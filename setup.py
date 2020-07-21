@@ -3,7 +3,8 @@
 
 """
 psi4_step
-A step for Psi4 in a SEAMM flowchart
+A step in SEAMM to setup, run and analyze quantum chemistry calculations
+using Psi4
 """
 import sys
 from setuptools import setup, find_packages
@@ -21,12 +22,8 @@ with open('README.rst') as readme_file:
 with open('HISTORY.rst') as history_file:
     history = history_file.read()
 
-requirements = [
-    'Pmw>=2.0.1<3',
-    'seamm>=0.2.0<1',
-    'seamm-widgets>=0.2.1<1',
-    'seamm-util>=0.2.1<1',
-]
+with open('requirements_install.txt') as fd:
+    requirements = fd.read()
 
 setup(
     name='psi4_step',
@@ -66,7 +63,7 @@ setup(
 
     # Manual control if final package is compressible or not, set False to
     # prevent the .egg from being made
-    # zip_safe=False,
+    zip_safe=True,
 
     keywords='psi4_step',
     classifiers=[
@@ -91,13 +88,9 @@ setup(
             'Energy = psi4_step:EnergyStep',
             'Initialization = psi4_step:InitializationStep',
         ],
-        # 'Custom = psi4_step:CustomStep',
-        # 'Minimization = psi4_step:MinimizationStep',
         'org.molssi.seamm.psi4.tk': [
             'Energy = psi4_step:EnergyStep',
             'Initialization = psi4_step:InitializationStep',
         ],
-        # 'Custom = psi4_step:CustomStep',
-        # 'Minimization = psi4_step:MinimizationStep',
     }
 )
