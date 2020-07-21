@@ -1,7 +1,6 @@
-# Config file for automatic testing at travis-ci.org
-# This file will be regenerated if you run travis_pypi_setup.py
-
 language: python
+script: pytest
+os: linux
 
 before_install:
     # Additional info about the build
@@ -14,7 +13,6 @@ before_install:
   - python -V
 
 install:
-
     # Create test environment for package
   - python devtools/scripts/create_conda_env.py -n=test -p=$PYTHON_VER devtools/conda-envs/test_env.yaml
     # Activate the test environment
@@ -26,38 +24,25 @@ install:
   - conda list
   - pip freeze
 
-
-matrix:
-  fast_finish: true
-
 notifications:
     email: false
 
 stages:
   - lint
   - test
-- deploy
+  - deploy
 
 jobs:
+  fast_finish: true
   include:
     - stage: lint
       name: "Check formatting of code for PEP-8"
       os: linux
-
       language: generic
-
-      env: PYTHON_VER=3.7
+      env: PYTHON_VER=3.8
       script:
         - flake8 psi4_step tests
         - yapf --diff --recursive  psi4_step tests
-
-    - stage: test
-      name: "Tests on MacOS Python 3.6"
-      script:
-        - pytest -v tests/
-      os: osx
-      language: generic
-      env: PYTHON_VER=3.6
 
     - stage: test
       name: "Tests on MacOS Python 3.7"
@@ -68,110 +53,47 @@ jobs:
       env: PYTHON_VER=3.7
 
     - stage: test
-      name: "Tests on Linux Python 3.6"
+      name: "Tests on MacOS Python 3.8"
+      script:
+        - pytest -v tests/
+      os: osx
+      language: generic
+      env: PYTHON_VER=3.8
+
+    - stage: test
+      name: "Tests on Linux Python 3.7"
       script:
         - pytest -v tests/
       os: linux
-
       language: generic  # No need to set Python version since its conda
-
-      env: PYTHON_VER=3.6
+      env: PYTHON_VER=3.7
 
     - stage: test
-      name: "Tests and coverage on Linux Python 3.7"
+      name: "Tests and coverage on Linux Python 3.8"
       script:
         - pytest -v --cov=psi4_step tests/
       after_success:
         - codecov
       os: linux
-
       language: generic
+      env: PYTHON_VER=3.8
 
-      env: PYTHON_VER=3.7
-- stage: deploy
+    - stage: deploy
       name: "Deploy to PyPi"
       if: tag IS present
+      os: linux
       dist: xenial
-      python: 3.7
+      python: 3.8
       script: skip
       deploy:
         provider: pypi
         distributions: sdist bdist_wheel
         skip_existing: true
         on:
-          condition: $PYTHON_VER = 3.7
+          condition: $PYTHON_VER = 3.8
           condition: $TRAVIS_OS_NAME = linux
           repo: molssi-seamm/psi4_step
           tags: true
-        user: seamm
+        username: seamm
         password:
-          secure: PLEASE_REPLACE_ME
-
-# Config file for automatic testing at travis-ci.org
-# This file will be regenerated if you run travis_pypi_setup.py
-
-language: python
-
-# Run jobs on container-based infrastructure, can be overridden per job
-
-matrix:
-  include:
-    # Extra includes for OSX since python language is not available by default on OSX
-    - os: osx
-      language: generic
-      env: PYTHON_VER=3.6
-    - os: osx
-      language: generic
-      env: PYTHON_VER=3.7
-
-
-    - os: linux
-      language: generic  # No need to set Python version since its conda
-      env: PYTHON_VER=3.6
-    - os: linux
-      language: generic
-      env: PYTHON_VER=3.7
-
-
-before_install:
-    # Additional info about the build
-  - uname -a
-  - df -h
-  - ulimit -a
-
-    # Install the Python environment
-  - source devtools/travis-ci/before_install.sh
-  - python -V
-
-install:
-
-    # Create test environment for package
-  - python devtools/scripts/create_conda_env.py -n=test -p=$PYTHON_VER devtools/conda-envs/test_env.yaml
-    # Activate the test environment
-  - conda activate test
-    # Build and install package
-  - python setup.py develop --no-deps
-
-
-script:
-  - pytest -v --cov=psi4_step tests/
-
-notifications:
-    email: false
-
-after_success:
-  - codecov
-
-# After you create the Github repo and add it to Travis, run the
-# travis_pypi_setup.py script to finish PyPI deployment setup
-deploy:
-  provider: pypi
-  distributions: sdist bdist_wheel
-  skip_existing: true
-  user: seamm
-  password:
-    secure: PLEASE_REPLACE_ME
-  on:
-    tags: true
-    repo: molssi-seamm/psi4_step
-    condition: "$TRAVIS_OS_NAME = linux"
+          secure: <replace>
