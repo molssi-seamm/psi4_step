@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
+
 """The graphical part of a Psi4 step"""
 
 import seamm
 from seamm_util import ureg, Q_, units_class  # noqa: F401
-import seamm_widgets as sw
 import psi4_step  # noqa: F401
 import Pmw
 import pprint  # noqa: F401
@@ -39,7 +39,7 @@ class TkPsi4(seamm.TkNode):
         self,
         tk_flowchart=None,
         node=None,
-        namespace='org.molssi.seamm.psi4_step.tk',
+        namespace='org.molssi.seamm.psi4.tk',
         canvas=None,
         x=None,
         y=None,
@@ -99,7 +99,8 @@ class TkPsi4(seamm.TkNode):
             defaultbutton='OK',
             master=self.toplevel,
             title='Edit Psi4 step',
-            command=self.handle_dialog)
+            command=self.handle_dialog
+        )
         self.dialog.withdraw()
 
         # The information about widgets is held in self['xxxx'], i.e. this
@@ -110,21 +111,21 @@ class TkPsi4(seamm.TkNode):
         self['frame'] = ttk.Frame(self.dialog.interior())
         self['frame'].pack(expand=tk.YES, fill=tk.BOTH)
         # make it large!
-        sw = self.dialog.winfo_screenwidth()
-        sh = self.dialog.winfo_screenheight()
-        w = int(0.9 * sw)
-        h = int(0.8 * sh)
-        x = int(0.05 * sw / 2)
-        y = int(0.1 * sh / 2)
+        screen_w = self.dialog.winfo_screenwidth()
+        screen_h = self.dialog.winfo_screenheight()
+        w = int(0.9 * screen_w)
+        h = int(0.8 * screen_h)
+        x = int(0.05 * screen_w / 2)
+        y = int(0.1 * screen_h / 2)
 
         self.dialog.geometry('{}x{}+{}+{}'.format(w, h, x, y))
 
-        self.sub_tk_flowchart = seamm.TkFlowchart(
+        self.tk_subflowchart = seamm.TkFlowchart(
             master=self['frame'],
-            flowchart=self.node.sub_flowchart,
+            flowchart=self.node.subflowchart,
             namespace=self.namespace
         )
-        self.sub_tk_flowchart.draw()
+        self.tk_subflowchart.draw()
 
     def right_click(self, event):
         """
@@ -179,9 +180,11 @@ class TkPsi4(seamm.TkNode):
         if result != "OK":
             self.dialog.deactivate(result)
             raise RuntimeError(
-                "Don't recognize dialog result '{}'".format(result))
+                "Don't recognize dialog result '{}'".format(result)
+            )
 
         self.dialog.deactivate(result)
+
     def update_flowchart(self, tk_flowchart=None, flowchart=None):
         """Update the nongraphical flowchart.
 
@@ -201,8 +204,8 @@ class TkPsi4(seamm.TkNode):
         """
 
         super().update_flowchart(
-            flowchart=self.node.sub_flowchart,
-            tk_flowchart=self.sub_tk_flowchart
+            flowchart=self.node.subflowchart,
+            tk_flowchart=self.tk_subflowchart
         )
 
     def from_flowchart(self, tk_flowchart=None, flowchart=None):
@@ -220,8 +223,8 @@ class TkPsi4(seamm.TkNode):
         """
 
         super().from_flowchart(
-            flowchart=self.node.sub_flowchart,
-            tk_flowchart=self.sub_tk_flowchart
+            flowchart=self.node.subflowchart,
+            tk_flowchart=self.tk_subflowchart
         )
 
     def handle_help(self):

@@ -28,10 +28,7 @@ class Psi4Step(object):
     """
 
     my_description = {
-        'description':
-            (
-                'An interface for Psi4'
-            ),
+        'description': ('An interface for Psi4'),
         'group': 'Simulations',
         'name': 'Psi4'
     }

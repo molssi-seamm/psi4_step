@@ -87,5 +87,17 @@ setup(
         'org.molssi.seamm.tk': [
             'Psi4 = psi4_step:Psi4Step',
         ],
+        'org.molssi.seamm.psi4': [
+            'Energy = psi4_step:EnergyStep',
+            'Initialization = psi4_step:InitializationStep',
+        ],
+        # 'Custom = psi4_step:CustomStep',
+        # 'Minimization = psi4_step:MinimizationStep',
+        'org.molssi.seamm.psi4.tk': [
+            'Energy = psi4_step:EnergyStep',
+            'Initialization = psi4_step:InitializationStep',
+        ],
+        # 'Custom = psi4_step:CustomStep',
+        # 'Minimization = psi4_step:MinimizationStep',
     }
 )
