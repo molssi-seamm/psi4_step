@@ -52,7 +52,7 @@ class Energy(seamm.Node):
         """
         return psi4_step.__git_revision__
 
-    def description_text(self, P=None):
+    def description_text(self, P=None, calculation_type='Single-point energy'):
         """Prepare information about what this node will do
         """
 
@@ -69,7 +69,7 @@ class Energy(seamm.Node):
                 functional = P['functional']
             else:
                 functional = P['advanced_functional']
-            text = f'Single-point energy using {method} with an '
+            text = f'{calculation_type} using {method} with an '
             text += f'exchange-correlation potential of {functional}'
             if (
                 len(psi4_step.dft_functionals[functional]['dispersion']) > 1
@@ -79,7 +79,7 @@ class Energy(seamm.Node):
             else:
                 text += " with no dispersion correction."
         else:
-            text = f'Single-point energy using {method}.'
+            text = f'{calculation_type} using {method}.'
 
         # Spin
         if P['spin-restricted'] == 'yes':
@@ -93,7 +93,7 @@ class Energy(seamm.Node):
 
         return self.header + '\n' + __(text, **P, indent=4 * ' ').__str__()
 
-    def get_input(self):
+    def get_input(self, calculation_type='energy'):
         """Get the input for an energy calculation for Psi4"""
         # Create the directory
         directory = Path(self.directory)
@@ -116,10 +116,11 @@ class Energy(seamm.Node):
         )
 
         lines = []
-        lines.append('')
-        lines.append('#' * 80)
-        lines.append(f'# {self.header}')
-        lines.append('#' * 80)
+        if calculation_type == 'energy':
+            lines.append('')
+            lines.append('#' * 80)
+            lines.append(f'# {self.header}')
+            lines.append('#' * 80)
 
         # Figure out what we are doing!
         if P['level'] == 'recommended':
@@ -154,9 +155,13 @@ class Energy(seamm.Node):
                 psi4_step.dft_functionals[functional_string]['dispersion']
             ) > 1:
                 functional = functional + '-' + P['dispersion']
-            lines.append(f"E, wfn = energy('{functional}', return_wfn=True)")
+            lines.append(
+                f"E, wfn = {calculation_type}('{functional}', return_wfn=True)"
+            )
         else:
-            lines.append(f"E, wfn = energy('{method}', return_wfn=True)")
+            lines.append(
+                f"E, wfn = {calculation_type}('{method}', return_wfn=True)"
+            )
 
         # Dump the properties to a json file
         filename = f'@{self._id[-1]}+properties.json'
