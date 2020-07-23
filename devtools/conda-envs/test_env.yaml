@@ -8,6 +8,7 @@ dependencies:
   - python
   - pip
   - configargparse
+  - psutil
   - py-cpuinfo
 
     # Testing
