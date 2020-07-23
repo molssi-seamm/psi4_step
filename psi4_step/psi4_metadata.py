@@ -1439,6 +1439,29 @@ dft_functionals = {
     },
 }  # yapf: disable
 
+optimization_methods = {
+    'Rational Function Optimization': 'RFO',
+    'Newton-Raphson': 'NR',
+    'Steepest Descents': 'SD',
+    'Static Linesearch': 'LINESEARCH_STATIC'
+}
+
+optimization_convergence = {
+    'CFOUR': 'CFOUR',
+    'Gaussian loose': 'GAU_LOOSE',
+    'Gaussian': 'GAU',
+    'Gaussian tight': 'GAU_TIGHT',
+    'Gaussian very tight': 'GAU_VERYTIGHT',
+    'MOLPRO': 'MOLPRO',
+    'NWChem loose': 'NWCHEM_LOOSE',
+    'NWChem': 'GAU',
+    'NWChem tight': 'GUA_TIGHT',
+    'QChem': 'QCHEM',
+    'TURBOMOLE': 'TURBOMOLE',
+    'Interfragment tight': 'INTERFRAG_TIGHT',
+    'Custom': '',
+}
+
 properties = {
     "-D ENERGY": {
         "calculation": [

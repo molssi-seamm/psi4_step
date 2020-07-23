@@ -5,6 +5,7 @@
 import configargparse
 import logging
 import tkinter as tk
+import tkinter.ttk as ttk
 
 import psi4_step
 import seamm
@@ -103,31 +104,64 @@ class TkEnergy(seamm.TkNode):
             title=title, widget='notebook', results_tab=True
         )
 
+        # Create a frame for the calculation control
+        self['calculation'] = ttk.LabelFrame(
+            frame,
+            borderwidth=4,
+            relief='sunken',
+            text='Calculation',
+            labelanchor='n',
+            padding=10
+        )
+
         # Create all the widgets
         P = self.node.parameters
-        for key in P:
+        for key in psi4_step.EnergyParameters.parameters:
             if key not in ('results', 'extra keywords', 'create tables'):
-                self[key] = P[key].widget(frame)
+                self[key] = P[key].widget(self['calculation'])
 
         # bindings...
-        self['level'].combobox.bind("<<ComboboxSelected>>", self.reset_dialog)
+        self['level'].combobox.bind(
+            "<<ComboboxSelected>>", self.reset_calculation
+        )
         self['level'].config(state='readonly')
 
-        self['method'].combobox.bind("<<ComboboxSelected>>", self.reset_dialog)
-        self['method'].combobox.bind("<Return>", self.reset_dialog)
-        self['method'].combobox.bind("<FocusOut>", self.reset_dialog)
+        self['method'].combobox.bind(
+            "<<ComboboxSelected>>", self.reset_calculation
+        )
+        self['method'].combobox.bind("<Return>", self.reset_calculation)
+        self['method'].combobox.bind("<FocusOut>", self.reset_calculation)
 
         self['advanced_method'].combobox.bind(
-            "<<ComboboxSelected>>", self.reset_dialog
+            "<<ComboboxSelected>>", self.reset_calculation
         )
-        self['advanced_method'].combobox.bind("<Return>", self.reset_dialog)
-        self['advanced_method'].combobox.bind("<FocusOut>", self.reset_dialog)
+        self['advanced_method'].combobox.bind(
+            "<Return>", self.reset_calculation
+        )
+        self['advanced_method'].combobox.bind(
+            "<FocusOut>", self.reset_calculation
+        )
 
         self.setup_results(psi4_step.properties, calculation=calculation)
+
+        # Top level needs to call reset_dialog
+        if calculation == 'energy':
+            self.reset_dialog()
 
         self.logger.debug('Finished creating the dialog')
 
     def reset_dialog(self, widget=None):
+        """Layout the widgets as needed for the current state"""
+
+        frame = self['frame']
+        for slave in frame.grid_slaves():
+            slave.grid_forget()
+
+        self['calculation'].grid(row=0, column=0)
+        self.reset_calculation()
+        return 1
+
+    def reset_calculation(self, widget=None):
         level = self['level'].get()
 
         if level == 'recommended':
@@ -137,7 +171,7 @@ class TkEnergy(seamm.TkNode):
             method = psi4_step.methods[self['advanced_method'].get()]['method']
             functional = self['advanced_functional'].get()
 
-        frame = self['frame']
+        frame = self['calculation']
         for slave in frame.grid_slaves():
             slave.grid_forget()
 
