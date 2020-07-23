@@ -3,12 +3,13 @@
 """Non-graphical part of the Psi4 step in a SEAMM flowchart
 """
 
-import configargparse
-import cpuinfo
 import json
 import logging
 from pathlib import Path
 import pprint
+
+import configargparse
+import psutil
 
 import psi4_step
 import seamm
@@ -28,6 +29,61 @@ from seamm_util.printing import FormattedText as __
 logger = logging.getLogger(__name__)
 job = printing.getPrinter()
 printer = printing.getPrinter('Psi4')
+
+
+def humanize(memory, suffix="B", kilo=1024):
+    """
+    Scale memory to its proper format
+    e.g:
+        1253656 => '1.20 MiB'
+        1253656678 => '1.17 GiB'
+    """
+    if kilo == 1000:
+        units = ["", "k", "M", "G", "T", "P"]
+    elif kilo == 1024:
+        units = ["", "Ki", "Mi", "Gi", "Ti", "Pi"]
+    else:
+        raise ValueError('kilo must be 1000 or 1024!')
+
+    for unit in units:
+        if memory < kilo:
+            return f"{memory:.2f} {unit}{suffix}"
+        memory /= kilo
+
+
+def dehumanize(memory, suffix="B"):
+    """
+    Unscale memory from its human readable form
+    e.g:
+        '1.20 MB' => 1200000
+        '1.17 GB' => 1170000000
+    """
+    units = {
+        '': 1,
+        'k': 1000,
+        'M': 1000**2,
+        'G': 1000**3,
+        'P': 1000**4,
+        'Ki': 1024,
+        'Mi': 1024**2,
+        'Gi': 1024**3,
+        'Pi': 1024**4
+    }
+
+    tmp = memory.split()
+    if len(tmp) == 1:
+        return memory
+    elif len(tmp) > 2:
+        raise ValueError('Memory must be <number> <units>, e.g. 1.23 GB')
+
+    amount, unit = tmp
+    amount = float(amount)
+
+    for prefix in units:
+        if prefix + suffix == unit:
+            return int(amount * units[prefix])
+
+    raise ValueError(f"Don't recognize the units on '{memory}'")
 
 
 class Psi4(seamm.Node):
@@ -124,6 +180,24 @@ class Psi4(seamm.Node):
             help='How many threads to use in Psi4'
         )
 
+        self.parser.add_argument(
+            '--psi4-max-threads',
+            default='default',
+            help='The maximum number of threads to use in Psi4'
+        )
+
+        self.parser.add_argument(
+            '--psi4-max-memory',
+            default='default',
+            help='The maximum amount of memory to use for Psi4'
+        )
+
+        self.parser.add_argument(
+            '--psi4-memory',
+            default='default',
+            help='The amount of memory to use for Psi4'
+        )
+
         self.options, self.unknown = self.parser.parse_known_args()
 
         # Set the logging level for this module if requested
@@ -210,24 +284,52 @@ class Psi4(seamm.Node):
         o = self.options
 
         # How many processors does this node have?
-        info = cpuinfo.get_cpu_info()
-        n_cores = info['count']
-        # Account for Intel hyperthreading
-        if info['arch'][0:3] == 'X86':
-            n_cores = int(n_cores / 2)
-        if n_cores < 1:
-            n_cores = 1
+        n_cores = psutil.cpu_count(logical=False)
         logger.info('The number of cores is {}'.format(n_cores))
 
+        # How many threads to use
         if o.psi4_num_threads == 'default':
-            psi4_num_threads = n_cores
+            n_threads = n_cores
         else:
-            psi4_num_threads = int(o.psi4_num_threads)
-        if psi4_num_threads > n_cores:
-            psi4_num_threads = n_cores
-        if psi4_num_threads < 1:
-            psi4_num_threads = 1
-        logger.info('Psi4 will use {} threads.'.format(psi4_num_threads))
+            n_threads = int(o.psi4_num_threads)
+        if n_threads > n_cores:
+            n_threads = n_cores
+        if n_threads < 1:
+            n_threads = 1
+        if o.psi4_max_threads != 'default':
+            if n_threads > o.psi4_max_threads:
+                n_threads = o.psi4_max_threads
+        logger.info(f'Psi4 will use {n_threads} threads.')
+
+        # How much memory to use
+        svmem = psutil.virtual_memory()
+        available = svmem.available * 0.9  # Safety factor....
+        if o.psi4_memory == 'default':
+            memory = available * (n_threads / n_cores)
+        else:
+            memory = dehumanize(o.psi4_memory)
+        if o.psi4_max_memory != 'default':
+            max_memory = dehumanize(o.psi4_max_memory)
+            if memory > max_memory:
+                memory = max_memory
+        # Psi applies a minimum of 250 MiB
+        min_memory = dehumanize('250 MiB')
+        if min_memory > memory:
+            memory = min_memory
+        memory = humanize(memory, kilo=1024)
+
+        printer.important(
+            self.indent +
+            f'    Psi4 will use {n_threads} threads and {memory} memory\n'
+        )
+
+        # Start the input data
+        input_data = []
+        input_data.append('import json')
+        input_data.append('import numpy as np')
+        input_data.append('')
+        input_data.append(f'memory {memory}')
+        input_data.append('')
 
         # Work through the subflowchart to find out what to do.
         self.subflowchart.root_directory = self.flowchart.root_directory
@@ -236,11 +338,6 @@ class Psi4(seamm.Node):
 
         # Get the first real node
         node = self.subflowchart.get_node('1').next()
-
-        input_data = []
-        input_data.append('import json')
-        input_data.append('import numpy as np')
-        input_data.append('')
 
         # Put the structure into the input
         input_data.append(self._convert_structure(name='initial'))
@@ -277,7 +374,7 @@ class Psi4(seamm.Node):
 
         local = seamm.ExecLocal()
         result = local.run(
-            cmd=[o.psi4_exe, f'-n {psi4_num_threads}'],
+            cmd=[o.psi4_exe, f'-n {n_threads}'],
             files=files,
             return_files=return_files,
             env=env
