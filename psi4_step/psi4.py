@@ -198,6 +198,28 @@ class Psi4(seamm.Node):
             help='The amount of memory to use for Psi4'
         )
 
+        self.parser.add_argument(
+            '--psi4-memory-factor',
+            default='90%',
+            help=(
+                'The amount of possible memory to use, typically about 90% to '
+                'allow for Psi4 not keeping track of all the memory used.'
+            )
+        )
+
+        # General options from seamm.ini on max cores and memory
+        self.parser.add_argument(
+            '--max-cores',
+            default='unlimited',
+            help='The maximum number of cores/threads to use in any step.'
+        )
+
+        self.parser.add_argument(
+            '--max-memory',
+            default='available',
+            help='The maximum amount of memory to use in any step.'
+        )
+
         self.options, self.unknown = self.parser.parse_known_args()
 
         # Set the logging level for this module if requested
@@ -297,13 +319,23 @@ class Psi4(seamm.Node):
         if n_threads < 1:
             n_threads = 1
         if o.psi4_max_threads != 'default':
-            if n_threads > o.psi4_max_threads:
-                n_threads = o.psi4_max_threads
+            if n_threads > int(o.psi4_max_threads):
+                n_threads = int(o.psi4_max_threads)
+        if o.max_cores != "unlimited":
+            if n_threads > int(o.max_cores):
+                n_threads = int(o.max_cores)
         logger.info(f'Psi4 will use {n_threads} threads.')
 
         # How much memory to use
+        if '%' in o.psi4_memory_factor:
+            factor = float(o.psi4_memory_factor.rstrip('%')) / 100.0
+        else:
+            factor = float(o.psi4_memory_factor)
         svmem = psutil.virtual_memory()
-        available = svmem.available * 0.9  # Safety factor....
+        if o.max_memory == 'all':
+            available = svmem.total * factor
+        else:
+            available = svmem.available * factor
         if o.psi4_memory == 'default':
             memory = available * (n_threads / n_cores)
         else:
@@ -312,6 +344,9 @@ class Psi4(seamm.Node):
             max_memory = dehumanize(o.psi4_max_memory)
             if memory > max_memory:
                 memory = max_memory
+        if o.max_memory != 'all' and o.max_memory != 'available':
+            if memory > dehumanize(o.max_memory):
+                memory = dehumanize(o.max_memory)
         # Psi applies a minimum of 250 MiB
         min_memory = dehumanize('250 MiB')
         if min_memory > memory:
