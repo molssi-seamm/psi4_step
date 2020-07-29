@@ -511,7 +511,7 @@ class Psi4(seamm.Node):
         if 'extras' in system:
             extras = system['extras']
 
-            if 'open' in extras:
+            if 'open' in extras and extras['open'] is not None:
                 openshell = extras['open']
                 if (
                     (
@@ -529,13 +529,13 @@ class Psi4(seamm.Node):
                     nopen = openshell
                     norbitals = nopen
 
-                if 'net_charge' in extras:
+                if 'net_charge' in extras and extras['net_charge'] is not None:
                     structure.append(f"    {extras['net_charge']}   {nopen}")
                 else:
                     structure.append(f'    0   {nopen}')
             else:
-                if 'net_charge' in extras:
-                    structure.append(f"    {extras['net_charge']}   0")
+                if 'net_charge' in extras and extras['net_charge'] is not None:
+                    structure.append(f"    {extras['net_charge']}   1")
 
         elements = system['atoms']['elements']
         coordinates = system['atoms']['coordinates']
