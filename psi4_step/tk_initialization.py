@@ -119,9 +119,6 @@ class TkInitialization(seamm.TkNode):
         self['symmetry_tolerance'].grid(row=row, column=0, sticky=tk.EW)
         widgets.append(self['symmetry_tolerance'])
         row += 1
-        self['calculate gradients'].grid(row=row, column=0, sticky=tk.EW)
-        widgets.append(self['calculate gradients'])
-        row += 1
         sw.align_labels(widgets)
 
         return row

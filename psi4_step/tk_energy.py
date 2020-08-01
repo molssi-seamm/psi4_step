@@ -217,6 +217,9 @@ class TkEnergy(seamm.TkNode):
         )
         widgets.append(self['spin-restricted'])
         row += 1
+        # self['calculate gradients'].grid(row=row, column=0, sticky=tk.EW)
+        # widgets.append(self['calculate gradients'])
+        # row += 1
         sw.align_labels(widgets)
 
         return row
