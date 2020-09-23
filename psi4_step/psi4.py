@@ -13,7 +13,6 @@ import psutil
 
 import psi4_step
 import seamm
-from seamm import data  # noqa: F401
 from seamm_util import ureg, Q_  # noqa: F401
 import seamm_util.printing as printing
 from seamm_util.printing import FormattedText as __
@@ -298,7 +297,9 @@ class Psi4(seamm.Node):
         printer.important(self.header)
         printer.important('')
 
-        if data.structure is None:
+        system = self.get_variable('_system')
+        n_atoms = system.n_atoms()
+        if n_atoms == 0:
             logger.error('Psi4 run(): there is no structure!')
             raise RuntimeError('Psi4 run(): there is no structure!')
 
@@ -483,13 +484,18 @@ class Psi4(seamm.Node):
             with structure_file.open(mode='r') as fd:
                 structure = json.load(fd)
         if 'geom' in structure:
-            system = seamm.data.structure
-            atoms = system['atoms']
-            xyz = []
+            system = self.get_variable('_system')
+            xs = []
+            ys = []
+            zs = []
             it = iter(structure['geom'])
             for x in it:
-                xyz.append([x, next(it), next(it)])
-            atoms['coordinates'] = xyz
+                xs.append(x)
+                ys.append(next(it))
+                zs.append(next(it))
+            system.atoms['x'][0:] = xs
+            system.atoms['y'][0:] = ys
+            system.atoms['z'][0:] = zs
             printer.important(
                 self.indent +
                 '    Updated the system with the structure from Psi4',
@@ -499,7 +505,7 @@ class Psi4(seamm.Node):
     def _convert_structure(self, name=None):
         """Convert the structure to the input for Psi4."""
 
-        system = seamm.data.structure
+        system = self.get_variable('_system')
 
         structure = []
         if name is None:
@@ -537,11 +543,11 @@ class Psi4(seamm.Node):
                 if 'net_charge' in extras and extras['net_charge'] is not None:
                     structure.append(f"    {extras['net_charge']}   1")
 
-        elements = system['atoms']['elements']
-        coordinates = system['atoms']['coordinates']
+        elements = system.atoms.symbols()
+        coordinates = system.atoms.coordinates()
 
-        if 'freeze' in system['atoms']:
-            freeze = system['atoms']['freeze']
+        if 'freeze' in system.atoms:
+            freeze = system.atoms['freeze']
         else:
             freeze = [''] * len(elements)
 
