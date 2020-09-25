@@ -90,6 +90,18 @@ class EnergyParameters(seamm.Parameters):
                 "(UHF, UKS)"
             )
         },
+        "freeze-cores": {
+            "default": "yes",
+            "kind": "enumeration",
+            "default_units": "",
+            "enumeration": ('yes', 'no'),
+            "format_string": "s",
+            "description": "Freeze core orbitals:",
+            "help_text": (
+                "Whether to freeze the core orbitals in correlated "
+                "methods"
+            )
+        },
         "results": {
             "default": {},
             "kind": "dictionary",
