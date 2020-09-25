@@ -39,565 +39,659 @@ methods = {
         'method': 'mp2',
         'calculation': ['energy', 'gradients'],
         'level': 'normal',
-        'gradients': 'analytic'
+        'gradients': 'analytic',
+        'freeze core?': True
     },
     '3rd-order Møller–Plesset perturbation theory (MP3)': {
         'method': 'mp3',
         'calculation': ['energy', 'gradients'],
         'level': 'normal',
-        'gradients': 'analytic'
+        'gradients': 'analytic',
+        'freeze core?': True
     },
     'MP3 with frozen natural orbitals': {
         'method': 'fno-mp3',
         'calculation': ['energy', 'gradients'],
         'level': 'expert',
-        'gradients': 'finite-difference'
+        'gradients': 'finite-difference',
+        'freeze core?': True
     },
     'average of MP2 and MP3': {
         'method': 'mp2.5',
         'calculation': ['energy', 'gradients'],
         'level': 'expert',
-        'gradients': 'analytic'
+        'gradients': 'analytic',
+        'freeze core?': True
     },
     '4th-order MP perturbation theory (MP4) less triples': {
         'method': 'mp4(sdq)',
         'calculation': ['energy', 'gradients'],
         'level': 'expert',
-        'gradients': 'finite-difference'
+        'gradients': 'finite-difference',
+        'freeze core?': True
     },
     'MP4 (less triples) with frozen natural orbitals': {
         'method': 'fno-mp4(sdq)',
         'calculation': ['energy', 'gradients'],
         'level': 'expert',
-        'gradients': 'finite-difference'
+        'gradients': 'finite-difference',
+        'freeze core?': True
     },
     'full MP4': {
         'method': 'mp4',
         'calculation': ['energy', 'gradients'],
         'level': 'expert',
-        'gradients': 'finite-difference'
+        'gradients': 'finite-difference',
+        'freeze core?': True
     },
     'full MP4 with frozen natural orbitals': {
         'method': 'fno-mp4',
         'calculation': ['energy', 'gradients'],
         'level': 'expert',
-        'gradients': 'finite-difference'
+        'gradients': 'finite-difference',
+        'freeze core?': True
     },
     'nth-order Møller–Plesset (MP) perturbation theory': {
         'method': 'mpn',
         'calculation': ['energy', 'gradients'],
         'level': 'expert',
-        'gradients': 'finite-difference'
+        'gradients': 'finite-difference',
+        'freeze core?': True
     },
     'nth-order z-averaged perturbation theory (ZAPT)': {
         'method': 'zaptn',
         'calculation': ['energy', 'gradients'],
         'level': 'expert',
-        'gradients': 'finite-difference'
+        'gradients': 'finite-difference',
+        'freeze core?': True
     },
     'orbital-optimized second-order MP perturbation theory': {
         'method': 'omp2',
         'calculation': ['energy', 'gradients'],
         'level': 'expert',
-        'gradients': 'analytic'
+        'gradients': 'analytic',
+        'freeze core?': True
     },
     'spin-component scaled OMP2': {
         'method': 'scs-omp2',
         'calculation': ['energy', 'gradients'],
         'level': 'expert',
-        'gradients': 'finite-difference'
+        'gradients': 'finite-difference',
+        'freeze core?': True
     },
     'a special version of SCS-OMP2 for nucleobase interactions': {
         'method': 'scs(n)-omp2',
         'calculation': ['energy', 'gradients'],
         'level': 'expert',
-        'gradients': 'finite-difference'
+        'gradients': 'finite-difference',
+        'freeze core?': True
     },
     'a special version of SCS-OMP2 (from ethene dimers)': {
         'method': 'scs-omp2-vdw',
         'calculation': ['energy', 'gradients'],
         'level': 'expert',
-        'gradients': 'finite-difference'
+        'gradients': 'finite-difference',
+        'freeze core?': True
     },
     'spin-opposite scaled OMP2': {
         'method': 'sos-omp2',
         'calculation': ['energy', 'gradients'],
         'level': 'expert',
-        'gradients': 'finite-difference'
+        'gradients': 'finite-difference',
+        'freeze core?': True
     },
     'A special version of SOS-OMP2 for pi systems': {
         'method': 'sos-pi-omp2',
         'calculation': ['energy', 'gradients'],
         'level': 'expert',
-        'gradients': 'finite-difference'
+        'gradients': 'finite-difference',
+        'freeze core?': True
     },
     'orbital-optimized third-order MP perturbation theory': {
         'method': 'omp3',
         'calculation': ['energy', 'gradients'],
         'level': 'expert',
-        'gradients': 'analytic'
+        'gradients': 'analytic',
+        'freeze core?': True
     },
     'spin-component scaled OMP3': {
         'method': 'scs-omp3',
         'calculation': ['energy', 'gradients'],
         'level': 'expert',
-        'gradients': 'finite-difference'
+        'gradients': 'finite-difference',
+        'freeze core?': True
     },
     'a special version of SCS-OMP3 for nucleobase interactions': {
         'method': 'scs(n)-omp3',
         'calculation': ['energy', 'gradients'],
         'level': 'expert',
-        'gradients': 'finite-difference'
+        'gradients': 'finite-difference',
+        'freeze core?': True
     },
     'a special version of SCS-OMP3 (from ethene dimers)': {
         'method': 'scs-omp3-vdw',
         'calculation': ['energy', 'gradients'],
         'level': 'expert',
-        'gradients': 'finite-difference'
+        'gradients': 'finite-difference',
+        'freeze core?': True
     },
     'spin-opposite scaled OMP3': {
         'method': 'sos-omp3',
         'calculation': ['energy', 'gradients'],
         'level': 'expert',
-        'gradients': 'finite-difference'
+        'gradients': 'finite-difference',
+        'freeze core?': True
     },
     'A special version of SOS-OMP3 for pi systems': {
         'method': 'sos-pi-omp3',
         'calculation': ['energy', 'gradients'],
         'level': 'expert',
-        'gradients': 'finite-difference'
+        'gradients': 'finite-difference',
+        'freeze core?': True
         },
     'orbital-optimized MP2.5': {
         'method': 'omp2.5',
         'calculation': ['energy', 'gradients'],
         'level': 'expert',
-        'gradients': 'analytic'
+        'gradients': 'analytic',
+        'freeze core?': True
     },
     'coupled electron pair approximation variant 0': {
         'method': 'cepa(0)',
         'calculation': ['energy', 'gradients'],
         'level': 'expert',
-        'gradients': 'finite-difference'
+        'gradients': 'finite-difference',
+        'freeze core?': True
     },
     'CEPA(0) with frozen natural orbitals': {
         'method': 'fno-cepa(0)',
         'calculation': ['energy', 'gradients'],
         'level': 'expert',
-        'gradients': 'finite-difference'
+        'gradients': 'finite-difference',
+        'freeze core?': True
     },
     'coupled electron pair approximation variant 1': {
         'method': 'cepa(1)',
         'calculation': ['energy', 'gradients'],
         'level': 'expert',
-        'gradients': 'finite-difference'
+        'gradients': 'finite-difference',
+        'freeze core?': True
     },
     'CEPA(1) with frozen natural orbitals': {
         'method': 'fno-cepa(1)',
         'calculation': ['energy', 'gradients'],
         'level': 'expert',
-        'gradients': 'finite-difference'
+        'gradients': 'finite-difference',
+        'freeze core?': True
     },
     'coupled electron pair approximation variant 3': {
         'method': 'cepa(3)',
         'calculation': ['energy', 'gradients'],
         'level': 'expert',
-        'gradients': 'finite-difference'
+        'gradients': 'finite-difference',
+        'freeze core?': True
     },
     'CEPA(3) with frozen natural orbitals': {
         'method': 'fno-cepa(3)',
         'calculation': ['energy', 'gradients'],
         'level': 'expert',
-        'gradients': 'finite-difference'
+        'gradients': 'finite-difference',
+        'freeze core?': True
     },
     'averaged coupled-pair functional': {
         'method': 'acpf',
         'calculation': ['energy', 'gradients'],
         'level': 'expert',
-        'gradients': 'finite-difference'
+        'gradients': 'finite-difference',
+        'freeze core?': True
     },
     'ACPF with frozen natural orbitals': {
         'method': 'fno-acpf',
         'calculation': ['energy', 'gradients'],
         'level': 'expert',
-        'gradients': 'finite-difference'
+        'gradients': 'finite-difference',
+        'freeze core?': True
     },
     'averaged quadratic coupled cluster': {
         'method': 'aqcc',
         'calculation': ['energy', 'gradients'],
         'level': 'expert',
-        'gradients': 'finite-difference'
+        'gradients': 'finite-difference',
+        'freeze core?': True
     },
     'AQCC with frozen natural orbitals': {
         'method': 'fno-aqcc',
         'calculation': ['energy', 'gradients'],
         'level': 'expert',
-        'gradients': 'finite-difference'
+        'gradients': 'finite-difference',
+        'freeze core?': True
     },
     'quadratic CI singles doubles (QCISD)': {
         'method': 'qcisd',
         'calculation': ['energy', 'gradients'],
         'level': 'expert',
-        'gradients': 'finite-difference'
+        'gradients': 'finite-difference',
+        'freeze core?': True
     },
     'QCISD with frozen natural orbitals': {
         'method': 'fno-qcisd',
         'calculation': ['energy', 'gradients'],
         'level': 'expert',
-        'gradients': 'finite-difference'
+        'gradients': 'finite-difference',
+        'freeze core?': True
     },
     'Linear CCD': {
         'method': 'lccd',
         'calculation': ['energy', 'gradients'],
         'level': 'normal',
-        'gradients': 'analytic'
+        'gradients': 'analytic',
+        'freeze core?': True
     },
     'LCCD with frozen natural orbitals': {
         'method': 'fno-lccd',
         'calculation': ['energy', 'gradients'],
         'level': 'expert',
-        'gradients': 'finite-difference'
+        'gradients': 'finite-difference',
+        'freeze core?': True
     },
     'orbital optimized LCCD': {
         'method': 'olccd',
         'calculation': ['energy', 'gradients'],
         'level': 'expert',
-        'gradients': 'analytic'
+        'gradients': 'analytic',
+        'freeze core?': True
     },
     'approximate coupled cluster singles and doubles (CC2)': {
         'method': 'cc2',
         'calculation': ['energy', 'gradients'],
         'level': 'expert',
-        'gradients': 'finite-difference'
+        'gradients': 'finite-difference',
+        'freeze core?': True
     },
     'coupled cluster doubles (CCD)': {
         'method': 'ccd',
         'calculation': ['energy', 'gradients'],
         'level': 'normal',
-        'gradients': 'analytic'
+        'gradients': 'analytic',
+        'freeze core?': True
     },
     'coupled cluster singles and doubles (CCSD)': {
         'method': 'ccsd',
         'calculation': ['energy', 'gradients'],
         'level': 'normal',
-        'gradients': 'analytic'
+        'gradients': 'analytic',
+        'freeze core?': True
     },
     'Brueckner coupled cluster doubles (BCCD)': {
         'method': 'bccd',
         'calculation': ['energy', 'gradients'],
         'level': 'expert',
-        'gradients': 'finite-difference'
+        'gradients': 'finite-difference',
+        'freeze core?': True
     },
     'CCSD with frozen natural orbitals': {
         'method': 'fno-ccsd',
         'calculation': ['energy', 'gradients'],
         'level': 'expert',
-        'gradients': 'finite-difference'
+        'gradients': 'finite-difference',
+        'freeze core?': True
     },
     'QCISD with perturbative triples': {
         'method': 'qcisd(t)',
         'calculation': ['energy', 'gradients'],
         'level': 'expert',
-        'gradients': 'finite-difference'
+        'gradients': 'finite-difference',
+        'freeze core?': True
     },
     'QCISD(T) with frozen natural orbitals': {
         'method': 'fno-qcisd(t)',
         'calculation': ['energy', 'gradients'],
         'level': 'expert',
-        'gradients': 'finite-difference'
+        'gradients': 'finite-difference',
+        'freeze core?': True
     },
     'CCSD with perturbative triples (CCSD(T))': {
         'method': 'ccsd(t)',
         'calculation': ['energy', 'gradients'],
         'level': 'normal',
-        'gradients': 'analytic'
+        'gradients': 'analytic',
+        'freeze core?': True
     },
     'CCSD with asymmetric perturbative triples (CCSD(AT))': {
         'method': 'ccsd(at)',
         'calculation': ['energy', 'gradients'],
         'level': 'expert',
-        'gradients': 'finite-difference'
+        'gradients': 'finite-difference',
+        'freeze core?': True
     },
     'BCCD with perturbative triples': {
         'method': 'bccd(t)',
         'calculation': ['energy', 'gradients'],
         'level': 'expert',
-        'gradients': 'finite-difference'
+        'gradients': 'finite-difference',
+        'freeze core?': True
     },
     'CCSD(T) with frozen natural orbitals': {
         'method': 'fno-ccsd(t)',
         'calculation': ['energy', 'gradients'],
         'level': 'expert',
-        'gradients': 'finite-difference'
+        'gradients': 'finite-difference',
+        'freeze core?': True
     },
     'approximate CC singles, doubles, and triples (CC3)': {
         'method': 'cc3',
         'calculation': ['energy', 'gradients'],
         'level': 'expert',
-        'gradients': 'finite-difference'
+        'gradients': 'finite-difference',
+        'freeze core?': True
     },
     'expert full control over ccenergy module': {
         'method': 'ccenergy',
         'calculation': ['energy', 'gradients'],
         'level': 'expert',
-        'gradients': 'finite-difference'
+        'gradients': 'finite-difference',
+        'freeze core?': True
     },
     'expert full control over dfocc module': {
         'method': 'dfocc',
         'calculation': ['energy', 'gradients'],
         'level': 'expert',
-        'gradients': 'finite-difference'
+        'gradients': 'finite-difference',
+        'freeze core?': True
     },
     'configuration interaction (CI) singles and doubles (CISD)': {
         'method': 'cisd',
         'calculation': ['energy', 'gradients'],
         'level': 'expert',
-        'gradients': 'finite-difference'
+        'gradients': 'finite-difference',
+        'freeze core?': True
     },
     'CISD with frozen natural orbitals': {
         'method': 'fno-cisd',
         'calculation': ['energy', 'gradients'],
         'level': 'expert',
-        'gradients': 'finite-difference'
+        'gradients': 'finite-difference',
+        'freeze core?': True
     },
     'CI singles, doubles, and triples (CISDT)': {
         'method': 'cisdt',
         'calculation': ['energy', 'gradients'],
         'level': 'expert',
-        'gradients': 'finite-difference'
+        'gradients': 'finite-difference',
+        'freeze core?': True
     },
     'CI singles, doubles, triples, and quadruples (CISDTQ)': {
         'method': 'cisdtq',
         'calculation': ['energy', 'gradients'],
         'level': 'expert',
-        'gradients': 'finite-difference'
+        'gradients': 'finite-difference',
+        'freeze core?': True
     },
     'nth-order CI': {
         'method': 'cin',
         'calculation': ['energy', 'gradients'],
         'level': 'expert',
-        'gradients': 'finite-difference'
+        'gradients': 'finite-difference',
+        'freeze core?': True
     },
     'full configuration interaction (FCI)': {
         'method': 'fci',
         'calculation': ['energy', 'gradients'],
         'level': 'expert',
-        'gradients': 'finite-difference'
+        'gradients': 'finite-difference',
+        'freeze core?': True
     },
     'expert full control over detci module': {
         'method': 'detci',
         'calculation': ['energy', 'gradients'],
         'level': 'expert',
-        'gradients': 'finite-difference'
+        'gradients': 'finite-difference',
+        'freeze core?': True
     },
     'complete active space self consistent field (CASSCF)': {
         'method': 'casscf',
         'calculation': ['energy', 'gradients'],
         'level': 'expert',
-        'gradients': 'finite-difference'
+        'gradients': 'finite-difference',
+        'freeze core?': False
     },
     'restricted active space self consistent field (RASSCF)': {
         'method': 'rasscf',
         'calculation': ['energy', 'gradients'],
         'level': 'expert',
-        'gradients': 'finite-difference'
+        'gradients': 'finite-difference',
+        'freeze core?': False
     },
     'multiconfigurational self consistent field (SCF)': {
         'method': 'mcscf',
         'calculation': ['energy', 'gradients'],
         'level': 'expert',
-        'gradients': 'finite-difference'
+        'gradients': 'finite-difference',
+        'freeze core?': False
     },
     'Mukherjee multireference coupled cluster (Mk-MRCC)': {
         'method': 'psimrcc',
         'calculation': ['energy', 'gradients'],
         'level': 'expert',
-        'gradients': 'finite-difference'
+        'gradients': 'finite-difference',
+        'freeze core?': False
     },
     'density matrix renormalization group SCF': {
         'method': 'dmrg-scf',
         'calculation': ['energy', 'gradients'],
         'level': 'expert',
-        'gradients': 'finite-difference'
+        'gradients': 'finite-difference',
+        'freeze core?': False
     },
     'density matrix renormalization group CASPT2': {
         'method': 'dmrg-caspt2',
         'calculation': ['energy', 'gradients'],
         'level': 'expert',
-        'gradients': 'finite-difference'
+        'gradients': 'finite-difference',
+        'freeze core?': True
     },
     'density matrix renormalization group CI': {
         'method': 'dmrg-ci',
         'calculation': ['energy', 'gradients'],
         'level': 'expert',
-        'gradients': 'finite-difference'
+        'gradients': 'finite-difference',
+        'freeze core?': True
         },
     '0th-order symmetry adapted perturbation theory (SAPT)': {
         'method': 'sapt0',
         'calculation': ['energy', 'gradients'],
         'level': 'expert',
-        'gradients': 'finite-difference'
+        'gradients': 'finite-difference',
+        'freeze core?': True
     },
     '0th-order SAPT with special exchange scaling': {
         'method': 'ssapt0',
         'calculation': ['energy', 'gradients'],
         'level': 'expert',
-        'gradients': 'finite-difference'
+        'gradients': 'finite-difference',
+        'freeze core?': True
     },
     '0th-order functional and/or intramolecular SAPT': {
         'method': 'fisapt0',
         'calculation': ['energy', 'gradients'],
         'level': 'expert',
-        'gradients': 'finite-difference'
+        'gradients': 'finite-difference',
+        'freeze core?': True
     },
     '2nd-order SAPT, traditional definition': {
         'method': 'sapt2',
         'calculation': ['energy', 'gradients'],
         'level': 'expert',
-        'gradients': 'finite-difference'
+        'gradients': 'finite-difference',
+        'freeze core?': True
     },
     'SAPT including all 2nd-order terms': {
         'method': 'sapt2+',
         'calculation': ['energy', 'gradients'],
         'level': 'expert',
-        'gradients': 'finite-difference'
+        'gradients': 'finite-difference',
+        'freeze core?': True
     },
     'SAPT including perturbative triples': {
         'method': 'sapt2+(3)',
         'calculation': ['energy', 'gradients'],
         'level': 'expert',
-        'gradients': 'finite-difference'
+        'gradients': 'finite-difference',
+        'freeze core?': True
     },
     'SAPT including all 3rd-order terms': {
         'method': 'sapt2+3',
         'calculation': ['energy', 'gradients'],
         'level': 'expert',
-        'gradients': 'finite-difference'
+        'gradients': 'finite-difference',
+        'freeze core?': True
     },
     'SAPT2+ with CC-based dispersion': {
         'method': 'sapt2+(ccd)',
         'calculation': ['energy', 'gradients'],
         'level': 'expert',
-        'gradients': 'finite-difference'
+        'gradients': 'finite-difference',
+        'freeze core?': True
     },
     'SAPT2+(3) with CC-based dispersion': {
         'method': 'sapt2+(3)(ccd)',
         'calculation': ['energy', 'gradients'],
         'level': 'expert',
-        'gradients': 'finite-difference'
+        'gradients': 'finite-difference',
+        'freeze core?': True
     },
     'SAPT2+3 with CC-based dispersion': {
         'method': 'sapt2+3(ccd)',
         'calculation': ['energy', 'gradients'],
         'level': 'expert',
-        'gradients': 'finite-difference'
+        'gradients': 'finite-difference',
+        'freeze core?': True
     },
     'SAPT including all 2nd-order terms and MP2 correction': {
         'method': 'sapt2+dmp2',
         'calculation': ['energy', 'gradients'],
         'level': 'expert',
-        'gradients': 'finite-difference'
+        'gradients': 'finite-difference',
+        'freeze core?': True
     },
     'SAPT including perturbative triples and MP2 correction': {
         'method': 'sapt2+(3)dmp2',
         'calculation': ['energy', 'gradients'],
         'level': 'expert',
-        'gradients': 'finite-difference'
+        'gradients': 'finite-difference',
+        'freeze core?': True
     },
     'SAPT including all 3rd-order terms and MP2 correction': {
         'method': 'sapt2+3dmp2',
         'calculation': ['energy', 'gradients'],
         'level': 'expert',
-        'gradients': 'finite-difference'
+        'gradients': 'finite-difference',
+        'freeze core?': True
     },
     'SAPT2+ with CC-based dispersion and MP2 correction': {
         'method': 'sapt2+(ccd)dmp2',
         'calculation': ['energy', 'gradients'],
         'level': 'expert',
-        'gradients': 'finite-difference'
+        'gradients': 'finite-difference',
+        'freeze core?': True
     },
     'SAPT2+(3) with CC-based dispersion and MP2 correction': {
         'method': 'sapt2+(3)(ccd)dmp2',
         'calculation': ['energy', 'gradients'],
         'level': 'expert',
-        'gradients': 'finite-difference'
+        'gradients': 'finite-difference',
+        'freeze core?': True
     },
     'SAPT2+3 with CC-based dispersion and MP2 correction': {
         'method': 'sapt2+3(ccd)dmp2',
         'calculation': ['energy', 'gradients'],
         'level': 'expert',
-        'gradients': 'finite-difference'
+        'gradients': 'finite-difference',
+        'freeze core?': True
     },
     '0th-order SAPT plus charge transfer (CT) calculation': {
         'method': 'sapt0-ct',
         'calculation': ['energy', 'gradients'],
         'level': 'expert',
-        'gradients': 'finite-difference'
+        'gradients': 'finite-difference',
+        'freeze core?': True
     },
     'SAPT2 plus CT': {
         'method': 'sapt2-ct',
         'calculation': ['energy', 'gradients'],
         'level': 'expert',
-        'gradients': 'finite-difference'
+        'gradients': 'finite-difference',
+        'freeze core?': True
     },
     'SAPT2+ plus CT': {
         'method': 'sapt2+-ct',
         'calculation': ['energy', 'gradients'],
         'level': 'expert',
-        'gradients': 'finite-difference'
+        'gradients': 'finite-difference',
+        'freeze core?': True
     },
     'SAPT2+(3) plus CT': {
         'method': 'sapt2+(3)-ct',
         'calculation': ['energy', 'gradients'],
         'level': 'expert',
-        'gradients': 'finite-difference'
+        'gradients': 'finite-difference',
+        'freeze core?': True
     },
     'SAPT2+3 plus CT': {
         'method': 'sapt2+3-ct',
         'calculation': ['energy', 'gradients'],
         'level': 'expert',
-        'gradients': 'finite-difference'
+        'gradients': 'finite-difference',
+        'freeze core?': True
     },
     'SAPT2+(CCD) plus CT': {
         'method': 'sapt2+(ccd)-ct',
         'calculation': ['energy', 'gradients'],
         'level': 'expert',
-        'gradients': 'finite-difference'
+        'gradients': 'finite-difference',
+        'freeze core?': True
     },
     'SAPT2+(3)(CCD) plus CT': {
         'method': 'sapt2+(3)(ccd)-ct',
         'calculation': ['energy', 'gradients'],
         'level': 'expert',
-        'gradients': 'finite-difference'
+        'gradients': 'finite-difference',
+        'freeze core?': True
     },
     'SAPT2+3(CCD) plus CT': {
         'method': 'sapt2+3(ccd)-ct',
         'calculation': ['energy', 'gradients'],
         'level': 'expert',
-        'gradients': 'finite-difference'
+        'gradients': 'finite-difference',
+        'freeze core?': True
     },
     '2nd-order algebraic diagrammatic construction (ADC)': {
         'method': 'adc',
         'calculation': ['energy', 'gradients'],
         'level': 'expert',
-        'gradients': 'finite-difference'
+        'gradients': 'finite-difference',
+        'freeze core?': True
     },
     'EOM-CC2': {
         'method': 'eom-cc2',
         'calculation': ['energy', 'gradients'],
         'level': 'expert',
-        'gradients': 'finite-difference'
+        'gradients': 'finite-difference',
+        'freeze core?': True
     },
     'equation of motion (EOM) CCSD': {
         'method': 'eom-ccsd',
         'calculation': ['energy', 'gradients'],
         'level': 'expert',
-        'gradients': 'analytic'
+        'gradients': 'analytic',
+        'freeze core?': True
     },
     'EOM-CC3': {
         'method': 'eom-cc3',
         'calculation': ['energy', 'gradients'],
         'level': 'expert',
-        'gradients': 'finite-difference'
+        'gradients': 'finite-difference',
+        'freeze core?': True
     }
 }  # yapf: disable
 
