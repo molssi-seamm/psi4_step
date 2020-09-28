@@ -1,4 +1,4 @@
 Pmw==2.0.1
-seamm==0.2.0
-seamm-util==0.2.1
-seamm-widgets==0.2.1
+seamm==2020.9.23
+seamm-util==2020.9.23
+seamm-widgets==2020.8.1

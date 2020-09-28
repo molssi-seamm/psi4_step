@@ -165,11 +165,15 @@ class TkEnergy(seamm.TkNode):
         level = self['level'].get()
 
         if level == 'recommended':
-            method = psi4_step.methods[self['method'].get()]['method']
+            long_method = self['method'].get()
+            method = psi4_step.methods[long_method]['method']
             functional = self['functional'].get()
+            meta = psi4_step.methods[long_method]
         else:
-            method = psi4_step.methods[self['advanced_method'].get()]['method']
+            long_method = self['advanced_method'].get()
+            method = psi4_step.methods[long_method]['method']
             functional = self['advanced_functional'].get()
+            meta = psi4_step.methods[long_method]
 
         frame = self['calculation']
         for slave in frame.grid_slaves():
@@ -188,6 +192,10 @@ class TkEnergy(seamm.TkNode):
                 self['functional'].grid(row=row, column=1, sticky=tk.EW)
                 widgets2.append(self['functional'])
                 row += 1
+            if 'freeze core?' in meta and meta['freeze core?']:
+                self['freeze-cores'].grid(row=row, column=1, sticky=tk.EW)
+                widgets2.append(self['freeze-cores'])
+                row += 1
         else:
             self['advanced_method'].grid(
                 row=row, column=0, columnspan=2, sticky=tk.EW
@@ -199,6 +207,10 @@ class TkEnergy(seamm.TkNode):
                     row=row, column=1, sticky=tk.EW
                 )
                 widgets2.append(self['advanced_functional'])
+                row += 1
+            if 'freeze core?' in meta and meta['freeze core?']:
+                self['freeze-cores'].grid(row=row, column=1, sticky=tk.EW)
+                widgets2.append(self['freeze-cores'])
                 row += 1
         if method == 'dft':
             dispersions = psi4_step.dft_functionals[functional]['dispersion']
