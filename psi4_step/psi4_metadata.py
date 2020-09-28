@@ -311,7 +311,7 @@ methods = {
     'coupled cluster doubles (CCD)': {
         'method': 'ccd',
         'calculation': ['energy', 'gradients'],
-        'level': 'normal',
+        'level': 'expert',
         'gradients': 'analytic',
         'freeze core?': True
     },
@@ -1557,6 +1557,21 @@ optimization_convergence = {
 }
 
 properties = {
+    "(T) CORRECTION ENERGY": {
+        "calculation": [
+            "energy",
+            "optimization",
+            "thermodynamics",
+            "vibrations"
+        ],
+        "description": "",
+        "dimensionality": "scalar",
+        "methods": [
+            "ccsd(t)"
+        ],
+        "type": "float",
+        "units": ""
+    },
     "-D ENERGY": {
         "calculation": [
             "energy",
@@ -1566,22 +1581,38 @@ properties = {
         ],
         "description": "dispersion correction energy",
         "dimensionality": "scalar",
+        "methods": [
+            "ccsd",
+            "ccsd(t)",
+            "dft",
+            "hf",
+            "lccd",
+            "mp2",
+            "mp3",
+            "mp4"
+        ],
         "type": "float",
         "units": "Ha"
     },
-    "32-POLE XXXXX": {
+    "-D GRADIENT": {
         "calculation": [
             "energy",
             "optimization",
             "thermodynamics",
             "vibrations"
         ],
-        "description": "5th order electrical multipole",
-        "dimensionality": "scalar",
+        "description": "gradient of the dispersion correction energy",
+        "dimensionality": [
+            3,
+            "n_atoms"
+        ],
+        "methods": [
+            "dft"
+        ],
         "type": "float",
         "units": ""
     },
-    "32-POLE XXXXY": {
+    "32-POLE": {
         "calculation": [
             "energy",
             "optimization",
@@ -1589,235 +1620,430 @@ properties = {
             "vibrations"
         ],
         "description": "5th order electrical multipole",
-        "dimensionality": "scalar",
+        "dimensionality": [
+            "triangular",
+            3,
+            3,
+            3,
+            3,
+            3
+        ],
+        "methods": [
+            "ccsd",
+            "ccsd(t)",
+            "dft",
+            "hf",
+            "lccd",
+            "mp2",
+            "mp3",
+            "mp4"
+        ],
         "type": "float",
         "units": ""
     },
-    "32-POLE XXXXZ": {
+    "AAA (T) CORRECTION ENERGY": {
         "calculation": [
             "energy",
             "optimization",
             "thermodynamics",
             "vibrations"
         ],
-        "description": "5th order electrical multipole",
+        "description": "",
         "dimensionality": "scalar",
+        "methods": [
+            "ccsd(t)"
+        ],
         "type": "float",
         "units": ""
     },
-    "32-POLE XXXYY": {
+    "AAB (T) CORRECTION ENERGY": {
         "calculation": [
             "energy",
             "optimization",
             "thermodynamics",
             "vibrations"
         ],
-        "description": "5th order electrical multipole",
+        "description": "",
         "dimensionality": "scalar",
+        "methods": [
+            "ccsd(t)"
+        ],
         "type": "float",
         "units": ""
     },
-    "32-POLE XXXYZ": {
+    "ABB (T) CORRECTION ENERGY": {
         "calculation": [
             "energy",
             "optimization",
             "thermodynamics",
             "vibrations"
         ],
-        "description": "5th order electrical multipole",
+        "description": "",
         "dimensionality": "scalar",
+        "methods": [
+            "ccsd(t)"
+        ],
         "type": "float",
         "units": ""
     },
-    "32-POLE XXXZZ": {
+    "B3LYP-D3(BJ) DISPERSION CORRECTION ENERGY": {
         "calculation": [
             "energy",
             "optimization",
             "thermodynamics",
             "vibrations"
         ],
-        "description": "5th order electrical multipole",
+        "description": "the dispersion correction energy",
         "dimensionality": "scalar",
+        "methods": [
+            "dft"
+        ],
         "type": "float",
         "units": ""
     },
-    "32-POLE XXYYY": {
+    "BBB (T) CORRECTION ENERGY": {
         "calculation": [
             "energy",
             "optimization",
             "thermodynamics",
             "vibrations"
         ],
-        "description": "5th order electrical multipole",
+        "description": "",
         "dimensionality": "scalar",
+        "methods": [
+            "ccsd(t)"
+        ],
         "type": "float",
         "units": ""
     },
-    "32-POLE XXYYZ": {
+    "CC D1 DIAGNOSTIC": {
         "calculation": [
             "energy",
             "optimization",
             "thermodynamics",
             "vibrations"
         ],
-        "description": "5th order electrical multipole",
+        "description": "",
         "dimensionality": "scalar",
+        "methods": [
+            "ccsd",
+            "ccsd(t)"
+        ],
         "type": "float",
         "units": ""
     },
-    "32-POLE XXYZZ": {
+    "CC D2 DIAGNOSTIC": {
         "calculation": [
             "energy",
             "optimization",
             "thermodynamics",
             "vibrations"
         ],
-        "description": "5th order electrical multipole",
+        "description": "",
         "dimensionality": "scalar",
+        "methods": [
+            "ccsd",
+            "ccsd(t)"
+        ],
         "type": "float",
         "units": ""
     },
-    "32-POLE XXZZZ": {
+    "CC NEW D1 DIAGNOSTIC": {
         "calculation": [
             "energy",
             "optimization",
             "thermodynamics",
             "vibrations"
         ],
-        "description": "5th order electrical multipole",
+        "description": "",
         "dimensionality": "scalar",
+        "methods": [
+            "ccsd",
+            "ccsd(t)"
+        ],
         "type": "float",
         "units": ""
     },
-    "32-POLE XYYYY": {
+    "CC T1 DIAGNOSTIC": {
         "calculation": [
             "energy",
             "optimization",
             "thermodynamics",
             "vibrations"
         ],
-        "description": "5th order electrical multipole",
+        "description": "",
         "dimensionality": "scalar",
+        "methods": [
+            "ccsd",
+            "ccsd(t)"
+        ],
         "type": "float",
         "units": ""
     },
-    "32-POLE XYYYZ": {
+    "CCSD CORRELATION ENERGY": {
         "calculation": [
             "energy",
             "optimization",
             "thermodynamics",
             "vibrations"
         ],
-        "description": "5th order electrical multipole",
+        "description": "the correlation energy for a CCSD calculation",
         "dimensionality": "scalar",
+        "methods": [
+            "ccsd",
+            "ccsd(t)"
+        ],
         "type": "float",
         "units": ""
     },
-    "32-POLE XYYZZ": {
+    "CCSD OPPOSITE-SPIN CORRELATION ENERGY": {
         "calculation": [
             "energy",
             "optimization",
             "thermodynamics",
             "vibrations"
         ],
-        "description": "5th order electrical multipole",
+        "description": "",
         "dimensionality": "scalar",
+        "methods": [
+            "ccsd",
+            "ccsd(t)"
+        ],
         "type": "float",
         "units": ""
     },
-    "32-POLE XYZZZ": {
+    "CCSD SAME-SPIN CORRELATION ENERGY": {
         "calculation": [
             "energy",
             "optimization",
             "thermodynamics",
             "vibrations"
         ],
-        "description": "5th order electrical multipole",
+        "description": "",
         "dimensionality": "scalar",
+        "methods": [
+            "ccsd",
+            "ccsd(t)"
+        ],
         "type": "float",
         "units": ""
     },
-    "32-POLE XZZZZ": {
+    "CCSD TOTAL ENERGY": {
         "calculation": [
             "energy",
             "optimization",
             "thermodynamics",
             "vibrations"
         ],
-        "description": "5th order electrical multipole",
+        "description": "the total electronic energy from a CCSD calculation",
         "dimensionality": "scalar",
+        "methods": [
+            "ccsd",
+            "ccsd(t)"
+        ],
         "type": "float",
         "units": ""
     },
-    "32-POLE YYYYY": {
+    "CCSD(T) CORRELATION ENERGY": {
         "calculation": [
             "energy",
             "optimization",
             "thermodynamics",
             "vibrations"
         ],
-        "description": "5th order electrical multipole",
+        "description": "",
         "dimensionality": "scalar",
+        "methods": [
+            "ccsd(t)"
+        ],
         "type": "float",
         "units": ""
     },
-    "32-POLE YYYYZ": {
+    "CCSD(T) TOTAL ENERGY": {
         "calculation": [
             "energy",
             "optimization",
             "thermodynamics",
             "vibrations"
         ],
-        "description": "5th order electrical multipole",
+        "description": "",
         "dimensionality": "scalar",
+        "methods": [
+            "ccsd(t)"
+        ],
         "type": "float",
         "units": ""
     },
-    "32-POLE YYYZZ": {
+    "CURRENT CORRELATION ENERGY": {
         "calculation": [
             "energy",
             "optimization",
             "thermodynamics",
             "vibrations"
         ],
-        "description": "5th order electrical multipole",
+        "description": "the correlation energy for the current method",
         "dimensionality": "scalar",
+        "methods": [
+            "ccsd",
+            "ccsd(t)",
+            "lccd",
+            "mp2",
+            "mp3",
+            "mp4"
+        ],
         "type": "float",
         "units": ""
     },
-    "32-POLE YYZZZ": {
+    "CURRENT DIPOLE": {
         "calculation": [
             "energy",
             "optimization",
             "thermodynamics",
             "vibrations"
         ],
-        "description": "5th order electrical multipole",
-        "dimensionality": "scalar",
+        "description": "the electrical dipole moment for the current method",
+        "dimensionality": [
+            3
+        ],
+        "methods": [
+            "ccsd",
+            "ccsd(t)",
+            "dft",
+            "hf",
+            "lccd",
+            "mp2",
+            "mp3",
+            "mp4"
+        ],
         "type": "float",
         "units": ""
     },
-    "32-POLE YZZZZ": {
+    "CURRENT DIPOLE X": {
         "calculation": [
             "energy",
             "optimization",
             "thermodynamics",
             "vibrations"
         ],
-        "description": "5th order electrical multipole",
+        "description": "the electrical dipole moment for the current method",
         "dimensionality": "scalar",
+        "methods": [
+            "ccsd",
+            "ccsd(t)",
+            "dft",
+            "hf",
+            "lccd",
+            "mp2",
+            "mp3",
+            "mp4"
+        ],
         "type": "float",
         "units": ""
     },
-    "32-POLE ZZZZZ": {
+    "CURRENT DIPOLE Y": {
         "calculation": [
             "energy",
             "optimization",
             "thermodynamics",
             "vibrations"
         ],
-        "description": "5th order electrical multipole",
+        "description": "the electrical dipole moment for the current method",
         "dimensionality": "scalar",
+        "methods": [
+            "ccsd",
+            "ccsd(t)",
+            "dft",
+            "hf",
+            "lccd",
+            "mp2",
+            "mp3",
+            "mp4"
+        ],
+        "type": "float",
+        "units": ""
+    },
+    "CURRENT DIPOLE Z": {
+        "calculation": [
+            "energy",
+            "optimization",
+            "thermodynamics",
+            "vibrations"
+        ],
+        "description": "the electrical dipole moment for the current method",
+        "dimensionality": "scalar",
+        "methods": [
+            "ccsd",
+            "ccsd(t)",
+            "dft",
+            "hf",
+            "lccd",
+            "mp2",
+            "mp3",
+            "mp4"
+        ],
+        "type": "float",
+        "units": ""
+    },
+    "CURRENT ENERGY": {
+        "calculation": [
+            "energy",
+            "optimization",
+            "thermodynamics",
+            "vibrations"
+        ],
+        "description": "the electronic energy from the current method",
+        "dimensionality": "scalar",
+        "methods": [
+            "ccsd",
+            "ccsd(t)",
+            "dft",
+            "hf",
+            "lccd",
+            "mp2",
+            "mp3",
+            "mp4"
+        ],
+        "type": "float",
+        "units": ""
+    },
+    "CURRENT GRADIENT": {
+        "calculation": [
+            "energy",
+            "optimization",
+            "thermodynamics",
+            "vibrations"
+        ],
+        "description": "the gradient of the energy for the current method",
+        "dimensionality": [
+            3,
+            "n_atoms"
+        ],
+        "methods": [
+            "dft",
+            "hf"
+        ],
+        "type": "float",
+        "units": ""
+    },
+    "CURRENT REFERENCE ENERGY": {
+        "calculation": [
+            "energy",
+            "optimization",
+            "thermodynamics",
+            "vibrations"
+        ],
+        "description": "",
+        "dimensionality": "scalar",
+        "methods": [
+            "ccsd",
+            "ccsd(t)",
+            "dft",
+            "hf",
+            "lccd",
+            "mp2",
+            "mp3",
+            "mp4"
+        ],
         "type": "float",
         "units": ""
     },
@@ -1830,6 +2056,9 @@ properties = {
         ],
         "description": "total energy of DFT functional",
         "dimensionality": "scalar",
+        "methods": [
+            "dft"
+        ],
         "type": "float",
         "units": ""
     },
@@ -1842,6 +2071,9 @@ properties = {
         ],
         "description": "Total DFT energy including dispersion",
         "dimensionality": "scalar",
+        "methods": [
+            "dft"
+        ],
         "type": "float",
         "units": ""
     },
@@ -1854,6 +2086,9 @@ properties = {
         ],
         "description": "VV10 energy in DFT",
         "dimensionality": "scalar",
+        "methods": [
+            "dft"
+        ],
         "type": "float",
         "units": ""
     },
@@ -1866,6 +2101,33 @@ properties = {
         ],
         "description": "DFT exchange-correlation energy",
         "dimensionality": "scalar",
+        "methods": [
+            "dft"
+        ],
+        "type": "float",
+        "units": ""
+    },
+    "DIPOLE": {
+        "calculation": [
+            "energy",
+            "optimization",
+            "thermodynamics",
+            "vibrations"
+        ],
+        "description": "electrical dipole moment",
+        "dimensionality": [
+            3
+        ],
+        "methods": [
+            "ccsd",
+            "ccsd(t)",
+            "dft",
+            "hf",
+            "lccd",
+            "mp2",
+            "mp3",
+            "mp4"
+        ],
         "type": "float",
         "units": ""
     },
@@ -1878,6 +2140,16 @@ properties = {
         ],
         "description": "electrical dipole moment",
         "dimensionality": "scalar",
+        "methods": [
+            "ccsd",
+            "ccsd(t)",
+            "dft",
+            "hf",
+            "lccd",
+            "mp2",
+            "mp3",
+            "mp4"
+        ],
         "type": "float",
         "units": ""
     },
@@ -1890,6 +2162,16 @@ properties = {
         ],
         "description": "electrical dipole moment",
         "dimensionality": "scalar",
+        "methods": [
+            "ccsd",
+            "ccsd(t)",
+            "dft",
+            "hf",
+            "lccd",
+            "mp2",
+            "mp3",
+            "mp4"
+        ],
         "type": "float",
         "units": ""
     },
@@ -1902,6 +2184,16 @@ properties = {
         ],
         "description": "electrical dipole moment",
         "dimensionality": "scalar",
+        "methods": [
+            "ccsd",
+            "ccsd(t)",
+            "dft",
+            "hf",
+            "lccd",
+            "mp2",
+            "mp3",
+            "mp4"
+        ],
         "type": "float",
         "units": ""
     },
@@ -1914,70 +2206,59 @@ properties = {
         ],
         "description": "energy of the dispersion correction",
         "dimensionality": "scalar",
+        "methods": [
+            "dft"
+        ],
         "type": "float",
         "units": ""
     },
-    "ESP": {
+    "ELECTROSTATIC POTENTIAL": {
         "calculation": [
             "energy",
             "optimization",
             "thermodynamics",
             "vibrations"
         ],
-        "description": "electrostatic potential at nuclei",
-        "dimensionality": "scalar",
+        "description": "the electrostatic potential at the nuclei",
+        "dimensionality": [
+            "n_atoms"
+        ],
+        "methods": [
+            "ccsd",
+            "ccsd(t)",
+            "dft",
+            "hf",
+            "lccd",
+            "mp2",
+            "mp3",
+            "mp4"
+        ],
         "type": "float",
         "units": ""
     },
-    "HEXADECAPOLE XXXX": {
+    "Eelec": {
         "calculation": [
             "energy",
             "optimization",
             "thermodynamics",
             "vibrations"
         ],
-        "description": "electrical hexadecapole moment",
+        "description": "the electronic energy",
         "dimensionality": "scalar",
-        "type": "float",
-        "units": ""
-    },
-    "HEXADECAPOLE XXXY": {
-        "calculation": [
-            "energy",
-            "optimization",
-            "thermodynamics",
-            "vibrations"
+        "methods": [
+            "ccsd",
+            "ccsd(t)",
+            "dft",
+            "hf",
+            "lccd",
+            "mp2",
+            "mp3",
+            "mp4"
         ],
-        "description": "electrical hexadecapole moment",
-        "dimensionality": "scalar",
         "type": "float",
         "units": ""
     },
-    "HEXADECAPOLE XXXZ": {
-        "calculation": [
-            "energy",
-            "optimization",
-            "thermodynamics",
-            "vibrations"
-        ],
-        "description": "electrical hexadecapole moment",
-        "dimensionality": "scalar",
-        "type": "float",
-        "units": ""
-    },
-    "HEXADECAPOLE XXYY": {
-        "calculation": [
-            "energy",
-            "optimization",
-            "thermodynamics",
-            "vibrations"
-        ],
-        "description": "electrical hexadecapole moment",
-        "dimensionality": "scalar",
-        "type": "float",
-        "units": ""
-    },
-    "HEXADECAPOLE XXYZ": {
+    "HEXADECAPOLE": {
         "calculation": [
             "energy",
             "optimization",
@@ -1985,127 +2266,120 @@ properties = {
             "vibrations"
         ],
         "description": "electrical hexadecapole moment",
-        "dimensionality": "scalar",
+        "dimensionality": [
+            "triangular",
+            3,
+            3,
+            3,
+            3
+        ],
+        "methods": [
+            "ccsd",
+            "ccsd(t)",
+            "dft",
+            "hf",
+            "lccd",
+            "mp2",
+            "mp3",
+            "mp4"
+        ],
         "type": "float",
         "units": ""
     },
-    "HEXADECAPOLE XXZZ": {
+    "HF TOTAL ENERGY": {
         "calculation": [
             "energy",
             "optimization",
             "thermodynamics",
             "vibrations"
         ],
-        "description": "electrical hexadecapole moment",
+        "description": "the Hartree-Fock electronic energy",
         "dimensionality": "scalar",
+        "methods": [
+            "ccsd",
+            "ccsd(t)",
+            "hf",
+            "lccd",
+            "mp2",
+            "mp3",
+            "mp4"
+        ],
         "type": "float",
         "units": ""
     },
-    "HEXADECAPOLE XYYY": {
+    "LCCD CORRELATION ENERGY": {
         "calculation": [
             "energy",
             "optimization",
             "thermodynamics",
             "vibrations"
         ],
-        "description": "electrical hexadecapole moment",
+        "description": "",
         "dimensionality": "scalar",
+        "methods": [
+            "lccd"
+        ],
         "type": "float",
         "units": ""
     },
-    "HEXADECAPOLE XYYZ": {
+    "LCCD OPPOSITE-SPIN CORRELATION ENERGY": {
         "calculation": [
             "energy",
             "optimization",
             "thermodynamics",
             "vibrations"
         ],
-        "description": "electrical hexadecapole moment",
+        "description": "",
         "dimensionality": "scalar",
+        "methods": [
+            "lccd"
+        ],
         "type": "float",
         "units": ""
     },
-    "HEXADECAPOLE XYZZ": {
+    "LCCD SAME-SPIN CORRELATION ENERGY": {
         "calculation": [
             "energy",
             "optimization",
             "thermodynamics",
             "vibrations"
         ],
-        "description": "electrical hexadecapole moment",
+        "description": "",
         "dimensionality": "scalar",
+        "methods": [
+            "lccd"
+        ],
         "type": "float",
         "units": ""
     },
-    "HEXADECAPOLE XZZZ": {
+    "LCCD TOTAL ENERGY": {
         "calculation": [
             "energy",
             "optimization",
             "thermodynamics",
             "vibrations"
         ],
-        "description": "electrical hexadecapole moment",
+        "description": "",
         "dimensionality": "scalar",
+        "methods": [
+            "lccd"
+        ],
         "type": "float",
         "units": ""
     },
-    "HEXADECAPOLE YYYY": {
+    "LCCSD (+LMP2) TOTAL ENERGY": {
         "calculation": [
             "energy",
             "optimization",
             "thermodynamics",
             "vibrations"
         ],
-        "description": "electrical hexadecapole moment",
+        "description": "",
         "dimensionality": "scalar",
-        "type": "float",
-        "units": ""
-    },
-    "HEXADECAPOLE YYYZ": {
-        "calculation": [
-            "energy",
-            "optimization",
-            "thermodynamics",
-            "vibrations"
+        "methods": [
+            "ccsd",
+            "ccsd(t)"
         ],
-        "description": "electrical hexadecapole moment",
-        "dimensionality": "scalar",
-        "type": "float",
-        "units": ""
-    },
-    "HEXADECAPOLE YYZZ": {
-        "calculation": [
-            "energy",
-            "optimization",
-            "thermodynamics",
-            "vibrations"
-        ],
-        "description": "electrical hexadecapole moment",
-        "dimensionality": "scalar",
-        "type": "float",
-        "units": ""
-    },
-    "HEXADECAPOLE YZZZ": {
-        "calculation": [
-            "energy",
-            "optimization",
-            "thermodynamics",
-            "vibrations"
-        ],
-        "description": "electrical hexadecapole moment",
-        "dimensionality": "scalar",
-        "type": "float",
-        "units": ""
-    },
-    "HEXADECAPOLE ZZZZ": {
-        "calculation": [
-            "energy",
-            "optimization",
-            "thermodynamics",
-            "vibrations"
-        ],
-        "description": "electrical hexadecapole moment",
-        "dimensionality": "scalar",
         "type": "float",
         "units": ""
     },
@@ -2117,7 +2391,19 @@ properties = {
             "vibrations"
         ],
         "description": "atomic charges using Lowdin's method",
-        "dimensionality": ["n_atoms"],
+        "dimensionality": [
+            "n_atoms"
+        ],
+        "methods": [
+            "ccsd",
+            "ccsd(t)",
+            "dft",
+            "hf",
+            "lccd",
+            "mp2",
+            "mp3",
+            "mp4"
+        ],
         "type": "float",
         "units": ""
     },
@@ -2129,7 +2415,285 @@ properties = {
             "vibrations"
         ],
         "description": "Mayer's bond indices",
-        "dimensionality": ["triangular", "n_atoms", "n_atoms"],
+        "dimensionality": [
+            "triangular",
+            "n_atoms",
+            "n_atoms"
+        ],
+        "methods": [
+            "ccsd",
+            "ccsd(t)",
+            "dft",
+            "hf",
+            "lccd",
+            "mp2",
+            "mp3",
+            "mp4"
+        ],
+        "type": "float",
+        "units": ""
+    },
+    "MP2 CORRELATION ENERGY": {
+        "calculation": [
+            "energy",
+            "optimization",
+            "thermodynamics",
+            "vibrations"
+        ],
+        "description": "",
+        "dimensionality": "scalar",
+        "methods": [
+            "ccsd",
+            "ccsd(t)",
+            "lccd",
+            "mp2",
+            "mp3",
+            "mp4"
+        ],
+        "type": "float",
+        "units": ""
+    },
+    "MP2 OPPOSITE-SPIN CORRELATION ENERGY": {
+        "calculation": [
+            "energy",
+            "optimization",
+            "thermodynamics",
+            "vibrations"
+        ],
+        "description": "",
+        "dimensionality": "scalar",
+        "methods": [
+            "ccsd",
+            "ccsd(t)",
+            "lccd",
+            "mp2",
+            "mp3",
+            "mp4"
+        ],
+        "type": "float",
+        "units": ""
+    },
+    "MP2 SAME-SPIN CORRELATION ENERGY": {
+        "calculation": [
+            "energy",
+            "optimization",
+            "thermodynamics",
+            "vibrations"
+        ],
+        "description": "",
+        "dimensionality": "scalar",
+        "methods": [
+            "ccsd",
+            "ccsd(t)",
+            "lccd",
+            "mp2",
+            "mp3",
+            "mp4"
+        ],
+        "type": "float",
+        "units": ""
+    },
+    "MP2 SINGLES ENERGY": {
+        "calculation": [
+            "energy",
+            "optimization",
+            "thermodynamics",
+            "vibrations"
+        ],
+        "description": "",
+        "dimensionality": "scalar",
+        "methods": [
+            "mp2"
+        ],
+        "type": "float",
+        "units": ""
+    },
+    "MP2 TOTAL ENERGY": {
+        "calculation": [
+            "energy",
+            "optimization",
+            "thermodynamics",
+            "vibrations"
+        ],
+        "description": "",
+        "dimensionality": "scalar",
+        "methods": [
+            "ccsd",
+            "ccsd(t)",
+            "lccd",
+            "mp2",
+            "mp3",
+            "mp4"
+        ],
+        "type": "float",
+        "units": ""
+    },
+    "MP2.5 CORRELATION ENERGY": {
+        "calculation": [
+            "energy",
+            "optimization",
+            "thermodynamics",
+            "vibrations"
+        ],
+        "description": "",
+        "dimensionality": "scalar",
+        "methods": [
+            "mp3",
+            "mp4"
+        ],
+        "type": "float",
+        "units": ""
+    },
+    "MP2.5 TOTAL ENERGY": {
+        "calculation": [
+            "energy",
+            "optimization",
+            "thermodynamics",
+            "vibrations"
+        ],
+        "description": "",
+        "dimensionality": "scalar",
+        "methods": [
+            "mp3",
+            "mp4"
+        ],
+        "type": "float",
+        "units": ""
+    },
+    "MP3 CORRELATION ENERGY": {
+        "calculation": [
+            "energy",
+            "optimization",
+            "thermodynamics",
+            "vibrations"
+        ],
+        "description": "",
+        "dimensionality": "scalar",
+        "methods": [
+            "mp3",
+            "mp4"
+        ],
+        "type": "float",
+        "units": ""
+    },
+    "MP3 TOTAL ENERGY": {
+        "calculation": [
+            "energy",
+            "optimization",
+            "thermodynamics",
+            "vibrations"
+        ],
+        "description": "",
+        "dimensionality": "scalar",
+        "methods": [
+            "mp3",
+            "mp4"
+        ],
+        "type": "float",
+        "units": ""
+    },
+    "MP4 CORRELATION ENERGY": {
+        "calculation": [
+            "energy",
+            "optimization",
+            "thermodynamics",
+            "vibrations"
+        ],
+        "description": "",
+        "dimensionality": "scalar",
+        "methods": [
+            "mp4"
+        ],
+        "type": "float",
+        "units": ""
+    },
+    "MP4 TOTAL ENERGY": {
+        "calculation": [
+            "energy",
+            "optimization",
+            "thermodynamics",
+            "vibrations"
+        ],
+        "description": "",
+        "dimensionality": "scalar",
+        "methods": [
+            "mp4"
+        ],
+        "type": "float",
+        "units": ""
+    },
+    "MP4(SDQ) CORRELATION ENERGY": {
+        "calculation": [
+            "energy",
+            "optimization",
+            "thermodynamics",
+            "vibrations"
+        ],
+        "description": "",
+        "dimensionality": "scalar",
+        "methods": [
+            "mp4"
+        ],
+        "type": "float",
+        "units": ""
+    },
+    "MP4(SDQ) TOTAL ENERGY": {
+        "calculation": [
+            "energy",
+            "optimization",
+            "thermodynamics",
+            "vibrations"
+        ],
+        "description": "",
+        "dimensionality": "scalar",
+        "methods": [
+            "mp4"
+        ],
+        "type": "float",
+        "units": ""
+    },
+    "MP4(SDTQ) CORRELATION ENERGY": {
+        "calculation": [
+            "energy",
+            "optimization",
+            "thermodynamics",
+            "vibrations"
+        ],
+        "description": "",
+        "dimensionality": "scalar",
+        "methods": [
+            "mp4"
+        ],
+        "type": "float",
+        "units": ""
+    },
+    "MP4(SDTQ) TOTAL ENERGY": {
+        "calculation": [
+            "energy",
+            "optimization",
+            "thermodynamics",
+            "vibrations"
+        ],
+        "description": "",
+        "dimensionality": "scalar",
+        "methods": [
+            "mp4"
+        ],
+        "type": "float",
+        "units": ""
+    },
+    "MP4(T) CORRECTION ENERGY": {
+        "calculation": [
+            "energy",
+            "optimization",
+            "thermodynamics",
+            "vibrations"
+        ],
+        "description": "",
+        "dimensionality": "scalar",
+        "methods": [
+            "mp4"
+        ],
         "type": "float",
         "units": ""
     },
@@ -2141,7 +2705,19 @@ properties = {
             "vibrations"
         ],
         "description": "atomic charges using Mulliken's method",
-        "dimensionality": ["n_atoms"],
+        "dimensionality": [
+            "n_atoms"
+        ],
+        "methods": [
+            "ccsd",
+            "ccsd(t)",
+            "dft",
+            "hf",
+            "lccd",
+            "mp2",
+            "mp3",
+            "mp4"
+        ],
         "type": "float",
         "units": ""
     },
@@ -2154,10 +2730,20 @@ properties = {
         ],
         "description": "",
         "dimensionality": "scalar",
+        "methods": [
+            "ccsd",
+            "ccsd(t)",
+            "dft",
+            "hf",
+            "lccd",
+            "mp2",
+            "mp3",
+            "mp4"
+        ],
         "type": "float",
         "units": ""
     },
-    "OCTUPOLE XXX": {
+    "OCTUPOLE": {
         "calculation": [
             "energy",
             "optimization",
@@ -2165,115 +2751,22 @@ properties = {
             "vibrations"
         ],
         "description": "electrical octupole moment",
-        "dimensionality": "scalar",
-        "type": "float",
-        "units": ""
-    },
-    "OCTUPOLE XXY": {
-        "calculation": [
-            "energy",
-            "optimization",
-            "thermodynamics",
-            "vibrations"
+        "dimensionality": [
+            "triangular",
+            3,
+            3,
+            3
         ],
-        "description": "electrical octupole moment",
-        "dimensionality": "scalar",
-        "type": "float",
-        "units": ""
-    },
-    "OCTUPOLE XXZ": {
-        "calculation": [
-            "energy",
-            "optimization",
-            "thermodynamics",
-            "vibrations"
+        "methods": [
+            "ccsd",
+            "ccsd(t)",
+            "dft",
+            "hf",
+            "lccd",
+            "mp2",
+            "mp3",
+            "mp4"
         ],
-        "description": "electrical octupole moment",
-        "dimensionality": "scalar",
-        "type": "float",
-        "units": ""
-    },
-    "OCTUPOLE XYY": {
-        "calculation": [
-            "energy",
-            "optimization",
-            "thermodynamics",
-            "vibrations"
-        ],
-        "description": "electrical octupole moment",
-        "dimensionality": "scalar",
-        "type": "float",
-        "units": ""
-    },
-    "OCTUPOLE XYZ": {
-        "calculation": [
-            "energy",
-            "optimization",
-            "thermodynamics",
-            "vibrations"
-        ],
-        "description": "electrical octupole moment",
-        "dimensionality": "scalar",
-        "type": "float",
-        "units": ""
-    },
-    "OCTUPOLE XZZ": {
-        "calculation": [
-            "energy",
-            "optimization",
-            "thermodynamics",
-            "vibrations"
-        ],
-        "description": "electrical octupole moment",
-        "dimensionality": "scalar",
-        "type": "float",
-        "units": ""
-    },
-    "OCTUPOLE YYY": {
-        "calculation": [
-            "energy",
-            "optimization",
-            "thermodynamics",
-            "vibrations"
-        ],
-        "description": "electrical octupole moment",
-        "dimensionality": "scalar",
-        "type": "float",
-        "units": ""
-    },
-    "OCTUPOLE YYZ": {
-        "calculation": [
-            "energy",
-            "optimization",
-            "thermodynamics",
-            "vibrations"
-        ],
-        "description": "electrical octupole moment",
-        "dimensionality": "scalar",
-        "type": "float",
-        "units": ""
-    },
-    "OCTUPOLE YZZ": {
-        "calculation": [
-            "energy",
-            "optimization",
-            "thermodynamics",
-            "vibrations"
-        ],
-        "description": "electrical octupole moment",
-        "dimensionality": "scalar",
-        "type": "float",
-        "units": ""
-    },
-    "OCTUPOLE ZZZ": {
-        "calculation": [
-            "energy",
-            "optimization",
-            "thermodynamics",
-            "vibrations"
-        ],
-        "description": "electrical octupole moment",
-        "dimensionality": "scalar",
         "type": "float",
         "units": ""
     },
@@ -2286,6 +2779,37 @@ properties = {
         ],
         "description": "the one-electron energy",
         "dimensionality": "scalar",
+        "methods": [
+            "ccsd",
+            "ccsd(t)",
+            "dft",
+            "hf",
+            "lccd",
+            "mp2",
+            "mp3",
+            "mp4"
+        ],
+        "type": "float",
+        "units": ""
+    },
+    "OPTIMIZATION ITERATIONS": {
+        "calculation": [
+            "energy",
+            "optimization",
+            "thermodynamics",
+            "vibrations"
+        ],
+        "description": "",
+        "dimensionality": "scalar",
+        "methods": [
+            "ccsd",
+            "ccsd(t)",
+            "dft",
+            "hf",
+            "lccd",
+            "mp2",
+            "mp3"
+        ],
         "type": "float",
         "units": ""
     },
@@ -2298,10 +2822,20 @@ properties = {
         ],
         "description": "the PCM polarization energy",
         "dimensionality": "scalar",
+        "methods": [
+            "ccsd",
+            "ccsd(t)",
+            "dft",
+            "hf",
+            "lccd",
+            "mp2",
+            "mp3",
+            "mp4"
+        ],
         "type": "float",
         "units": ""
     },
-    "QUADRUPOLE XX": {
+    "QUADRUPOLE": {
         "calculation": [
             "energy",
             "optimization",
@@ -2309,67 +2843,45 @@ properties = {
             "vibrations"
         ],
         "description": "electrical quadrupole moment",
-        "dimensionality": "scalar",
+        "dimensionality": [
+            "triangular",
+            3,
+            3
+        ],
+        "methods": [
+            "ccsd",
+            "ccsd(t)",
+            "dft",
+            "hf",
+            "lccd",
+            "mp2",
+            "mp3",
+            "mp4"
+        ],
         "type": "float",
         "units": ""
     },
-    "QUADRUPOLE XY": {
+    "SCF DIPOLE": {
         "calculation": [
             "energy",
             "optimization",
             "thermodynamics",
             "vibrations"
         ],
-        "description": "electrical quadrupole moment",
-        "dimensionality": "scalar",
-        "type": "float",
-        "units": ""
-    },
-    "QUADRUPOLE XZ": {
-        "calculation": [
-            "energy",
-            "optimization",
-            "thermodynamics",
-            "vibrations"
+        "description": "electrical dipole moment from SCF",
+        "dimensionality": [
+            3
         ],
-        "description": "electrical quadrupole moment",
-        "dimensionality": "scalar",
-        "type": "float",
-        "units": ""
-    },
-    "QUADRUPOLE YY": {
-        "calculation": [
-            "energy",
-            "optimization",
-            "thermodynamics",
-            "vibrations"
+        "methods": [
+            "ccsd",
+            "ccsd(t)",
+            "dft",
+            "hf",
+            "lccd",
+            "mp2",
+            "mp3",
+            "mp4"
         ],
-        "description": "electrical quadrupole moment",
-        "dimensionality": "scalar",
-        "type": "float",
-        "units": ""
-    },
-    "QUADRUPOLE YZ": {
-        "calculation": [
-            "energy",
-            "optimization",
-            "thermodynamics",
-            "vibrations"
-        ],
-        "description": "electrical quadrupole moment",
-        "dimensionality": "scalar",
-        "type": "float",
-        "units": ""
-    },
-    "QUADRUPOLE ZZ": {
-        "calculation": [
-            "energy",
-            "optimization",
-            "thermodynamics",
-            "vibrations"
-        ],
-        "description": "electrical quadrupole moment",
-        "dimensionality": "scalar",
         "type": "float",
         "units": ""
     },
@@ -2382,6 +2894,16 @@ properties = {
         ],
         "description": "electrical dipole moment from SCF",
         "dimensionality": "scalar",
+        "methods": [
+            "ccsd",
+            "ccsd(t)",
+            "dft",
+            "hf",
+            "lccd",
+            "mp2",
+            "mp3",
+            "mp4"
+        ],
         "type": "float",
         "units": ""
     },
@@ -2394,6 +2916,16 @@ properties = {
         ],
         "description": "electrical dipole moment from SCF",
         "dimensionality": "scalar",
+        "methods": [
+            "ccsd",
+            "ccsd(t)",
+            "dft",
+            "hf",
+            "lccd",
+            "mp2",
+            "mp3",
+            "mp4"
+        ],
         "type": "float",
         "units": ""
     },
@@ -2406,6 +2938,38 @@ properties = {
         ],
         "description": "electrical dipole moment from SCF",
         "dimensionality": "scalar",
+        "methods": [
+            "ccsd",
+            "ccsd(t)",
+            "dft",
+            "hf",
+            "lccd",
+            "mp2",
+            "mp3",
+            "mp4"
+        ],
+        "type": "float",
+        "units": ""
+    },
+    "SCF ITERATION ENERGY": {
+        "calculation": [
+            "energy",
+            "optimization",
+            "thermodynamics",
+            "vibrations"
+        ],
+        "description": "",
+        "dimensionality": "scalar",
+        "methods": [
+            "ccsd",
+            "ccsd(t)",
+            "dft",
+            "hf",
+            "lccd",
+            "mp2",
+            "mp3",
+            "mp4"
+        ],
         "type": "float",
         "units": ""
     },
@@ -2418,7 +2982,400 @@ properties = {
         ],
         "description": "number of itereations in the SCF",
         "dimensionality": "scalar",
+        "methods": [
+            "ccsd",
+            "ccsd(t)",
+            "dft",
+            "hf",
+            "lccd",
+            "mp2",
+            "mp3",
+            "mp4"
+        ],
         "type": "integer",
+        "units": ""
+    },
+    "SCF TOTAL ENERGY": {
+        "calculation": [
+            "energy",
+            "optimization",
+            "thermodynamics",
+            "vibrations"
+        ],
+        "description": "",
+        "dimensionality": "scalar",
+        "methods": [
+            "ccsd",
+            "ccsd(t)",
+            "dft",
+            "hf",
+            "lccd",
+            "mp2",
+            "mp3",
+            "mp4"
+        ],
+        "type": "float",
+        "units": ""
+    },
+    "SCF TOTAL GRADIENT": {
+        "calculation": [
+            "energy",
+            "optimization",
+            "thermodynamics",
+            "vibrations"
+        ],
+        "description": "",
+        "dimensionality": [
+            3,
+            "n_atoms"
+        ],
+        "methods": [
+            "dft",
+            "hf"
+        ],
+        "type": "float",
+        "units": ""
+    },
+    "SCS-MP2 CORRELATION ENERGY": {
+        "calculation": [
+            "energy",
+            "optimization",
+            "thermodynamics",
+            "vibrations"
+        ],
+        "description": "",
+        "dimensionality": "scalar",
+        "methods": [
+            "lccd",
+            "mp2",
+            "mp3"
+        ],
+        "type": "float",
+        "units": ""
+    },
+    "SCS-MP2 OPPOSITE-SPIN CORRELATION ENERGY": {
+        "calculation": [
+            "energy",
+            "optimization",
+            "thermodynamics",
+            "vibrations"
+        ],
+        "description": "",
+        "dimensionality": "scalar",
+        "methods": [
+            "mp2"
+        ],
+        "type": "float",
+        "units": ""
+    },
+    "SCS-MP2 SAME-SPIN CORRELATION ENERGY": {
+        "calculation": [
+            "energy",
+            "optimization",
+            "thermodynamics",
+            "vibrations"
+        ],
+        "description": "",
+        "dimensionality": "scalar",
+        "methods": [
+            "mp2"
+        ],
+        "type": "float",
+        "units": ""
+    },
+    "SCS-MP2 TOTAL ENERGY": {
+        "calculation": [
+            "energy",
+            "optimization",
+            "thermodynamics",
+            "vibrations"
+        ],
+        "description": "",
+        "dimensionality": "scalar",
+        "methods": [
+            "lccd",
+            "mp2",
+            "mp3"
+        ],
+        "type": "float",
+        "units": ""
+    },
+    "SCS-MP2-VDW CORRELATION ENERGY": {
+        "calculation": [
+            "energy",
+            "optimization",
+            "thermodynamics",
+            "vibrations"
+        ],
+        "description": "",
+        "dimensionality": "scalar",
+        "methods": [
+            "lccd",
+            "mp3"
+        ],
+        "type": "float",
+        "units": ""
+    },
+    "SCS-MP2-VDW TOTAL ENERGY": {
+        "calculation": [
+            "energy",
+            "optimization",
+            "thermodynamics",
+            "vibrations"
+        ],
+        "description": "",
+        "dimensionality": "scalar",
+        "methods": [
+            "lccd",
+            "mp3"
+        ],
+        "type": "float",
+        "units": ""
+    },
+    "SCS-MP3 CORRELATION ENERGY": {
+        "calculation": [
+            "energy",
+            "optimization",
+            "thermodynamics",
+            "vibrations"
+        ],
+        "description": "",
+        "dimensionality": "scalar",
+        "methods": [
+            "mp3"
+        ],
+        "type": "float",
+        "units": ""
+    },
+    "SCS-MP3 TOTAL ENERGY": {
+        "calculation": [
+            "energy",
+            "optimization",
+            "thermodynamics",
+            "vibrations"
+        ],
+        "description": "",
+        "dimensionality": "scalar",
+        "methods": [
+            "mp3"
+        ],
+        "type": "float",
+        "units": ""
+    },
+    "SCS-MP3-VDW CORRELATION ENERGY": {
+        "calculation": [
+            "energy",
+            "optimization",
+            "thermodynamics",
+            "vibrations"
+        ],
+        "description": "",
+        "dimensionality": "scalar",
+        "methods": [
+            "mp3"
+        ],
+        "type": "float",
+        "units": ""
+    },
+    "SCS-MP3-VDW TOTAL ENERGY": {
+        "calculation": [
+            "energy",
+            "optimization",
+            "thermodynamics",
+            "vibrations"
+        ],
+        "description": "",
+        "dimensionality": "scalar",
+        "methods": [
+            "mp3"
+        ],
+        "type": "float",
+        "units": ""
+    },
+    "SCSN-MP2 CORRELATION ENERGY": {
+        "calculation": [
+            "energy",
+            "optimization",
+            "thermodynamics",
+            "vibrations"
+        ],
+        "description": "",
+        "dimensionality": "scalar",
+        "methods": [
+            "lccd",
+            "mp3"
+        ],
+        "type": "float",
+        "units": ""
+    },
+    "SCSN-MP2 TOTAL ENERGY": {
+        "calculation": [
+            "energy",
+            "optimization",
+            "thermodynamics",
+            "vibrations"
+        ],
+        "description": "",
+        "dimensionality": "scalar",
+        "methods": [
+            "lccd",
+            "mp3"
+        ],
+        "type": "float",
+        "units": ""
+    },
+    "SCSN-MP3 CORRELATION ENERGY": {
+        "calculation": [
+            "energy",
+            "optimization",
+            "thermodynamics",
+            "vibrations"
+        ],
+        "description": "",
+        "dimensionality": "scalar",
+        "methods": [
+            "mp3"
+        ],
+        "type": "float",
+        "units": ""
+    },
+    "SCSN-MP3 TOTAL ENERGY": {
+        "calculation": [
+            "energy",
+            "optimization",
+            "thermodynamics",
+            "vibrations"
+        ],
+        "description": "",
+        "dimensionality": "scalar",
+        "methods": [
+            "mp3"
+        ],
+        "type": "float",
+        "units": ""
+    },
+    "SOS-MP2 CORRELATION ENERGY": {
+        "calculation": [
+            "energy",
+            "optimization",
+            "thermodynamics",
+            "vibrations"
+        ],
+        "description": "",
+        "dimensionality": "scalar",
+        "methods": [
+            "lccd",
+            "mp3"
+        ],
+        "type": "float",
+        "units": ""
+    },
+    "SOS-MP2 TOTAL ENERGY": {
+        "calculation": [
+            "energy",
+            "optimization",
+            "thermodynamics",
+            "vibrations"
+        ],
+        "description": "",
+        "dimensionality": "scalar",
+        "methods": [
+            "lccd",
+            "mp3"
+        ],
+        "type": "float",
+        "units": ""
+    },
+    "SOS-MP3 CORRELATION ENERGY": {
+        "calculation": [
+            "energy",
+            "optimization",
+            "thermodynamics",
+            "vibrations"
+        ],
+        "description": "",
+        "dimensionality": "scalar",
+        "methods": [
+            "mp3"
+        ],
+        "type": "float",
+        "units": ""
+    },
+    "SOS-MP3 TOTAL ENERGY": {
+        "calculation": [
+            "energy",
+            "optimization",
+            "thermodynamics",
+            "vibrations"
+        ],
+        "description": "",
+        "dimensionality": "scalar",
+        "methods": [
+            "mp3"
+        ],
+        "type": "float",
+        "units": ""
+    },
+    "SOS-PI-MP2 CORRELATION ENERGY": {
+        "calculation": [
+            "energy",
+            "optimization",
+            "thermodynamics",
+            "vibrations"
+        ],
+        "description": "",
+        "dimensionality": "scalar",
+        "methods": [
+            "lccd",
+            "mp3"
+        ],
+        "type": "float",
+        "units": ""
+    },
+    "SOS-PI-MP2 TOTAL ENERGY": {
+        "calculation": [
+            "energy",
+            "optimization",
+            "thermodynamics",
+            "vibrations"
+        ],
+        "description": "",
+        "dimensionality": "scalar",
+        "methods": [
+            "lccd",
+            "mp3"
+        ],
+        "type": "float",
+        "units": ""
+    },
+    "SOS-PI-MP3 CORRELATION ENERGY": {
+        "calculation": [
+            "energy",
+            "optimization",
+            "thermodynamics",
+            "vibrations"
+        ],
+        "description": "",
+        "dimensionality": "scalar",
+        "methods": [
+            "mp3"
+        ],
+        "type": "float",
+        "units": ""
+    },
+    "SOS-PI-MP3 TOTAL ENERGY": {
+        "calculation": [
+            "energy",
+            "optimization",
+            "thermodynamics",
+            "vibrations"
+        ],
+        "description": "",
+        "dimensionality": "scalar",
+        "methods": [
+            "mp3"
+        ],
+        "type": "float",
         "units": ""
     },
     "TWO-ELECTRON ENERGY": {
@@ -2430,6 +3387,16 @@ properties = {
         ],
         "description": "the two-electron energy",
         "dimensionality": "scalar",
+        "methods": [
+            "ccsd",
+            "ccsd(t)",
+            "dft",
+            "hf",
+            "lccd",
+            "mp2",
+            "mp3",
+            "mp4"
+        ],
         "type": "float",
         "units": ""
     },
@@ -2441,8 +3408,22 @@ properties = {
             "vibrations"
         ],
         "description": "the Wiber-Lowdin bond indices",
-        "dimensionality": ["triangular", "n_atoms", "n_atoms"],
+        "dimensionality": [
+            "triangular",
+            "n_atoms",
+            "n_atoms"
+        ],
+        "methods": [
+            "ccsd",
+            "ccsd(t)",
+            "dft",
+            "hf",
+            "lccd",
+            "mp2",
+            "mp3",
+            "mp4"
+        ],
         "type": "float",
         "units": ""
-    },
-}  # yapf: disable
+    }
+}}  # yapf: disable

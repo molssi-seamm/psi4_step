@@ -33,6 +33,7 @@ class TkEnergy(seamm.TkNode):
         Keyword arguments:
         """
         self.results_widgets = []
+        self._calculation = None
 
         # Argument/config parsing
         self.parser = configargparse.ArgParser(
@@ -100,6 +101,7 @@ class TkEnergy(seamm.TkNode):
     ):
         """Create the dialog!"""
         self.logger.debug('Creating the dialog')
+        self._calculation = calculation
         frame = super().create_dialog(
             title=title, widget='notebook', results_tab=True
         )
@@ -142,7 +144,7 @@ class TkEnergy(seamm.TkNode):
             "<FocusOut>", self.reset_calculation
         )
 
-        self.setup_results(psi4_step.properties, calculation=calculation)
+        # self.setup_results(psi4_step.properties, calculation=calculation)
 
         # Top level needs to call reset_dialog
         if calculation == 'energy':
@@ -174,6 +176,12 @@ class TkEnergy(seamm.TkNode):
             method = psi4_step.methods[long_method]['method']
             functional = self['advanced_functional'].get()
             meta = psi4_step.methods[long_method]
+
+        # Set up the results table because it depends on the method
+        self.results_widgets = []
+        self.setup_results(
+            psi4_step.properties, calculation=self._calculation, method=method
+        )
 
         frame = self['calculation']
         for slave in frame.grid_slaves():

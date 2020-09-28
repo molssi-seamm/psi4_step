@@ -133,7 +133,7 @@ class Optimization(psi4_step.Energy):
                 create_tables=self.parameters['create tables'].get()
             )
 
-            text = 'The calculated energy is {E:.6f} Ha.'
+            text = 'The calculated energy is {Eelec:.6f} Ha.'
         else:
             data = {}
             text = (
