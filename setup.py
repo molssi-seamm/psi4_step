@@ -63,7 +63,7 @@ setup(
 
     # Manual control if final package is compressible or not, set False to
     # prevent the .egg from being made
-    zip_safe=True,
+    zip_safe=False,
 
     keywords='psi4_step',
     classifiers=[
