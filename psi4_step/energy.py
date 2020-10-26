@@ -25,7 +25,12 @@ class Energy(seamm.Node):
 
         logger.debug('Creating Energy {}'.format(self))
 
-        super().__init__(flowchart=flowchart, title=title, extension=extension)
+        super().__init__(
+            flowchart=flowchart,
+            title=title,
+            extension=extension,
+            logger=logger
+        )
 
         self.parameters = psi4_step.EnergyParameters()
 
@@ -64,7 +69,12 @@ class Energy(seamm.Node):
         else:
             method = P['advanced_method']
 
-        if psi4_step.methods[method]['method'] == 'dft':
+        if self.is_expr(method):
+            text = f'{calculation_type} using method given by {method}.'
+        elif (
+            method in psi4_step.methods and
+            psi4_step.methods[method]['method'] == 'dft'
+        ):
             if P['level'] == 'recommended':
                 functional = P['functional']
             else:
@@ -84,12 +94,12 @@ class Energy(seamm.Node):
         # Spin
         if P['spin-restricted'] == 'yes':
             text += " The spin will be restricted to a pure eigenstate."
-        elif P['spin-restricted']:
-            text += " The spin will not be restricted and may not be a "
-            text += "proper eigenstate."
-        else:
+        elif self.is_expr(P['spin-restricted']):
             text += " Whether the spin will be restricted to a pure "
             text += "eigenstate will be determined by {P['spin-restricted']}"
+        else:
+            text += " The spin will not be restricted and may not be a "
+            text += "proper eigenstate."
 
         return self.header + '\n' + __(text, **P, indent=4 * ' ').__str__()
 
@@ -128,10 +138,13 @@ class Energy(seamm.Node):
         else:
             method_string = P['advanced_method']
 
-        method = psi4_step.methods[method_string]['method']
+        if method_string in psi4_step.methods:
+            method = psi4_step.methods[method_string]['method']
+        else:
+            method = method_string
 
-        lines.append('set scf_type df')
-        lines.append('set guess sad')
+        # lines.append('set scf_type df')
+        # lines.append('set guess sad')
 
         spin_restricted = P['spin-restricted'] == 'yes'
         if method == 'dft':
@@ -144,6 +157,11 @@ class Energy(seamm.Node):
                 lines.append('set reference rhf')
             else:
                 lines.append('set reference uhf')
+
+        if 'freeze-cores' in P and P['freeze-cores'] == 'yes':
+            lines.append('set freeze_core True')
+        else:
+            lines.append('set freeze_core False')
         lines.append('')
         if method == 'dft':
             if P['level'] == 'recommended':
@@ -156,11 +174,12 @@ class Energy(seamm.Node):
             ) > 1:
                 functional = functional + '-' + P['dispersion']
             lines.append(
-                f"E, wfn = {calculation_type}('{functional}', return_wfn=True)"
+                f"Eelec, wfn = {calculation_type}('{functional}', "
+                "return_wfn=True)"
             )
         else:
             lines.append(
-                f"E, wfn = {calculation_type}('{method}', return_wfn=True)"
+                f"Eelec, wfn = {calculation_type}('{method}', return_wfn=True)"
             )
 
         # Dump the properties to a json file
@@ -170,7 +189,7 @@ class Energy(seamm.Node):
         lines.append('    wfn,')
         lines.append("    'MULTIPOLE(5)',")
         lines.append("    'ESP_AT_NUCLEI',")
-        lines.append("    'MO_EXTENTS',")
+        # lines.append("    'MO_EXTENTS',")
         lines.append("    'LOWDIN_CHARGES',")
         lines.append("    'MULLIKEN_CHARGES',")
         lines.append("    'WIBERG_LOWDIN_INDICES',")
@@ -179,16 +198,27 @@ class Energy(seamm.Node):
         lines.append("    title='PROP'")
         lines.append(')')
         lines.append('')
-        lines.append('variables = wfn.scalar_variables()')
+        lines.append('variables = scalar_variables()')
+        lines.append('variables.update(wfn.scalar_variables())')
+        lines.append('arrays = array_variables()')
+        lines.append('for item in arrays:')
+        lines.append('    variables[item] = array_variable(item).np.tolist()')
         lines.append('arrays = wfn.array_variables()')
         lines.append('for item in arrays:')
         lines.append(
             '    variables[item] = wfn.array_variable(item).np.tolist()'
         )
-        lines.append("variables['E'] = E")
+        lines.append("variables['Eelec'] = Eelec")
+        lines.append(f"variables['_method'] = '{method}'")
+        lines.append(f"variables['_method_string'] = '{method_string}'")
+        lines.append('')
         lines.append('')
         lines.append(f"with open('{filename}', 'w') as fd:")
-        lines.append('    json.dump(variables, fd, sort_keys=True, indent=3)')
+        lines.append(
+            '    json.dump(fix_multipoles(variables), fd, sort_keys=True, '
+            'indent=3)'
+        )
+        lines.append('')
 
         return '\n'.join(lines)
 
@@ -216,7 +246,7 @@ class Energy(seamm.Node):
                 create_tables=self.parameters['create tables'].get()
             )
 
-            text = 'The calculated energy is {E:.6f} Ha.'
+            text = 'The calculated energy is {Eelec:.6f} Ha.'
         else:
             data = {}
             text = (

@@ -28,6 +28,68 @@ logger = logging.getLogger(__name__)
 job = printing.getPrinter()
 printer = printing.getPrinter('Psi4')
 
+pre_code = """\
+def fix_multipoles(data):
+    result = {}
+    esp = []
+    it = iter(data.items())
+    for key, value in it:
+        if '32-POLE' in key:
+            tmp = []
+            while True:
+                value = 0.0 if abs(value) < 1.0e-10 else value
+                tmp.append(value)
+                if 'ZZZZZ' in key:
+                    break
+                key, value = next(it)
+            result['32-POLE'] = tmp
+        elif 'HEXADECAPOLE' in key:
+            tmp = []
+            while True:
+                value = 0.0 if abs(value) < 1.0e-10 else value
+                tmp.append(value)
+                if 'ZZZZ' in key:
+                    break
+                key, value = next(it)
+            result['HEXADECAPOLE'] = tmp
+        elif 'OCTUPOLE' in key:
+            tmp = []
+            while True:
+                value = 0.0 if abs(value) < 1.0e-10 else value
+                tmp.append(value)
+                if 'ZZZ' in key:
+                    break
+                key, value = next(it)
+            result['OCTUPOLE'] = tmp
+        elif 'QUADRUPOLE' in key:
+            tmp = []
+            while True:
+                value = 0.0 if abs(value) < 1.0e-10 else value
+                tmp.append(value)
+                if 'ZZ' in key:
+                    break
+                key, value = next(it)
+            result['QUADRUPOLE'] = tmp
+        elif 'DIPOLE' in key:
+            tmp = []
+            while True:
+                value = 0.0 if abs(value) < 1.0e-10 else value
+                tmp.append(value)
+                result[key] = value
+                if 'Z' in key:
+                    break
+                key, value = next(it)
+            result[key[0:-2]] = tmp
+        elif 'ESP AT CENTER' in key:
+            esp.append(value)
+        else:
+            result[key] = value
+
+    if len(esp) > 0:
+        result['ELECTROSTATIC POTENTIAL'] = esp
+    return result
+"""
+
 
 def humanize(memory, suffix="B", kilo=1024):
     """
@@ -334,8 +396,11 @@ class Psi4(seamm.Node):
         input_data = []
         input_data.append('import json')
         input_data.append('import numpy as np')
+        input_data.append('import pprint')
         input_data.append('')
         input_data.append(f'memory {memory}')
+        input_data.append('')
+        input_data.append(pre_code)
         input_data.append('')
 
         # Work through the subflowchart to find out what to do.
@@ -352,6 +417,11 @@ class Psi4(seamm.Node):
         while node is not None:
             text = node.get_input()
             input_data.append(text)
+
+            input_data.append('clean()')
+            input_data.append('clean_variables()')
+            # input_data.append('clean_options()')
+
             node = node.next()
 
         # Write out the final structure
