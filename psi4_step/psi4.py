@@ -221,7 +221,8 @@ class Psi4(seamm.Node):
     def create_parser(self):
         """Setup the command-line / config file parser
         """
-        parser_name = 'psi4-step'
+        # parser_name = 'psi4-step'
+        parser_name = self.step_type
         parser = seamm.getParser()
 
         # Remember if the parser exists ... this type of step may have been
@@ -330,9 +331,8 @@ class Psi4(seamm.Node):
             raise RuntimeError('Psi4 run(): there is no structure!')
 
         # Access the options
-        parser = seamm.getParser()
-        options = parser.get_options('psi4-step')
-        seamm_options = parser.get_options('SEAMM')
+        options = self.options
+        seamm_options = self.global_options
 
         # How many processors does this node have?
         n_cores = psutil.cpu_count(logical=False)
