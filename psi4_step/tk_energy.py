@@ -2,7 +2,6 @@
 
 """The graphical part of a Psi4 Energy node"""
 
-import configargparse
 import logging
 import tkinter as tk
 import tkinter.ttk as ttk
@@ -35,45 +34,14 @@ class TkEnergy(seamm.TkNode):
         self.results_widgets = []
         self._calculation = None
 
-        # Argument/config parsing
-        self.parser = configargparse.ArgParser(
-            auto_env_var_prefix='',
-            default_config_files=[
-                '/etc/seamm/psi4_energy.ini',
-                '/etc/seamm/seamm.ini',
-                '~/.seamm/psi4_energy.ini',
-                '~/.seamm/seamm.ini',
-            ]
-        )
-
-        self.parser.add_argument(
-            '--seamm-configfile',
-            is_config_file=True,
-            default=None,
-            help='a configuration file to override others'
-        )
-
-        # Options for this plugin
-        self.parser.add_argument(
-            "--psi4-tk-energy-log-level",
-            default=configargparse.SUPPRESS,
-            choices=[
-                'CRITICAL', 'ERROR', 'WARNING', 'INFO', 'DEBUG', 'NOTSET'
-            ],
-            type=lambda string: string.upper(),
-            help="the logging level for the Psi4 Tk_energy step"
-        )
-
-        self.options, self.unknown = self.parser.parse_known_args()
-
         # Set the logging level for this module if requested
-        if 'psi4_tk_energy_log_level' in self.options:
-            my_logger.setLevel(self.options.psi4_tk_energy_log_level)
-            my_logger.critical(
-                'Set log level to {}'.format(
-                    self.options.psi4_tk_energy_log_level
-                )
-            )
+        # if 'psi4_tk_energy_log_level' in self.options:
+        #     my_logger.setLevel(self.options.psi4_tk_energy_log_level)
+        #     my_logger.critical(
+        #         'Set log level to {}'.format(
+        #             self.options.psi4_tk_energy_log_level
+        #         )
+        #     )
 
         super().__init__(
             tk_flowchart=tk_flowchart,
