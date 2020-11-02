@@ -8,7 +8,6 @@ import logging
 from pathlib import Path
 import pprint
 
-import configargparse
 import psutil
 
 import psi4_step
@@ -28,6 +27,68 @@ from seamm_util.printing import FormattedText as __
 logger = logging.getLogger(__name__)
 job = printing.getPrinter()
 printer = printing.getPrinter('Psi4')
+
+pre_code = """\
+def fix_multipoles(data):
+    result = {}
+    esp = []
+    it = iter(data.items())
+    for key, value in it:
+        if '32-POLE' in key:
+            tmp = []
+            while True:
+                value = 0.0 if abs(value) < 1.0e-10 else value
+                tmp.append(value)
+                if 'ZZZZZ' in key:
+                    break
+                key, value = next(it)
+            result['32-POLE'] = tmp
+        elif 'HEXADECAPOLE' in key:
+            tmp = []
+            while True:
+                value = 0.0 if abs(value) < 1.0e-10 else value
+                tmp.append(value)
+                if 'ZZZZ' in key:
+                    break
+                key, value = next(it)
+            result['HEXADECAPOLE'] = tmp
+        elif 'OCTUPOLE' in key:
+            tmp = []
+            while True:
+                value = 0.0 if abs(value) < 1.0e-10 else value
+                tmp.append(value)
+                if 'ZZZ' in key:
+                    break
+                key, value = next(it)
+            result['OCTUPOLE'] = tmp
+        elif 'QUADRUPOLE' in key:
+            tmp = []
+            while True:
+                value = 0.0 if abs(value) < 1.0e-10 else value
+                tmp.append(value)
+                if 'ZZ' in key:
+                    break
+                key, value = next(it)
+            result['QUADRUPOLE'] = tmp
+        elif 'DIPOLE' in key:
+            tmp = []
+            while True:
+                value = 0.0 if abs(value) < 1.0e-10 else value
+                tmp.append(value)
+                result[key] = value
+                if 'Z' in key:
+                    break
+                key, value = next(it)
+            result[key[0:-2]] = tmp
+        elif 'ESP AT CENTER' in key:
+            esp.append(value)
+        else:
+            result[key] = value
+
+    if len(esp) > 0:
+        result['ELECTROSTATIC POTENTIAL'] = esp
+    return result
+"""
 
 
 def humanize(memory, suffix="B", kilo=1024):
@@ -91,9 +152,6 @@ class Psi4(seamm.Node):
 
     Attributes
     ----------
-    parser : configargparse.ArgParser
-        The parser object.
-
     options : tuple
         It contains a two item tuple containing the populated namespace and the
         list of remaining argument strings.
@@ -135,101 +193,15 @@ class Psi4(seamm.Node):
         """
         logger.debug('Creating Psi4 {}'.format(self))
 
-        # Argument/config parsing
-        self.parser = configargparse.ArgParser(
-            auto_env_var_prefix='',
-            default_config_files=[
-                '/etcs/seamm/psi4.in',
-                '/etc/seamm/psi4_step.ini',
-                '/etc/seamm/seamm.ini',
-                '~/.seamm/psi4.ini',
-                '~/.seamm/psi4_step.ini',
-                '~/.seamm/seamm.ini',
-            ]
-        )
-
-        self.parser.add_argument(
-            '--seamm-configfile',
-            is_config_file=True,
-            default=None,
-            help='a configuration file to override others'
-        )
-
-        # Options for this plugin
-        self.parser.add_argument(
-            "--psi4-step-log-level",
-            default=configargparse.SUPPRESS,
-            choices=[
-                'CRITICAL', 'ERROR', 'WARNING', 'INFO', 'DEBUG', 'NOTSET'
-            ],
-            type=str.upper,
-            help="the logging level for the Psi4 step"
-        )
-
-        # Options for Psi4
-        self.parser.add_argument(
-            '--psi4-exe',
-            default='psi4',
-            help='the path to the Psi4 executable'
-        )
-
-        self.parser.add_argument(
-            '--psi4-num-threads',
-            default='default',
-            help='How many threads to use in Psi4'
-        )
-
-        self.parser.add_argument(
-            '--psi4-max-threads',
-            default='default',
-            help='The maximum number of threads to use in Psi4'
-        )
-
-        self.parser.add_argument(
-            '--psi4-max-memory',
-            default='default',
-            help='The maximum amount of memory to use for Psi4'
-        )
-
-        self.parser.add_argument(
-            '--psi4-memory',
-            default='default',
-            help='The amount of memory to use for Psi4'
-        )
-
-        self.parser.add_argument(
-            '--psi4-memory-factor',
-            default='90%',
-            help=(
-                'The amount of possible memory to use, typically about 90% to '
-                'allow for Psi4 not keeping track of all the memory used.'
-            )
-        )
-
-        # General options from seamm.ini on max cores and memory
-        self.parser.add_argument(
-            '--max-cores',
-            default='unlimited',
-            help='The maximum number of cores/threads to use in any step.'
-        )
-
-        self.parser.add_argument(
-            '--max-memory',
-            default='available',
-            help='The maximum amount of memory to use in any step.'
-        )
-
-        self.options, self.unknown = self.parser.parse_known_args()
-
-        # Set the logging level for this module if requested
-        if 'psi4_step_log_level' in self.options:
-            logger.setLevel(self.options.psi4_step_log_level)
         self.subflowchart = seamm.Flowchart(
             parent=self, name='Psi4', namespace=namespace
         )
 
         super().__init__(
-            flowchart=flowchart, title='Psi4', extension=extension
+            flowchart=flowchart,
+            title='Psi4',
+            extension=extension,
+            logger=logger
         )
 
         self.parameters = psi4_step.Psi4Parameters()
@@ -245,6 +217,61 @@ class Psi4(seamm.Node):
         """The git version of this module.
         """
         return psi4_step.__git_revision__
+
+    def create_parser(self):
+        """Setup the command-line / config file parser
+        """
+        # parser_name = 'psi4-step'
+        parser_name = self.step_type
+        parser = seamm.getParser()
+
+        # Remember if the parser exists ... this type of step may have been
+        # found before
+        parser_exists = parser.exists(parser_name)
+
+        # Create the standard options, e.g. log-level
+        result = super().create_parser(name=parser_name)
+
+        if parser_exists:
+            return result
+
+        # Options for Psi4
+        parser.add_argument(
+            parser_name,
+            '--exe',
+            default='psi4',
+            help='the path to the Psi4 executable'
+        )
+
+        parser.add_argument(
+            parser_name,
+            '--ncores',
+            default='available',
+            help='How many threads to use in Psi4'
+        )
+
+        parser.add_argument(
+            parser_name,
+            '--memory',
+            default='available',
+            help=(
+                'The maximum amount of memory to use for Psi4, which can be '
+                "'all' or 'available', or a number, which may use k, Ki, "
+                'M, Mi, etc. suffixes. Default: available.'
+            )
+        )
+
+        parser.add_argument(
+            parser_name,
+            '--memory-factor',
+            default='90%',
+            help=(
+                'The amount of possible memory to use, typically about 90%% to'
+                ' allow for Psi4 not keeping track of all the memory used.'
+            )
+        )
+
+        return result
 
     def set_id(self, node_id):
         """Set the id for node to a given tuple"""
@@ -278,7 +305,7 @@ class Psi4(seamm.Node):
 
         text = self.header + '\n\n'
         while node is not None:
-            text += __(node.description_text(), indent=3 * ' ').__str__()
+            text += __(node.description_text(), indent=4 * ' ').__str__()
             text += '\n'
             node = node.next()
 
@@ -300,54 +327,60 @@ class Psi4(seamm.Node):
         system = self.get_variable('_system')
         n_atoms = system.n_atoms()
         if n_atoms == 0:
-            logger.error('Psi4 run(): there is no structure!')
+            self.logger.error('Psi4 run(): there is no structure!')
             raise RuntimeError('Psi4 run(): there is no structure!')
 
         # Access the options
-        o = self.options
+        options = self.options
+        seamm_options = self.global_options
 
         # How many processors does this node have?
         n_cores = psutil.cpu_count(logical=False)
-        logger.info('The number of cores is {}'.format(n_cores))
+        self.logger.info('The number of cores is {}'.format(n_cores))
 
         # How many threads to use
-        if o.psi4_num_threads == 'default':
+        if options['ncores'] == 'available':
             n_threads = n_cores
         else:
-            n_threads = int(o.psi4_num_threads)
+            n_threads = int(options['ncores'])
         if n_threads > n_cores:
             n_threads = n_cores
         if n_threads < 1:
             n_threads = 1
-        if o.psi4_max_threads != 'default':
-            if n_threads > int(o.psi4_max_threads):
-                n_threads = int(o.psi4_max_threads)
-        if o.max_cores != "unlimited":
-            if n_threads > int(o.max_cores):
-                n_threads = int(o.max_cores)
-        logger.info(f'Psi4 will use {n_threads} threads.')
+        if seamm_options['ncores'] != "available":
+            n_threads = min(n_threads, int(options['max_cores']))
+        self.logger.info(f'Psi4 will use {n_threads} threads.')
 
         # How much memory to use
-        if '%' in o.psi4_memory_factor:
-            factor = float(o.psi4_memory_factor.rstrip('%')) / 100.0
-        else:
-            factor = float(o.psi4_memory_factor)
         svmem = psutil.virtual_memory()
-        if o.max_memory == 'all':
-            available = svmem.total * factor
+
+        if seamm_options['memory'] == 'all':
+            mem_limit = svmem.total
+        elif seamm_options['memory'] == 'available':
+            # For the default, 'available', use in proportion to number of
+            # cores used
+            mem_limit = svmem.total * (n_threads / n_cores)
         else:
-            available = svmem.available * factor
-        if o.psi4_memory == 'default':
-            memory = available * (n_threads / n_cores)
+            mem_limit = dehumanize(seamm_options['memory'])
+
+        if options['memory'] == 'all':
+            memory = svmem.total
+        elif options['memory'] == 'available':
+            # For the default, 'available', use in proportion to number of
+            # cores used
+            memory = svmem.total * (n_threads / n_cores)
         else:
-            memory = dehumanize(o.psi4_memory)
-        if o.psi4_max_memory != 'default':
-            max_memory = dehumanize(o.psi4_max_memory)
-            if memory > max_memory:
-                memory = max_memory
-        if o.max_memory != 'all' and o.max_memory != 'available':
-            if memory > dehumanize(o.max_memory):
-                memory = dehumanize(o.max_memory)
+            memory = dehumanize(options['memory'])
+
+        memory = min(memory, mem_limit)
+
+        if '%' in options['memory_factor']:
+            factor = float(options['memory_factor'].rstrip('%')) / 100.0
+        else:
+            factor = float(options['memory_factor'])
+
+        memory *= factor
+
         # Psi applies a minimum of 250 MiB
         min_memory = dehumanize('250 MiB')
         if min_memory > memory:
@@ -363,8 +396,11 @@ class Psi4(seamm.Node):
         input_data = []
         input_data.append('import json')
         input_data.append('import numpy as np')
+        input_data.append('import pprint')
         input_data.append('')
         input_data.append(f'memory {memory}')
+        input_data.append('')
+        input_data.append(pre_code)
         input_data.append('')
 
         # Work through the subflowchart to find out what to do.
@@ -381,6 +417,11 @@ class Psi4(seamm.Node):
         while node is not None:
             text = node.get_input()
             input_data.append(text)
+
+            input_data.append('clean()')
+            input_data.append('clean_variables()')
+            # input_data.append('clean_options()')
+
             node = node.next()
 
         # Write out the final structure
@@ -396,7 +437,7 @@ class Psi4(seamm.Node):
         input_data.append('    json.dump(tmp, fd, sort_keys=True, indent=3)')
 
         files = {'input.dat': '\n'.join(input_data)}
-        logger.info('input.dat:\n' + files['input.dat'])
+        self.logger.info('input.dat:\n' + files['input.dat'])
 
         directory = Path(self.directory)
         directory.mkdir(parents=True, exist_ok=True)
@@ -406,30 +447,30 @@ class Psi4(seamm.Node):
                 fd.write(files[filename])
 
         return_files = ['output.dat', '*properties.json', '*structure.json']
-        env = {'PSIPATH': Path(o.psi4_exe).parent}
+        env = {'PSIPATH': Path(options['exe']).parent}
 
         local = seamm.ExecLocal()
         result = local.run(
-            cmd=[o.psi4_exe, f'-n {n_threads}'],
+            cmd=[options['exe'], f'-n {n_threads}'],
             files=files,
             return_files=return_files,
             env=env
         )  # yapf: disable
 
         if result is None:
-            logger.error('There was an error running Psi4')
+            self.logger.error('There was an error running Psi4')
             return None
 
-        logger.debug('\n' + pprint.pformat(result))
+        self.logger.debug('\n' + pprint.pformat(result))
 
-        logger.debug('stdout:\n' + result['stdout'])
+        self.logger.debug('stdout:\n' + result['stdout'])
         if 'stdout' in result and result['stdout'] != '':
             path = directory / 'stdout.txt'
             with path.open(mode='w') as fd:
                 fd.write(result['stdout'])
 
         if result['stderr'] != '':
-            logger.warning('stderr:\n' + result['stderr'])
+            self.logger.warning('stderr:\n' + result['stderr'])
             path = directory / 'stderr.txt'
             with path.open(mode='w') as fd:
                 fd.write(result['stderr'])

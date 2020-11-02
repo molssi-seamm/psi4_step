@@ -61,4 +61,3 @@ if __name__ == "__main__":
         analyze(data, properties)
 
     print(json.dumps(properties, sort_keys=True, indent=4))
-

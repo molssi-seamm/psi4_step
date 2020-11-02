@@ -2,7 +2,6 @@
 
 """The graphical part of a Psi4 Energy node"""
 
-import configargparse
 import logging
 import tkinter as tk
 import tkinter.ttk as ttk
@@ -33,46 +32,16 @@ class TkEnergy(seamm.TkNode):
         Keyword arguments:
         """
         self.results_widgets = []
-
-        # Argument/config parsing
-        self.parser = configargparse.ArgParser(
-            auto_env_var_prefix='',
-            default_config_files=[
-                '/etc/seamm/psi4_energy.ini',
-                '/etc/seamm/seamm.ini',
-                '~/.seamm/psi4_energy.ini',
-                '~/.seamm/seamm.ini',
-            ]
-        )
-
-        self.parser.add_argument(
-            '--seamm-configfile',
-            is_config_file=True,
-            default=None,
-            help='a configuration file to override others'
-        )
-
-        # Options for this plugin
-        self.parser.add_argument(
-            "--psi4-tk-energy-log-level",
-            default=configargparse.SUPPRESS,
-            choices=[
-                'CRITICAL', 'ERROR', 'WARNING', 'INFO', 'DEBUG', 'NOTSET'
-            ],
-            type=lambda string: string.upper(),
-            help="the logging level for the Psi4 Tk_energy step"
-        )
-
-        self.options, self.unknown = self.parser.parse_known_args()
+        self._calculation = None
 
         # Set the logging level for this module if requested
-        if 'psi4_tk_energy_log_level' in self.options:
-            my_logger.setLevel(self.options.psi4_tk_energy_log_level)
-            my_logger.critical(
-                'Set log level to {}'.format(
-                    self.options.psi4_tk_energy_log_level
-                )
-            )
+        # if 'psi4_tk_energy_log_level' in self.options:
+        #     my_logger.setLevel(self.options.psi4_tk_energy_log_level)
+        #     my_logger.critical(
+        #         'Set log level to {}'.format(
+        #             self.options.psi4_tk_energy_log_level
+        #         )
+        #     )
 
         super().__init__(
             tk_flowchart=tk_flowchart,
@@ -100,6 +69,7 @@ class TkEnergy(seamm.TkNode):
     ):
         """Create the dialog!"""
         self.logger.debug('Creating the dialog')
+        self._calculation = calculation
         frame = super().create_dialog(
             title=title, widget='notebook', results_tab=True
         )
@@ -142,7 +112,7 @@ class TkEnergy(seamm.TkNode):
             "<FocusOut>", self.reset_calculation
         )
 
-        self.setup_results(psi4_step.properties, calculation=calculation)
+        # self.setup_results(psi4_step.properties, calculation=calculation)
 
         # Top level needs to call reset_dialog
         if calculation == 'energy':
@@ -166,14 +136,28 @@ class TkEnergy(seamm.TkNode):
 
         if level == 'recommended':
             long_method = self['method'].get()
-            method = psi4_step.methods[long_method]['method']
+            if self.is_expr(long_method):
+                method = None
+                meta = None
+            else:
+                method = psi4_step.methods[long_method]['method']
+                meta = psi4_step.methods[long_method]
             functional = self['functional'].get()
-            meta = psi4_step.methods[long_method]
         else:
             long_method = self['advanced_method'].get()
-            method = psi4_step.methods[long_method]['method']
+            if self.is_expr(long_method):
+                method = None
+                meta = None
+            else:
+                method = psi4_step.methods[long_method]['method']
+                meta = psi4_step.methods[long_method]
             functional = self['advanced_functional'].get()
-            meta = psi4_step.methods[long_method]
+
+        # Set up the results table because it depends on the method
+        self.results_widgets = []
+        self.setup_results(
+            psi4_step.properties, calculation=self._calculation, method=method
+        )
 
         frame = self['calculation']
         for slave in frame.grid_slaves():
@@ -188,11 +172,11 @@ class TkEnergy(seamm.TkNode):
             self['method'].grid(row=row, column=0, columnspan=2, sticky=tk.EW)
             widgets.append(self['method'])
             row += 1
-            if method == 'dft':
+            if method is None or method == 'dft':
                 self['functional'].grid(row=row, column=1, sticky=tk.EW)
                 widgets2.append(self['functional'])
                 row += 1
-            if 'freeze core?' in meta and meta['freeze core?']:
+            if meta is None or 'freeze core?' in meta and meta['freeze core?']:
                 self['freeze-cores'].grid(row=row, column=1, sticky=tk.EW)
                 widgets2.append(self['freeze-cores'])
                 row += 1
@@ -202,17 +186,17 @@ class TkEnergy(seamm.TkNode):
             )
             widgets.append(self['advanced_method'])
             row += 1
-            if method == 'dft':
+            if method is None or method == 'dft':
                 self['advanced_functional'].grid(
                     row=row, column=1, sticky=tk.EW
                 )
                 widgets2.append(self['advanced_functional'])
                 row += 1
-            if 'freeze core?' in meta and meta['freeze core?']:
+            if meta is None or 'freeze core?' in meta and meta['freeze core?']:
                 self['freeze-cores'].grid(row=row, column=1, sticky=tk.EW)
                 widgets2.append(self['freeze-cores'])
                 row += 1
-        if method == 'dft':
+        if method is None or method == 'dft':
             dispersions = psi4_step.dft_functionals[functional]['dispersion']
             if len(dispersions) > 1:
                 w = self['dispersion']
@@ -229,9 +213,6 @@ class TkEnergy(seamm.TkNode):
         )
         widgets.append(self['spin-restricted'])
         row += 1
-        # self['calculate gradients'].grid(row=row, column=0, sticky=tk.EW)
-        # widgets.append(self['calculate gradients'])
-        # row += 1
         sw.align_labels(widgets)
 
         return row
