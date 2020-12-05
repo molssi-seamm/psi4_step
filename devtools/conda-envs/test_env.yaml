@@ -1,31 +1,26 @@
 name: test
 
 channels:
-  - default
   - conda-forge
-  
+
 dependencies:
-    # Base depends
+  # Base depends
   - python
   - pip
-  - configargparse
-  - psutil
-  - py-cpuinfo
-  - openbabel
 
-    # Testing
-  - coverage
+  # molsystem requires, and only available via Conda.
+  - openbabel
+  - psutil
+
+  # Testing
+  - codecov
   - flake8
   - pytest
   - pytest-cov
-  - pytest-runner
 
     # Pip-only installs
   - pip:
-    - seamm>=2020.9.23
-    - seamm-util>=2020.9.23
-    - seamm-widgets>=2020.8.1
+    - seamm
 
-      # Testing
-    - codecov
+    # Testing
     - yapf
