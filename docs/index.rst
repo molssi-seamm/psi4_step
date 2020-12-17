@@ -1,22 +1,32 @@
-Welcome to the documentation for the Psi4 Step
-======================================
+Welcome to the documentation for the Psi4 plug-in
+================================================= 
 
 Contents:
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
+   :titlesonly:
 
-   readme
-   installation
-   usage
-   modules
-   contributing
+   user/index
+   developer/index
    authors
    history
 
-Indices and tables
-==================
+--------
+   
+.. toctree::
+   :maxdepth: 1
+   :titlesonly:
 
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
+   Main SEAMM documentation <https://molssi-seamm.github.io>
+
+Documentation Versions
+----------------------
+
+.. raw:: html
+
+   <iframe
+   src="https://molssi-seamm.github.io/psi4_step/dev/versions.html"
+   title="Documentation Versions"  style="border:none;">
+   </iframe>
+
