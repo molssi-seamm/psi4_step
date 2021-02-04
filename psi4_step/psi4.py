@@ -324,8 +324,9 @@ class Psi4(seamm.Node):
         printer.important(self.header)
         printer.important('')
 
-        system = self.get_variable('_system')
-        n_atoms = system.n_atoms()
+        system_db = self.get_variable('_system_db')
+        configuration = system_db.system.configuration
+        n_atoms = configuration.n_atoms
         if n_atoms == 0:
             self.logger.error('Psi4 run(): there is no structure!')
             raise RuntimeError('Psi4 run(): there is no structure!')
@@ -525,7 +526,8 @@ class Psi4(seamm.Node):
             with structure_file.open(mode='r') as fd:
                 structure = json.load(fd)
         if 'geom' in structure:
-            system = self.get_variable('_system')
+            system_db = self.get_variable('_system_db')
+            configuration = system_db.system.configuration
             xs = []
             ys = []
             zs = []
@@ -534,9 +536,9 @@ class Psi4(seamm.Node):
                 xs.append(x)
                 ys.append(next(it))
                 zs.append(next(it))
-            system.atoms['x'][0:] = xs
-            system.atoms['y'][0:] = ys
-            system.atoms['z'][0:] = zs
+            configuration.atoms['x'][0:] = xs
+            configuration.atoms['y'][0:] = ys
+            configuration.atoms['z'][0:] = zs
             printer.important(
                 self.indent +
                 '    Updated the system with the structure from Psi4',
@@ -546,7 +548,8 @@ class Psi4(seamm.Node):
     def _convert_structure(self, name=None):
         """Convert the structure to the input for Psi4."""
 
-        system = self.get_variable('_system')
+        system_db = self.get_variable('_system_db')
+        configuration = system_db.system.configuration
 
         structure = []
         if name is None:
@@ -555,40 +558,13 @@ class Psi4(seamm.Node):
             structure.append('molecule ' + name + ' {')
 
         # Charge and multiplicity
-        if 'extras' in system:
-            extras = system['extras']
+        # not handled yet!!!!
 
-            if 'open' in extras and extras['open'] is not None:
-                openshell = extras['open']
-                if (
-                    (
-                        isinstance(openshell, tuple) or
-                        isinstance(openshell, list)
-                    ) and len(openshell) > 1
-                ):
-                    nopen = openshell[0]
-                    norbitals = openshell[1]
-                    if nopen != norbitals:
-                        raise NotImplementedError(
-                            f"Handling of open shell = '{openshell}'"
-                        )
-                else:
-                    nopen = openshell
-                    norbitals = nopen
+        elements = configuration.atoms.symbols
+        coordinates = configuration.atoms.coordinates
 
-                if 'net_charge' in extras and extras['net_charge'] is not None:
-                    structure.append(f"    {extras['net_charge']}   {nopen}")
-                else:
-                    structure.append(f'    0   {nopen}')
-            else:
-                if 'net_charge' in extras and extras['net_charge'] is not None:
-                    structure.append(f"    {extras['net_charge']}   1")
-
-        elements = system.atoms.symbols()
-        coordinates = system.atoms.coordinates()
-
-        if 'freeze' in system.atoms:
-            freeze = system.atoms['freeze']
+        if 'freeze' in configuration.atoms:
+            freeze = configuration.atoms['freeze']
         else:
             freeze = [''] * len(elements)
 
