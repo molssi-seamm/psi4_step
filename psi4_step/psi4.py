@@ -558,34 +558,7 @@ class Psi4(seamm.Node):
             structure.append('molecule ' + name + ' {')
 
         # Charge and multiplicity
-        if False and 'extras' in configuration:
-            extras = configuration['extras']
-
-            if 'open' in extras and extras['open'] is not None:
-                openshell = extras['open']
-                if (
-                    (
-                        isinstance(openshell, tuple) or
-                        isinstance(openshell, list)
-                    ) and len(openshell) > 1
-                ):
-                    nopen = openshell[0]
-                    norbitals = openshell[1]
-                    if nopen != norbitals:
-                        raise NotImplementedError(
-                            f"Handling of open shell = '{openshell}'"
-                        )
-                else:
-                    nopen = openshell
-                    norbitals = nopen
-
-                if 'net_charge' in extras and extras['net_charge'] is not None:
-                    structure.append(f"    {extras['net_charge']}   {nopen}")
-                else:
-                    structure.append(f'    0   {nopen}')
-            else:
-                if 'net_charge' in extras and extras['net_charge'] is not None:
-                    structure.append(f"    {extras['net_charge']}   1")
+        # not handled yet!!!!
 
         elements = configuration.atoms.symbols
         coordinates = configuration.atoms.coordinates
