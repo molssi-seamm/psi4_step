@@ -1,13 +1,5 @@
-=======
-Credits
-=======
-
-Development Lead
+Development Team
 ----------------
 
-* Paul Saxe <psaxe@molssi.org>
-
-Contributors
-------------
-
-None yet. Why not be the first?
+* Paul Saxe <psaxe@molssi.org> (Lead)
+* Why don't you join the team? Become a contributor!

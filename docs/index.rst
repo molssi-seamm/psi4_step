@@ -1,27 +1,9 @@
-Welcome to the documentation for the Psi4 plug-in
-================================================= 
+.. include:: ../README.rst
+.. include:: ../AUTHORS.rst
 
-Contents:
-
-.. toctree::
-   :maxdepth: 1
-   :titlesonly:
-
-   user/index
-   developer/index
-   authors
-   history
-
---------
-   
-.. toctree::
-   :maxdepth: 1
-   :titlesonly:
-
-   Main SEAMM documentation <https://molssi-seamm.github.io>
-
-Documentation Versions
-----------------------
+==============================
+Versions of this Documentation
+==============================
 
 .. raw:: html
 
@@ -30,3 +12,18 @@ Documentation Versions
    title="Documentation Versions"  style="border:none;">
    </iframe>
 
+.. toctree::
+   :hidden:
+   :maxdepth: 1
+   :titlesonly:
+
+   user/index
+   developer/index
+   history
+
+.. toctree::
+   :hidden:
+   :maxdepth: 1
+   :titlesonly:
+
+   Main SEAMM documentation <https://molssi-seamm.github.io>
