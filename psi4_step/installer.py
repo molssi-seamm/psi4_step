@@ -56,6 +56,7 @@ class Installer(seamm_installer.InstallerBase):
         self.section = "psi4-step"
         self.path_name = "psi4-path"
         self.executables = ["psi4"]
+        self.resource_path = Path(pkg_resources.resource_filename(__name__, "data/"))
         # What Conda environment is the default?
         data = self.configuration.get_values(self.section)
         if "conda-environment" in data and data["conda-environment"] != "":
@@ -83,7 +84,7 @@ class Installer(seamm_installer.InstallerBase):
         """
         try:
             result = subprocess.run(
-                [str(path), "-log", "none"],
+                [str(path), "--version"],
                 stdin=subprocess.DEVNULL,
                 capture_output=True,
                 text=True,
@@ -96,10 +97,8 @@ class Installer(seamm_installer.InstallerBase):
             for line in lines:
                 line = line.strip()
                 tmp = line.split()
-                if len(tmp) == 2:
-                    key, value = tmp
-                    if key == "Version":
-                        version = value
-                        break
+                if len(tmp) == 1:
+                    version = tmp[0]
+                    break
 
         return version
