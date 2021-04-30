@@ -1,0 +1,323 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>psi4_step.tk_initialization &mdash; SEAMM Psi4 Plug-in 2021.2.11+10.g01595e8 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/css/custom.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+<!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-PQXXTJ2');</script>
+<!-- End Google Tag Manager -->
+
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+  
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PQXXTJ2"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
+ 
+
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> SEAMM Psi4 Plug-in
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                2021.2.11+10.g01595e8
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../user/index.html">User Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../developer/index.html">Developer Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../history.html">History</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://molssi-seamm.github.io">Main SEAMM documentation</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">SEAMM Psi4 Plug-in</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>psi4_step.tk_initialization</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for psi4_step.tk_initialization</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+
+<span class="sd">&quot;&quot;&quot;The graphical part of a Psi4 Initialization node&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">tkinter</span> <span class="k">as</span> <span class="nn">tk</span>
+
+<span class="kn">import</span> <span class="nn">seamm</span>
+<span class="kn">import</span> <span class="nn">seamm_widgets</span> <span class="k">as</span> <span class="nn">sw</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="TkInitialization"><a class="viewcode-back" href="../../developer/psi4_step.html#psi4_step.tk_initialization.TkInitialization">[docs]</a><span class="k">class</span> <span class="nc">TkInitialization</span><span class="p">(</span><span class="n">seamm</span><span class="o">.</span><span class="n">TkNode</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">tk_flowchart</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">node</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">canvas</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">x</span><span class="o">=</span><span class="mi">120</span><span class="p">,</span>
+        <span class="n">y</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
+        <span class="n">w</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span>
+        <span class="n">h</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>
+        <span class="n">my_logger</span><span class="o">=</span><span class="n">logger</span><span class="p">,</span>
+        <span class="n">keyword_metadata</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Initialize the graphical Tk Psi4 initialization step</span>
+
+<span class="sd">        Keyword arguments:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">results_widgets</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="c1"># Set the logging level for this module if requested</span>
+        <span class="c1"># if &#39;psi4_tk_initialization_log_level&#39; in self.options:</span>
+        <span class="c1">#     my_logger.setLevel(self.options.psi4_tk_initialization_log_level)</span>
+        <span class="c1">#     my_logger.critical(</span>
+        <span class="c1">#         &#39;Set log level to {}&#39;.format(</span>
+        <span class="c1">#             self.options.psi4_tk_initialization_log_level</span>
+        <span class="c1">#         )</span>
+        <span class="c1">#     )</span>
+
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="n">tk_flowchart</span><span class="o">=</span><span class="n">tk_flowchart</span><span class="p">,</span>
+            <span class="n">node</span><span class="o">=</span><span class="n">node</span><span class="p">,</span>
+            <span class="n">canvas</span><span class="o">=</span><span class="n">canvas</span><span class="p">,</span>
+            <span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">,</span>
+            <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">,</span>
+            <span class="n">w</span><span class="o">=</span><span class="n">w</span><span class="p">,</span>
+            <span class="n">h</span><span class="o">=</span><span class="n">h</span><span class="p">,</span>
+            <span class="n">my_logger</span><span class="o">=</span><span class="n">my_logger</span><span class="p">,</span>
+            <span class="n">keyword_metadata</span><span class="o">=</span><span class="n">keyword_metadata</span><span class="p">,</span>
+        <span class="p">)</span>
+
+<div class="viewcode-block" id="TkInitialization.right_click"><a class="viewcode-back" href="../../developer/psi4_step.html#psi4_step.tk_initialization.TkInitialization.right_click">[docs]</a>    <span class="k">def</span> <span class="nf">right_click</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Probably need to add our dialog...&quot;&quot;&quot;</span>
+
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">right_click</span><span class="p">(</span><span class="n">event</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">popup_menu</span><span class="o">.</span><span class="n">add_command</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s2">&quot;Edit..&quot;</span><span class="p">,</span> <span class="n">command</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">edit</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">popup_menu</span><span class="o">.</span><span class="n">tk_popup</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">x_root</span><span class="p">,</span> <span class="n">event</span><span class="o">.</span><span class="n">y_root</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="TkInitialization.create_dialog"><a class="viewcode-back" href="../../developer/psi4_step.html#psi4_step.tk_initialization.TkInitialization.create_dialog">[docs]</a>    <span class="k">def</span> <span class="nf">create_dialog</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Edit Psi4 Initialization Step&quot;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Create the dialog!&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Creating the dialog&quot;</span><span class="p">)</span>
+        <span class="n">frame</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">create_dialog</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">)</span>
+
+        <span class="c1"># Create all the widgets</span>
+        <span class="n">P</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">node</span><span class="o">.</span><span class="n">parameters</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">P</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;results&quot;</span><span class="p">,</span> <span class="s2">&quot;extra keywords&quot;</span><span class="p">,</span> <span class="s2">&quot;create tables&quot;</span><span class="p">):</span>
+                <span class="bp">self</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">P</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">widget</span><span class="p">(</span><span class="n">frame</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Finished creating the dialog&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="TkInitialization.reset_dialog"><a class="viewcode-back" href="../../developer/psi4_step.html#psi4_step.tk_initialization.TkInitialization.reset_dialog">[docs]</a>    <span class="k">def</span> <span class="nf">reset_dialog</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">widget</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="n">frame</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;frame&quot;</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">slave</span> <span class="ow">in</span> <span class="n">frame</span><span class="o">.</span><span class="n">grid_slaves</span><span class="p">():</span>
+            <span class="n">slave</span><span class="o">.</span><span class="n">grid_forget</span><span class="p">()</span>
+
+        <span class="n">widgets</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">row</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;basis&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">row</span><span class="o">=</span><span class="n">row</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">sticky</span><span class="o">=</span><span class="n">tk</span><span class="o">.</span><span class="n">EW</span><span class="p">)</span>
+        <span class="n">widgets</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="s2">&quot;basis&quot;</span><span class="p">])</span>
+        <span class="n">row</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;symmetry_tolerance&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">row</span><span class="o">=</span><span class="n">row</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">sticky</span><span class="o">=</span><span class="n">tk</span><span class="o">.</span><span class="n">EW</span><span class="p">)</span>
+        <span class="n">widgets</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="s2">&quot;symmetry_tolerance&quot;</span><span class="p">])</span>
+        <span class="n">row</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="n">sw</span><span class="o">.</span><span class="n">align_labels</span><span class="p">(</span><span class="n">widgets</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">row</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+
+    </p>
+  </div>
+
+<p>
+<div class="row">
+  <div class="column_left">
+    <a href="https://molssi.org/" target="_blank" title="Go to MolSSI in a new tab">
+      <img src="/_images/MolSSI.jpg" alt="The MolSSI" style="border:0;">
+    </a>
+  </div>
+  <div class="column">
+    &copy; Copyright 2020, the Molecular Sciences Software Institute,
+    which receives funding from the National Science Foundation under award ACI-1547580
+  </div>
+  <div class="column_right">
+    <a href="https://nsf.gov/" target="_blank" title="Go to the NSF in a new tab">
+      <img src="/_images/NSF_4-Color_bitmap_Logo.png" alt="The NSF" style="border:0;">
+    </a>
+  </div>
+</div>
+
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

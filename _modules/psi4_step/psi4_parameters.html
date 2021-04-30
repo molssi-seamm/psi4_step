@@ -1,0 +1,345 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>psi4_step.psi4_parameters &mdash; SEAMM Psi4 Plug-in 2021.2.11+2.g1081f26 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/css/custom.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+<!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-PQXXTJ2');</script>
+<!-- End Google Tag Manager -->
+
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+  
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PQXXTJ2"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
+ 
+
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> SEAMM Psi4 Plug-in
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                2021.2.11+2.g1081f26
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../user/index.html">User Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../developer/index.html">Developer Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../history.html">History</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://molssi-seamm.github.io">Main SEAMM documentation</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">SEAMM Psi4 Plug-in</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>psi4_step.psi4_parameters</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for psi4_step.psi4_parameters</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Control parameters for the Psi4 step in a SEAMM flowchart</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">seamm</span>
+<span class="kn">import</span> <span class="nn">pprint</span>  <span class="c1"># noqa: F401</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="Psi4Parameters"><a class="viewcode-back" href="../../developer/psi4_step.html#psi4_step.psi4_parameters.Psi4Parameters">[docs]</a><span class="k">class</span> <span class="nc">Psi4Parameters</span><span class="p">(</span><span class="n">seamm</span><span class="o">.</span><span class="n">Parameters</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    The control parameters for Psi4.</span>
+
+<span class="sd">    The developer will add a dictionary of Parameters to this class.</span>
+<span class="sd">    The keys are parameters for the current plugin, which themselves</span>
+<span class="sd">    might be dictionaries.</span>
+
+<span class="sd">    You need to replace the &#39;time&#39; example below with one or more</span>
+<span class="sd">    definitions of the control parameters for your plugin and application.</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    parameters : {&#39;kind&#39;, &#39;default&#39;, &#39;default_units&#39;, &#39;enumeration&#39;,</span>
+<span class="sd">                  &#39;format_string&#39;, description&#39;, help_text&#39;}</span>
+<span class="sd">        A dictionary containing the parameters for the current step.</span>
+<span class="sd">        Each key of the dictionary is a dictionary that contains the</span>
+<span class="sd">        the following keys: kind, default, default_units, enumeration,</span>
+<span class="sd">        format_string, description and help text.</span>
+
+<span class="sd">    parameters[&#39;kind&#39;]: custom</span>
+<span class="sd">        Specifies the kind of a variable. While the &#39;kind&#39; of a variable might</span>
+<span class="sd">        be a numeric value, it may still have enumerated custom values</span>
+<span class="sd">        meaningful to the user. For instance, if the parameter is</span>
+<span class="sd">        a convergence criterion for an optimizer, custom values like &#39;normal&#39;,</span>
+<span class="sd">        &#39;precise&#39;, etc, might be adequate. In addition, any</span>
+<span class="sd">        parameter can be set to a variable of expression, indicated by having</span>
+<span class="sd">        &#39;$&#39; as the first character in the field. For example, $OPTIMIZER_CONV.</span>
+
+<span class="sd">    parameters[&#39;default&#39;] : &#39;integer&#39; or &#39;float&#39; or &#39;string&#39; or &#39;boolean&#39; or</span>
+<span class="sd">        &#39;enum&#39; The default value of the parameter, used to reset it.</span>
+
+<span class="sd">    parameters[&#39;default_units&#39;] : str</span>
+<span class="sd">        The default units, used for resetting the value.</span>
+
+<span class="sd">    parameters[&#39;enumeration&#39;]: tuple</span>
+<span class="sd">        A tuple of enumerated values.</span>
+
+<span class="sd">    parameters[&#39;format_string&#39;]: str</span>
+<span class="sd">        A format string for &#39;pretty&#39; output.</span>
+
+<span class="sd">    parameters[&#39;description&#39;]: str</span>
+<span class="sd">        A short string used as a prompt in the GUI.</span>
+
+<span class="sd">    parameters[&#39;help_text&#39;]: tuple</span>
+<span class="sd">        A longer string to display as help for the user.</span>
+
+<span class="sd">    See Also</span>
+<span class="sd">    --------</span>
+<span class="sd">    Psi4, TkPsi4, Psi4</span>
+<span class="sd">    Psi4Parameters, Psi4Step</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    parameters = {</span>
+<span class="sd">        &quot;time&quot;: {</span>
+<span class="sd">            &quot;default&quot;: 100.0,</span>
+<span class="sd">            &quot;kind&quot;: &quot;float&quot;,</span>
+<span class="sd">            &quot;default_units&quot;: &quot;ps&quot;,</span>
+<span class="sd">            &quot;enumeration&quot;: tuple(),</span>
+<span class="sd">            &quot;format_string&quot;: &quot;.1f&quot;,</span>
+<span class="sd">            &quot;description&quot;: &quot;Simulation time:&quot;,</span>
+<span class="sd">            &quot;help_text&quot;: (&quot;The time to simulate in the dynamics run.&quot;)</span>
+<span class="sd">        },</span>
+<span class="sd">    }</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">parameters</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;time&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="mf">100.0</span><span class="p">,</span>
+            <span class="s2">&quot;kind&quot;</span><span class="p">:</span> <span class="s2">&quot;float&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;default_units&quot;</span><span class="p">:</span> <span class="s2">&quot;ps&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;enumeration&quot;</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">(),</span>
+            <span class="s2">&quot;format_string&quot;</span><span class="p">:</span> <span class="s2">&quot;.1f&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Simulation time:&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;help_text&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;The time to simulate in the dynamics run.&quot;</span><span class="p">)</span>
+        <span class="p">},</span>
+    <span class="p">}</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">defaults</span><span class="o">=</span><span class="p">{},</span> <span class="n">data</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initialize the parameters, by default with the parameters defined above</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">            defaults: dict</span>
+<span class="sd">                A dictionary of parameters to initialize. The parameters</span>
+<span class="sd">                above are used first and any given will override/add to them.</span>
+<span class="sd">            data: dict</span>
+<span class="sd">                A dictionary of keys and a subdictionary with value and units</span>
+<span class="sd">                for updating the current, default values.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;Psi4Parameters.__init__&#39;</span><span class="p">)</span>
+
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="n">defaults</span><span class="o">=</span><span class="p">{</span><span class="o">**</span><span class="n">Psi4Parameters</span><span class="o">.</span><span class="n">parameters</span><span class="p">,</span> <span class="o">**</span><span class="n">defaults</span><span class="p">},</span>
+            <span class="n">data</span><span class="o">=</span><span class="n">data</span>
+        <span class="p">)</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+
+    </p>
+  </div>
+
+<p>
+<div class="row">
+  <div class="column_left">
+    <a href="https://molssi.org/" target="_blank" title="Go to MolSSI in a new tab">
+      <img src="/_images/MolSSI.jpg" alt="The MolSSI" style="border:0;">
+    </a>
+  </div>
+  <div class="column">
+    &copy; Copyright 2020, the Molecular Sciences Software Institute,
+    which receives funding from the National Science Foundation under award ACI-1547580
+  </div>
+  <div class="column_right">
+    <a href="https://nsf.gov/" target="_blank" title="Go to the NSF in a new tab">
+      <img src="/_images/NSF_4-Color_bitmap_Logo.png" alt="The NSF" style="border:0;">
+    </a>
+  </div>
+</div>
+
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
