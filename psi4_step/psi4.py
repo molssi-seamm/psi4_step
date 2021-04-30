@@ -238,8 +238,8 @@ class Psi4(seamm.Node):
         # Options for Psi4
         parser.add_argument(
             parser_name,
-            '--exe',
-            default='psi4',
+            '--psi4-path',
+            default='',
             help='the path to the Psi4 executable'
         )
 
@@ -448,11 +448,12 @@ class Psi4(seamm.Node):
                 fd.write(files[filename])
 
         return_files = ['output.dat', '*properties.json', '*structure.json']
-        env = {'PSIPATH': Path(options['exe']).parent}
+        env = {'PSIPATH': Path(options['psi4-path'])}
 
         local = seamm.ExecLocal()
+        exe = Path(options['psi4-path']) / 'psi4'
         result = local.run(
-            cmd=[options['exe'], f'-n {n_threads}'],
+            cmd=[str(exe), f'-n {n_threads}'],
             files=files,
             return_files=return_files,
             env=env

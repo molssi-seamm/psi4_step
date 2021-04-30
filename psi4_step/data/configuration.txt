@@ -15,5 +15,19 @@ modules =
 # Ignored if a module is used. The default is to use the PATH
 # environment variable.
 
-psi4-path = 
+psi4-path =
+
+# Maximum number of threads (cores) to use
+# ncores = available
+
+# Total amount of memory to use
+# Use kB, MB, GB (1k = 1000) or kiB, MiB, GiB (1k = 1024)
+# The default is to use the same proportion of memory as
+# cores being used.
+# memory = available
+
+# How much of the memory to use. Defaults to 90% to allow
+# for Psi4 not perfectly tracking its memory requirements.
+# memory-factor = 90%
+
 
