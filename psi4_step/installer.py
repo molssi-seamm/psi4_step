@@ -101,4 +101,12 @@ class Installer(seamm_installer.InstallerBase):
                     version = tmp[0]
                     break
 
+        # Psi4 tends to leave timing.dat floating around. :-(
+        timing = Path('timer.dat')
+        if timing.exists():
+            try:
+                timing.unlink()
+            except Exception:
+                pass
+
         return version
