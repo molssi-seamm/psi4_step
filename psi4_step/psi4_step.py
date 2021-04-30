@@ -28,9 +28,9 @@ class Psi4Step(object):
     """
 
     my_description = {
-        'description': ('An interface for Psi4'),
-        'group': 'Simulations',
-        'name': 'Psi4'
+        "description": ("An interface for Psi4"),
+        "group": "Simulations",
+        "name": "Psi4",
     }
 
     def __init__(self, flowchart=None, gui=None):
@@ -41,8 +41,7 @@ class Psi4Step(object):
         pass
 
     def description(self):
-        """Return a description of what this extension does
-        """
+        """Return a description of what this extension does"""
         return Psi4Step.my_description
 
     def create_node(self, flowchart=None, **kwargs):

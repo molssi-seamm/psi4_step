@@ -12,7 +12,6 @@ logger = logging.getLogger(__name__)
 
 
 class TkInitialization(seamm.TkNode):
-
     def __init__(
         self,
         tk_flowchart=None,
@@ -23,7 +22,7 @@ class TkInitialization(seamm.TkNode):
         w=200,
         h=50,
         my_logger=logger,
-        keyword_metadata=None
+        keyword_metadata=None,
     ):
         """Initialize the graphical Tk Psi4 initialization step
 
@@ -49,43 +48,42 @@ class TkInitialization(seamm.TkNode):
             w=w,
             h=h,
             my_logger=my_logger,
-            keyword_metadata=keyword_metadata
+            keyword_metadata=keyword_metadata,
         )
 
     def right_click(self, event):
-        """Probably need to add our dialog...
-        """
+        """Probably need to add our dialog..."""
 
         super().right_click(event)
         self.popup_menu.add_command(label="Edit..", command=self.edit)
 
         self.popup_menu.tk_popup(event.x_root, event.y_root, 0)
 
-    def create_dialog(self, title='Edit Psi4 Initialization Step'):
+    def create_dialog(self, title="Edit Psi4 Initialization Step"):
         """Create the dialog!"""
-        self.logger.debug('Creating the dialog')
+        self.logger.debug("Creating the dialog")
         frame = super().create_dialog(title=title)
 
         # Create all the widgets
         P = self.node.parameters
         for key in P:
-            if key not in ('results', 'extra keywords', 'create tables'):
+            if key not in ("results", "extra keywords", "create tables"):
                 self[key] = P[key].widget(frame)
 
-        self.logger.debug('Finished creating the dialog')
+        self.logger.debug("Finished creating the dialog")
 
     def reset_dialog(self, widget=None):
-        frame = self['frame']
+        frame = self["frame"]
         for slave in frame.grid_slaves():
             slave.grid_forget()
 
         widgets = []
         row = 0
-        self['basis'].grid(row=row, column=0, sticky=tk.EW)
-        widgets.append(self['basis'])
+        self["basis"].grid(row=row, column=0, sticky=tk.EW)
+        widgets.append(self["basis"])
         row += 1
-        self['symmetry_tolerance'].grid(row=row, column=0, sticky=tk.EW)
-        widgets.append(self['symmetry_tolerance'])
+        self["symmetry_tolerance"].grid(row=row, column=0, sticky=tk.EW)
+        widgets.append(self["symmetry_tolerance"])
         row += 1
         sw.align_labels(widgets)
 

@@ -5,6 +5,7 @@
 import logging
 
 import psi4_step
+
 # import seamm
 
 logger = logging.getLogger(__name__)
@@ -18,35 +19,29 @@ class OptimizationParameters(psi4_step.EnergyParameters):
             "default": "Rational Function Optimization",
             "kind": "enumeration",
             "default_units": "",
-            "enumeration": [
-                x for x in psi4_step.optimization_methods
-            ],
+            "enumeration": [x for x in psi4_step.optimization_methods],
             "format_string": "s",
             "description": "Method:",
-            "help_text": ("The optimization method to use.")
+            "help_text": ("The optimization method to use."),
         },
         "max geometry steps": {
             "default": "default",
             "kind": "integer",
             "default_units": "",
-            "enumeration": (
-                "default",
-            ),
+            "enumeration": ("default",),
             "format_string": "",
             "description": "Maximum steps:",
             "help_text": (
                 "The maximum number of steps to take in the optimization. "
                 "'default' is based on the system size, giving a reasonable "
                 "limit in most cases."
-            )
+            ),
         },
         "geometry convergence": {
             "default": "QChem",
             "kind": "string",
             "default_units": "",
-            "enumeration": [
-                x for x in psi4_step.optimization_convergence
-            ],
+            "enumeration": [x for x in psi4_step.optimization_convergence],
             "format_string": "",
             "description": "Convergence criteria:",
             "help_text": "The criteria to use for convergence.",
@@ -55,15 +50,13 @@ class OptimizationParameters(psi4_step.EnergyParameters):
             "default": "never",
             "kind": "integer",
             "default_units": "",
-            "enumeration": (
-                'never',
-            ),
+            "enumeration": ("never",),
             "format_string": "",
             "description": "Recalculate Hessian:",
             "help_text": (
                 "How often to recalculate the Hessian (in steps). Smaller "
                 "values help convergence but are expensive."
-            )
+            ),
         },
     }
 
@@ -72,6 +65,5 @@ class OptimizationParameters(psi4_step.EnergyParameters):
         parameters given in the class"""
 
         super().__init__(
-            defaults={**OptimizationParameters.parameters, **defaults},
-            data=data
+            defaults={**OptimizationParameters.parameters, **defaults}, data=data
         )

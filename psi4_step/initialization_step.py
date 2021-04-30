@@ -7,9 +7,9 @@ import psi4_step
 
 class InitializationStep(object):
     my_description = {
-        'description': 'Initialization of Psi4',
-        'group': 'Setup',
-        'name': 'Initialization'
+        "description": "Initialization of Psi4",
+        "group": "Setup",
+        "name": "Initialization",
     }
 
     def __init__(self, flowchart=None, gui=None):
@@ -20,8 +20,7 @@ class InitializationStep(object):
         pass
 
     def description(self):
-        """Return a description of what this extension does
-        """
+        """Return a description of what this extension does"""
         return InitializationStep.my_description
 
     def create_node(self, flowchart=None, **kwargs):

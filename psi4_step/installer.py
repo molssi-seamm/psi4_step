@@ -102,7 +102,7 @@ class Installer(seamm_installer.InstallerBase):
                     break
 
         # Psi4 tends to leave timing.dat floating around. :-(
-        timing = Path('timer.dat')
+        timing = Path("timer.dat")
         if timing.exists():
             try:
                 timing.unlink()

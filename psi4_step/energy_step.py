@@ -7,9 +7,9 @@ import psi4_step
 
 class EnergyStep(object):
     my_description = {
-        'description': 'Energy calculation using Psi4',
-        'group': 'Calculation',
-        'name': 'Energy'
+        "description": "Energy calculation using Psi4",
+        "group": "Calculation",
+        "name": "Energy",
     }
 
     def __init__(self, flowchart=None, gui=None):
@@ -20,8 +20,7 @@ class EnergyStep(object):
         pass
 
     def description(self):
-        """Return a description of what this extension does
-        """
+        """Return a description of what this extension does"""
         return EnergyStep.my_description
 
     def create_node(self, flowchart=None, **kwargs):

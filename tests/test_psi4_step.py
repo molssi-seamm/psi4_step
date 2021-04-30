@@ -18,7 +18,7 @@ def instance():
 def test_construction():
     """Simplest test that we can make a Psi4 object"""
     instance = psi4_step.Psi4()
-    assert (str(type(instance)) == "<class 'psi4_step.psi4.Psi4'>")
+    assert str(type(instance)) == "<class 'psi4_step.psi4.Psi4'>"
 
 
 def test_version():

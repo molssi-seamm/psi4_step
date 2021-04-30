@@ -17,16 +17,16 @@ class InitializationParameters(seamm.Parameters):
             "kind": "enumeration",
             "default_units": "",
             "enumeration": (
-                '6-31G',
-                '6-31G*',
-                '6-31G**',
-                'cc-pVDZ',
-                'cc-pVTZ',
-                'cc-pVQZ',
+                "6-31G",
+                "6-31G*",
+                "6-31G**",
+                "cc-pVDZ",
+                "cc-pVTZ",
+                "cc-pVQZ",
             ),
             "format_string": "s",
             "description": "Basis:",
-            "help_text": ("The basis set to use.")
+            "help_text": ("The basis set to use."),
         },
         "symmetry_tolerance": {
             "default": "0.05",
@@ -35,7 +35,7 @@ class InitializationParameters(seamm.Parameters):
             "enumeration": tuple(),
             "format_string": ".1e",
             "description": "Symmetry tolerance:",
-            "help_text": "The tolerance used when determining the symmetry."
+            "help_text": "The tolerance used when determining the symmetry.",
         },
     }
 
@@ -44,6 +44,5 @@ class InitializationParameters(seamm.Parameters):
         parameters given in the class"""
 
         super().__init__(
-            defaults={**InitializationParameters.parameters, **defaults},
-            data=data
+            defaults={**InitializationParameters.parameters, **defaults}, data=data
         )
