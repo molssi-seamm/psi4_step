@@ -1,0 +1,9 @@
+name: seamm-psi4
+channels:
+  - psi4
+  - conda-forge
+dependencies:
+  - python
+    # Executables, etc.
+  - psi4
+  - psi4-rt

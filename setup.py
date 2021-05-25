@@ -59,6 +59,9 @@ setup(
         'Programming Language :: Python :: 3.8',
     ],
     entry_points={
+        'console_scripts': [
+            'psi4-step-installer=psi4_step.__main__:run',
+        ],
         'org.molssi.seamm': [
             'Psi4 = psi4_step:Psi4Step',
         ],

@@ -39,12 +39,12 @@ class TkPsi4(seamm.TkNode):
         self,
         tk_flowchart=None,
         node=None,
-        namespace='org.molssi.seamm.psi4.tk',
+        namespace="org.molssi.seamm.psi4.tk",
         canvas=None,
         x=None,
         y=None,
         w=200,
-        h=50
+        h=50,
     ):
         """
         Initialize a graphical node.
@@ -72,13 +72,7 @@ class TkPsi4(seamm.TkNode):
         self.dialog = None
 
         super().__init__(
-            tk_flowchart=tk_flowchart,
-            node=node,
-            canvas=canvas,
-            x=x,
-            y=y,
-            w=w,
-            h=h
+            tk_flowchart=tk_flowchart, node=node, canvas=canvas, x=x, y=y, w=w, h=h
         )
         self.create_dialog()
 
@@ -95,11 +89,11 @@ class TkPsi4(seamm.TkNode):
 
         self.dialog = Pmw.Dialog(
             self.toplevel,
-            buttons=('OK', 'Help', 'Cancel'),
-            defaultbutton='OK',
+            buttons=("OK", "Help", "Cancel"),
+            defaultbutton="OK",
             master=self.toplevel,
-            title='Edit Psi4 step',
-            command=self.handle_dialog
+            title="Edit Psi4 step",
+            command=self.handle_dialog,
         )
         self.dialog.withdraw()
 
@@ -108,8 +102,8 @@ class TkPsi4(seamm.TkNode):
         # the widgets easier and allows loops, etc.
 
         # Create a frame to hold everything. This is always called 'frame'.
-        self['frame'] = ttk.Frame(self.dialog.interior())
-        self['frame'].pack(expand=tk.YES, fill=tk.BOTH)
+        self["frame"] = ttk.Frame(self.dialog.interior())
+        self["frame"].pack(expand=tk.YES, fill=tk.BOTH)
         # make it large!
         screen_w = self.dialog.winfo_screenwidth()
         screen_h = self.dialog.winfo_screenheight()
@@ -118,12 +112,12 @@ class TkPsi4(seamm.TkNode):
         x = int(0.05 * screen_w / 2)
         y = int(0.1 * screen_h / 2)
 
-        self.dialog.geometry('{}x{}+{}+{}'.format(w, h, x, y))
+        self.dialog.geometry("{}x{}+{}+{}".format(w, h, x, y))
 
         self.tk_subflowchart = seamm.TkFlowchart(
-            master=self['frame'],
+            master=self["frame"],
             flowchart=self.node.subflowchart,
-            namespace=self.namespace
+            namespace=self.namespace,
         )
         self.tk_subflowchart.draw()
 
@@ -152,7 +146,7 @@ class TkPsi4(seamm.TkNode):
         if self.dialog is None:
             self.create_dialog()
 
-        self.dialog.activate(geometry='centerscreenfirst')
+        self.dialog.activate(geometry="centerscreenfirst")
 
     def handle_dialog(self, result):
         """Handle the closing of the edit dialog
@@ -169,19 +163,17 @@ class TkPsi4(seamm.TkNode):
 
         """
 
-        if result is None or result == 'Cancel':
+        if result is None or result == "Cancel":
             self.dialog.deactivate(result)
             return
 
-        if result == 'Help':
+        if result == "Help":
             # display help!!!
             return
 
         if result != "OK":
             self.dialog.deactivate(result)
-            raise RuntimeError(
-                "Don't recognize dialog result '{}'".format(result)
-            )
+            raise RuntimeError("Don't recognize dialog result '{}'".format(result))
 
         self.dialog.deactivate(result)
 
@@ -204,8 +196,7 @@ class TkPsi4(seamm.TkNode):
         """
 
         super().update_flowchart(
-            flowchart=self.node.subflowchart,
-            tk_flowchart=self.tk_subflowchart
+            flowchart=self.node.subflowchart, tk_flowchart=self.tk_subflowchart
         )
 
     def from_flowchart(self, tk_flowchart=None, flowchart=None):
@@ -223,12 +214,9 @@ class TkPsi4(seamm.TkNode):
         """
 
         super().from_flowchart(
-            flowchart=self.node.subflowchart,
-            tk_flowchart=self.tk_subflowchart
+            flowchart=self.node.subflowchart, tk_flowchart=self.tk_subflowchart
         )
 
     def handle_help(self):
-        """Shows the help to the user when click on help button.
-
-        """
-        print('Help not implemented yet for Psi4!')
+        """Shows the help to the user when click on help button."""
+        print("Help not implemented yet for Psi4!")

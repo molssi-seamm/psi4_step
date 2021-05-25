@@ -85,7 +85,7 @@ class Psi4Parameters(seamm.Parameters):
             "enumeration": tuple(),
             "format_string": ".1f",
             "description": "Simulation time:",
-            "help_text": ("The time to simulate in the dynamics run.")
+            "help_text": ("The time to simulate in the dynamics run."),
         },
     }
 
@@ -104,9 +104,6 @@ class Psi4Parameters(seamm.Parameters):
 
         """
 
-        logger.debug('Psi4Parameters.__init__')
+        logger.debug("Psi4Parameters.__init__")
 
-        super().__init__(
-            defaults={**Psi4Parameters.parameters, **defaults},
-            data=data
-        )
+        super().__init__(defaults={**Psi4Parameters.parameters, **defaults}, data=data)

@@ -8,6 +8,7 @@ import tkinter as tk
 import tkinter.ttk as ttk
 
 import psi4_step
+
 # import seamm
 import seamm_widgets as sw
 
@@ -15,7 +16,6 @@ logger = logging.getLogger(__name__)
 
 
 class TkOptimization(psi4_step.TkEnergy):
-
     def __init__(
         self,
         tk_flowchart=None,
@@ -26,7 +26,7 @@ class TkOptimization(psi4_step.TkEnergy):
         w=200,
         h=50,
         my_logger=logger,
-        keyword_metadata=None
+        keyword_metadata=None,
     ):
         """Initialize the graphical Tk Psi4 optimization step
 
@@ -52,12 +52,11 @@ class TkOptimization(psi4_step.TkEnergy):
             w=w,
             h=h,
             my_logger=my_logger,
-            keyword_metadata=keyword_metadata
+            keyword_metadata=keyword_metadata,
         )
 
     def right_click(self, event):
-        """Probably need to add our dialog...
-        """
+        """Probably need to add our dialog..."""
 
         super().right_click(event)
         self.popup_menu.add_command(label="Edit..", command=self.edit)
@@ -65,7 +64,7 @@ class TkOptimization(psi4_step.TkEnergy):
         self.popup_menu.tk_popup(event.x_root, event.y_root, 0)
 
     def create_dialog(
-        self, title='Edit Psi4 Optimization Step', calculation='optimization'
+        self, title="Edit Psi4 Optimization Step", calculation="optimization"
     ):
         """Create the edit dialog!
 
@@ -85,7 +84,7 @@ class TkOptimization(psi4_step.TkEnergy):
           section.
         """
 
-        logger.debug('TkOptimization.create_dialog')
+        logger.debug("TkOptimization.create_dialog")
 
         # Let parent classes do their thing.
         super().create_dialog(title=title, calculation=calculation)
@@ -93,41 +92,39 @@ class TkOptimization(psi4_step.TkEnergy):
         # Shortcut for parameters
         P = self.node.parameters
 
-        logger.debug('Parameters:\n{}'.format(pprint.pformat(P.to_dict())))
+        logger.debug("Parameters:\n{}".format(pprint.pformat(P.to_dict())))
 
         # Frame to isolate widgets
-        opt_frame = self['optimization'] = ttk.LabelFrame(
-            self['frame'],
+        opt_frame = self["optimization"] = ttk.LabelFrame(
+            self["frame"],
             borderwidth=4,
-            relief='sunken',
-            text='Geometry Optimization',
-            labelanchor='n',
-            padding=10
+            relief="sunken",
+            text="Geometry Optimization",
+            labelanchor="n",
+            padding=10,
         )
 
         for key in psi4_step.OptimizationParameters.parameters:
             self[key] = P[key].widget(opt_frame)
 
         # and binding to change as needed
-        self['geometry convergence'].combobox.bind(
+        self["geometry convergence"].combobox.bind(
             "<<ComboboxSelected>>", self.reset_optimization
         )
-        self['geometry convergence'].combobox.bind(
-            "<Return>", self.reset_optimization
-        )
-        self['geometry convergence'].combobox.bind(
+        self["geometry convergence"].combobox.bind("<Return>", self.reset_optimization)
+        self["geometry convergence"].combobox.bind(
             "<FocusOut>", self.reset_optimization
         )
 
         # Top level needs to call reset_dialog
-        if calculation == 'optimization':
+        if calculation == "optimization":
             self.reset_dialog()
 
     def reset_dialog(self, widget=None):
         """Layout the widgets, letting our parents go first."""
         row = super().reset_dialog()
 
-        self['optimization'].grid(row=row, column=0)
+        self["optimization"].grid(row=row, column=0)
         row += 1
 
         self.reset_optimization()
@@ -135,9 +132,9 @@ class TkOptimization(psi4_step.TkEnergy):
         return row
 
     def reset_optimization(self, widget=None):
-        convergence = self['geometry convergence'].get()
+        convergence = self["geometry convergence"].get()
 
-        frame = self['optimization']
+        frame = self["optimization"]
         for slave in frame.grid_slaves():
             slave.grid_forget()
 
@@ -145,31 +142,23 @@ class TkOptimization(psi4_step.TkEnergy):
         # widgets2 = []
         row = 0
 
-        self['optimization method'].grid(
-            row=row, column=0, columnspan=2, sticky=tk.EW
-        )
-        widgets.append(self['optimization method'])
+        self["optimization method"].grid(row=row, column=0, columnspan=2, sticky=tk.EW)
+        widgets.append(self["optimization method"])
         row += 1
 
-        self['max geometry steps'].grid(
-            row=row, column=0, columnspan=2, sticky=tk.EW
-        )
-        widgets.append(self['max geometry steps'])
+        self["max geometry steps"].grid(row=row, column=0, columnspan=2, sticky=tk.EW)
+        widgets.append(self["max geometry steps"])
         row += 1
 
-        self['geometry convergence'].grid(
-            row=row, column=0, columnspan=2, sticky=tk.EW
-        )
-        widgets.append(self['geometry convergence'])
+        self["geometry convergence"].grid(row=row, column=0, columnspan=2, sticky=tk.EW)
+        widgets.append(self["geometry convergence"])
         row += 1
 
-        if convergence == 'Custom':
+        if convergence == "Custom":
             pass
 
-        self['recalc hessian'].grid(
-            row=row, column=0, columnspan=2, sticky=tk.EW
-        )
-        widgets.append(self['recalc hessian'])
+        self["recalc hessian"].grid(row=row, column=0, columnspan=2, sticky=tk.EW)
+        widgets.append(self["recalc hessian"])
         row += 1
 
         sw.align_labels(widgets)

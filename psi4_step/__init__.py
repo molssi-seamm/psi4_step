@@ -20,7 +20,7 @@ from psi4_step.psi4_step import Psi4Step  # noqa: F401
 from psi4_step.tk_psi4 import TkPsi4  # noqa: F401
 
 from psi4_step.initialization import Initialization  # noqa: F401
-from psi4_step.initialization_parameters import InitializationParameters  # noqa: F401, E501
+from psi4_step.initialization_parameters import InitializationParameters  # noqa: F401
 from psi4_step.initialization_step import InitializationStep  # noqa: F401
 from psi4_step.tk_initialization import TkInitialization  # noqa: F401
 
@@ -30,7 +30,7 @@ from psi4_step.energy_step import EnergyStep  # noqa: F401
 from psi4_step.tk_energy import TkEnergy  # noqa: F401
 
 from psi4_step.optimization import Optimization  # noqa: F401
-from psi4_step.optimization_parameters import OptimizationParameters  # noqa: F401, E501
+from psi4_step.optimization_parameters import OptimizationParameters  # noqa: F401
 from psi4_step.optimization_step import OptimizationStep  # noqa: F401
 from psi4_step.tk_optimization import TkOptimization  # noqa: F401
 
@@ -38,8 +38,8 @@ from psi4_step.tk_optimization import TkOptimization  # noqa: F401
 from ._version import get_versions
 
 __author__ = """Paul Saxe"""
-__email__ = 'psaxe@molssi.org'
+__email__ = "psaxe@molssi.org"
 versions = get_versions()
-__version__ = versions['version']
-__git_revision__ = versions['full-revisionid']
+__version__ = versions["version"]
+__git_revision__ = versions["full-revisionid"]
 del get_versions, versions

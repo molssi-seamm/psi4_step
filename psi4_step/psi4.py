@@ -26,7 +26,7 @@ from seamm_util.printing import FormattedText as __
 
 logger = logging.getLogger(__name__)
 job = printing.getPrinter()
-printer = printing.getPrinter('Psi4')
+printer = printing.getPrinter("Psi4")
 
 pre_code = """\
 def fix_multipoles(data):
@@ -103,7 +103,7 @@ def humanize(memory, suffix="B", kilo=1024):
     elif kilo == 1024:
         units = ["", "Ki", "Mi", "Gi", "Ti", "Pi"]
     else:
-        raise ValueError('kilo must be 1000 or 1024!')
+        raise ValueError("kilo must be 1000 or 1024!")
 
     for unit in units:
         if memory < kilo:
@@ -119,22 +119,22 @@ def dehumanize(memory, suffix="B"):
         '1.17 GB' => 1170000000
     """
     units = {
-        '': 1,
-        'k': 1000,
-        'M': 1000**2,
-        'G': 1000**3,
-        'P': 1000**4,
-        'Ki': 1024,
-        'Mi': 1024**2,
-        'Gi': 1024**3,
-        'Pi': 1024**4
+        "": 1,
+        "k": 1000,
+        "M": 1000 ** 2,
+        "G": 1000 ** 3,
+        "P": 1000 ** 4,
+        "Ki": 1024,
+        "Mi": 1024 ** 2,
+        "Gi": 1024 ** 3,
+        "Pi": 1024 ** 4,
     }
 
     tmp = memory.split()
     if len(tmp) == 1:
         return memory
     elif len(tmp) > 2:
-        raise ValueError('Memory must be <number> <units>, e.g. 1.23 GB')
+        raise ValueError("Memory must be <number> <units>, e.g. 1.23 GB")
 
     amount, unit = tmp
     amount = float(amount)
@@ -171,9 +171,9 @@ class Psi4(seamm.Node):
     def __init__(
         self,
         flowchart=None,
-        title='Psi4',
-        namespace='org.molssi.seamm.psi4',
-        extension=None
+        title="Psi4",
+        namespace="org.molssi.seamm.psi4",
+        extension=None,
     ):
         """A step for Psi4 in a SEAMM flowchart.
 
@@ -191,36 +191,30 @@ class Psi4(seamm.Node):
             extension: None
                 Not yet implemented
         """
-        logger.debug('Creating Psi4 {}'.format(self))
+        logger.debug("Creating Psi4 {}".format(self))
 
         self.subflowchart = seamm.Flowchart(
-            parent=self, name='Psi4', namespace=namespace
+            parent=self, name="Psi4", namespace=namespace
         )
 
         super().__init__(
-            flowchart=flowchart,
-            title='Psi4',
-            extension=extension,
-            logger=logger
+            flowchart=flowchart, title="Psi4", extension=extension, logger=logger
         )
 
         self.parameters = psi4_step.Psi4Parameters()
 
     @property
     def version(self):
-        """The semantic version of this module.
-        """
+        """The semantic version of this module."""
         return psi4_step.__version__
 
     @property
     def git_revision(self):
-        """The git version of this module.
-        """
+        """The git version of this module."""
         return psi4_step.__git_revision__
 
     def create_parser(self):
-        """Setup the command-line / config file parser
-        """
+        """Setup the command-line / config file parser"""
         # parser_name = 'psi4-step'
         parser_name = self.step_type
         parser = seamm.getParser()
@@ -238,37 +232,37 @@ class Psi4(seamm.Node):
         # Options for Psi4
         parser.add_argument(
             parser_name,
-            '--exe',
-            default='psi4',
-            help='the path to the Psi4 executable'
+            "--psi4-path",
+            default="",
+            help="the path to the Psi4 executable",
         )
 
         parser.add_argument(
             parser_name,
-            '--ncores',
-            default='available',
-            help='How many threads to use in Psi4'
+            "--ncores",
+            default="available",
+            help="How many threads to use in Psi4",
         )
 
         parser.add_argument(
             parser_name,
-            '--memory',
-            default='available',
+            "--memory",
+            default="available",
             help=(
-                'The maximum amount of memory to use for Psi4, which can be '
+                "The maximum amount of memory to use for Psi4, which can be "
                 "'all' or 'available', or a number, which may use k, Ki, "
-                'M, Mi, etc. suffixes. Default: available.'
-            )
+                "M, Mi, etc. suffixes. Default: available."
+            ),
         )
 
         parser.add_argument(
             parser_name,
-            '--memory-factor',
-            default='90%',
+            "--memory-factor",
+            default="90%",
             help=(
-                'The amount of possible memory to use, typically about 90%% to'
-                ' allow for Psi4 not keeping track of all the memory used.'
-            )
+                "The amount of possible memory to use, typically about 90%% to"
+                " allow for Psi4 not keeping track of all the memory used."
+            ),
         )
 
         return result
@@ -301,12 +295,12 @@ class Psi4(seamm.Node):
         self.subflowchart.root_directory = self.flowchart.root_directory
 
         # Get the first real node
-        node = self.subflowchart.get_node('1').next()
+        node = self.subflowchart.get_node("1").next()
 
-        text = self.header + '\n\n'
+        text = self.header + "\n\n"
         while node is not None:
-            text += __(node.description_text(), indent=4 * ' ').__str__()
-            text += '\n'
+            text += __(node.description_text(), indent=4 * " ").__str__()
+            text += "\n"
             node = node.next()
 
         return text
@@ -322,14 +316,14 @@ class Psi4(seamm.Node):
 
         """
         printer.important(self.header)
-        printer.important('')
+        printer.important("")
 
-        system_db = self.get_variable('_system_db')
+        system_db = self.get_variable("_system_db")
         configuration = system_db.system.configuration
         n_atoms = configuration.n_atoms
         if n_atoms == 0:
-            self.logger.error('Psi4 run(): there is no structure!')
-            raise RuntimeError('Psi4 run(): there is no structure!')
+            self.logger.error("Psi4 run(): there is no structure!")
+            raise RuntimeError("Psi4 run(): there is no structure!")
 
         # Access the options
         options = self.options
@@ -337,72 +331,71 @@ class Psi4(seamm.Node):
 
         # How many processors does this node have?
         n_cores = psutil.cpu_count(logical=False)
-        self.logger.info('The number of cores is {}'.format(n_cores))
+        self.logger.info("The number of cores is {}".format(n_cores))
 
         # How many threads to use
-        if options['ncores'] == 'available':
+        if options["ncores"] == "available":
             n_threads = n_cores
         else:
-            n_threads = int(options['ncores'])
+            n_threads = int(options["ncores"])
         if n_threads > n_cores:
             n_threads = n_cores
         if n_threads < 1:
             n_threads = 1
-        if seamm_options['ncores'] != "available":
-            n_threads = min(n_threads, int(options['max_cores']))
-        self.logger.info(f'Psi4 will use {n_threads} threads.')
+        if seamm_options["ncores"] != "available":
+            n_threads = min(n_threads, int(options["max_cores"]))
+        self.logger.info(f"Psi4 will use {n_threads} threads.")
 
         # How much memory to use
         svmem = psutil.virtual_memory()
 
-        if seamm_options['memory'] == 'all':
+        if seamm_options["memory"] == "all":
             mem_limit = svmem.total
-        elif seamm_options['memory'] == 'available':
+        elif seamm_options["memory"] == "available":
             # For the default, 'available', use in proportion to number of
             # cores used
             mem_limit = svmem.total * (n_threads / n_cores)
         else:
-            mem_limit = dehumanize(seamm_options['memory'])
+            mem_limit = dehumanize(seamm_options["memory"])
 
-        if options['memory'] == 'all':
+        if options["memory"] == "all":
             memory = svmem.total
-        elif options['memory'] == 'available':
+        elif options["memory"] == "available":
             # For the default, 'available', use in proportion to number of
             # cores used
             memory = svmem.total * (n_threads / n_cores)
         else:
-            memory = dehumanize(options['memory'])
+            memory = dehumanize(options["memory"])
 
         memory = min(memory, mem_limit)
 
-        if '%' in options['memory_factor']:
-            factor = float(options['memory_factor'].rstrip('%')) / 100.0
+        if "%" in options["memory_factor"]:
+            factor = float(options["memory_factor"].rstrip("%")) / 100.0
         else:
-            factor = float(options['memory_factor'])
+            factor = float(options["memory_factor"])
 
         memory *= factor
 
         # Psi applies a minimum of 250 MiB
-        min_memory = dehumanize('250 MiB')
+        min_memory = dehumanize("250 MiB")
         if min_memory > memory:
             memory = min_memory
         memory = humanize(memory, kilo=1024)
 
         printer.important(
-            self.indent +
-            f'    Psi4 will use {n_threads} threads and {memory} memory\n'
+            self.indent + f"    Psi4 will use {n_threads} threads and {memory} memory\n"
         )
 
         # Start the input data
         input_data = []
-        input_data.append('import json')
-        input_data.append('import numpy as np')
-        input_data.append('import pprint')
-        input_data.append('')
-        input_data.append(f'memory {memory}')
-        input_data.append('')
+        input_data.append("import json")
+        input_data.append("import numpy as np")
+        input_data.append("import pprint")
+        input_data.append("")
+        input_data.append(f"memory {memory}")
+        input_data.append("")
         input_data.append(pre_code)
-        input_data.append('')
+        input_data.append("")
 
         # Work through the subflowchart to find out what to do.
         self.subflowchart.root_directory = self.flowchart.root_directory
@@ -410,90 +403,92 @@ class Psi4(seamm.Node):
         next_node = super().run(printer)
 
         # Get the first real node
-        node = self.subflowchart.get_node('1').next()
+        node = self.subflowchart.get_node("1").next()
 
         # Put the structure into the input
-        input_data.append(self._convert_structure(name='initial'))
+        input_data.append(self._convert_structure(name="initial"))
 
         while node is not None:
             text = node.get_input()
             input_data.append(text)
 
-            input_data.append('clean()')
-            input_data.append('clean_variables()')
+            input_data.append("clean()")
+            input_data.append("clean_variables()")
             # input_data.append('clean_options()')
 
             node = node.next()
 
         # Write out the final structure
-        input_data.append('')
-        input_data.append('# Write the final structure to disk')
-        input_data.append('molecule = get_active_molecule()')
-        input_data.append('tmp = molecule.to_dict()')
-        input_data.append('for item, value in tmp.items():')
-        input_data.append('    if isinstance(value, np.ndarray):')
-        input_data.append('        tmp[item] = value.tolist()')
-        input_data.append('')
+        input_data.append("")
+        input_data.append("# Write the final structure to disk")
+        input_data.append("molecule = get_active_molecule()")
+        input_data.append("tmp = molecule.to_dict()")
+        input_data.append("for item, value in tmp.items():")
+        input_data.append("    if isinstance(value, np.ndarray):")
+        input_data.append("        tmp[item] = value.tolist()")
+        input_data.append("")
         input_data.append("with open('final_structure.json', 'w') as fd:")
-        input_data.append('    json.dump(tmp, fd, sort_keys=True, indent=3)')
+        input_data.append("    json.dump(tmp, fd, sort_keys=True, indent=3)")
 
-        files = {'input.dat': '\n'.join(input_data)}
-        self.logger.info('input.dat:\n' + files['input.dat'])
+        files = {"input.dat": "\n".join(input_data)}
+        self.logger.info("input.dat:\n" + files["input.dat"])
 
         directory = Path(self.directory)
         directory.mkdir(parents=True, exist_ok=True)
         for filename in files:
             path = directory / filename
-            with path.open(mode='w') as fd:
+            with path.open(mode="w") as fd:
                 fd.write(files[filename])
 
-        return_files = ['output.dat', '*properties.json', '*structure.json']
-        env = {'PSIPATH': Path(options['exe']).parent}
+        return_files = ["output.dat", "*properties.json", "*structure.json"]
+        exe_path = Path(options["psi4_path"])
+        env = {"PSIPATH": str(exe_path)}
 
         local = seamm.ExecLocal()
+        exe = exe_path / "psi4"
         result = local.run(
-            cmd=[options['exe'], f'-n {n_threads}'],
+            cmd=[str(exe), f"-n {n_threads}"],
             files=files,
             return_files=return_files,
-            env=env
+            env=env,
         )  # yapf: disable
 
         if result is None:
-            self.logger.error('There was an error running Psi4')
+            self.logger.error("There was an error running Psi4")
             return None
 
-        self.logger.debug('\n' + pprint.pformat(result))
+        self.logger.debug("\n" + pprint.pformat(result))
 
-        self.logger.debug('stdout:\n' + result['stdout'])
-        if 'stdout' in result and result['stdout'] != '':
-            path = directory / 'stdout.txt'
-            with path.open(mode='w') as fd:
-                fd.write(result['stdout'])
+        self.logger.debug("stdout:\n" + result["stdout"])
+        if "stdout" in result and result["stdout"] != "":
+            path = directory / "stdout.txt"
+            with path.open(mode="w") as fd:
+                fd.write(result["stdout"])
 
-        if result['stderr'] != '':
-            self.logger.warning('stderr:\n' + result['stderr'])
-            path = directory / 'stderr.txt'
-            with path.open(mode='w') as fd:
-                fd.write(result['stderr'])
+        if result["stderr"] != "":
+            self.logger.warning("stderr:\n" + result["stderr"])
+            path = directory / "stderr.txt"
+            with path.open(mode="w") as fd:
+                fd.write(result["stderr"])
 
-        for filename in result['files']:
-            if filename[0] == '@':
-                subdir, fname = filename[1:].split('+')
+        for filename in result["files"]:
+            if filename[0] == "@":
+                subdir, fname = filename[1:].split("+")
                 path = directory / subdir / fname
             else:
                 path = directory / filename
-            with path.open(mode='w') as fd:
-                if result[filename]['data'] is not None:
-                    fd.write(result[filename]['data'])
+            with path.open(mode="w") as fd:
+                if result[filename]["data"] is not None:
+                    fd.write(result[filename]["data"])
                 else:
-                    fd.write(result[filename]['exception'])
+                    fd.write(result[filename]["exception"])
 
         # Analyze the results
         self.analyze()
 
         return next_node
 
-    def analyze(self, indent='', **kwargs):
+    def analyze(self, indent="", **kwargs):
         """Do any analysis of the output from this step.
 
         Also print important results to the local step.out file using
@@ -506,7 +501,7 @@ class Psi4(seamm.Node):
         """
 
         # Get the first real node
-        node = self.subflowchart.get_node('1').next()
+        node = self.subflowchart.get_node("1").next()
 
         # Loop over the subnodes, asking them to do their analysis
         while node is not None:
@@ -515,47 +510,46 @@ class Psi4(seamm.Node):
 
             node.analyze()
 
-            printer.normal('')
+            printer.normal("")
 
             node = node.next()
 
         # Update the structure
         directory = Path(self.directory)
-        structure_file = directory / 'final_structure.json'
+        structure_file = directory / "final_structure.json"
         if structure_file.exists():
-            with structure_file.open(mode='r') as fd:
+            with structure_file.open(mode="r") as fd:
                 structure = json.load(fd)
-        if 'geom' in structure:
-            system_db = self.get_variable('_system_db')
+        if "geom" in structure:
+            system_db = self.get_variable("_system_db")
             configuration = system_db.system.configuration
             xs = []
             ys = []
             zs = []
-            it = iter(structure['geom'])
+            it = iter(structure["geom"])
             for x in it:
                 xs.append(x)
                 ys.append(next(it))
                 zs.append(next(it))
-            configuration.atoms['x'][0:] = xs
-            configuration.atoms['y'][0:] = ys
-            configuration.atoms['z'][0:] = zs
+            configuration.atoms["x"][0:] = xs
+            configuration.atoms["y"][0:] = ys
+            configuration.atoms["z"][0:] = zs
             printer.important(
-                self.indent +
-                '    Updated the system with the structure from Psi4',
+                self.indent + "    Updated the system with the structure from Psi4",
             )
-            printer.important('')
+            printer.important("")
 
     def _convert_structure(self, name=None):
         """Convert the structure to the input for Psi4."""
 
-        system_db = self.get_variable('_system_db')
+        system_db = self.get_variable("_system_db")
         configuration = system_db.system.configuration
 
         structure = []
         if name is None:
-            structure.append('molecule {')
+            structure.append("molecule {")
         else:
-            structure.append('molecule ' + name + ' {')
+            structure.append("molecule " + name + " {")
 
         # Charge and multiplicity
         # not handled yet!!!!
@@ -563,17 +557,17 @@ class Psi4(seamm.Node):
         elements = configuration.atoms.symbols
         coordinates = configuration.atoms.coordinates
 
-        if 'freeze' in configuration.atoms:
-            freeze = configuration.atoms['freeze']
+        if "freeze" in configuration.atoms:
+            freeze = configuration.atoms["freeze"]
         else:
-            freeze = [''] * len(elements)
+            freeze = [""] * len(elements)
 
         for element, xyz, frz in zip(elements, coordinates, freeze):
             x, y, z = xyz
             structure.append(
-                f'    {element:2s} {float(x): 12.8f} {float(y): 12.8f} '
-                f'{float(z): 12.8f}'
+                f"    {element:2s} {float(x): 12.8f} {float(y): 12.8f} "
+                f"{float(z): 12.8f}"
             )
-        structure.append('}')
+        structure.append("}")
 
-        return '\n'.join(structure) + '\n'
+        return "\n".join(structure) + "\n"
