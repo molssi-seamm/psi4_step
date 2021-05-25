@@ -229,11 +229,10 @@ class Energy(seamm.Node):
             text = "The calculated energy is {Eelec:.6f} Ha."
         else:
             data = {}
+            tmp = str(json_file)
             text = (
-                (
-                    "\nThere are no results from Psi4. Perhaps it "
-                    f"failed? Looking for {str(json_file)}."
-                ),
+                "\nThere are no results from Psi4. Perhaps it "
+                f"failed? Looking for {tmp}."
             )
 
         printer.normal(__(text, **data, indent=self.indent + 4 * " "))
