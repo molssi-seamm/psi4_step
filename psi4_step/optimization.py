@@ -128,10 +128,8 @@ class Optimization(psi4_step.Energy):
         else:
             data = {}
             text = (
-                (
-                    "\nThere are no results from Psi4. Perhaps it "
-                    f"failed? Looking for {str(json_file)}."
-                ),
+                "\nThere are no results from Psi4. Perhaps it "
+                f"failed? Looking for {str(json_file)}."
             )
 
         printer.normal(__(text, **data, indent=self.indent + 4 * " "))
