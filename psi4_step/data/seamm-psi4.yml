@@ -1,4 +1,4 @@
-name: seamm-lammps
+name: seamm-psi4
 channels:
   - psi4
   - conda-forge
