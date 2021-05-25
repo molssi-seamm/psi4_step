@@ -441,10 +441,11 @@ class Psi4(seamm.Node):
                 fd.write(files[filename])
 
         return_files = ["output.dat", "*properties.json", "*structure.json"]
-        env = {"PSIPATH": Path(options["psi4-path"])}
+        exe_path = Path(options["psi4_path"])
+        env = {"PSIPATH": str(exe_path)}
 
         local = seamm.ExecLocal()
-        exe = Path(options["psi4-path"]) / "psi4"
+        exe = exe_path / "psi4"
         result = local.run(
             cmd=[str(exe), f"-n {n_threads}"],
             files=files,
