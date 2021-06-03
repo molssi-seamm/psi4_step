@@ -12,6 +12,7 @@ import psutil
 
 import psi4_step
 import seamm
+import seamm_util
 from seamm_util import ureg, Q_  # noqa: F401
 import seamm_util.printing as printing
 from seamm_util.printing import FormattedText as __
@@ -217,7 +218,7 @@ class Psi4(seamm.Node):
         """Setup the command-line / config file parser"""
         # parser_name = 'psi4-step'
         parser_name = self.step_type
-        parser = seamm.getParser()
+        parser = seamm_util.getParser()
 
         # Remember if the parser exists ... this type of step may have been
         # found before
