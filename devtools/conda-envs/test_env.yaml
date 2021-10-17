@@ -8,8 +8,8 @@ dependencies:
   - python
   - pip
 
-  # molsystem requires, and only available via Conda.
-  - openbabel
+  # Of the code
+  - seamm
   - psutil
 
   # Testing
@@ -21,8 +21,6 @@ dependencies:
 
     # Pip-only installs
   - pip:
-    - seamm
-
     # Documentation
     - rinohtype
     - pygments
