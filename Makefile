@@ -1,5 +1,6 @@
 MODULE := psi4_step
-.PHONY: clean clean-test clean-pyc clean-build docs help
+.PHONY: help clean clean-build clean-pyc clean-test lint format typing test dependencies
+.PHONY: test-all coverage html docs servedocs release check-release dist install uninstall
 .DEFAULT_GOAL := help
 define BROWSER_PYSCRIPT
 import os, webbrowser, sys
@@ -50,57 +51,47 @@ clean-test: ## remove test and coverage artifacts
 	find . -name '.pytype' -exec rm -fr {} +
 
 lint: ## check style with black and flake8
-	black --check --diff $(MODULE) tests
+	black --extend-exclude '_version.py' --check --diff $(MODULE) tests
 	flake8 $(MODULE) tests
 
 format: ## reformat with with yapf and isort
-	black $(MODULE) tests
-
-typing: ## check typing
-	pytype $(MODULE)
+	black --extend-exclude '_version.py' $(MODULE) tests
 
 test: ## run tests quickly with the default Python
-	py.test
-
-dependencies:
-	pur -r requirements_dev.txt
-	pip install -r requirements_dev.txt
-
-test-all: ## run tests on every Python version with tox
-	tox
+	pytest tests/
 
 coverage: ## check code coverage quickly with the default Python
-	coverage run --source $(MODULE) -m pytest
-	coverage report -m
-	coverage html
+	pytest -v --cov=$(MODULE) --cov-report term --color=yes tests/
+
+coverage-html: ## check code coverage quickly with the default Python, showing as html
+	pytest -v --cov=$(MODULE) --cov-report=html:htmlcov --cov-report term --color=yes tests/
 	$(BROWSER) htmlcov/index.html
 
-docs: ## generate Sphinx HTML documentation, including API docs
+html: ## generate Sphinx HTML documentation, including API docs
 	rm -f docs/developer/$(MODULE).rst
 	rm -f docs/developer/modules.rst
 	sphinx-apidoc -o docs/developer $(MODULE)
 	$(MAKE) -C docs clean
 	$(MAKE) -C docs html
+
+docs: html ## Make the html docs and show in the browser
 	$(BROWSER) docs/_build/html/index.html
 
 servedocs: docs ## compile the docs watching for changes
 	watchmedo shell-command -p '*.rst' -c '$(MAKE) -C docs html' -R -D .
 
-release: clean ## package and upload a release
-	python setup.py sdist bdist_wheel
+release: dist ## package and upload a release
 	python -m twine upload dist/*
 
-check-release: clean ## check the release for errors
-	python setup.py sdist bdist_wheel
+check-release: dist ## check the release for errors
 	python -m twine check dist/*
 
 dist: clean ## builds source and wheel package
-	python setup.py sdist
-	python setup.py bdist_wheel
+	python -m build
 	ls -l dist
 
 install: uninstall ## install the package to the active Python's site-packages
-	python setup.py install
+	pip install .
 
 uninstall: clean ## uninstall the package
 	pip uninstall --yes $(MODULE)
