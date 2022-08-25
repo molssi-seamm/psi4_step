@@ -35,7 +35,13 @@ def fix_multipoles(data):
     esp = []
     it = iter(data.items())
     for key, value in it:
-        if '32-POLE' in key:
+        if 'PROP ' == key[0:5]:
+            result[key[6:]] = value[0]
+        elif 'SCF DIPOLE' == key:
+            result[key] = value[0]
+        elif 'CURRENT DIPOLE' == key:
+            result[key] = value[0]
+        elif '32-POLE' in key:
             tmp = []
             while True:
                 value = 0.0 if abs(value) < 1.0e-10 else value
@@ -122,13 +128,13 @@ def dehumanize(memory, suffix="B"):
     units = {
         "": 1,
         "k": 1000,
-        "M": 1000 ** 2,
-        "G": 1000 ** 3,
-        "P": 1000 ** 4,
+        "M": 1000**2,
+        "G": 1000**3,
+        "P": 1000**4,
         "Ki": 1024,
-        "Mi": 1024 ** 2,
-        "Gi": 1024 ** 3,
-        "Pi": 1024 ** 4,
+        "Mi": 1024**2,
+        "Gi": 1024**3,
+        "Pi": 1024**4,
     }
 
     tmp = memory.split()
@@ -443,7 +449,10 @@ class Psi4(seamm.Node):
 
         return_files = ["output.dat", "*properties.json", "*structure.json"]
         exe_path = Path(options["psi4_path"])
-        env = {"PSIPATH": str(exe_path)}
+        env = {
+            "PSIPATH": str(exe_path),
+            "PATH": str(exe_path),
+        }
 
         local = seamm.ExecLocal()
         exe = exe_path / "psi4"
