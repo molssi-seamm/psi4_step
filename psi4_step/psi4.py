@@ -325,6 +325,15 @@ class Psi4(seamm.Node):
         printer.important(self.header)
         printer.important("")
 
+        # Add the main citation for DFTB+
+        self.references.cite(
+            raw=self._bibliography["doi:10.1063/5.0006002"],
+            alias="psi4",
+            module="psi4 step",
+            level=1,
+            note="The principle Psi4 citation.",
+        )
+
         system_db = self.get_variable("_system_db")
         configuration = system_db.system.configuration
         n_atoms = configuration.n_atoms
