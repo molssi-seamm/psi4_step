@@ -1,10 +1,14 @@
 -r requirements_install.txt
 
-coverage
+black
+build
+codecov
 flake8
 pytest
-pytest-runner
-sphinx
-tox
+pytest-cov
+pygments
 twine
-yapf
+rinohtype
+sphinx
+sphinx-rtd-theme
+pystemmer

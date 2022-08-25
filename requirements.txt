@@ -1,2 +1,2 @@
-psutil==5.7.2
-seamm==2021.2.2
+psutil
+seamm
