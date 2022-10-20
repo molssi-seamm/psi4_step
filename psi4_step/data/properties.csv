@@ -1,0 +1,4 @@
+Property,Type,Units,Description,URL
+dielectric energy#Psi4#{model},float,E_h,"The dielectric energy from the PCM model."
+electronic energy#Psi4#{model},float,E_h,"The {model} electronic energy.",
+total energy#Psi4#{model},float,E_h,"The {model} total energy (electronic + nuclear).",

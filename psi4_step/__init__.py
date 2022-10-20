@@ -12,7 +12,7 @@ from psi4_step.psi4_metadata import methods  # noqa: F401
 from psi4_step.psi4_metadata import dft_functionals  # noqa: F401
 from psi4_step.psi4_metadata import optimization_methods  # noqa: F401
 from psi4_step.psi4_metadata import optimization_convergence  # noqa: F401
-from psi4_step.psi4_metadata import properties  # noqa: F401
+from psi4_step.psi4_metadata import metadata  # noqa: F401
 
 from psi4_step.psi4 import Psi4  # noqa: F401
 from psi4_step.psi4_parameters import Psi4Parameters  # noqa: F401

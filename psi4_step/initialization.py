@@ -26,6 +26,9 @@ class Initialization(seamm.Node):
 
         super().__init__(flowchart=flowchart, title=title, extension=extension)
 
+        self._calculation = ""
+        self._model = None
+        self._metadata = psi4_step.metadata
         self.parameters = psi4_step.InitializationParameters()
 
         self.description = ["Initialization of Psi4"]

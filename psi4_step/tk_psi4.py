@@ -5,10 +5,7 @@
 import seamm
 from seamm_util import ureg, Q_, units_class  # noqa: F401
 import psi4_step  # noqa: F401
-import Pmw
 import pprint  # noqa: F401
-import tkinter as tk
-import tkinter.ttk as ttk
 
 
 class TkPsi4(seamm.TkNode):
@@ -86,24 +83,12 @@ class TkPsi4(seamm.TkNode):
         --------
         TkPsi4.reset_dialog
         """
-
-        self.dialog = Pmw.Dialog(
-            self.toplevel,
-            buttons=("OK", "Help", "Cancel"),
-            defaultbutton="OK",
-            master=self.toplevel,
-            title="Edit Psi4 step",
-            command=self.handle_dialog,
-        )
-        self.dialog.withdraw()
+        frame = super().create_dialog("Edit Psi4 Step")
 
         # The information about widgets is held in self['xxxx'], i.e. this
         # class is in part a dictionary of widgets. This makes accessing
         # the widgets easier and allows loops, etc.
 
-        # Create a frame to hold everything. This is always called 'frame'.
-        self["frame"] = ttk.Frame(self.dialog.interior())
-        self["frame"].pack(expand=tk.YES, fill=tk.BOTH)
         # make it large!
         screen_w = self.dialog.winfo_screenwidth()
         screen_h = self.dialog.winfo_screenheight()
@@ -115,9 +100,7 @@ class TkPsi4(seamm.TkNode):
         self.dialog.geometry("{}x{}+{}+{}".format(w, h, x, y))
 
         self.tk_subflowchart = seamm.TkFlowchart(
-            master=self["frame"],
-            flowchart=self.node.subflowchart,
-            namespace=self.namespace,
+            master=frame, flowchart=self.node.subflowchart, namespace=self.namespace
         )
         self.tk_subflowchart.draw()
 
