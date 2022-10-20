@@ -26,7 +26,6 @@ class TkOptimization(psi4_step.TkEnergy):
         w=200,
         h=50,
         my_logger=logger,
-        keyword_metadata=None,
     ):
         """Initialize the graphical Tk Psi4 optimization step
 
@@ -52,7 +51,6 @@ class TkOptimization(psi4_step.TkEnergy):
             w=w,
             h=h,
             my_logger=my_logger,
-            keyword_metadata=keyword_metadata,
         )
 
     def right_click(self, event):
@@ -63,9 +61,7 @@ class TkOptimization(psi4_step.TkEnergy):
 
         self.popup_menu.tk_popup(event.x_root, event.y_root, 0)
 
-    def create_dialog(
-        self, title="Edit Psi4 Optimization Step", calculation="optimization"
-    ):
+    def create_dialog(self, title="Edit Psi4 Optimization Step"):
         """Create the edit dialog!
 
         This is reasonably complicated, so a bit of description
@@ -87,7 +83,7 @@ class TkOptimization(psi4_step.TkEnergy):
         logger.debug("TkOptimization.create_dialog")
 
         # Let parent classes do their thing.
-        super().create_dialog(title=title, calculation=calculation)
+        super().create_dialog(title=title)
 
         # Shortcut for parameters
         P = self.node.parameters
@@ -117,7 +113,7 @@ class TkOptimization(psi4_step.TkEnergy):
         )
 
         # Top level needs to call reset_dialog
-        if calculation == "optimization":
+        if self.node.calculation == "optimization":
             self.reset_dialog()
 
     def reset_dialog(self, widget=None):

@@ -28,6 +28,9 @@ class Energy(seamm.Node):
             flowchart=flowchart, title=title, extension=extension, logger=logger
         )
 
+        self._calculation = "energy"
+        self._model = None
+        self._metadata = psi4_step.metadata
         self.parameters = psi4_step.EnergyParameters()
 
         self.description = "A single point energy calculation"
@@ -221,8 +224,6 @@ class Energy(seamm.Node):
             # Put any requested results into variables or tables
             self.store_results(
                 data=data,
-                properties=psi4_step.properties,
-                results=self.parameters["results"].value,
                 create_tables=self.parameters["create tables"].get(),
             )
 

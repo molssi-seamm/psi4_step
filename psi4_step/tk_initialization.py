@@ -22,7 +22,6 @@ class TkInitialization(seamm.TkNode):
         w=200,
         h=50,
         my_logger=logger,
-        keyword_metadata=None,
     ):
         """Initialize the graphical Tk Psi4 initialization step
 
@@ -48,7 +47,6 @@ class TkInitialization(seamm.TkNode):
             w=w,
             h=h,
             my_logger=my_logger,
-            keyword_metadata=keyword_metadata,
         )
 
     def right_click(self, event):

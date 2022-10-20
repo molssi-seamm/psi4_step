@@ -1,3 +1,5 @@
+metadata = {}
+
 methods = {
     "effective fragment potential (EFP)": {
         "method": "efp",
@@ -1556,7 +1558,7 @@ optimization_convergence = {
     "Custom": "",
 }
 
-properties = {
+metadata["results"] = {
     "(T) CORRECTION ENERGY": {
         "calculation": ["energy", "optimization", "thermodynamics", "vibrations"],
         "description": "",
@@ -1571,7 +1573,7 @@ properties = {
         "dimensionality": "scalar",
         "methods": ["ccsd", "ccsd(t)", "dft", "hf", "lccd", "mp2", "mp3", "mp4"],
         "type": "float",
-        "units": "Ha",
+        "units": "E_h",
     },
     "-D GRADIENT": {
         "calculation": ["energy", "optimization", "thermodynamics", "vibrations"],
@@ -1579,7 +1581,7 @@ properties = {
         "dimensionality": [3, "n_atoms"],
         "methods": ["dft"],
         "type": "float",
-        "units": "",
+        "units": "E_h/a_0",
     },
     "32-POLE": {
         "calculation": ["energy", "optimization", "thermodynamics", "vibrations"],
@@ -1587,7 +1589,6 @@ properties = {
         "dimensionality": ["triangular", 3, 3, 3, 3, 3],
         "methods": ["ccsd", "ccsd(t)", "dft", "hf", "lccd", "mp2", "mp3", "mp4"],
         "type": "float",
-        "units": "",
     },
     "AAA (T) CORRECTION ENERGY": {
         "calculation": ["energy", "optimization", "thermodynamics", "vibrations"],
@@ -1595,7 +1596,7 @@ properties = {
         "dimensionality": "scalar",
         "methods": ["ccsd(t)"],
         "type": "float",
-        "units": "",
+        "units": "E_h",
     },
     "AAB (T) CORRECTION ENERGY": {
         "calculation": ["energy", "optimization", "thermodynamics", "vibrations"],
@@ -1603,7 +1604,7 @@ properties = {
         "dimensionality": "scalar",
         "methods": ["ccsd(t)"],
         "type": "float",
-        "units": "",
+        "units": "E_h",
     },
     "ABB (T) CORRECTION ENERGY": {
         "calculation": ["energy", "optimization", "thermodynamics", "vibrations"],
@@ -1611,7 +1612,7 @@ properties = {
         "dimensionality": "scalar",
         "methods": ["ccsd(t)"],
         "type": "float",
-        "units": "",
+        "units": "E_h",
     },
     "B3LYP-D3(BJ) DISPERSION CORRECTION ENERGY": {
         "calculation": ["energy", "optimization", "thermodynamics", "vibrations"],
@@ -1619,7 +1620,7 @@ properties = {
         "dimensionality": "scalar",
         "methods": ["dft"],
         "type": "float",
-        "units": "",
+        "units": "E_h",
     },
     "BBB (T) CORRECTION ENERGY": {
         "calculation": ["energy", "optimization", "thermodynamics", "vibrations"],
@@ -1627,7 +1628,7 @@ properties = {
         "dimensionality": "scalar",
         "methods": ["ccsd(t)"],
         "type": "float",
-        "units": "",
+        "units": "E_h",
     },
     "CC D1 DIAGNOSTIC": {
         "calculation": ["energy", "optimization", "thermodynamics", "vibrations"],
@@ -1635,7 +1636,6 @@ properties = {
         "dimensionality": "scalar",
         "methods": ["ccsd", "ccsd(t)"],
         "type": "float",
-        "units": "",
     },
     "CC D2 DIAGNOSTIC": {
         "calculation": ["energy", "optimization", "thermodynamics", "vibrations"],
@@ -1643,7 +1643,6 @@ properties = {
         "dimensionality": "scalar",
         "methods": ["ccsd", "ccsd(t)"],
         "type": "float",
-        "units": "",
     },
     "CC NEW D1 DIAGNOSTIC": {
         "calculation": ["energy", "optimization", "thermodynamics", "vibrations"],
@@ -1651,7 +1650,6 @@ properties = {
         "dimensionality": "scalar",
         "methods": ["ccsd", "ccsd(t)"],
         "type": "float",
-        "units": "",
     },
     "CC T1 DIAGNOSTIC": {
         "calculation": ["energy", "optimization", "thermodynamics", "vibrations"],
@@ -1659,7 +1657,6 @@ properties = {
         "dimensionality": "scalar",
         "methods": ["ccsd", "ccsd(t)"],
         "type": "float",
-        "units": "",
     },
     "CCSD CORRELATION ENERGY": {
         "calculation": ["energy", "optimization", "thermodynamics", "vibrations"],
@@ -1667,7 +1664,7 @@ properties = {
         "dimensionality": "scalar",
         "methods": ["ccsd", "ccsd(t)"],
         "type": "float",
-        "units": "",
+        "units": "E_h",
     },
     "CCSD OPPOSITE-SPIN CORRELATION ENERGY": {
         "calculation": ["energy", "optimization", "thermodynamics", "vibrations"],
@@ -1675,7 +1672,7 @@ properties = {
         "dimensionality": "scalar",
         "methods": ["ccsd", "ccsd(t)"],
         "type": "float",
-        "units": "",
+        "units": "E_h",
     },
     "CCSD SAME-SPIN CORRELATION ENERGY": {
         "calculation": ["energy", "optimization", "thermodynamics", "vibrations"],
@@ -1683,7 +1680,7 @@ properties = {
         "dimensionality": "scalar",
         "methods": ["ccsd", "ccsd(t)"],
         "type": "float",
-        "units": "",
+        "units": "E_h",
     },
     "CCSD TOTAL ENERGY": {
         "calculation": ["energy", "optimization", "thermodynamics", "vibrations"],
@@ -1691,7 +1688,7 @@ properties = {
         "dimensionality": "scalar",
         "methods": ["ccsd", "ccsd(t)"],
         "type": "float",
-        "units": "",
+        "units": "E_h",
     },
     "CCSD(T) CORRELATION ENERGY": {
         "calculation": ["energy", "optimization", "thermodynamics", "vibrations"],
@@ -1699,7 +1696,7 @@ properties = {
         "dimensionality": "scalar",
         "methods": ["ccsd(t)"],
         "type": "float",
-        "units": "",
+        "units": "E_h",
     },
     "CCSD(T) TOTAL ENERGY": {
         "calculation": ["energy", "optimization", "thermodynamics", "vibrations"],
@@ -1707,7 +1704,7 @@ properties = {
         "dimensionality": "scalar",
         "methods": ["ccsd(t)"],
         "type": "float",
-        "units": "",
+        "units": "E_h",
     },
     "CURRENT CORRELATION ENERGY": {
         "calculation": ["energy", "optimization", "thermodynamics", "vibrations"],
@@ -1715,7 +1712,7 @@ properties = {
         "dimensionality": "scalar",
         "methods": ["ccsd", "ccsd(t)", "lccd", "mp2", "mp3", "mp4"],
         "type": "float",
-        "units": "",
+        "units": "E_h",
     },
     "CURRENT DIPOLE": {
         "calculation": ["energy", "optimization", "thermodynamics", "vibrations"],
@@ -1723,7 +1720,7 @@ properties = {
         "dimensionality": [3],
         "methods": ["ccsd", "ccsd(t)", "dft", "hf", "lccd", "mp2", "mp3", "mp4"],
         "type": "float",
-        "units": "",
+        "units": "D",
     },
     "CURRENT DIPOLE X": {
         "calculation": ["energy", "optimization", "thermodynamics", "vibrations"],
@@ -1731,7 +1728,7 @@ properties = {
         "dimensionality": "scalar",
         "methods": ["ccsd", "ccsd(t)", "dft", "hf", "lccd", "mp2", "mp3", "mp4"],
         "type": "float",
-        "units": "",
+        "units": "D",
     },
     "CURRENT DIPOLE Y": {
         "calculation": ["energy", "optimization", "thermodynamics", "vibrations"],
@@ -1739,7 +1736,7 @@ properties = {
         "dimensionality": "scalar",
         "methods": ["ccsd", "ccsd(t)", "dft", "hf", "lccd", "mp2", "mp3", "mp4"],
         "type": "float",
-        "units": "",
+        "units": "D",
     },
     "CURRENT DIPOLE Z": {
         "calculation": ["energy", "optimization", "thermodynamics", "vibrations"],
@@ -1747,15 +1744,16 @@ properties = {
         "dimensionality": "scalar",
         "methods": ["ccsd", "ccsd(t)", "dft", "hf", "lccd", "mp2", "mp3", "mp4"],
         "type": "float",
-        "units": "",
+        "units": "D",
     },
     "CURRENT ENERGY": {
         "calculation": ["energy", "optimization", "thermodynamics", "vibrations"],
         "description": "the electronic energy from the current method",
         "dimensionality": "scalar",
         "methods": ["ccsd", "ccsd(t)", "dft", "hf", "lccd", "mp2", "mp3", "mp4"],
+        "property": "total energy#Psi4#{model}",
         "type": "float",
-        "units": "",
+        "units": "E_h",
     },
     "CURRENT GRADIENT": {
         "calculation": ["energy", "optimization", "thermodynamics", "vibrations"],
@@ -1763,7 +1761,7 @@ properties = {
         "dimensionality": [3, "n_atoms"],
         "methods": ["dft", "hf"],
         "type": "float",
-        "units": "",
+        "units": "E_h/a_0",
     },
     "CURRENT REFERENCE ENERGY": {
         "calculation": ["energy", "optimization", "thermodynamics", "vibrations"],
@@ -1771,7 +1769,7 @@ properties = {
         "dimensionality": "scalar",
         "methods": ["ccsd", "ccsd(t)", "dft", "hf", "lccd", "mp2", "mp3", "mp4"],
         "type": "float",
-        "units": "",
+        "units": "E_h",
     },
     "DFT FUNCTIONAL TOTAL ENERGY": {
         "calculation": ["energy", "optimization", "thermodynamics", "vibrations"],
@@ -1779,7 +1777,7 @@ properties = {
         "dimensionality": "scalar",
         "methods": ["dft"],
         "type": "float",
-        "units": "",
+        "units": "E_h",
     },
     "DFT TOTAL ENERGY": {
         "calculation": ["energy", "optimization", "thermodynamics", "vibrations"],
@@ -1787,7 +1785,7 @@ properties = {
         "dimensionality": "scalar",
         "methods": ["dft"],
         "type": "float",
-        "units": "",
+        "units": "E_h",
     },
     "DFT VV10 ENERGY": {
         "calculation": ["energy", "optimization", "thermodynamics", "vibrations"],
@@ -1795,7 +1793,7 @@ properties = {
         "dimensionality": "scalar",
         "methods": ["dft"],
         "type": "float",
-        "units": "",
+        "units": "E_h",
     },
     "DFT XC ENERGY": {
         "calculation": ["energy", "optimization", "thermodynamics", "vibrations"],
@@ -1803,7 +1801,7 @@ properties = {
         "dimensionality": "scalar",
         "methods": ["dft"],
         "type": "float",
-        "units": "",
+        "units": "E_h",
     },
     "DIPOLE": {
         "calculation": ["energy", "optimization", "thermodynamics", "vibrations"],
@@ -1811,7 +1809,7 @@ properties = {
         "dimensionality": [3],
         "methods": ["ccsd", "ccsd(t)", "dft", "hf", "lccd", "mp2", "mp3", "mp4"],
         "type": "float",
-        "units": "",
+        "units": "D",
     },
     "DIPOLE X": {
         "calculation": ["energy", "optimization", "thermodynamics", "vibrations"],
@@ -1819,7 +1817,7 @@ properties = {
         "dimensionality": "scalar",
         "methods": ["ccsd", "ccsd(t)", "dft", "hf", "lccd", "mp2", "mp3", "mp4"],
         "type": "float",
-        "units": "",
+        "units": "D",
     },
     "DIPOLE Y": {
         "calculation": ["energy", "optimization", "thermodynamics", "vibrations"],
@@ -1827,7 +1825,7 @@ properties = {
         "dimensionality": "scalar",
         "methods": ["ccsd", "ccsd(t)", "dft", "hf", "lccd", "mp2", "mp3", "mp4"],
         "type": "float",
-        "units": "",
+        "units": "D",
     },
     "DIPOLE Z": {
         "calculation": ["energy", "optimization", "thermodynamics", "vibrations"],
@@ -1835,7 +1833,7 @@ properties = {
         "dimensionality": "scalar",
         "methods": ["ccsd", "ccsd(t)", "dft", "hf", "lccd", "mp2", "mp3", "mp4"],
         "type": "float",
-        "units": "",
+        "units": "D",
     },
     "DISPERSION CORRECTION ENERGY": {
         "calculation": ["energy", "optimization", "thermodynamics", "vibrations"],
@@ -1843,7 +1841,7 @@ properties = {
         "dimensionality": "scalar",
         "methods": ["dft"],
         "type": "float",
-        "units": "",
+        "units": "E_h",
     },
     "ELECTROSTATIC POTENTIAL": {
         "calculation": ["energy", "optimization", "thermodynamics", "vibrations"],
@@ -1851,15 +1849,16 @@ properties = {
         "dimensionality": ["n_atoms"],
         "methods": ["ccsd", "ccsd(t)", "dft", "hf", "lccd", "mp2", "mp3", "mp4"],
         "type": "float",
-        "units": "",
+        "units": "E_h",
     },
     "Eelec": {
         "calculation": ["energy", "optimization", "thermodynamics", "vibrations"],
         "description": "the electronic energy",
         "dimensionality": "scalar",
         "methods": ["ccsd", "ccsd(t)", "dft", "hf", "lccd", "mp2", "mp3", "mp4"],
+        "property": "electronic energy#Psi4#{model}",
         "type": "float",
-        "units": "",
+        "units": "E_h",
     },
     "HEXADECAPOLE": {
         "calculation": ["energy", "optimization", "thermodynamics", "vibrations"],
@@ -1867,7 +1866,6 @@ properties = {
         "dimensionality": ["triangular", 3, 3, 3, 3],
         "methods": ["ccsd", "ccsd(t)", "dft", "hf", "lccd", "mp2", "mp3", "mp4"],
         "type": "float",
-        "units": "",
     },
     "HF TOTAL ENERGY": {
         "calculation": ["energy", "optimization", "thermodynamics", "vibrations"],
@@ -1875,7 +1873,7 @@ properties = {
         "dimensionality": "scalar",
         "methods": ["ccsd", "ccsd(t)", "hf", "lccd", "mp2", "mp3", "mp4"],
         "type": "float",
-        "units": "",
+        "units": "E_h",
     },
     "LCCD CORRELATION ENERGY": {
         "calculation": ["energy", "optimization", "thermodynamics", "vibrations"],
@@ -1883,7 +1881,7 @@ properties = {
         "dimensionality": "scalar",
         "methods": ["lccd"],
         "type": "float",
-        "units": "",
+        "units": "E_h",
     },
     "LCCD OPPOSITE-SPIN CORRELATION ENERGY": {
         "calculation": ["energy", "optimization", "thermodynamics", "vibrations"],
@@ -1891,7 +1889,7 @@ properties = {
         "dimensionality": "scalar",
         "methods": ["lccd"],
         "type": "float",
-        "units": "",
+        "units": "E_h",
     },
     "LCCD SAME-SPIN CORRELATION ENERGY": {
         "calculation": ["energy", "optimization", "thermodynamics", "vibrations"],
@@ -1899,7 +1897,7 @@ properties = {
         "dimensionality": "scalar",
         "methods": ["lccd"],
         "type": "float",
-        "units": "",
+        "units": "E_h",
     },
     "LCCD TOTAL ENERGY": {
         "calculation": ["energy", "optimization", "thermodynamics", "vibrations"],
@@ -1907,7 +1905,7 @@ properties = {
         "dimensionality": "scalar",
         "methods": ["lccd"],
         "type": "float",
-        "units": "",
+        "units": "E_h",
     },
     "LCCSD (+LMP2) TOTAL ENERGY": {
         "calculation": ["energy", "optimization", "thermodynamics", "vibrations"],
@@ -1915,7 +1913,7 @@ properties = {
         "dimensionality": "scalar",
         "methods": ["ccsd", "ccsd(t)"],
         "type": "float",
-        "units": "",
+        "units": "E_h",
     },
     "LOWDIN_CHARGES": {
         "calculation": ["energy", "optimization", "thermodynamics", "vibrations"],
@@ -1923,7 +1921,7 @@ properties = {
         "dimensionality": ["n_atoms"],
         "methods": ["ccsd", "ccsd(t)", "dft", "hf", "lccd", "mp2", "mp3", "mp4"],
         "type": "float",
-        "units": "",
+        "units": "e",
     },
     "MAYER_INDICES": {
         "calculation": ["energy", "optimization", "thermodynamics", "vibrations"],
@@ -1931,7 +1929,6 @@ properties = {
         "dimensionality": ["triangular", "n_atoms", "n_atoms"],
         "methods": ["ccsd", "ccsd(t)", "dft", "hf", "lccd", "mp2", "mp3", "mp4"],
         "type": "float",
-        "units": "",
     },
     "MP2 CORRELATION ENERGY": {
         "calculation": ["energy", "optimization", "thermodynamics", "vibrations"],
@@ -1939,7 +1936,7 @@ properties = {
         "dimensionality": "scalar",
         "methods": ["ccsd", "ccsd(t)", "lccd", "mp2", "mp3", "mp4"],
         "type": "float",
-        "units": "",
+        "units": "E_h",
     },
     "MP2 OPPOSITE-SPIN CORRELATION ENERGY": {
         "calculation": ["energy", "optimization", "thermodynamics", "vibrations"],
@@ -1947,7 +1944,7 @@ properties = {
         "dimensionality": "scalar",
         "methods": ["ccsd", "ccsd(t)", "lccd", "mp2", "mp3", "mp4"],
         "type": "float",
-        "units": "",
+        "units": "E_h",
     },
     "MP2 SAME-SPIN CORRELATION ENERGY": {
         "calculation": ["energy", "optimization", "thermodynamics", "vibrations"],
@@ -1955,7 +1952,7 @@ properties = {
         "dimensionality": "scalar",
         "methods": ["ccsd", "ccsd(t)", "lccd", "mp2", "mp3", "mp4"],
         "type": "float",
-        "units": "",
+        "units": "E_h",
     },
     "MP2 SINGLES ENERGY": {
         "calculation": ["energy", "optimization", "thermodynamics", "vibrations"],
@@ -1963,7 +1960,7 @@ properties = {
         "dimensionality": "scalar",
         "methods": ["mp2"],
         "type": "float",
-        "units": "",
+        "units": "E_h",
     },
     "MP2 TOTAL ENERGY": {
         "calculation": ["energy", "optimization", "thermodynamics", "vibrations"],
@@ -1971,7 +1968,7 @@ properties = {
         "dimensionality": "scalar",
         "methods": ["ccsd", "ccsd(t)", "lccd", "mp2", "mp3", "mp4"],
         "type": "float",
-        "units": "",
+        "units": "E_h",
     },
     "MP2.5 CORRELATION ENERGY": {
         "calculation": ["energy", "optimization", "thermodynamics", "vibrations"],
@@ -1979,7 +1976,7 @@ properties = {
         "dimensionality": "scalar",
         "methods": ["mp3", "mp4"],
         "type": "float",
-        "units": "",
+        "units": "E_h",
     },
     "MP2.5 TOTAL ENERGY": {
         "calculation": ["energy", "optimization", "thermodynamics", "vibrations"],
@@ -1987,7 +1984,7 @@ properties = {
         "dimensionality": "scalar",
         "methods": ["mp3", "mp4"],
         "type": "float",
-        "units": "",
+        "units": "E_h",
     },
     "MP3 CORRELATION ENERGY": {
         "calculation": ["energy", "optimization", "thermodynamics", "vibrations"],
@@ -1995,7 +1992,7 @@ properties = {
         "dimensionality": "scalar",
         "methods": ["mp3", "mp4"],
         "type": "float",
-        "units": "",
+        "units": "E_h",
     },
     "MP3 TOTAL ENERGY": {
         "calculation": ["energy", "optimization", "thermodynamics", "vibrations"],
@@ -2003,7 +2000,7 @@ properties = {
         "dimensionality": "scalar",
         "methods": ["mp3", "mp4"],
         "type": "float",
-        "units": "",
+        "units": "E_h",
     },
     "MP4 CORRELATION ENERGY": {
         "calculation": ["energy", "optimization", "thermodynamics", "vibrations"],
@@ -2011,7 +2008,7 @@ properties = {
         "dimensionality": "scalar",
         "methods": ["mp4"],
         "type": "float",
-        "units": "",
+        "units": "E_h",
     },
     "MP4 TOTAL ENERGY": {
         "calculation": ["energy", "optimization", "thermodynamics", "vibrations"],
@@ -2019,7 +2016,7 @@ properties = {
         "dimensionality": "scalar",
         "methods": ["mp4"],
         "type": "float",
-        "units": "",
+        "units": "E_h",
     },
     "MP4(SDQ) CORRELATION ENERGY": {
         "calculation": ["energy", "optimization", "thermodynamics", "vibrations"],
@@ -2027,7 +2024,7 @@ properties = {
         "dimensionality": "scalar",
         "methods": ["mp4"],
         "type": "float",
-        "units": "",
+        "units": "E_h",
     },
     "MP4(SDQ) TOTAL ENERGY": {
         "calculation": ["energy", "optimization", "thermodynamics", "vibrations"],
@@ -2035,7 +2032,7 @@ properties = {
         "dimensionality": "scalar",
         "methods": ["mp4"],
         "type": "float",
-        "units": "",
+        "units": "E_h",
     },
     "MP4(SDTQ) CORRELATION ENERGY": {
         "calculation": ["energy", "optimization", "thermodynamics", "vibrations"],
@@ -2043,7 +2040,7 @@ properties = {
         "dimensionality": "scalar",
         "methods": ["mp4"],
         "type": "float",
-        "units": "",
+        "units": "E_h",
     },
     "MP4(SDTQ) TOTAL ENERGY": {
         "calculation": ["energy", "optimization", "thermodynamics", "vibrations"],
@@ -2051,7 +2048,7 @@ properties = {
         "dimensionality": "scalar",
         "methods": ["mp4"],
         "type": "float",
-        "units": "",
+        "units": "E_h",
     },
     "MP4(T) CORRECTION ENERGY": {
         "calculation": ["energy", "optimization", "thermodynamics", "vibrations"],
@@ -2059,7 +2056,7 @@ properties = {
         "dimensionality": "scalar",
         "methods": ["mp4"],
         "type": "float",
-        "units": "",
+        "units": "E_h",
     },
     "MULLIKEN_CHARGES": {
         "calculation": ["energy", "optimization", "thermodynamics", "vibrations"],
@@ -2067,15 +2064,16 @@ properties = {
         "dimensionality": ["n_atoms"],
         "methods": ["ccsd", "ccsd(t)", "dft", "hf", "lccd", "mp2", "mp3", "mp4"],
         "type": "float",
-        "units": "",
+        "units": "e",
     },
     "NUCLEAR REPULSION ENERGY": {
         "calculation": ["energy", "optimization", "thermodynamics", "vibrations"],
         "description": "",
         "dimensionality": "scalar",
         "methods": ["ccsd", "ccsd(t)", "dft", "hf", "lccd", "mp2", "mp3", "mp4"],
+        "property": "nuclear repulsion energy",
         "type": "float",
-        "units": "",
+        "units": "E_h",
     },
     "OCTUPOLE": {
         "calculation": ["energy", "optimization", "thermodynamics", "vibrations"],
@@ -2083,7 +2081,6 @@ properties = {
         "dimensionality": ["triangular", 3, 3, 3],
         "methods": ["ccsd", "ccsd(t)", "dft", "hf", "lccd", "mp2", "mp3", "mp4"],
         "type": "float",
-        "units": "",
     },
     "ONE-ELECTRON ENERGY": {
         "calculation": ["energy", "optimization", "thermodynamics", "vibrations"],
@@ -2091,7 +2088,7 @@ properties = {
         "dimensionality": "scalar",
         "methods": ["ccsd", "ccsd(t)", "dft", "hf", "lccd", "mp2", "mp3", "mp4"],
         "type": "float",
-        "units": "",
+        "units": "E_h",
     },
     "OPTIMIZATION ITERATIONS": {
         "calculation": ["energy", "optimization", "thermodynamics", "vibrations"],
@@ -2099,15 +2096,15 @@ properties = {
         "dimensionality": "scalar",
         "methods": ["ccsd", "ccsd(t)", "dft", "hf", "lccd", "mp2", "mp3"],
         "type": "float",
-        "units": "",
     },
     "PCM POLARIZATION ENERGY": {
         "calculation": ["energy", "optimization", "thermodynamics", "vibrations"],
         "description": "the PCM polarization energy",
         "dimensionality": "scalar",
         "methods": ["ccsd", "ccsd(t)", "dft", "hf", "lccd", "mp2", "mp3", "mp4"],
+        "property": "dielectric energy#Psi4#{model}",
         "type": "float",
-        "units": "",
+        "units": "E_h",
     },
     "QUADRUPOLE": {
         "calculation": ["energy", "optimization", "thermodynamics", "vibrations"],
@@ -2115,7 +2112,6 @@ properties = {
         "dimensionality": ["triangular", 3, 3],
         "methods": ["ccsd", "ccsd(t)", "dft", "hf", "lccd", "mp2", "mp3", "mp4"],
         "type": "float",
-        "units": "",
     },
     "SCF DIPOLE": {
         "calculation": ["energy", "optimization", "thermodynamics", "vibrations"],
@@ -2123,7 +2119,6 @@ properties = {
         "dimensionality": [3],
         "methods": ["ccsd", "ccsd(t)", "dft", "hf", "lccd", "mp2", "mp3", "mp4"],
         "type": "float",
-        "units": "",
     },
     "SCF DIPOLE X": {
         "calculation": ["energy", "optimization", "thermodynamics", "vibrations"],
@@ -2131,7 +2126,6 @@ properties = {
         "dimensionality": "scalar",
         "methods": ["ccsd", "ccsd(t)", "dft", "hf", "lccd", "mp2", "mp3", "mp4"],
         "type": "float",
-        "units": "",
     },
     "SCF DIPOLE Y": {
         "calculation": ["energy", "optimization", "thermodynamics", "vibrations"],
@@ -2139,7 +2133,6 @@ properties = {
         "dimensionality": "scalar",
         "methods": ["ccsd", "ccsd(t)", "dft", "hf", "lccd", "mp2", "mp3", "mp4"],
         "type": "float",
-        "units": "",
     },
     "SCF DIPOLE Z": {
         "calculation": ["energy", "optimization", "thermodynamics", "vibrations"],
@@ -2147,7 +2140,6 @@ properties = {
         "dimensionality": "scalar",
         "methods": ["ccsd", "ccsd(t)", "dft", "hf", "lccd", "mp2", "mp3", "mp4"],
         "type": "float",
-        "units": "",
     },
     "SCF ITERATION ENERGY": {
         "calculation": ["energy", "optimization", "thermodynamics", "vibrations"],
@@ -2155,7 +2147,7 @@ properties = {
         "dimensionality": "scalar",
         "methods": ["ccsd", "ccsd(t)", "dft", "hf", "lccd", "mp2", "mp3", "mp4"],
         "type": "float",
-        "units": "",
+        "units": "E_h",
     },
     "SCF ITERATIONS": {
         "calculation": ["energy", "optimization", "thermodynamics", "vibrations"],
@@ -2163,7 +2155,6 @@ properties = {
         "dimensionality": "scalar",
         "methods": ["ccsd", "ccsd(t)", "dft", "hf", "lccd", "mp2", "mp3", "mp4"],
         "type": "integer",
-        "units": "",
     },
     "SCF TOTAL ENERGY": {
         "calculation": ["energy", "optimization", "thermodynamics", "vibrations"],
@@ -2171,7 +2162,7 @@ properties = {
         "dimensionality": "scalar",
         "methods": ["ccsd", "ccsd(t)", "dft", "hf", "lccd", "mp2", "mp3", "mp4"],
         "type": "float",
-        "units": "",
+        "units": "E_h",
     },
     "SCF TOTAL GRADIENT": {
         "calculation": ["energy", "optimization", "thermodynamics", "vibrations"],
@@ -2179,7 +2170,7 @@ properties = {
         "dimensionality": [3, "n_atoms"],
         "methods": ["dft", "hf"],
         "type": "float",
-        "units": "",
+        "units": "E_h/a_0",
     },
     "SCS-MP2 CORRELATION ENERGY": {
         "calculation": ["energy", "optimization", "thermodynamics", "vibrations"],
@@ -2187,7 +2178,7 @@ properties = {
         "dimensionality": "scalar",
         "methods": ["lccd", "mp2", "mp3"],
         "type": "float",
-        "units": "",
+        "units": "E_h",
     },
     "SCS-MP2 OPPOSITE-SPIN CORRELATION ENERGY": {
         "calculation": ["energy", "optimization", "thermodynamics", "vibrations"],
@@ -2195,7 +2186,7 @@ properties = {
         "dimensionality": "scalar",
         "methods": ["mp2"],
         "type": "float",
-        "units": "",
+        "units": "E_h",
     },
     "SCS-MP2 SAME-SPIN CORRELATION ENERGY": {
         "calculation": ["energy", "optimization", "thermodynamics", "vibrations"],
@@ -2203,7 +2194,7 @@ properties = {
         "dimensionality": "scalar",
         "methods": ["mp2"],
         "type": "float",
-        "units": "",
+        "units": "E_h",
     },
     "SCS-MP2 TOTAL ENERGY": {
         "calculation": ["energy", "optimization", "thermodynamics", "vibrations"],
@@ -2211,7 +2202,7 @@ properties = {
         "dimensionality": "scalar",
         "methods": ["lccd", "mp2", "mp3"],
         "type": "float",
-        "units": "",
+        "units": "E_h",
     },
     "SCS-MP2-VDW CORRELATION ENERGY": {
         "calculation": ["energy", "optimization", "thermodynamics", "vibrations"],
@@ -2219,7 +2210,7 @@ properties = {
         "dimensionality": "scalar",
         "methods": ["lccd", "mp3"],
         "type": "float",
-        "units": "",
+        "units": "E_h",
     },
     "SCS-MP2-VDW TOTAL ENERGY": {
         "calculation": ["energy", "optimization", "thermodynamics", "vibrations"],
@@ -2227,7 +2218,7 @@ properties = {
         "dimensionality": "scalar",
         "methods": ["lccd", "mp3"],
         "type": "float",
-        "units": "",
+        "units": "E_h",
     },
     "SCS-MP3 CORRELATION ENERGY": {
         "calculation": ["energy", "optimization", "thermodynamics", "vibrations"],
@@ -2235,7 +2226,7 @@ properties = {
         "dimensionality": "scalar",
         "methods": ["mp3"],
         "type": "float",
-        "units": "",
+        "units": "E_h",
     },
     "SCS-MP3 TOTAL ENERGY": {
         "calculation": ["energy", "optimization", "thermodynamics", "vibrations"],
@@ -2243,7 +2234,7 @@ properties = {
         "dimensionality": "scalar",
         "methods": ["mp3"],
         "type": "float",
-        "units": "",
+        "units": "E_h",
     },
     "SCS-MP3-VDW CORRELATION ENERGY": {
         "calculation": ["energy", "optimization", "thermodynamics", "vibrations"],
@@ -2251,7 +2242,7 @@ properties = {
         "dimensionality": "scalar",
         "methods": ["mp3"],
         "type": "float",
-        "units": "",
+        "units": "E_h",
     },
     "SCS-MP3-VDW TOTAL ENERGY": {
         "calculation": ["energy", "optimization", "thermodynamics", "vibrations"],
@@ -2259,7 +2250,7 @@ properties = {
         "dimensionality": "scalar",
         "methods": ["mp3"],
         "type": "float",
-        "units": "",
+        "units": "E_h",
     },
     "SCSN-MP2 CORRELATION ENERGY": {
         "calculation": ["energy", "optimization", "thermodynamics", "vibrations"],
@@ -2267,7 +2258,7 @@ properties = {
         "dimensionality": "scalar",
         "methods": ["lccd", "mp3"],
         "type": "float",
-        "units": "",
+        "units": "E_h",
     },
     "SCSN-MP2 TOTAL ENERGY": {
         "calculation": ["energy", "optimization", "thermodynamics", "vibrations"],
@@ -2275,7 +2266,7 @@ properties = {
         "dimensionality": "scalar",
         "methods": ["lccd", "mp3"],
         "type": "float",
-        "units": "",
+        "units": "E_h",
     },
     "SCSN-MP3 CORRELATION ENERGY": {
         "calculation": ["energy", "optimization", "thermodynamics", "vibrations"],
@@ -2283,7 +2274,7 @@ properties = {
         "dimensionality": "scalar",
         "methods": ["mp3"],
         "type": "float",
-        "units": "",
+        "units": "E_h",
     },
     "SCSN-MP3 TOTAL ENERGY": {
         "calculation": ["energy", "optimization", "thermodynamics", "vibrations"],
@@ -2291,7 +2282,7 @@ properties = {
         "dimensionality": "scalar",
         "methods": ["mp3"],
         "type": "float",
-        "units": "",
+        "units": "E_h",
     },
     "SOS-MP2 CORRELATION ENERGY": {
         "calculation": ["energy", "optimization", "thermodynamics", "vibrations"],
@@ -2299,7 +2290,7 @@ properties = {
         "dimensionality": "scalar",
         "methods": ["lccd", "mp3"],
         "type": "float",
-        "units": "",
+        "units": "E_h",
     },
     "SOS-MP2 TOTAL ENERGY": {
         "calculation": ["energy", "optimization", "thermodynamics", "vibrations"],
@@ -2307,7 +2298,7 @@ properties = {
         "dimensionality": "scalar",
         "methods": ["lccd", "mp3"],
         "type": "float",
-        "units": "",
+        "units": "E_h",
     },
     "SOS-MP3 CORRELATION ENERGY": {
         "calculation": ["energy", "optimization", "thermodynamics", "vibrations"],
@@ -2315,7 +2306,7 @@ properties = {
         "dimensionality": "scalar",
         "methods": ["mp3"],
         "type": "float",
-        "units": "",
+        "units": "E_h",
     },
     "SOS-MP3 TOTAL ENERGY": {
         "calculation": ["energy", "optimization", "thermodynamics", "vibrations"],
@@ -2323,7 +2314,7 @@ properties = {
         "dimensionality": "scalar",
         "methods": ["mp3"],
         "type": "float",
-        "units": "",
+        "units": "E_h",
     },
     "SOS-PI-MP2 CORRELATION ENERGY": {
         "calculation": ["energy", "optimization", "thermodynamics", "vibrations"],
@@ -2331,7 +2322,7 @@ properties = {
         "dimensionality": "scalar",
         "methods": ["lccd", "mp3"],
         "type": "float",
-        "units": "",
+        "units": "E_h",
     },
     "SOS-PI-MP2 TOTAL ENERGY": {
         "calculation": ["energy", "optimization", "thermodynamics", "vibrations"],
@@ -2339,7 +2330,7 @@ properties = {
         "dimensionality": "scalar",
         "methods": ["lccd", "mp3"],
         "type": "float",
-        "units": "",
+        "units": "E_h",
     },
     "SOS-PI-MP3 CORRELATION ENERGY": {
         "calculation": ["energy", "optimization", "thermodynamics", "vibrations"],
@@ -2347,7 +2338,7 @@ properties = {
         "dimensionality": "scalar",
         "methods": ["mp3"],
         "type": "float",
-        "units": "",
+        "units": "E_h",
     },
     "SOS-PI-MP3 TOTAL ENERGY": {
         "calculation": ["energy", "optimization", "thermodynamics", "vibrations"],
@@ -2355,7 +2346,7 @@ properties = {
         "dimensionality": "scalar",
         "methods": ["mp3"],
         "type": "float",
-        "units": "",
+        "units": "E_h",
     },
     "TWO-ELECTRON ENERGY": {
         "calculation": ["energy", "optimization", "thermodynamics", "vibrations"],
@@ -2363,7 +2354,7 @@ properties = {
         "dimensionality": "scalar",
         "methods": ["ccsd", "ccsd(t)", "dft", "hf", "lccd", "mp2", "mp3", "mp4"],
         "type": "float",
-        "units": "",
+        "units": "E_h",
     },
     "WIBERG_LOWDIN_INDICES": {
         "calculation": ["energy", "optimization", "thermodynamics", "vibrations"],
@@ -2371,6 +2362,5 @@ properties = {
         "dimensionality": ["triangular", "n_atoms", "n_atoms"],
         "methods": ["ccsd", "ccsd(t)", "dft", "hf", "lccd", "mp2", "mp3", "mp4"],
         "type": "float",
-        "units": "",
     },
 }  # yapf: disable

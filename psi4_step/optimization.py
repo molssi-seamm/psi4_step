@@ -26,6 +26,9 @@ class Optimization(psi4_step.Energy):
 
         super().__init__(flowchart=flowchart, title=title, extension=extension)
 
+        self._calculation = "optimization"
+        self._model = None
+        self._metadata = psi4_step.metadata
         self.parameters = psi4_step.OptimizationParameters()
 
         self.description = "A geometry optimization"
@@ -119,8 +122,6 @@ class Optimization(psi4_step.Energy):
             # Put any requested results into variables or tables
             self.store_results(
                 data=data,
-                properties=psi4_step.properties,
-                results=self.parameters["results"].value,
                 create_tables=self.parameters["create tables"].get(),
             )
 

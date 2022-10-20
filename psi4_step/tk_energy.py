@@ -24,14 +24,12 @@ class TkEnergy(seamm.TkNode):
         w=200,
         h=50,
         my_logger=logger,
-        keyword_metadata=None,
     ):
         """Initialize the graphical Tk Psi4 energy step
 
         Keyword arguments:
         """
         self.results_widgets = []
-        self._calculation = None
 
         # Set the logging level for this module if requested
         # if 'psi4_tk_energy_log_level' in self.options:
@@ -51,7 +49,6 @@ class TkEnergy(seamm.TkNode):
             w=w,
             h=h,
             my_logger=my_logger,
-            keyword_metadata=keyword_metadata,
         )
 
     def right_click(self, event):
@@ -62,10 +59,9 @@ class TkEnergy(seamm.TkNode):
 
         self.popup_menu.tk_popup(event.x_root, event.y_root, 0)
 
-    def create_dialog(self, title="Edit Psi4 Energy Step", calculation="energy"):
+    def create_dialog(self, title="Edit Psi4 Energy Step"):
         """Create the dialog!"""
         self.logger.debug("Creating the dialog")
-        self._calculation = calculation
         frame = super().create_dialog(title=title, widget="notebook", results_tab=True)
 
         # Create a frame for the calculation control
@@ -101,7 +97,7 @@ class TkEnergy(seamm.TkNode):
         # self.setup_results(psi4_step.properties, calculation=calculation)
 
         # Top level needs to call reset_dialog
-        if calculation == "energy":
+        if self.node.calculation == "energy":
             self.reset_dialog()
 
         self.logger.debug("Finished creating the dialog")
@@ -123,27 +119,25 @@ class TkEnergy(seamm.TkNode):
         if level == "recommended":
             long_method = self["method"].get()
             if self.is_expr(long_method):
-                method = None
+                self.node.method = None
                 meta = None
             else:
-                method = psi4_step.methods[long_method]["method"]
+                self.node.method = psi4_step.methods[long_method]["method"]
                 meta = psi4_step.methods[long_method]
             functional = self["functional"].get()
         else:
             long_method = self["advanced_method"].get()
             if self.is_expr(long_method):
-                method = None
+                self.node.method = None
                 meta = None
             else:
-                method = psi4_step.methods[long_method]["method"]
+                self.node.method = psi4_step.methods[long_method]["method"]
                 meta = psi4_step.methods[long_method]
             functional = self["advanced_functional"].get()
 
         # Set up the results table because it depends on the method
         self.results_widgets = []
-        self.setup_results(
-            psi4_step.properties, calculation=self._calculation, method=method
-        )
+        self.setup_results()
 
         frame = self["calculation"]
         for slave in frame.grid_slaves():
@@ -158,7 +152,7 @@ class TkEnergy(seamm.TkNode):
             self["method"].grid(row=row, column=0, columnspan=2, sticky=tk.EW)
             widgets.append(self["method"])
             row += 1
-            if method is None or method == "dft":
+            if self.node.method is None or self.node.method == "dft":
                 self["functional"].grid(row=row, column=1, sticky=tk.EW)
                 widgets2.append(self["functional"])
                 row += 1
@@ -170,7 +164,7 @@ class TkEnergy(seamm.TkNode):
             self["advanced_method"].grid(row=row, column=0, columnspan=2, sticky=tk.EW)
             widgets.append(self["advanced_method"])
             row += 1
-            if method is None or method == "dft":
+            if self.node.method is None or self.node.method == "dft":
                 self["advanced_functional"].grid(row=row, column=1, sticky=tk.EW)
                 widgets2.append(self["advanced_functional"])
                 row += 1
@@ -178,7 +172,7 @@ class TkEnergy(seamm.TkNode):
                 self["freeze-cores"].grid(row=row, column=1, sticky=tk.EW)
                 widgets2.append(self["freeze-cores"])
                 row += 1
-        if method is None or method == "dft":
+        if self.node.method is None or self.node.method == "dft":
             dispersions = psi4_step.dft_functionals[functional]["dispersion"]
             if len(dispersions) > 1:
                 w = self["dispersion"]
