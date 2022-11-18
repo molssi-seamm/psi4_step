@@ -571,7 +571,7 @@ class Psi4(seamm.Node):
             structure.append("molecule " + name + " {")
 
         # Charge and multiplicity
-        # not handled yet!!!!
+        structure.append(f"  {configuration.charge} {configuration.spin_multiplicity}")
 
         elements = configuration.atoms.symbols
         coordinates = configuration.atoms.coordinates
