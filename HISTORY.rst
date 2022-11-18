@@ -2,6 +2,8 @@
 History
 =======
 
+2022.11.18 -- Added total charge and multiplicity to Psi4 input
+
 2021.2.11 (11 February 2021)
 ----------------------------
 
