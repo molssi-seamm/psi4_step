@@ -1,0 +1,269 @@
+#!/usr/bin/env run_flowchart
+!MolSSI flowchart 2.0
+#metadata
+{
+    "title": "",
+    "description": "",
+    "keywords": [],
+    "creators": [],
+    "sha256": "13edb16ffedbe70efa92126f3e5127f36e9b750756613e3825cab3f4c5062450",
+    "sha256_strict": "3313feec569c3d830f5b90651dbcdaf5cd00f182ad47e174e2259e108592651b"
+}
+#flowchart
+{
+    "item": "object",
+    "module": "seamm.flowchart",
+    "class": "Flowchart",
+    "extension": null,
+    "nodes": [
+        {
+            "item": "object",
+            "module": "seamm.start_node",
+            "class": "StartNode",
+            "version": "2022.10.23+0.g1657be3.dirty",
+            "extension": null,
+            "attributes": {
+                "_tables": [],
+                "_title": "Start",
+                "_uuid": 1,
+                "extension": null,
+                "_method": null,
+                "parameters": null,
+                "x": 150.0,
+                "y": 35.0,
+                "w": 200,
+                "h": 50
+            }
+        },
+        {
+            "item": "object",
+            "module": "mopac_step.mopac",
+            "class": "MOPAC",
+            "version": "2022.11.18+1.gd7db4da.dirty",
+            "extension": "MOPAC",
+            "attributes": {
+                "_tables": [],
+                "_title": "MOPAC",
+                "_uuid": 220300420177782232205925637117937859473,
+                "extension": "MOPAC",
+                "_method": null,
+                "parameters": null,
+                "x": 150.0,
+                "y": 105.0,
+                "w": 200,
+                "h": 50
+            },
+            "subflowchart": {
+                "item": "object",
+                "module": "seamm.flowchart",
+                "class": "Flowchart",
+                "extension": null,
+                "nodes": [
+                    {
+                        "item": "object",
+                        "module": "seamm.start_node",
+                        "class": "StartNode",
+                        "version": "2022.10.23+0.g1657be3.dirty",
+                        "extension": null,
+                        "attributes": {
+                            "_tables": [],
+                            "_title": "Start",
+                            "_uuid": 1,
+                            "extension": null,
+                            "_method": null,
+                            "parameters": null,
+                            "x": 150.0,
+                            "y": 35.0,
+                            "w": 200,
+                            "h": 50
+                        }
+                    },
+                    {
+                        "item": "object",
+                        "module": "mopac_step.energy",
+                        "class": "Energy",
+                        "version": "2022.11.18+1.gd7db4da.dirty",
+                        "extension": "Energy",
+                        "attributes": {
+                            "_tables": [],
+                            "_title": "Energy",
+                            "_uuid": 266547607745284106659935927189369698035,
+                            "extension": "Energy",
+                            "_method": null,
+                            "parameters": {
+                                "__class__": "EnergyParameters",
+                                "__module__": "mopac_step.energy_parameters",
+                                "structure": {
+                                    "value": "default",
+                                    "units": null
+                                },
+                                "hamiltonian": {
+                                    "value": "PM7",
+                                    "units": null
+                                },
+                                "convergence": {
+                                    "value": "precise",
+                                    "units": null
+                                },
+                                "uhf": {
+                                    "value": "no",
+                                    "units": null
+                                },
+                                "COSMO": {
+                                    "value": "no",
+                                    "units": null
+                                },
+                                "MOZYME": {
+                                    "value": "for larger systems",
+                                    "units": null
+                                },
+                                "nMOZYME": {
+                                    "value": "300",
+                                    "units": null
+                                },
+                                "MOZYME follow-up": {
+                                    "value": "recalculate the energy at the end using new, orthogonal localized orbitals",
+                                    "units": null
+                                },
+                                "eps": {
+                                    "value": "78.4",
+                                    "units": null
+                                },
+                                "rsolve": {
+                                    "value": "1.3",
+                                    "units": "\u00c5"
+                                },
+                                "nspa": {
+                                    "value": "42",
+                                    "units": null
+                                },
+                                "disex": {
+                                    "value": "2.0",
+                                    "units": null
+                                },
+                                "calculate gradients": {
+                                    "value": "yes",
+                                    "units": null
+                                },
+                                "relative": {
+                                    "value": "0.1",
+                                    "units": null
+                                },
+                                "absolute": {
+                                    "value": "1.0E-07",
+                                    "units": "kcal/mol"
+                                },
+                                "extra keywords": {
+                                    "value": [],
+                                    "units": null
+                                },
+                                "results": {
+                                    "value": {
+                                        "AREA": {
+                                            "property": "surface area#MOPAC"
+                                        },
+                                        "DENSITY": {
+                                            "property": "density"
+                                        },
+                                        "DIPOLE": {
+                                            "property": "dipole moment#MOPAC#{model}"
+                                        },
+                                        "ENERGY_ELECTRONIC": {
+                                            "property": "electronic energy#MOPAC#{model}"
+                                        },
+                                        "ENERGY_NUCLEAR": {
+                                            "property": "nuclear repulsion energy"
+                                        },
+                                        "DIEL_ENER": {
+                                            "property": "dielectric energy#MOPAC#{model}"
+                                        },
+                                        "GRADIENTS": {
+                                            "variable": "_mopac_gradients",
+                                            "units": "E_h/a_0"
+                                        },
+                                        "HEAT_OF_FORMATION": {
+                                            "variable": "_mopac_energy",
+                                            "units": "E_h",
+                                            "property": "enthalpy of formation#MOPAC#{model}"
+                                        },
+                                        "IONIZATION_POTENTIAL": {
+                                            "property": "ionization energy#MOPAC#{model}"
+                                        },
+                                        "TOTAL_ENERGY": {
+                                            "property": "total energy#MOPAC#{model}"
+                                        },
+                                        "HOMO Energy": {
+                                            "property": "HOMO energy#MOPAC#{model}"
+                                        },
+                                        "LUMO Energy": {
+                                            "property": "LUMO energy#MOPAC#{model}"
+                                        },
+                                        "HOMO-LUMO Gap": {
+                                            "property": "band gap#MOPAC#{model}"
+                                        },
+                                        "TOTAL_SPIN": {
+                                            "property": "S^2#MOPAC#{model}"
+                                        },
+                                        "VOLUME": {
+                                            "property": "volume#MOPAC"
+                                        }
+                                    },
+                                    "units": null
+                                },
+                                "create tables": {
+                                    "value": "yes",
+                                    "units": null
+                                }
+                            },
+                            "x": 150.0,
+                            "y": 105.0,
+                            "w": 200,
+                            "h": 50
+                        }
+                    }
+                ],
+                "edges": [
+                    {
+                        "item": "edge",
+                        "node1": 1,
+                        "node2": 266547607745284106659935927189369698035,
+                        "edge_type": "execution",
+                        "edge_subtype": "next",
+                        "attributes": {
+                            "arrow_id": 25,
+                            "anchor1": "s",
+                            "anchor2": "n",
+                            "coords": [
+                                150,
+                                60,
+                                150,
+                                80
+                            ]
+                        }
+                    }
+                ]
+            }
+        }
+    ],
+    "edges": [
+        {
+            "item": "edge",
+            "node1": 1,
+            "node2": 220300420177782232205925637117937859473,
+            "edge_type": "execution",
+            "edge_subtype": "next",
+            "attributes": {
+                "arrow_id": 25,
+                "anchor1": "s",
+                "anchor2": "n",
+                "coords": [
+                    150,
+                    60,
+                    150,
+                    80
+                ]
+            }
+        }
+    ]
+}
+#end

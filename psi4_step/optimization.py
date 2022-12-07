@@ -62,6 +62,8 @@ class Optimization(psi4_step.Energy):
 
     def get_input(self, calculation_type="optimize"):
         """Get the input for an optimization calculation for Psi4"""
+        _, configuration = self.get_system_configuration()
+
         # Create the directory
         directory = Path(self.directory)
         directory.mkdir(parents=True, exist_ok=True)
@@ -89,8 +91,11 @@ class Optimization(psi4_step.Energy):
         lines.append("set opt_type min")
         opt_method = psi4_step.optimization_methods[P["optimization method"]]
         lines.append(f"set step_type {opt_method}")
-        max_steps = 50
+        max_steps = P["max geometry steps"]
+        if max_steps == "default":
+            max_steps = 3 * (3 * configuration.n_atoms - 6)
         lines.append(f"set geom_maxiter {max_steps}")
+        lines.append(f"set opt_coordinates {P['coordinates']}")
         if P["geometry convergence"] == "Custom":
             pass
         else:

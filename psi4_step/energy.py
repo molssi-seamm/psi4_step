@@ -94,7 +94,7 @@ class Energy(seamm.Node):
 
         return self.header + "\n" + __(text, **P, indent=4 * " ").__str__()
 
-    def get_input(self, calculation_type="energy"):
+    def get_input(self, calculation_type="energy", restart=None):
         """Get the input for an energy calculation for Psi4"""
         # Create the directory
         directory = Path(self.directory)
@@ -160,47 +160,74 @@ class Energy(seamm.Node):
             functional = psi4_step.dft_functionals[functional_string]["name"]
             if len(psi4_step.dft_functionals[functional_string]["dispersion"]) > 1:
                 functional = functional + "-" + P["dispersion"]
-            lines.append(
-                f"Eelec, wfn = {calculation_type}('{functional}', " "return_wfn=True)"
-            )
+            if restart is None:
+                lines.append(
+                    f"Eelec, wfn = {calculation_type}('{functional}', return_wfn=True)"
+                )
+            else:
+                if calculation_type == "gradient":
+                    lines.append(
+                        f"Eelec, wfn = energy('{functional}', return_wfn=True,"
+                        f" restart_file='{restart}')"
+                    )
+                    lines.append(f"G = gradient('{functional}', ref_wfn=wfn)")
+                else:
+                    lines.append(
+                        f"Eelec, wfn = {calculation_type}('{functional}', "
+                        f"return_wfn=True, restart_file='{restart}')"
+                    )
         else:
-            lines.append(
-                f"Eelec, wfn = {calculation_type}('{method}', return_wfn=True)"
-            )
+            if restart is None:
+                lines.append(
+                    f"Eelec, wfn = {calculation_type}('{method}', return_wfn=True)"
+                )
+            else:
+                if calculation_type == "gradient":
+                    lines.append(
+                        f"Eelec, wfn = energy('{method}', return_wfn=True, "
+                        f" restart_file='{restart}')"
+                    )
+                    lines.append(f"G = gradient('{method}', ref_wfn=wfn)")
+                else:
+                    lines.append(
+                        f"Eelec, wfn = {calculation_type}('{method}', return_wfn=True, "
+                        f" restart_file='{restart}')"
+                    )
 
-        # Dump the properties to a json file
-        filename = f"@{self._id[-1]}+properties.json"
-        lines.append("")
-        lines.append("oeprop(")
-        lines.append("    wfn,")
-        lines.append("    'MULTIPOLE(5)',")
-        lines.append("    'ESP_AT_NUCLEI',")
-        # lines.append("    'MO_EXTENTS',")
-        lines.append("    'LOWDIN_CHARGES',")
-        lines.append("    'MULLIKEN_CHARGES',")
-        lines.append("    'WIBERG_LOWDIN_INDICES',")
-        lines.append("    'MAYER_INDICES',")
-        lines.append("    'NO_OCCUPATIONS',")
-        lines.append("    title='PROP'")
-        lines.append(")")
-        lines.append("")
-        lines.append("variables = scalar_variables()")
-        lines.append("variables.update(wfn.scalar_variables())")
-        lines.append("arrays = array_variables()")
-        lines.append("for item in arrays:")
-        lines.append("    variables[item] = array_variable(item).np.tolist()")
-        lines.append("arrays = wfn.array_variables()")
-        lines.append("for item in arrays:")
-        lines.append("    variables[item] = wfn.array_variable(item).np.tolist()")
-        lines.append("variables['Eelec'] = Eelec")
-        lines.append(f"variables['_method'] = '{method}'")
-        lines.append(f"variables['_method_string'] = '{method_string}'")
-        lines.append("")
-        lines.append("")
-        lines.append(f"with open('{filename}', 'w') as fd:")
-        lines.append(
-            "    json.dump(fix_multipoles(variables), fd, sort_keys=True, " "indent=3)"
-        )
+        if calculation_type != "gradient":
+            # Dump the properties to a json file
+            filename = f"@{self._id[-1]}+properties.json"
+            lines.append("")
+            lines.append("oeprop(")
+            lines.append("    wfn,")
+            lines.append("    'MULTIPOLE(5)',")
+            lines.append("    'ESP_AT_NUCLEI',")
+            # lines.append("    'MO_EXTENTS',")
+            lines.append("    'LOWDIN_CHARGES',")
+            lines.append("    'MULLIKEN_CHARGES',")
+            lines.append("    'WIBERG_LOWDIN_INDICES',")
+            lines.append("    'MAYER_INDICES',")
+            lines.append("    'NO_OCCUPATIONS',")
+            lines.append("    title='PROP'")
+            lines.append(")")
+            lines.append("")
+            lines.append("variables = scalar_variables()")
+            lines.append("variables.update(wfn.scalar_variables())")
+            lines.append("arrays = array_variables()")
+            lines.append("for item in arrays:")
+            lines.append("    variables[item] = array_variable(item).np.tolist()")
+            lines.append("arrays = wfn.array_variables()")
+            lines.append("for item in arrays:")
+            lines.append("    variables[item] = wfn.array_variable(item).np.tolist()")
+            lines.append("variables['Eelec'] = Eelec")
+            lines.append(f"variables['_method'] = '{method}'")
+            lines.append(f"variables['_method_string'] = '{method_string}'")
+            lines.append("")
+            lines.append("")
+            lines.append(f"with open('{filename}', 'w') as fd:")
+            lines.append(
+                "    json.dump(fix_multipoles(variables), fd, sort_keys=True, indent=3)"
+            )
         lines.append("")
 
         return "\n".join(lines)

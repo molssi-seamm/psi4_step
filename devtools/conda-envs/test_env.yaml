@@ -9,8 +9,11 @@ dependencies:
   - pip
 
   # Of the code
-  - seamm
+  - numpy
+  - optking
   - psutil
+  - scipy
+  - seamm
 
   # Testing
   - black
