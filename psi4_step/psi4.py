@@ -522,24 +522,24 @@ class Psi4(seamm.Node):
         if structure_file.exists():
             with structure_file.open(mode="r") as fd:
                 structure = json.load(fd)
-        if "geom" in structure:
-            system_db = self.get_variable("_system_db")
-            configuration = system_db.system.configuration
-            xs = []
-            ys = []
-            zs = []
-            it = iter(structure["geom"])
-            for x in it:
-                xs.append(x)
-                ys.append(next(it))
-                zs.append(next(it))
-            configuration.atoms["x"][0:] = xs
-            configuration.atoms["y"][0:] = ys
-            configuration.atoms["z"][0:] = zs
-            printer.important(
-                self.indent + "    Updated the system with the structure from Psi4",
-            )
-            printer.important("")
+            if "geom" in structure:
+                system_db = self.get_variable("_system_db")
+                configuration = system_db.system.configuration
+                xs = []
+                ys = []
+                zs = []
+                it = iter(structure["geom"])
+                for x in it:
+                    xs.append(x)
+                    ys.append(next(it))
+                    zs.append(next(it))
+                configuration.atoms["x"][0:] = xs
+                configuration.atoms["y"][0:] = ys
+                configuration.atoms["z"][0:] = zs
+                printer.important(
+                    self.indent + "    Updated the system with the structure from Psi4",
+                )
+                printer.important("")
 
     def _convert_structure(self, name=None, no_com=True, no_reorient=True):
         """Convert the structure to the input for Psi4."""

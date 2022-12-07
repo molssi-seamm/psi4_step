@@ -142,6 +142,10 @@ class TkOptimization(psi4_step.TkEnergy):
         widgets.append(self["optimization method"])
         row += 1
 
+        self["coordinates"].grid(row=row, column=0, columnspan=2, sticky=tk.EW)
+        widgets.append(self["coordinates"])
+        row += 1
+
         self["max geometry steps"].grid(row=row, column=0, columnspan=2, sticky=tk.EW)
         widgets.append(self["max geometry steps"])
         row += 1
@@ -155,6 +159,10 @@ class TkOptimization(psi4_step.TkEnergy):
 
         self["recalc hessian"].grid(row=row, column=0, columnspan=2, sticky=tk.EW)
         widgets.append(self["recalc hessian"])
+        row += 1
+
+        self["hessian update"].grid(row=row, column=0, columnspan=2, sticky=tk.EW)
+        widgets.append(self["hessian update"])
         row += 1
 
         sw.align_labels(widgets)

@@ -50,13 +50,27 @@ class OptimizationParameters(psi4_step.EnergyParameters):
             "default": "never",
             "kind": "integer",
             "default_units": "",
-            "enumeration": ("never",),
+            "enumeration": ("every step", "at beginning", "never"),
             "format_string": "",
             "description": "Recalculate Hessian:",
             "help_text": (
                 "How often to recalculate the Hessian (in steps). Smaller "
                 "values help convergence but are expensive."
             ),
+        },
+        "hessian update": {
+            "default": "bfgs",
+            "kind": "enumeration",
+            "default_units": "",
+            "enumeration": (
+                "bfgs",
+                "ms",
+                "powell",
+                "none",
+            ),
+            "format_string": "s",
+            "description": "Hessian update:",
+            "help_text": "The algorithm for updating the Hessian.",
         },
         "coordinates": {
             "default": "Internal",

@@ -54,7 +54,7 @@ class Optimization(psi4_step.Energy):
             added += " The convergence criterion is '{geometry convergence}'."
 
         if P["recalc hessian"] != "never":
-            added += " The Hessian will be recalculated every {recalc hession}"
+            added += " The Hessian will be recalculated every {recalc hessian}"
             added += " steps. Note that calculating the second derivatives is "
             added += "quite expensive!"
 
@@ -89,18 +89,36 @@ class Optimization(psi4_step.Energy):
         lines.append("#" * 80)
         lines.append("")
         lines.append("set opt_type min")
-        opt_method = psi4_step.optimization_methods[P["optimization method"]]
+        if P["optimization method"] in psi4_step.optimization_methods:
+            opt_method = psi4_step.optimization_methods[P["optimization method"]]
+        else:
+            opt_method = P["optimization method"]
         lines.append(f"set step_type {opt_method}")
+        lines.append(f"set opt_coordinates {P['coordinates']}")
         max_steps = P["max geometry steps"]
         if max_steps == "default":
             max_steps = 3 * (3 * configuration.n_atoms - 6)
         lines.append(f"set geom_maxiter {max_steps}")
-        lines.append(f"set opt_coordinates {P['coordinates']}")
         if P["geometry convergence"] == "Custom":
             pass
         else:
-            convergence = psi4_step.optimization_convergence[P["geometry convergence"]]
+            if P["geometry convergence"] in psi4_step.optimization_convergence:
+                convergence = psi4_step.optimization_convergence[
+                    P["geometry convergence"]
+                ]
+            else:
+                convergence = P["geometry convergence"]
             lines.append(f"set g_convergence {convergence}")
+
+        if P["recalc hessian"] == "every step":
+            lines.append("set full_hess_every 1")
+        elif P["recalc hessian"] == "at beginning":
+            lines.append("set full_hess_every 0")
+        elif P["recalc hessian"] == "never":
+            lines.append("set full_hess_every -1")
+        else:
+            lines.append(f"set full_hess_every {P['recalc hessian']}")
+        lines.append(f"set hess_update {P['hessian update']}")
         lines.append("")
 
         # Add in the input from the energy part of things

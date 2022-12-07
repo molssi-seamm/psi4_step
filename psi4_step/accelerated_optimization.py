@@ -226,7 +226,9 @@ class AcceleratedOptimization(psi4_step.Energy):
         self._node0 = node0
         self._memory = memory
         if self._restart_wfn is not None:
-            self.prolog, self.epilog = self.input_text(node0, memory, restart="old_wfn")
+            self.prolog, self.epilog = self.input_text(
+                node0, memory, restart="old_wfn.npy"
+            )
         else:
             self.prolog, self.epilog = self.input_text(node0, memory)
 
@@ -570,7 +572,9 @@ class AcceleratedOptimization(psi4_step.Energy):
         # Get the input other than the structure
         self.n_threads = n_threads
         if self._restart_wfn is not None:
-            self.prolog, self.epilog = self.input_text(node0, memory, restart="old_wfn")
+            self.prolog, self.epilog = self.input_text(
+                node0, memory, restart="old_wfn.npy"
+            )
         else:
             self.prolog, self.epilog = self.input_text(node0, memory)
 
@@ -636,7 +640,7 @@ class AcceleratedOptimization(psi4_step.Energy):
         print("")
 
         # Set up to restart from the previous wavefunction
-        self.prolog, self.epilog = self.input_text(node0, memory, restart="old_wfn")
+        self.prolog, self.epilog = self.input_text(node0, memory, restart="old_wfn.npy")
 
         result = minimize(self._step, x0, method=self._bfgs, jac=True)
         # result = minimize(self._step, x0, method="BFGS", jac=True)
@@ -978,7 +982,7 @@ class AcceleratedOptimization(psi4_step.Energy):
         if self._restart_wfn is not None:
             files["old_wfn.npy"] = self._restart_wfn
             self.prolog, self.epilog = self.input_text(
-                self._node0, self._memory, restart="old_wfn"
+                self._node0, self._memory, restart="old_wfn.npy"
             )
         else:
             self.prolog, self.epilog = self.input_text(self._node0, self._memory)
@@ -1323,7 +1327,7 @@ class AcceleratedOptimization(psi4_step.Energy):
         if self._restart_wfn is not None:
             files["old_wfn.npy"] = self._restart_wfn
             self.prolog, self.epilog = self.input_text(
-                self._node0, self._memory, restart="old_wfn"
+                self._node0, self._memory, restart="old_wfn.npy"
             )
         else:
             self.prolog, self.epilog = self.input_text(self._node0, self._memory)
