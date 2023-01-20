@@ -158,7 +158,10 @@ class Energy(seamm.Node):
             else:
                 functional_string = P["advanced_functional"]
             functional = psi4_step.dft_functionals[functional_string]["name"]
-            if len(psi4_step.dft_functionals[functional_string]["dispersion"]) > 1:
+            if (
+                P["dispersion"] != "none"
+                and len(psi4_step.dft_functionals[functional_string]["dispersion"]) > 1
+            ):
                 functional = functional + "-" + P["dispersion"]
             if restart is None:
                 lines.append(
