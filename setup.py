@@ -72,11 +72,13 @@ setup(
             'Energy = psi4_step:EnergyStep',
             'Initialization = psi4_step:InitializationStep',
             'Optimization = psi4_step:OptimizationStep',
+            'AcceleratedOptimization = psi4_step:AcceleratedOptimizationStep',
         ],
         'org.molssi.seamm.psi4.tk': [
             'Energy = psi4_step:EnergyStep',
             'Initialization = psi4_step:InitializationStep',
             'Optimization = psi4_step:OptimizationStep',
+            'AcceleratedOptimization = psi4_step:AcceleratedOptimizationStep',
         ],
     }
 )

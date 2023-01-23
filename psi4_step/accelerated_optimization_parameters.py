@@ -5,21 +5,28 @@
 import logging
 
 import psi4_step
+from seamm.standard_parameters import structure_handling_parameters
 
 # import seamm
 
 logger = logging.getLogger(__name__)
 
 
-class OptimizationParameters(psi4_step.EnergyParameters):
-    """The control parameters for the energy."""
+class AcceleratedOptimizationParameters(psi4_step.EnergyParameters):
+    """The control parameters for the MOPAC accelerated optimization."""
 
     parameters = {
         "optimization method": {
-            "default": "Rational Function Optimization",
+            "default": "RFO",
             "kind": "enumeration",
             "default_units": "",
-            "enumeration": [*psi4_step.optimization_methods],
+            "enumeration": (
+                "RFO",
+                "P_RFO",
+                "NR",
+                "SD",
+                "LINESEARCH",
+            ),
             "format_string": "s",
             "description": "Method:",
             "help_text": "The optimization method to use.",
@@ -38,16 +45,26 @@ class OptimizationParameters(psi4_step.EnergyParameters):
             ),
         },
         "geometry convergence": {
-            "default": "QChem",
-            "kind": "string",
+            "default": "QCHEM",
+            "kind": "float",
             "default_units": "",
-            "enumeration": [x for x in psi4_step.optimization_convergence],
+            "enumeration": (
+                "QCHEM",
+                "MOLPRO",
+                "GAU",
+                "GAU_LOOSE",
+                "GAU_TIGHT",
+                "GAU_VERYTIGHT",
+                "TURBOMOLE",
+                "CFOUR",
+                "NWCHEM_LOOSE",
+            ),
             "format_string": "",
             "description": "Convergence criteria:",
             "help_text": "The criteria to use for convergence.",
         },
         "recalc hessian": {
-            "default": "never",
+            "default": "every step",
             "kind": "integer",
             "default_units": "",
             "enumeration": ("every step", "at beginning", "never"),
@@ -78,12 +95,14 @@ class OptimizationParameters(psi4_step.EnergyParameters):
             "default_units": "",
             "enumeration": (
                 "Internal",
+                "Delocalized",
+                "Natural",
                 "Cartesian",
                 "Both",
             ),
             "format_string": "s",
             "description": "Type of coordinates:",
-            "help_text": "The typ of coordinates to use in the minimization.",
+            "help_text": "The type of coordinates to use in the minimization.",
         },
     }
 
@@ -92,5 +111,10 @@ class OptimizationParameters(psi4_step.EnergyParameters):
         parameters given in the class"""
 
         super().__init__(
-            defaults={**OptimizationParameters.parameters, **defaults}, data=data
+            defaults={
+                **AcceleratedOptimizationParameters.parameters,
+                **structure_handling_parameters,
+                **defaults,
+            },
+            data=data,
         )

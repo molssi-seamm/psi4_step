@@ -12,7 +12,6 @@ import psutil
 
 import psi4_step
 import seamm
-import seamm_util
 from seamm_util import ureg, Q_  # noqa: F401
 import seamm_util.printing as printing
 from seamm_util.printing import FormattedText as __
@@ -100,8 +99,8 @@ def fix_multipoles(data):
 
 def humanize(memory, suffix="B", kilo=1024):
     """
-    Scale memory to its proper format
-    e.g:
+    Scale memory to its proper format e.g:
+
         1253656 => '1.20 MiB'
         1253656678 => '1.17 GiB'
     """
@@ -120,8 +119,8 @@ def humanize(memory, suffix="B", kilo=1024):
 
 def dehumanize(memory, suffix="B"):
     """
-    Unscale memory from its human readable form
-    e.g:
+    Unscale memory from its human readable form e.g:
+
         '1.20 MB' => 1200000
         '1.17 GB' => 1170000000
     """
@@ -224,7 +223,7 @@ class Psi4(seamm.Node):
         """Setup the command-line / config file parser"""
         # parser_name = 'psi4-step'
         parser_name = self.step_type
-        parser = seamm_util.getParser()
+        parser = self.flowchart.parser
 
         # Remember if the parser exists ... this type of step may have been
         # found before
@@ -402,6 +401,23 @@ class Psi4(seamm.Node):
             self.indent + f"    Psi4 will use {n_threads} threads and {memory} memory\n"
         )
 
+        # Work through the subflowchart to find out what to do.
+        self.subflowchart.root_directory = self.flowchart.root_directory
+
+        next_node = super().run(printer)
+
+        # Get the first real node
+        node0 = self.subflowchart.get_node("1").next()
+
+        # See if this is a normal or special run
+        node = node0
+        while node is not None:
+            if isinstance(node, psi4_step.AcceleratedOptimization):
+                node.run(node0, memory, n_threads)
+                return next_node
+
+            node = node.next()
+
         # Start the input data
         input_data = []
         input_data.append("import json")
@@ -413,17 +429,10 @@ class Psi4(seamm.Node):
         input_data.append(pre_code)
         input_data.append("")
 
-        # Work through the subflowchart to find out what to do.
-        self.subflowchart.root_directory = self.flowchart.root_directory
-
-        next_node = super().run(printer)
-
-        # Get the first real node
-        node = self.subflowchart.get_node("1").next()
-
         # Put the structure into the input
         input_data.append(self._convert_structure(name="initial"))
 
+        node = node0
         while node is not None:
             text = node.get_input()
             input_data.append(text)
@@ -451,10 +460,6 @@ class Psi4(seamm.Node):
 
         directory = Path(self.directory)
         directory.mkdir(parents=True, exist_ok=True)
-        for filename in files:
-            path = directory / filename
-            with path.open(mode="w") as fd:
-                fd.write(files[filename])
 
         return_files = ["output.dat", "*properties.json", "*structure.json"]
         exe_path = Path(options["psi4_path"])
@@ -470,6 +475,8 @@ class Psi4(seamm.Node):
             files=files,
             return_files=return_files,
             env=env,
+            directory=directory,
+            in_situ=True,
         )  # yapf: disable
 
         if result is None:
@@ -477,30 +484,6 @@ class Psi4(seamm.Node):
             return None
 
         self.logger.debug("\n" + pprint.pformat(result))
-
-        self.logger.debug("stdout:\n" + result["stdout"])
-        if "stdout" in result and result["stdout"] != "":
-            path = directory / "stdout.txt"
-            with path.open(mode="w") as fd:
-                fd.write(result["stdout"])
-
-        if result["stderr"] != "":
-            self.logger.warning("stderr:\n" + result["stderr"])
-            path = directory / "stderr.txt"
-            with path.open(mode="w") as fd:
-                fd.write(result["stderr"])
-
-        for filename in result["files"]:
-            if filename[0] == "@":
-                subdir, fname = filename[1:].split("+")
-                path = directory / subdir / fname
-            else:
-                path = directory / filename
-            with path.open(mode="w") as fd:
-                if result[filename]["data"] is not None:
-                    fd.write(result[filename]["data"])
-                else:
-                    fd.write(result[filename]["exception"])
 
         # Analyze the results
         self.analyze()
@@ -539,26 +522,26 @@ class Psi4(seamm.Node):
         if structure_file.exists():
             with structure_file.open(mode="r") as fd:
                 structure = json.load(fd)
-        if "geom" in structure:
-            system_db = self.get_variable("_system_db")
-            configuration = system_db.system.configuration
-            xs = []
-            ys = []
-            zs = []
-            it = iter(structure["geom"])
-            for x in it:
-                xs.append(x)
-                ys.append(next(it))
-                zs.append(next(it))
-            configuration.atoms["x"][0:] = xs
-            configuration.atoms["y"][0:] = ys
-            configuration.atoms["z"][0:] = zs
-            printer.important(
-                self.indent + "    Updated the system with the structure from Psi4",
-            )
-            printer.important("")
+            if "geom" in structure:
+                system_db = self.get_variable("_system_db")
+                configuration = system_db.system.configuration
+                xs = []
+                ys = []
+                zs = []
+                it = iter(structure["geom"])
+                for x in it:
+                    xs.append(x)
+                    ys.append(next(it))
+                    zs.append(next(it))
+                configuration.atoms["x"][0:] = xs
+                configuration.atoms["y"][0:] = ys
+                configuration.atoms["z"][0:] = zs
+                printer.important(
+                    self.indent + "    Updated the system with the structure from Psi4",
+                )
+                printer.important("")
 
-    def _convert_structure(self, name=None):
+    def _convert_structure(self, name=None, no_com=True, no_reorient=True):
         """Convert the structure to the input for Psi4."""
 
         system_db = self.get_variable("_system_db")
@@ -587,6 +570,11 @@ class Psi4(seamm.Node):
                 f"    {element:2s} {float(x): 12.8f} {float(y): 12.8f} "
                 f"{float(z): 12.8f}"
             )
+        structure.append("")
+        if no_com:
+            structure.append("no_com")
+        if no_reorient:
+            structure.append("no_reorient")
         structure.append("}")
 
         return "\n".join(structure) + "\n"

@@ -14,8 +14,8 @@ SEAMM Psi4 Plug-in
    :target: https://codecov.io/gh/molssi-seamm/psi4_step
    :alt: Code Coverage
 
-.. image:: https://img.shields.io/lgtm/grade/python/g/molssi-seamm/psi4_step.svg?logo=lgtm&logoWidth=18
-   :target: https://lgtm.com/projects/g/molssi-seamm/psi4_step/context:python
+.. image:: https://github.com/molssi-seamm/psi4_step/workflows/CodeQL/badge.svg
+   :target: https://github.com/molssi-seamm/psi4_step/security/code-scanning
    :alt: Code Quality
 
 .. image:: https://github.com/molssi-seamm/psi4_step/workflows/Documentation/badge.svg

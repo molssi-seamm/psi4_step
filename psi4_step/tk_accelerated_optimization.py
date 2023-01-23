@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-"""The graphical part of a Psi4 Optimization node"""
+"""The graphical part of a Psi4 Accelerated Optimization node"""
 
 import logging
 import pprint
@@ -15,7 +15,7 @@ import seamm_widgets as sw
 logger = logging.getLogger(__name__)
 
 
-class TkOptimization(psi4_step.TkEnergy):
+class TkAcceleratedOptimization(psi4_step.TkEnergy):
     def __init__(
         self,
         tk_flowchart=None,
@@ -61,7 +61,7 @@ class TkOptimization(psi4_step.TkEnergy):
 
         self.popup_menu.tk_popup(event.x_root, event.y_root, 0)
 
-    def create_dialog(self, title="Edit Psi4 Optimization Step"):
+    def create_dialog(self, title="Edit Psi4 Accelerated Optimization Step"):
         """Create the edit dialog!
 
         This is reasonably complicated, so a bit of description
@@ -80,7 +80,7 @@ class TkOptimization(psi4_step.TkEnergy):
           section.
         """
 
-        logger.debug("TkOptimization.create_dialog")
+        logger.debug("TkAcceleratedOptimization.create_dialog")
 
         # Let parent classes do their thing.
         super().create_dialog(title=title)
@@ -100,7 +100,7 @@ class TkOptimization(psi4_step.TkEnergy):
             padding=10,
         )
 
-        for key in psi4_step.OptimizationParameters.parameters:
+        for key in psi4_step.AcceleratedOptimizationParameters.parameters:
             self[key] = P[key].widget(opt_frame)
 
         # and binding to change as needed
