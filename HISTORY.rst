@@ -2,6 +2,14 @@
 History
 =======
 
+2023.1.23 (23 January 2023)
+---------------------------
+
+* Corrected bugs, including if no dispersion term requested
+* Added preliminary version of accelerated optimization using
+  MOPAC for Hessians, etc. May not fully work at the moment.
+* Updated documentation theme and structure to match new style.
+
 2022.11.18 -- Added total charge and multiplicity to Psi4 input
 
 2021.2.11 (11 February 2021)

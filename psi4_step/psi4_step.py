@@ -10,7 +10,7 @@ class Psi4Step(object):
     description of this node, and create_node() and create_tk_node() methods
     for creating the graphical and non-graphical nodes.
 
-    Attributes
+    Parameters
     ----------
     my_description : {description, group, name}
         A human-readable description of this step. It can be

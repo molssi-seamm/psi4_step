@@ -99,8 +99,8 @@ def fix_multipoles(data):
 
 def humanize(memory, suffix="B", kilo=1024):
     """
-    Scale memory to its proper format
-    e.g:
+    Scale memory to its proper format e.g:
+
         1253656 => '1.20 MiB'
         1253656678 => '1.17 GiB'
     """
@@ -119,8 +119,8 @@ def humanize(memory, suffix="B", kilo=1024):
 
 def dehumanize(memory, suffix="B"):
     """
-    Unscale memory from its human readable form
-    e.g:
+    Unscale memory from its human readable form e.g:
+
         '1.20 MB' => 1200000
         '1.17 GB' => 1170000000
     """
