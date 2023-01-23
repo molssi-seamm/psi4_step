@@ -441,7 +441,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="TkAcceleratedOptimization"><a class="viewcode-back" href="../../developer/psi4_step.html#psi4_step.tk_accelerated_optimization.TkAcceleratedOptimization">[docs]</a><span class="k">class</span> <span class="nc">TkAcceleratedOptimization</span><span class="p">(</span><span class="n">psi4_step</span><span class="o">.</span><span class="n">TkEnergy</span><span class="p">):</span>
+<div class="viewcode-block" id="TkAcceleratedOptimization"><a class="viewcode-back" href="../../api/psi4_step.html#psi4_step.tk_accelerated_optimization.TkAcceleratedOptimization">[docs]</a><span class="k">class</span> <span class="nc">TkAcceleratedOptimization</span><span class="p">(</span><span class="n">psi4_step</span><span class="o">.</span><span class="n">TkEnergy</span><span class="p">):</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">tk_flowchart</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -479,7 +479,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             <span class="n">my_logger</span><span class="o">=</span><span class="n">my_logger</span><span class="p">,</span>
         <span class="p">)</span>
 
-<div class="viewcode-block" id="TkAcceleratedOptimization.right_click"><a class="viewcode-back" href="../../developer/psi4_step.html#psi4_step.tk_accelerated_optimization.TkAcceleratedOptimization.right_click">[docs]</a>    <span class="k">def</span> <span class="nf">right_click</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
+<div class="viewcode-block" id="TkAcceleratedOptimization.right_click"><a class="viewcode-back" href="../../api/psi4_step.html#psi4_step.tk_accelerated_optimization.TkAcceleratedOptimization.right_click">[docs]</a>    <span class="k">def</span> <span class="nf">right_click</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Probably need to add our dialog...&quot;&quot;&quot;</span>
 
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">right_click</span><span class="p">(</span><span class="n">event</span><span class="p">)</span>
@@ -487,7 +487,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
         <span class="bp">self</span><span class="o">.</span><span class="n">popup_menu</span><span class="o">.</span><span class="n">tk_popup</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">x_root</span><span class="p">,</span> <span class="n">event</span><span class="o">.</span><span class="n">y_root</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="TkAcceleratedOptimization.create_dialog"><a class="viewcode-back" href="../../developer/psi4_step.html#psi4_step.tk_accelerated_optimization.TkAcceleratedOptimization.create_dialog">[docs]</a>    <span class="k">def</span> <span class="nf">create_dialog</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Edit Psi4 Accelerated Optimization Step&quot;</span><span class="p">):</span>
+<div class="viewcode-block" id="TkAcceleratedOptimization.create_dialog"><a class="viewcode-back" href="../../api/psi4_step.html#psi4_step.tk_accelerated_optimization.TkAcceleratedOptimization.create_dialog">[docs]</a>    <span class="k">def</span> <span class="nf">create_dialog</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Edit Psi4 Accelerated Optimization Step&quot;</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Create the edit dialog!</span>
 
 <span class="sd">        This is reasonably complicated, so a bit of description</span>
@@ -542,7 +542,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">node</span><span class="o">.</span><span class="n">calculation</span> <span class="o">==</span> <span class="s2">&quot;optimization&quot;</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">reset_dialog</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="TkAcceleratedOptimization.reset_dialog"><a class="viewcode-back" href="../../developer/psi4_step.html#psi4_step.tk_accelerated_optimization.TkAcceleratedOptimization.reset_dialog">[docs]</a>    <span class="k">def</span> <span class="nf">reset_dialog</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">widget</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="TkAcceleratedOptimization.reset_dialog"><a class="viewcode-back" href="../../api/psi4_step.html#psi4_step.tk_accelerated_optimization.TkAcceleratedOptimization.reset_dialog">[docs]</a>    <span class="k">def</span> <span class="nf">reset_dialog</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">widget</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Layout the widgets, letting our parents go first.&quot;&quot;&quot;</span>
         <span class="n">row</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">reset_dialog</span><span class="p">()</span>
 
@@ -553,7 +553,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
         <span class="k">return</span> <span class="n">row</span></div>
 
-<div class="viewcode-block" id="TkAcceleratedOptimization.reset_optimization"><a class="viewcode-back" href="../../developer/psi4_step.html#psi4_step.tk_accelerated_optimization.TkAcceleratedOptimization.reset_optimization">[docs]</a>    <span class="k">def</span> <span class="nf">reset_optimization</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">widget</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="TkAcceleratedOptimization.reset_optimization"><a class="viewcode-back" href="../../api/psi4_step.html#psi4_step.tk_accelerated_optimization.TkAcceleratedOptimization.reset_optimization">[docs]</a>    <span class="k">def</span> <span class="nf">reset_optimization</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">widget</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="n">convergence</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;geometry convergence&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
 
         <span class="n">frame</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;optimization&quot;</span><span class="p">]</span>

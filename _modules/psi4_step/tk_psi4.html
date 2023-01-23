@@ -434,7 +434,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <span class="kn">import</span> <span class="nn">pprint</span>  <span class="c1"># noqa: F401</span>
 
 
-<div class="viewcode-block" id="TkPsi4"><a class="viewcode-back" href="../../developer/psi4_step.html#psi4_step.tk_psi4.TkPsi4">[docs]</a><span class="k">class</span> <span class="nc">TkPsi4</span><span class="p">(</span><span class="n">seamm</span><span class="o">.</span><span class="n">TkNode</span><span class="p">):</span>
+<div class="viewcode-block" id="TkPsi4"><a class="viewcode-back" href="../../api/psi4_step.html#psi4_step.tk_psi4.TkPsi4">[docs]</a><span class="k">class</span> <span class="nc">TkPsi4</span><span class="p">(</span><span class="n">seamm</span><span class="o">.</span><span class="n">TkNode</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    The graphical part of a Psi4 step in a flowchart.</span>
 
@@ -499,7 +499,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">create_dialog</span><span class="p">()</span>
 
-<div class="viewcode-block" id="TkPsi4.create_dialog"><a class="viewcode-back" href="../../developer/psi4_step.html#psi4_step.tk_psi4.TkPsi4.create_dialog">[docs]</a>    <span class="k">def</span> <span class="nf">create_dialog</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="TkPsi4.create_dialog"><a class="viewcode-back" href="../../api/psi4_step.html#psi4_step.tk_psi4.TkPsi4.create_dialog">[docs]</a>    <span class="k">def</span> <span class="nf">create_dialog</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Create the dialog. A set of widgets will be chosen by default</span>
 <span class="sd">        based on what is specified in the</span>
@@ -530,7 +530,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">tk_subflowchart</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="TkPsi4.right_click"><a class="viewcode-back" href="../../developer/psi4_step.html#psi4_step.tk_psi4.TkPsi4.right_click">[docs]</a>    <span class="k">def</span> <span class="nf">right_click</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
+<div class="viewcode-block" id="TkPsi4.right_click"><a class="viewcode-back" href="../../api/psi4_step.html#psi4_step.tk_psi4.TkPsi4.right_click">[docs]</a>    <span class="k">def</span> <span class="nf">right_click</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Handles the right click event on the node.</span>
 
@@ -544,7 +544,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
         <span class="bp">self</span><span class="o">.</span><span class="n">popup_menu</span><span class="o">.</span><span class="n">tk_popup</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">x_root</span><span class="p">,</span> <span class="n">event</span><span class="o">.</span><span class="n">y_root</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="TkPsi4.edit"><a class="viewcode-back" href="../../developer/psi4_step.html#psi4_step.tk_psi4.TkPsi4.edit">[docs]</a>    <span class="k">def</span> <span class="nf">edit</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="TkPsi4.edit"><a class="viewcode-back" href="../../api/psi4_step.html#psi4_step.tk_psi4.TkPsi4.edit">[docs]</a>    <span class="k">def</span> <span class="nf">edit</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Present a dialog for editing the Psi4 input</span>
 
 <span class="sd">        See Also</span>
@@ -557,7 +557,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
         <span class="bp">self</span><span class="o">.</span><span class="n">dialog</span><span class="o">.</span><span class="n">activate</span><span class="p">(</span><span class="n">geometry</span><span class="o">=</span><span class="s2">&quot;centerscreenfirst&quot;</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="TkPsi4.handle_dialog"><a class="viewcode-back" href="../../developer/psi4_step.html#psi4_step.tk_psi4.TkPsi4.handle_dialog">[docs]</a>    <span class="k">def</span> <span class="nf">handle_dialog</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">result</span><span class="p">):</span>
+<div class="viewcode-block" id="TkPsi4.handle_dialog"><a class="viewcode-back" href="../../api/psi4_step.html#psi4_step.tk_psi4.TkPsi4.handle_dialog">[docs]</a>    <span class="k">def</span> <span class="nf">handle_dialog</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">result</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Handle the closing of the edit dialog</span>
 
 <span class="sd">        What to do depends on the button used to close the dialog. If</span>
@@ -586,7 +586,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
         <span class="bp">self</span><span class="o">.</span><span class="n">dialog</span><span class="o">.</span><span class="n">deactivate</span><span class="p">(</span><span class="n">result</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="TkPsi4.update_flowchart"><a class="viewcode-back" href="../../developer/psi4_step.html#psi4_step.tk_psi4.TkPsi4.update_flowchart">[docs]</a>    <span class="k">def</span> <span class="nf">update_flowchart</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tk_flowchart</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">flowchart</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="TkPsi4.update_flowchart"><a class="viewcode-back" href="../../api/psi4_step.html#psi4_step.tk_psi4.TkPsi4.update_flowchart">[docs]</a>    <span class="k">def</span> <span class="nf">update_flowchart</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tk_flowchart</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">flowchart</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Update the nongraphical flowchart.</span>
 
 <span class="sd">        This is only used in nodes that contain sub-flowcharts</span>
@@ -608,7 +608,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             <span class="n">flowchart</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">node</span><span class="o">.</span><span class="n">subflowchart</span><span class="p">,</span> <span class="n">tk_flowchart</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">tk_subflowchart</span>
         <span class="p">)</span></div>
 
-<div class="viewcode-block" id="TkPsi4.from_flowchart"><a class="viewcode-back" href="../../developer/psi4_step.html#psi4_step.tk_psi4.TkPsi4.from_flowchart">[docs]</a>    <span class="k">def</span> <span class="nf">from_flowchart</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tk_flowchart</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">flowchart</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="TkPsi4.from_flowchart"><a class="viewcode-back" href="../../api/psi4_step.html#psi4_step.tk_psi4.TkPsi4.from_flowchart">[docs]</a>    <span class="k">def</span> <span class="nf">from_flowchart</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tk_flowchart</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">flowchart</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Recreate the graphics from the non-graphical flowchart.</span>
 
 <span class="sd">        This is only used in nodes that contain sub-flowcharts.</span>
@@ -626,7 +626,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             <span class="n">flowchart</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">node</span><span class="o">.</span><span class="n">subflowchart</span><span class="p">,</span> <span class="n">tk_flowchart</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">tk_subflowchart</span>
         <span class="p">)</span></div>
 
-<div class="viewcode-block" id="TkPsi4.handle_help"><a class="viewcode-back" href="../../developer/psi4_step.html#psi4_step.tk_psi4.TkPsi4.handle_help">[docs]</a>    <span class="k">def</span> <span class="nf">handle_help</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="TkPsi4.handle_help"><a class="viewcode-back" href="../../api/psi4_step.html#psi4_step.tk_psi4.TkPsi4.handle_help">[docs]</a>    <span class="k">def</span> <span class="nf">handle_help</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Shows the help to the user when click on help button.&quot;&quot;&quot;</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Help not implemented yet for Psi4!&quot;</span><span class="p">)</span></div></div>
 </pre></div>

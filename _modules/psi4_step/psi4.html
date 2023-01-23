@@ -523,7 +523,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <span class="s2">&quot;&quot;&quot;</span>
 
 
-<div class="viewcode-block" id="humanize"><a class="viewcode-back" href="../../developer/psi4_step.html#psi4_step.psi4.humanize">[docs]</a><span class="k">def</span> <span class="nf">humanize</span><span class="p">(</span><span class="n">memory</span><span class="p">,</span> <span class="n">suffix</span><span class="o">=</span><span class="s2">&quot;B&quot;</span><span class="p">,</span> <span class="n">kilo</span><span class="o">=</span><span class="mi">1024</span><span class="p">):</span>
+<div class="viewcode-block" id="humanize"><a class="viewcode-back" href="../../api/psi4_step.html#psi4_step.psi4.humanize">[docs]</a><span class="k">def</span> <span class="nf">humanize</span><span class="p">(</span><span class="n">memory</span><span class="p">,</span> <span class="n">suffix</span><span class="o">=</span><span class="s2">&quot;B&quot;</span><span class="p">,</span> <span class="n">kilo</span><span class="o">=</span><span class="mi">1024</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Scale memory to its proper format e.g:</span>
 
@@ -543,7 +543,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <span class="n">memory</span> <span class="o">/=</span> <span class="n">kilo</span></div>
 
 
-<div class="viewcode-block" id="dehumanize"><a class="viewcode-back" href="../../developer/psi4_step.html#psi4_step.psi4.dehumanize">[docs]</a><span class="k">def</span> <span class="nf">dehumanize</span><span class="p">(</span><span class="n">memory</span><span class="p">,</span> <span class="n">suffix</span><span class="o">=</span><span class="s2">&quot;B&quot;</span><span class="p">):</span>
+<div class="viewcode-block" id="dehumanize"><a class="viewcode-back" href="../../api/psi4_step.html#psi4_step.psi4.dehumanize">[docs]</a><span class="k">def</span> <span class="nf">dehumanize</span><span class="p">(</span><span class="n">memory</span><span class="p">,</span> <span class="n">suffix</span><span class="o">=</span><span class="s2">&quot;B&quot;</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Unscale memory from its human readable form e.g:</span>
 
@@ -578,7 +578,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Don&#39;t recognize the units on &#39;</span><span class="si">{</span><span class="n">memory</span><span class="si">}</span><span class="s2">&#39;&quot;</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="Psi4"><a class="viewcode-back" href="../../developer/psi4_step.html#psi4_step.psi4.Psi4">[docs]</a><span class="k">class</span> <span class="nc">Psi4</span><span class="p">(</span><span class="n">seamm</span><span class="o">.</span><span class="n">Node</span><span class="p">):</span>
+<div class="viewcode-block" id="Psi4"><a class="viewcode-back" href="../../api/psi4_step.html#psi4_step.psi4.Psi4">[docs]</a><span class="k">class</span> <span class="nc">Psi4</span><span class="p">(</span><span class="n">seamm</span><span class="o">.</span><span class="n">Node</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    The non-graphical part of a Psi4 step in a flowchart.</span>
 
@@ -645,7 +645,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;The git version of this module.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">psi4_step</span><span class="o">.</span><span class="n">__git_revision__</span>
 
-<div class="viewcode-block" id="Psi4.create_parser"><a class="viewcode-back" href="../../developer/psi4_step.html#psi4_step.psi4.Psi4.create_parser">[docs]</a>    <span class="k">def</span> <span class="nf">create_parser</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Psi4.create_parser"><a class="viewcode-back" href="../../api/psi4_step.html#psi4_step.psi4.Psi4.create_parser">[docs]</a>    <span class="k">def</span> <span class="nf">create_parser</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Setup the command-line / config file parser&quot;&quot;&quot;</span>
         <span class="c1"># parser_name = &#39;psi4-step&#39;</span>
         <span class="n">parser_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">step_type</span>
@@ -699,7 +699,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
         <span class="k">return</span> <span class="n">result</span></div>
 
-<div class="viewcode-block" id="Psi4.set_id"><a class="viewcode-back" href="../../developer/psi4_step.html#psi4_step.psi4.Psi4.set_id">[docs]</a>    <span class="k">def</span> <span class="nf">set_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node_id</span><span class="p">):</span>
+<div class="viewcode-block" id="Psi4.set_id"><a class="viewcode-back" href="../../api/psi4_step.html#psi4_step.psi4.Psi4.set_id">[docs]</a>    <span class="k">def</span> <span class="nf">set_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node_id</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Set the id for node to a given tuple&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_id</span> <span class="o">=</span> <span class="n">node_id</span>
 
@@ -708,7 +708,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">next</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="Psi4.description_text"><a class="viewcode-back" href="../../developer/psi4_step.html#psi4_step.psi4.Psi4.description_text">[docs]</a>    <span class="k">def</span> <span class="nf">description_text</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">P</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="Psi4.description_text"><a class="viewcode-back" href="../../api/psi4_step.html#psi4_step.psi4.Psi4.description_text">[docs]</a>    <span class="k">def</span> <span class="nf">description_text</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">P</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Create the text description of what this step will do.</span>
 <span class="sd">        The dictionary of control values is passed in as P so that</span>
 <span class="sd">        the code can test values, etc.</span>
@@ -737,7 +737,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
         <span class="k">return</span> <span class="n">text</span></div>
 
-<div class="viewcode-block" id="Psi4.run"><a class="viewcode-back" href="../../developer/psi4_step.html#psi4_step.psi4.Psi4.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Psi4.run"><a class="viewcode-back" href="../../api/psi4_step.html#psi4_step.psi4.Psi4.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Run a Psi4 step.</span>
 
 <span class="sd">        Returns</span>
@@ -916,7 +916,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
         <span class="k">return</span> <span class="n">next_node</span></div>
 
-<div class="viewcode-block" id="Psi4.analyze"><a class="viewcode-back" href="../../developer/psi4_step.html#psi4_step.psi4.Psi4.analyze">[docs]</a>    <span class="k">def</span> <span class="nf">analyze</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="Psi4.analyze"><a class="viewcode-back" href="../../api/psi4_step.html#psi4_step.psi4.Psi4.analyze">[docs]</a>    <span class="k">def</span> <span class="nf">analyze</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Do any analysis of the output from this step.</span>
 
 <span class="sd">        Also print important results to the local step.out file using</span>

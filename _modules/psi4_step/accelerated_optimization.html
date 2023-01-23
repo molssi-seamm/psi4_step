@@ -464,23 +464,23 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <span class="n">optking_logger</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">WARNING</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="norm"><a class="viewcode-back" href="../../developer/psi4_step.html#psi4_step.accelerated_optimization.norm">[docs]</a><span class="k">def</span> <span class="nf">norm</span><span class="p">(</span><span class="n">V</span><span class="p">):</span>
+<div class="viewcode-block" id="norm"><a class="viewcode-back" href="../../api/psi4_step.html#psi4_step.accelerated_optimization.norm">[docs]</a><span class="k">def</span> <span class="nf">norm</span><span class="p">(</span><span class="n">V</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">V</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="abs_max"><a class="viewcode-back" href="../../developer/psi4_step.html#psi4_step.accelerated_optimization.abs_max">[docs]</a><span class="k">def</span> <span class="nf">abs_max</span><span class="p">(</span><span class="n">V</span><span class="p">):</span>
+<div class="viewcode-block" id="abs_max"><a class="viewcode-back" href="../../api/psi4_step.html#psi4_step.accelerated_optimization.abs_max">[docs]</a><span class="k">def</span> <span class="nf">abs_max</span><span class="p">(</span><span class="n">V</span><span class="p">):</span>
     <span class="k">return</span> <span class="nb">max</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">elem</span><span class="p">)</span> <span class="k">for</span> <span class="n">elem</span> <span class="ow">in</span> <span class="n">V</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="abs_min"><a class="viewcode-back" href="../../developer/psi4_step.html#psi4_step.accelerated_optimization.abs_min">[docs]</a><span class="k">def</span> <span class="nf">abs_min</span><span class="p">(</span><span class="n">V</span><span class="p">):</span>
+<div class="viewcode-block" id="abs_min"><a class="viewcode-back" href="../../api/psi4_step.html#psi4_step.accelerated_optimization.abs_min">[docs]</a><span class="k">def</span> <span class="nf">abs_min</span><span class="p">(</span><span class="n">V</span><span class="p">):</span>
     <span class="k">return</span> <span class="nb">min</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">elem</span><span class="p">)</span> <span class="k">for</span> <span class="n">elem</span> <span class="ow">in</span> <span class="n">V</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="rms"><a class="viewcode-back" href="../../developer/psi4_step.html#psi4_step.accelerated_optimization.rms">[docs]</a><span class="k">def</span> <span class="nf">rms</span><span class="p">(</span><span class="n">V</span><span class="p">):</span>
+<div class="viewcode-block" id="rms"><a class="viewcode-back" href="../../api/psi4_step.html#psi4_step.accelerated_optimization.rms">[docs]</a><span class="k">def</span> <span class="nf">rms</span><span class="p">(</span><span class="n">V</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">V</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span></div>
 
 
-<div class="viewcode-block" id="AcceleratedOptimization"><a class="viewcode-back" href="../../developer/psi4_step.html#psi4_step.accelerated_optimization.AcceleratedOptimization">[docs]</a><span class="k">class</span> <span class="nc">AcceleratedOptimization</span><span class="p">(</span><span class="n">psi4_step</span><span class="o">.</span><span class="n">Energy</span><span class="p">):</span>
+<div class="viewcode-block" id="AcceleratedOptimization"><a class="viewcode-back" href="../../api/psi4_step.html#psi4_step.accelerated_optimization.AcceleratedOptimization">[docs]</a><span class="k">class</span> <span class="nc">AcceleratedOptimization</span><span class="p">(</span><span class="n">psi4_step</span><span class="o">.</span><span class="n">Energy</span><span class="p">):</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">flowchart</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -509,7 +509,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_counters</span> <span class="o">=</span> <span class="p">{}</span>
 
-<div class="viewcode-block" id="AcceleratedOptimization.description_text"><a class="viewcode-back" href="../../developer/psi4_step.html#psi4_step.accelerated_optimization.AcceleratedOptimization.description_text">[docs]</a>    <span class="k">def</span> <span class="nf">description_text</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">P</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="AcceleratedOptimization.description_text"><a class="viewcode-back" href="../../api/psi4_step.html#psi4_step.accelerated_optimization.AcceleratedOptimization.description_text">[docs]</a>    <span class="k">def</span> <span class="nf">description_text</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">P</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Prepare information about what this node will do&quot;&quot;&quot;</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="n">P</span><span class="p">:</span>
@@ -538,7 +538,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
         <span class="k">return</span> <span class="n">text</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="n">__</span><span class="p">(</span><span class="n">added</span><span class="p">,</span> <span class="o">**</span><span class="n">P</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span> <span class="o">*</span> <span class="s2">&quot; &quot;</span><span class="p">)</span><span class="o">.</span><span class="fm">__str__</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="AcceleratedOptimization.input_text"><a class="viewcode-back" href="../../developer/psi4_step.html#psi4_step.accelerated_optimization.AcceleratedOptimization.input_text">[docs]</a>    <span class="k">def</span> <span class="nf">input_text</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node0</span><span class="p">,</span> <span class="n">memory</span><span class="p">,</span> <span class="n">restart</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="AcceleratedOptimization.input_text"><a class="viewcode-back" href="../../api/psi4_step.html#psi4_step.accelerated_optimization.AcceleratedOptimization.input_text">[docs]</a>    <span class="k">def</span> <span class="nf">input_text</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node0</span><span class="p">,</span> <span class="n">memory</span><span class="p">,</span> <span class="n">restart</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Create the first and last parts of the Psi4 input.</span>
 
 <span class="sd">        Parameters</span>
@@ -614,7 +614,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
         <span class="k">return</span> <span class="n">prolog</span><span class="p">,</span> <span class="n">epilog</span></div>
 
-<div class="viewcode-block" id="AcceleratedOptimization.run"><a class="viewcode-back" href="../../developer/psi4_step.html#psi4_step.accelerated_optimization.AcceleratedOptimization.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node0</span><span class="p">,</span> <span class="n">memory</span><span class="p">,</span> <span class="n">n_threads</span><span class="p">):</span>
+<div class="viewcode-block" id="AcceleratedOptimization.run"><a class="viewcode-back" href="../../api/psi4_step.html#psi4_step.accelerated_optimization.AcceleratedOptimization.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node0</span><span class="p">,</span> <span class="n">memory</span><span class="p">,</span> <span class="n">n_threads</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Run the accelerated optimization.</span>
 
 <span class="sd">        Parameters</span>
@@ -962,7 +962,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
         <span class="k">return</span> <span class="n">converged</span>
 
-<div class="viewcode-block" id="AcceleratedOptimization.run_old"><a class="viewcode-back" href="../../developer/psi4_step.html#psi4_step.accelerated_optimization.AcceleratedOptimization.run_old">[docs]</a>    <span class="k">def</span> <span class="nf">run_old</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node0</span><span class="p">,</span> <span class="n">memory</span><span class="p">,</span> <span class="n">n_threads</span><span class="p">):</span>
+<div class="viewcode-block" id="AcceleratedOptimization.run_old"><a class="viewcode-back" href="../../api/psi4_step.html#psi4_step.accelerated_optimization.AcceleratedOptimization.run_old">[docs]</a>    <span class="k">def</span> <span class="nf">run_old</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node0</span><span class="p">,</span> <span class="n">memory</span><span class="p">,</span> <span class="n">n_threads</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Run the accelerated optimization.</span>
 
 <span class="sd">        Parameters</span>
@@ -1732,7 +1732,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             <span class="n">result</span><span class="p">[</span><span class="s2">&quot;allvecs&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">allvecs</span>
         <span class="k">return</span> <span class="n">result</span>
 
-<div class="viewcode-block" id="AcceleratedOptimization.runPsi4"><a class="viewcode-back" href="../../developer/psi4_step.html#psi4_step.accelerated_optimization.AcceleratedOptimization.runPsi4">[docs]</a>    <span class="k">def</span> <span class="nf">runPsi4</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">needed</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;E&quot;</span><span class="p">,</span> <span class="s2">&quot;dE&quot;</span><span class="p">)):</span>
+<div class="viewcode-block" id="AcceleratedOptimization.runPsi4"><a class="viewcode-back" href="../../api/psi4_step.html#psi4_step.accelerated_optimization.AcceleratedOptimization.runPsi4">[docs]</a>    <span class="k">def</span> <span class="nf">runPsi4</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">needed</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;E&quot;</span><span class="p">,</span> <span class="s2">&quot;dE&quot;</span><span class="p">)):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_counters</span><span class="p">[</span><span class="s2">&quot;main&quot;</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
 
         <span class="n">directory</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">directory</span><span class="p">)</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;Psi4_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_counters</span><span class="p">[</span><span class="s1">&#39;main&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
@@ -1797,7 +1797,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
         <span class="k">return</span> <span class="n">E</span><span class="p">,</span> <span class="n">dE</span></div>
 
-<div class="viewcode-block" id="AcceleratedOptimization.runMOPAC"><a class="viewcode-back" href="../../developer/psi4_step.html#psi4_step.accelerated_optimization.AcceleratedOptimization.runMOPAC">[docs]</a>    <span class="k">def</span> <span class="nf">runMOPAC</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">needed</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;E&quot;</span><span class="p">,</span> <span class="s2">&quot;dE&quot;</span><span class="p">)):</span>
+<div class="viewcode-block" id="AcceleratedOptimization.runMOPAC"><a class="viewcode-back" href="../../api/psi4_step.html#psi4_step.accelerated_optimization.AcceleratedOptimization.runMOPAC">[docs]</a>    <span class="k">def</span> <span class="nf">runMOPAC</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">needed</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;E&quot;</span><span class="p">,</span> <span class="s2">&quot;dE&quot;</span><span class="p">)):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Run the MOPAC flowchart in the given directory.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_counters</span><span class="p">[</span><span class="s2">&quot;surrogate&quot;</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
 
