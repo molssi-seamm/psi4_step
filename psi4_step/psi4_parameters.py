@@ -22,7 +22,8 @@ class Psi4Parameters(seamm.Parameters):
 
     Parameters
     ----------
-    parameters : {'kind', 'default', 'default_units', 'enumeration', 'format_string', description', help_text'}
+    parameters : {'kind', 'default', 'default_units', 'enumeration',
+    'format_string', description', help_text'}
         A dictionary containing the parameters for the current step.
         Each key of the dictionary is a dictionary that contains the
         the following keys: kind, default, default_units, enumeration,
