@@ -53,7 +53,7 @@ class Psi4Parameters(seamm.Parameters):
     parameters['description'] : str
         A short string used as a prompt in the GUI.
 
-    parameters['help_text']: tuple
+    parameters['help_text'] : tuple
         A longer string to display as help for the user.
 
     See Also
@@ -96,12 +96,12 @@ class Psi4Parameters(seamm.Parameters):
 
         Parameters
         ----------
-            defaults: dict
-                A dictionary of parameters to initialize. The parameters
-                above are used first and any given will override/add to them.
-            data: dict
-                A dictionary of keys and a subdictionary with value and units
-                for updating the current, default values.
+        defaults: dict
+            A dictionary of parameters to initialize. The parameters
+            above are used first and any given will override/add to them.
+        data: dict
+            A dictionary of keys and a subdictionary with value and units
+            for updating the current, default values.
 
         """
 
