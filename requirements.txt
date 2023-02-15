@@ -1,5 +1,5 @@
 numpy
-optking
+# optking
 psutil
 scipy
 seamm
