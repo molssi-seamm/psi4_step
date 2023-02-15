@@ -44,7 +44,7 @@ code feature shared-memory parallelization to run efficiently on multi-core mach
    .. grid-item-card:: API Reference
       :margin: 0 3 0 0
 
-      The API for the Geometry Analysis Step
+      The API for the Psi4 Step
 
       .. button-link:: ./api/index.html
 	 :color: primary
