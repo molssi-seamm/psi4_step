@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>psi4_step.psi4 &#8212; SEAMM Psi4 Plug-in 2023.2.16 documentation</title>
+    <title>psi4_step.psi4 &#8212; SEAMM Psi4 Plug-in 2023.2.16.1 documentation</title>
   
   
   
@@ -836,13 +836,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <span class="n">node0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">subflowchart</span><span class="o">.</span><span class="n">get_node</span><span class="p">(</span><span class="s2">&quot;1&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">next</span><span class="p">()</span>
 
         <span class="c1"># See if this is a normal or special run</span>
-        <span class="n">node</span> <span class="o">=</span> <span class="n">node0</span>
-        <span class="k">while</span> <span class="n">node</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">psi4_step</span><span class="o">.</span><span class="n">AcceleratedOptimization</span><span class="p">):</span>
-                <span class="n">node</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">node0</span><span class="p">,</span> <span class="n">memory</span><span class="p">,</span> <span class="n">n_threads</span><span class="p">)</span>
-                <span class="k">return</span> <span class="n">next_node</span>
+        <span class="c1"># node = node0</span>
+        <span class="c1"># while node is not None:</span>
+        <span class="c1">#     if isinstance(node, psi4_step.AcceleratedOptimization):</span>
+        <span class="c1">#         node.run(node0, memory, n_threads)</span>
+        <span class="c1">#         return next_node</span>
 
-            <span class="n">node</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">next</span><span class="p">()</span>
+        <span class="c1">#     node = node.next()</span>
 
         <span class="c1"># Start the input data</span>
         <span class="n">input_data</span> <span class="o">=</span> <span class="p">[]</span>
