@@ -410,13 +410,13 @@ class Psi4(seamm.Node):
         node0 = self.subflowchart.get_node("1").next()
 
         # See if this is a normal or special run
-        node = node0
-        while node is not None:
-            if isinstance(node, psi4_step.AcceleratedOptimization):
-                node.run(node0, memory, n_threads)
-                return next_node
+        # node = node0
+        # while node is not None:
+        #     if isinstance(node, psi4_step.AcceleratedOptimization):
+        #         node.run(node0, memory, n_threads)
+        #         return next_node
 
-            node = node.next()
+        #     node = node.next()
 
         # Start the input data
         input_data = []
