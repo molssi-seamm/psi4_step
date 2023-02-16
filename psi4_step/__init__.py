@@ -34,16 +34,16 @@ from psi4_step.optimization_parameters import OptimizationParameters  # noqa: F4
 from psi4_step.optimization_step import OptimizationStep  # noqa: F401
 from psi4_step.tk_optimization import TkOptimization  # noqa: F401
 
-from psi4_step.accelerated_optimization import AcceleratedOptimization  # noqa: F401
-from psi4_step.accelerated_optimization_parameters import (  # noqa: F401
-    AcceleratedOptimizationParameters,
-)
-from psi4_step.accelerated_optimization_step import (  # noqa: F401
-    AcceleratedOptimizationStep,
-)
-from psi4_step.tk_accelerated_optimization import (  # noqa: F401
-    TkAcceleratedOptimization,
-)
+# from psi4_step.accelerated_optimization import AcceleratedOptimization  # noqa: F401
+# from psi4_step.accelerated_optimization_parameters import (  # noqa: F401
+#     AcceleratedOptimizationParameters,
+# )
+# from psi4_step.accelerated_optimization_step import (  # noqa: F401
+#     AcceleratedOptimizationStep,
+# )
+# from psi4_step.tk_accelerated_optimization import (  # noqa: F401
+#     TkAcceleratedOptimization,
+# )
 
 # Handle versioneer
 from ._version import get_versions
