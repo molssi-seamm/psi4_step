@@ -155,5 +155,7 @@ class Optimization(psi4_step.Energy):
                 "\nThere are no results from Psi4. Perhaps it "
                 f"failed? Looking for {str(json_file)}."
             )
+            printer.normal(__(text, **data, indent=self.indent + 4 * " "))
+            raise RuntimeError(text)
 
         printer.normal(__(text, **data, indent=self.indent + 4 * " "))

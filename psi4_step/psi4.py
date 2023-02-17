@@ -481,12 +481,22 @@ class Psi4(seamm.Node):
 
         if result is None:
             self.logger.error("There was an error running Psi4")
-            return None
+            raise RuntimeError("There was an error running Psi4")
 
         self.logger.debug("\n" + pprint.pformat(result))
 
+        failed = False
+        if "output.dat" in result["files"]:
+            if result["output.dat"]["data"] is not None:
+                if "*** Psi4 exiting successfully." not in result["output.dat"]["data"]:
+                    self.logger.warning("Psi4 did not complete successfully.")
+                    failed = True
+
         # Analyze the results
         self.analyze()
+
+        if failed:
+            raise RuntimeError("Psi4 did not complete successfully.")
 
         return next_node
 

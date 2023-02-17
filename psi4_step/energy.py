@@ -265,5 +265,7 @@ class Energy(seamm.Node):
                 "\nThere are no results from Psi4. Perhaps it "
                 f"failed? Looking for {tmp}."
             )
+            printer.normal(__(text, **data, indent=self.indent + 4 * " "))
+            raise RuntimeError(text)
 
         printer.normal(__(text, **data, indent=self.indent + 4 * " "))
