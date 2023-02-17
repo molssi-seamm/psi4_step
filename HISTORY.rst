@@ -2,6 +2,10 @@
 History
 =======
 
+2023.2.17 -- Checking more thoroughly for errors in Psi4
+   * Check and throw errors for various issues when running Psi4, including whenever it
+     does not complete successfully according to the output.
+     
 2023.2.16.1 -- OptKing will not die!!!
    * Yet another part needed to be removed.
      
