@@ -175,9 +175,9 @@ class Energy(seamm.Node):
         lines.append(f"set maxiter {P['maximum iterations']}")
 
         if P["density convergence"] != "default":
-            lines.append("set d_convergence {P['density convergence']}")
+            lines.append(f"set d_convergence {P['density convergence']}")
         if P["energy convergence"] != "default":
-            lines.append("set e_convergence {P['energy convergence']}")
+            lines.append(f"set e_convergence {P['energy convergence']}")
 
         if P["use damping"]:
             lines.append(f"set damping_percentage {P['damping percentage']}")
