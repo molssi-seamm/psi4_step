@@ -97,7 +97,12 @@ class Optimization(psi4_step.Energy):
         lines.append(f"set opt_coordinates {P['coordinates']}")
         max_steps = P["max geometry steps"]
         if max_steps == "default":
-            max_steps = 3 * (3 * configuration.n_atoms - 6)
+            max_steps = 6 * configuration.n_atoms
+        if "nAtoms" in max_steps:
+            n_atoms = configuration.n_atoms
+            max_steps = max_steps.replace("nAtoms", str(n_atoms))
+            max_steps = eval(max_steps)
+
         lines.append(f"set geom_maxiter {max_steps}")
         if P["geometry convergence"] == "Custom":
             pass

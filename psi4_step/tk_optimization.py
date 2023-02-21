@@ -118,14 +118,14 @@ class TkOptimization(psi4_step.TkEnergy):
 
     def reset_dialog(self, widget=None):
         """Layout the widgets, letting our parents go first."""
-        row = super().reset_dialog()
+        rows = super().reset_dialog()
 
-        self["optimization"].grid(row=row, column=0)
-        row += 1
+        self["optimization"].grid(row=0, column=1, rowspan=rows, sticky=tk.N)
+        # row += 1
 
         self.reset_optimization()
 
-        return row
+        return rows
 
     def reset_optimization(self, widget=None):
         convergence = self["geometry convergence"].get()
