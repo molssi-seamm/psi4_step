@@ -25,10 +25,10 @@ class OptimizationParameters(psi4_step.EnergyParameters):
             "help_text": "The optimization method to use.",
         },
         "max geometry steps": {
-            "default": "default",
+            "default": "6*nAtoms",
             "kind": "integer",
             "default_units": "",
-            "enumeration": ("default",),
+            "enumeration": ("6*nAtoms",),
             "format_string": "",
             "description": "Maximum steps:",
             "help_text": (

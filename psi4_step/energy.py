@@ -100,7 +100,7 @@ class Energy(seamm.Node):
         directory = Path(self.directory)
         directory.mkdir(parents=True, exist_ok=True)
 
-        # references = self.parent.references
+        _, configuration = self.get_system_configuration(None)
 
         P = self.parameters.current_values_to_dict(
             context=seamm.flowchart_variables._data
@@ -135,15 +135,29 @@ class Energy(seamm.Node):
         # lines.append('set scf_type df')
         # lines.append('set guess sad')
 
-        spin_restricted = P["spin-restricted"] == "yes"
+        multiplicity = configuration.spin_multiplicity
+        spin_restricted = P["spin-restricted"]
+        if spin_restricted == "default":
+            if multiplicity == 1:
+                restricted = True
+            else:
+                restricted = False
+        elif spin_restricted == "yes":
+            restricted = True
+        else:
+            restricted = False
+
         if method == "dft":
-            if spin_restricted:
+            if restricted:
                 lines.append("set reference rks")
             else:
                 lines.append("set reference uks")
         else:
-            if spin_restricted:
-                lines.append("set reference rhf")
+            if restricted:
+                if multiplicity == 1:
+                    lines.append("set reference rhf")
+                else:
+                    lines.append("set reference rohf")
             else:
                 lines.append("set reference uhf")
 
@@ -151,6 +165,38 @@ class Energy(seamm.Node):
             lines.append("set freeze_core True")
         else:
             lines.append("set freeze_core False")
+
+        if P["stability analysis"]:
+            lines.append("set stability_analysis True")
+
+        # Convergence parameters and methods
+        lines.append("set fail_on_maxiter False")  # Psi4 hangs! Cope in the plug-in
+
+        lines.append(f"set maxiter {P['maximum iterations']}")
+
+        if P["density convergence"] != "default":
+            lines.append(f"set d_convergence {P['density convergence']}")
+        if P["energy convergence"] != "default":
+            lines.append(f"set e_convergence {P['energy convergence']}")
+
+        if P["use damping"]:
+            lines.append(f"set damping_percentage {P['damping percentage']}")
+            lines.append(f"set damping_convergence {P['damping convergence']}")
+
+        if P["use level shift"]:
+            lines.append(f"set level_shift {P['level shift']}")
+            lines.append(f"set level_shift_cutoff {P['level shift convergence']}")
+
+        if P["use soscf"]:
+            lines.append("set soscf True")
+            lines.append(
+                f"set soscf_start_convergence {P['soscf starting convergence']}"
+            )
+            lines.append(f"set soscf_conv {P['soscf convergence']}")
+            lines.append(f"set soscf_max_iter {P['soscf max iterations']}")
+            if P["soscf print iterations"]:
+                lines.append("set soscf_print True")
+
         lines.append("")
         if method == "dft":
             if P["level"] == "recommended":
