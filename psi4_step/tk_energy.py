@@ -73,12 +73,48 @@ class TkEnergy(seamm.TkNode):
             labelanchor="n",
             padding=10,
         )
+        # Create a frame for the convergence control
+        self["convergence"] = ttk.LabelFrame(
+            frame,
+            borderwidth=4,
+            relief="sunken",
+            text="SCF Convergence Control",
+            labelanchor="n",
+            padding=10,
+        )
 
         # Create all the widgets
         P = self.node.parameters
-        for key in psi4_step.EnergyParameters.parameters:
-            if key not in ("results", "extra keywords", "create tables"):
-                self[key] = P[key].widget(self["calculation"])
+        for key in (
+            "level",
+            "method",
+            "advanced_method",
+            "functional",
+            "advanced_functional",
+            "dispersion",
+            "spin-restricted",
+            "freeze-cores",
+            "stability analysis",
+        ):
+            self[key] = P[key].widget(self["calculation"])
+        for key in (
+            "use damping",
+            "damping percentage",
+            "damping convergence",
+            "use level shift",
+            "level shift",
+            "level shift convergence",
+            "use soscf",
+            "soscf starting convergence",
+            "soscf convergence",
+            "soscf max iterations",
+            "soscf print iterations",
+            "density convergence",
+            "energy convergence",
+            "convergence error",
+            "maximum iterations",
+        ):
+            self[key] = P[key].widget(self["convergence"])
 
         # bindings...
         self["level"].combobox.bind("<<ComboboxSelected>>", self.reset_calculation)
@@ -94,7 +130,10 @@ class TkEnergy(seamm.TkNode):
         self["advanced_method"].combobox.bind("<Return>", self.reset_calculation)
         self["advanced_method"].combobox.bind("<FocusOut>", self.reset_calculation)
 
-        # self.setup_results(psi4_step.properties, calculation=calculation)
+        for key in ("use damping", "use level shift", "use soscf"):
+            self[key].bind("<<ComboboxSelected>>", self.reset_convergence)
+            self[key].bind("<Return>", self.reset_convergence)
+            self[key].bind("<FocusOut>", self.reset_convergence)
 
         # Top level needs to call reset_dialog
         if self.node.calculation == "energy":
@@ -111,7 +150,9 @@ class TkEnergy(seamm.TkNode):
 
         self["calculation"].grid(row=0, column=0)
         self.reset_calculation()
-        return 1
+        self["convergence"].grid(row=1, column=0)
+        self.reset_convergence()
+        return 2
 
     def reset_calculation(self, widget=None):
         level = self["level"].get()
@@ -187,6 +228,66 @@ class TkEnergy(seamm.TkNode):
         self["spin-restricted"].grid(row=row, column=0, columnspan=2, sticky=tk.EW)
         widgets.append(self["spin-restricted"])
         row += 1
-        sw.align_labels(widgets)
+        self["stability analysis"].grid(row=row, column=0, columnspan=2, sticky=tk.EW)
+        widgets.append(self["stability analysis"])
+        row += 1
+        sw.align_labels(widgets, sticky=tk.E)
 
         return row
+
+    def reset_convergence(self, widget=None):
+        """Layout the convergence widgets as needed for the current state"""
+
+        frame = self["convergence"]
+        for slave in frame.grid_slaves():
+            slave.grid_forget()
+
+        widgets = []
+        widgets2 = []
+        row = 0
+
+        for key in (
+            "maximum iterations",
+            "density convergence",
+            "energy convergence",
+            "convergence error",
+            "use damping",
+        ):
+            self[key].grid(row=row, column=0, columnspan=2, sticky=tk.EW)
+            widgets.append(self[key])
+            row += 1
+
+        if self["use damping"].get() != "no":
+            for key in ("damping percentage", "damping convergence"):
+                self[key].grid(row=row, column=1, sticky=tk.EW)
+                widgets2.append(self[key])
+                row += 1
+
+        for key in ("use level shift",):
+            self[key].grid(row=row, column=0, columnspan=2, sticky=tk.EW)
+            widgets.append(self[key])
+            row += 1
+        if self["use level shift"].get() != "no":
+            for key in ("level shift", "level shift convergence"):
+                self[key].grid(row=row, column=1, sticky=tk.EW)
+                widgets2.append(self[key])
+                row += 1
+
+        for key in ("use soscf",):
+            self[key].grid(row=row, column=0, columnspan=2, sticky=tk.EW)
+            widgets.append(self[key])
+            row += 1
+        if self["use soscf"].get() != "no":
+            for key in (
+                "soscf starting convergence",
+                "soscf convergence",
+                "soscf max iterations",
+                "soscf print iterations",
+            ):
+                self[key].grid(row=row, column=1, sticky=tk.EW)
+                widgets2.append(self[key])
+                row += 1
+
+        frame.columnconfigure(0, minsize=150)
+        sw.align_labels(widgets, sticky=tk.E)
+        sw.align_labels(widgets2, sticky=tk.E)
