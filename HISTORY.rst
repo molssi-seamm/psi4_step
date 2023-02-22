@@ -2,6 +2,12 @@
 History
 =======
 
+2023.2.21 -- Added control over SCF convergence
+   * Able to set convergence criteria.
+   * Options for damping. level shifting and second-order SCF
+   * Set default for number of steps for optimization to 6*nAtoms to
+     make it more explicit.
+     
 2023.2.17 -- Checking more thoroughly for errors in Psi4
    * Check and throw errors for various issues when running Psi4, including whenever it
      does not complete successfully according to the output.
