@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>psi4_step.optimization &#8212; SEAMM Psi4 Plug-in 2023.2.17 documentation</title>
+    <title>psi4_step.optimization &#8212; SEAMM Psi4 Plug-in 2023.2.21 documentation</title>
   
   
   
@@ -523,7 +523,12 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;set opt_coordinates </span><span class="si">{</span><span class="n">P</span><span class="p">[</span><span class="s1">&#39;coordinates&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="n">max_steps</span> <span class="o">=</span> <span class="n">P</span><span class="p">[</span><span class="s2">&quot;max geometry steps&quot;</span><span class="p">]</span>
         <span class="k">if</span> <span class="n">max_steps</span> <span class="o">==</span> <span class="s2">&quot;default&quot;</span><span class="p">:</span>
-            <span class="n">max_steps</span> <span class="o">=</span> <span class="mi">3</span> <span class="o">*</span> <span class="p">(</span><span class="mi">3</span> <span class="o">*</span> <span class="n">configuration</span><span class="o">.</span><span class="n">n_atoms</span> <span class="o">-</span> <span class="mi">6</span><span class="p">)</span>
+            <span class="n">max_steps</span> <span class="o">=</span> <span class="mi">6</span> <span class="o">*</span> <span class="n">configuration</span><span class="o">.</span><span class="n">n_atoms</span>
+        <span class="k">if</span> <span class="s2">&quot;nAtoms&quot;</span> <span class="ow">in</span> <span class="n">max_steps</span><span class="p">:</span>
+            <span class="n">n_atoms</span> <span class="o">=</span> <span class="n">configuration</span><span class="o">.</span><span class="n">n_atoms</span>
+            <span class="n">max_steps</span> <span class="o">=</span> <span class="n">max_steps</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;nAtoms&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">n_atoms</span><span class="p">))</span>
+            <span class="n">max_steps</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="n">max_steps</span><span class="p">)</span>
+
         <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;set geom_maxiter </span><span class="si">{</span><span class="n">max_steps</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">P</span><span class="p">[</span><span class="s2">&quot;geometry convergence&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Custom&quot;</span><span class="p">:</span>
             <span class="k">pass</span>

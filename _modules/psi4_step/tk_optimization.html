@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>psi4_step.tk_optimization &#8212; SEAMM Psi4 Plug-in 2023.2.17 documentation</title>
+    <title>psi4_step.tk_optimization &#8212; SEAMM Psi4 Plug-in 2023.2.21 documentation</title>
   
   
   
@@ -544,14 +544,14 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
 <div class="viewcode-block" id="TkOptimization.reset_dialog"><a class="viewcode-back" href="../../api/psi4_step.html#psi4_step.tk_optimization.TkOptimization.reset_dialog">[docs]</a>    <span class="k">def</span> <span class="nf">reset_dialog</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">widget</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Layout the widgets, letting our parents go first.&quot;&quot;&quot;</span>
-        <span class="n">row</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">reset_dialog</span><span class="p">()</span>
+        <span class="n">rows</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">reset_dialog</span><span class="p">()</span>
 
-        <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;optimization&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">row</span><span class="o">=</span><span class="n">row</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-        <span class="n">row</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;optimization&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">row</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">rowspan</span><span class="o">=</span><span class="n">rows</span><span class="p">,</span> <span class="n">sticky</span><span class="o">=</span><span class="n">tk</span><span class="o">.</span><span class="n">N</span><span class="p">)</span>
+        <span class="c1"># row += 1</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">reset_optimization</span><span class="p">()</span>
 
-        <span class="k">return</span> <span class="n">row</span></div>
+        <span class="k">return</span> <span class="n">rows</span></div>
 
 <div class="viewcode-block" id="TkOptimization.reset_optimization"><a class="viewcode-back" href="../../api/psi4_step.html#psi4_step.tk_optimization.TkOptimization.reset_optimization">[docs]</a>    <span class="k">def</span> <span class="nf">reset_optimization</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">widget</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="n">convergence</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;geometry convergence&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>

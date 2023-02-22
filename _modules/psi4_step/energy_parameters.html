@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>psi4_step.energy_parameters &#8212; SEAMM Psi4 Plug-in 2023.2.17 documentation</title>
+    <title>psi4_step.energy_parameters &#8212; SEAMM Psi4 Plug-in 2023.2.21 documentation</title>
   
   
   
@@ -499,15 +499,161 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             <span class="s2">&quot;help_text&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;The dispersion correction to use.&quot;</span><span class="p">),</span>
         <span class="p">},</span>
         <span class="s2">&quot;spin-restricted&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="s2">&quot;no&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="s2">&quot;default&quot;</span><span class="p">,</span>
             <span class="s2">&quot;kind&quot;</span><span class="p">:</span> <span class="s2">&quot;enumeration&quot;</span><span class="p">,</span>
             <span class="s2">&quot;default_units&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;enumeration&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;yes&quot;</span><span class="p">,</span> <span class="s2">&quot;no&quot;</span><span class="p">),</span>
+            <span class="s2">&quot;enumeration&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;default&quot;</span><span class="p">,</span> <span class="s2">&quot;yes&quot;</span><span class="p">,</span> <span class="s2">&quot;no&quot;</span><span class="p">),</span>
             <span class="s2">&quot;format_string&quot;</span><span class="p">:</span> <span class="s2">&quot;s&quot;</span><span class="p">,</span>
             <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Spin-restricted:&quot;</span><span class="p">,</span>
             <span class="s2">&quot;help_text&quot;</span><span class="p">:</span> <span class="p">(</span>
-                <span class="s2">&quot;Whether to restrict the spin (RHF, ROHF, RKS) or not &quot;</span> <span class="s2">&quot;(UHF, UKS)&quot;</span>
+                <span class="s2">&quot;Whether to restrict the spin (RHF, ROHF, RKS) or not &quot;</span>
+                <span class="s2">&quot;(UHF, UKS).&quot;</span>
+                <span class="s2">&quot; Default is restricted for singlets, unrestricted otherwise.&quot;</span>
             <span class="p">),</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;use damping&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="s2">&quot;no&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;kind&quot;</span><span class="p">:</span> <span class="s2">&quot;boolean&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;default_units&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;enumeration&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;yes&quot;</span><span class="p">,</span> <span class="s2">&quot;no&quot;</span><span class="p">),</span>
+            <span class="s2">&quot;format_string&quot;</span><span class="p">:</span> <span class="s2">&quot;s&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Damp the iterations:&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;help_text&quot;</span><span class="p">:</span> <span class="p">(</span>
+                <span class="s2">&quot;Whether to damp the iterations using a fraction of the previous &quot;</span>
+                <span class="s2">&quot;density to damp oscillations.&quot;</span>
+            <span class="p">),</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;damping percentage&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="mf">20.0</span><span class="p">,</span>
+            <span class="s2">&quot;kind&quot;</span><span class="p">:</span> <span class="s2">&quot;float&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;default_units&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;enumeration&quot;</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">(),</span>
+            <span class="s2">&quot;format_string&quot;</span><span class="p">:</span> <span class="s2">&quot;s&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Percent damping:&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;help_text&quot;</span><span class="p">:</span> <span class="s2">&quot;Percent of previous density to use to damp oscillations.&quot;</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;damping convergence&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
+            <span class="s2">&quot;kind&quot;</span><span class="p">:</span> <span class="s2">&quot;float&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;default_units&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;enumeration&quot;</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">(),</span>
+            <span class="s2">&quot;format_string&quot;</span><span class="p">:</span> <span class="s2">&quot;s&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Damp to convergence:&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;help_text&quot;</span><span class="p">:</span> <span class="s2">&quot;Convergence level to stop damping. 0 = always damp.&quot;</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;use level shift&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="s2">&quot;no&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;kind&quot;</span><span class="p">:</span> <span class="s2">&quot;boolean&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;default_units&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;enumeration&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;yes&quot;</span><span class="p">,</span> <span class="s2">&quot;no&quot;</span><span class="p">),</span>
+            <span class="s2">&quot;format_string&quot;</span><span class="p">:</span> <span class="s2">&quot;s&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Use a level shift:&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;help_text&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;Whether to use a level shift to help convergence.&quot;</span><span class="p">),</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;level shift&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="mf">5.0</span><span class="p">,</span>
+            <span class="s2">&quot;kind&quot;</span><span class="p">:</span> <span class="s2">&quot;float&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;default_units&quot;</span><span class="p">:</span> <span class="s2">&quot;E_h&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;enumeration&quot;</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">(),</span>
+            <span class="s2">&quot;format_string&quot;</span><span class="p">:</span> <span class="s2">&quot;s&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Level shift:&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;help_text&quot;</span><span class="p">:</span> <span class="s2">&quot;The amount to shift the occupied orbitals down.&quot;</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;level shift convergence&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="mf">0.01</span><span class="p">,</span>
+            <span class="s2">&quot;kind&quot;</span><span class="p">:</span> <span class="s2">&quot;float&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;default_units&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;enumeration&quot;</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">(),</span>
+            <span class="s2">&quot;format_string&quot;</span><span class="p">:</span> <span class="s2">&quot;s&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Stop when converged to:&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;help_text&quot;</span><span class="p">:</span> <span class="s2">&quot;Convergence level to stop level shifting.&quot;</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;use soscf&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="s2">&quot;no&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;kind&quot;</span><span class="p">:</span> <span class="s2">&quot;boolean&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;default_units&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;enumeration&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;yes&quot;</span><span class="p">,</span> <span class="s2">&quot;no&quot;</span><span class="p">),</span>
+            <span class="s2">&quot;format_string&quot;</span><span class="p">:</span> <span class="s2">&quot;s&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Use second order SCF:&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;help_text&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;Whether to use the second order SCF to help convergence.&quot;</span><span class="p">),</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;soscf starting convergence&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="mf">0.01</span><span class="p">,</span>
+            <span class="s2">&quot;kind&quot;</span><span class="p">:</span> <span class="s2">&quot;float&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;default_units&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;enumeration&quot;</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">(),</span>
+            <span class="s2">&quot;format_string&quot;</span><span class="p">:</span> <span class="s2">&quot;s&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Start when converged to:&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;help_text&quot;</span><span class="p">:</span> <span class="s2">&quot;Convergence level to start second order SCF.&quot;</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;soscf convergence&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="mf">0.001</span><span class="p">,</span>
+            <span class="s2">&quot;kind&quot;</span><span class="p">:</span> <span class="s2">&quot;float&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;default_units&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;enumeration&quot;</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">(),</span>
+            <span class="s2">&quot;format_string&quot;</span><span class="p">:</span> <span class="s2">&quot;s&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Microiteration convergence:&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;help_text&quot;</span><span class="p">:</span> <span class="s2">&quot;Convergence level for SOSCF microiterations.&quot;</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;soscf max iterations&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
+            <span class="s2">&quot;kind&quot;</span><span class="p">:</span> <span class="s2">&quot;integer&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;default_units&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;enumeration&quot;</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">(),</span>
+            <span class="s2">&quot;format_string&quot;</span><span class="p">:</span> <span class="s2">&quot;s&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Maximum microiterations:&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;help_text&quot;</span><span class="p">:</span> <span class="s2">&quot;Maximum number of SOSCF microiterations.&quot;</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;soscf print iterations&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="s2">&quot;no&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;kind&quot;</span><span class="p">:</span> <span class="s2">&quot;boolean&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;default_units&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;enumeration&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;yes&quot;</span><span class="p">,</span> <span class="s2">&quot;no&quot;</span><span class="p">),</span>
+            <span class="s2">&quot;format_string&quot;</span><span class="p">:</span> <span class="s2">&quot;s&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Print microiterations:&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;help_text&quot;</span><span class="p">:</span> <span class="s2">&quot;Print information about the SOSCF microiterations.&quot;</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;density convergence&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="s2">&quot;default&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;kind&quot;</span><span class="p">:</span> <span class="s2">&quot;float&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;default_units&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;enumeration&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;default&quot;</span><span class="p">,),</span>
+            <span class="s2">&quot;format_string&quot;</span><span class="p">:</span> <span class="s2">&quot;s&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Density convergence criterion:&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;help_text&quot;</span><span class="p">:</span> <span class="p">(</span>
+                <span class="s2">&quot;Criterion for convergence of the density, default 10^-6 for &quot;</span>
+                <span class="s2">&quot;SCF, 10^-8 optimization.&quot;</span>
+            <span class="p">),</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;energy convergence&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="s2">&quot;default&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;kind&quot;</span><span class="p">:</span> <span class="s2">&quot;float&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;default_units&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;enumeration&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;default&quot;</span><span class="p">,),</span>
+            <span class="s2">&quot;format_string&quot;</span><span class="p">:</span> <span class="s2">&quot;s&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Energy convergence criterion:&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;help_text&quot;</span><span class="p">:</span> <span class="p">(</span>
+                <span class="s2">&quot;Criterion for convergence of the energy, default 10^-6 for &quot;</span>
+                <span class="s2">&quot;SCF, 10^-8 optimization.&quot;</span>
+            <span class="p">),</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;convergence error&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="s2">&quot;yes&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;kind&quot;</span><span class="p">:</span> <span class="s2">&quot;boolean&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;default_units&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;enumeration&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;yes&quot;</span><span class="p">,</span> <span class="s2">&quot;no&quot;</span><span class="p">),</span>
+            <span class="s2">&quot;format_string&quot;</span><span class="p">:</span> <span class="s2">&quot;s&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Error if not converged:&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;help_text&quot;</span><span class="p">:</span> <span class="s2">&quot;Whether to throw an error if not converged.&quot;</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;maximum iterations&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="mi">100</span><span class="p">,</span>
+            <span class="s2">&quot;kind&quot;</span><span class="p">:</span> <span class="s2">&quot;integer&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;default_units&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;enumeration&quot;</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">(),</span>
+            <span class="s2">&quot;format_string&quot;</span><span class="p">:</span> <span class="s2">&quot;s&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Maximum iterations:&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;help_text&quot;</span><span class="p">:</span> <span class="s2">&quot;Maximum number of SCF iterations.&quot;</span><span class="p">,</span>
         <span class="p">},</span>
         <span class="s2">&quot;freeze-cores&quot;</span><span class="p">:</span> <span class="p">{</span>
             <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="s2">&quot;yes&quot;</span><span class="p">,</span>
@@ -519,6 +665,15 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             <span class="s2">&quot;help_text&quot;</span><span class="p">:</span> <span class="p">(</span>
                 <span class="s2">&quot;Whether to freeze the core orbitals in correlated &quot;</span> <span class="s2">&quot;methods&quot;</span>
             <span class="p">),</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;stability analysis&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="s2">&quot;no&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;kind&quot;</span><span class="p">:</span> <span class="s2">&quot;boolean&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;default_units&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;enumeration&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;yes&quot;</span><span class="p">,</span> <span class="s2">&quot;no&quot;</span><span class="p">),</span>
+            <span class="s2">&quot;format_string&quot;</span><span class="p">:</span> <span class="s2">&quot;s&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Do stability analysis:&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;help_text&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;Analyze the stability of the SCF/DFT wavefunction.&quot;</span><span class="p">),</span>
         <span class="p">},</span>
         <span class="s2">&quot;results&quot;</span><span class="p">:</span> <span class="p">{</span>
             <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="p">{},</span>

@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>psi4_step.energy &#8212; SEAMM Psi4 Plug-in 2023.2.17 documentation</title>
+    <title>psi4_step.energy &#8212; SEAMM Psi4 Plug-in 2023.2.21 documentation</title>
   
   
   
@@ -526,7 +526,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <span class="n">directory</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">directory</span><span class="p">)</span>
         <span class="n">directory</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
-        <span class="c1"># references = self.parent.references</span>
+        <span class="n">_</span><span class="p">,</span> <span class="n">configuration</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_system_configuration</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
 
         <span class="n">P</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">current_values_to_dict</span><span class="p">(</span>
             <span class="n">context</span><span class="o">=</span><span class="n">seamm</span><span class="o">.</span><span class="n">flowchart_variables</span><span class="o">.</span><span class="n">_data</span>
@@ -561,15 +561,29 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <span class="c1"># lines.append(&#39;set scf_type df&#39;)</span>
         <span class="c1"># lines.append(&#39;set guess sad&#39;)</span>
 
-        <span class="n">spin_restricted</span> <span class="o">=</span> <span class="n">P</span><span class="p">[</span><span class="s2">&quot;spin-restricted&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;yes&quot;</span>
+        <span class="n">multiplicity</span> <span class="o">=</span> <span class="n">configuration</span><span class="o">.</span><span class="n">spin_multiplicity</span>
+        <span class="n">spin_restricted</span> <span class="o">=</span> <span class="n">P</span><span class="p">[</span><span class="s2">&quot;spin-restricted&quot;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">spin_restricted</span> <span class="o">==</span> <span class="s2">&quot;default&quot;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">multiplicity</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">restricted</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">restricted</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">elif</span> <span class="n">spin_restricted</span> <span class="o">==</span> <span class="s2">&quot;yes&quot;</span><span class="p">:</span>
+            <span class="n">restricted</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">restricted</span> <span class="o">=</span> <span class="kc">False</span>
+
         <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;dft&quot;</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">spin_restricted</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">restricted</span><span class="p">:</span>
                 <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;set reference rks&quot;</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;set reference uks&quot;</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">spin_restricted</span><span class="p">:</span>
-                <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;set reference rhf&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">restricted</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">multiplicity</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;set reference rhf&quot;</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;set reference rohf&quot;</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;set reference uhf&quot;</span><span class="p">)</span>
 
@@ -577,6 +591,38 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;set freeze_core True&quot;</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;set freeze_core False&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">P</span><span class="p">[</span><span class="s2">&quot;stability analysis&quot;</span><span class="p">]:</span>
+            <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;set stability_analysis True&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Convergence parameters and methods</span>
+        <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;set fail_on_maxiter False&quot;</span><span class="p">)</span>  <span class="c1"># Psi4 hangs! Cope in the plug-in</span>
+
+        <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;set maxiter </span><span class="si">{</span><span class="n">P</span><span class="p">[</span><span class="s1">&#39;maximum iterations&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">P</span><span class="p">[</span><span class="s2">&quot;density convergence&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;default&quot;</span><span class="p">:</span>
+            <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;set d_convergence </span><span class="si">{</span><span class="n">P</span><span class="p">[</span><span class="s1">&#39;density convergence&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">P</span><span class="p">[</span><span class="s2">&quot;energy convergence&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;default&quot;</span><span class="p">:</span>
+            <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;set e_convergence </span><span class="si">{</span><span class="n">P</span><span class="p">[</span><span class="s1">&#39;energy convergence&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">P</span><span class="p">[</span><span class="s2">&quot;use damping&quot;</span><span class="p">]:</span>
+            <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;set damping_percentage </span><span class="si">{</span><span class="n">P</span><span class="p">[</span><span class="s1">&#39;damping percentage&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;set damping_convergence </span><span class="si">{</span><span class="n">P</span><span class="p">[</span><span class="s1">&#39;damping convergence&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">P</span><span class="p">[</span><span class="s2">&quot;use level shift&quot;</span><span class="p">]:</span>
+            <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;set level_shift </span><span class="si">{</span><span class="n">P</span><span class="p">[</span><span class="s1">&#39;level shift&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;set level_shift_cutoff </span><span class="si">{</span><span class="n">P</span><span class="p">[</span><span class="s1">&#39;level shift convergence&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">P</span><span class="p">[</span><span class="s2">&quot;use soscf&quot;</span><span class="p">]:</span>
+            <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;set soscf True&quot;</span><span class="p">)</span>
+            <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;set soscf_start_convergence </span><span class="si">{</span><span class="n">P</span><span class="p">[</span><span class="s1">&#39;soscf starting convergence&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
+            <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;set soscf_conv </span><span class="si">{</span><span class="n">P</span><span class="p">[</span><span class="s1">&#39;soscf convergence&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;set soscf_max_iter </span><span class="si">{</span><span class="n">P</span><span class="p">[</span><span class="s1">&#39;soscf max iterations&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">P</span><span class="p">[</span><span class="s2">&quot;soscf print iterations&quot;</span><span class="p">]:</span>
+                <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;set soscf_print True&quot;</span><span class="p">)</span>
+
         <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;dft&quot;</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">P</span><span class="p">[</span><span class="s2">&quot;level&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;recommended&quot;</span><span class="p">:</span>

@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>psi4_step.tk_energy &#8212; SEAMM Psi4 Plug-in 2023.2.17 documentation</title>
+    <title>psi4_step.tk_energy &#8212; SEAMM Psi4 Plug-in 2023.2.21 documentation</title>
   
   
   
@@ -499,12 +499,48 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             <span class="n">labelanchor</span><span class="o">=</span><span class="s2">&quot;n&quot;</span><span class="p">,</span>
             <span class="n">padding</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
         <span class="p">)</span>
+        <span class="c1"># Create a frame for the convergence control</span>
+        <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;convergence&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ttk</span><span class="o">.</span><span class="n">LabelFrame</span><span class="p">(</span>
+            <span class="n">frame</span><span class="p">,</span>
+            <span class="n">borderwidth</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
+            <span class="n">relief</span><span class="o">=</span><span class="s2">&quot;sunken&quot;</span><span class="p">,</span>
+            <span class="n">text</span><span class="o">=</span><span class="s2">&quot;SCF Convergence Control&quot;</span><span class="p">,</span>
+            <span class="n">labelanchor</span><span class="o">=</span><span class="s2">&quot;n&quot;</span><span class="p">,</span>
+            <span class="n">padding</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+        <span class="p">)</span>
 
         <span class="c1"># Create all the widgets</span>
         <span class="n">P</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">node</span><span class="o">.</span><span class="n">parameters</span>
-        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">psi4_step</span><span class="o">.</span><span class="n">EnergyParameters</span><span class="o">.</span><span class="n">parameters</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;results&quot;</span><span class="p">,</span> <span class="s2">&quot;extra keywords&quot;</span><span class="p">,</span> <span class="s2">&quot;create tables&quot;</span><span class="p">):</span>
-                <span class="bp">self</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">P</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">widget</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="s2">&quot;calculation&quot;</span><span class="p">])</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="p">(</span>
+            <span class="s2">&quot;level&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;method&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;advanced_method&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;functional&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;advanced_functional&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;dispersion&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;spin-restricted&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;freeze-cores&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;stability analysis&quot;</span><span class="p">,</span>
+        <span class="p">):</span>
+            <span class="bp">self</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">P</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">widget</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="s2">&quot;calculation&quot;</span><span class="p">])</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="p">(</span>
+            <span class="s2">&quot;use damping&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;damping percentage&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;damping convergence&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;use level shift&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;level shift&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;level shift convergence&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;use soscf&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;soscf starting convergence&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;soscf convergence&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;soscf max iterations&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;soscf print iterations&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;density convergence&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;energy convergence&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;convergence error&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;maximum iterations&quot;</span><span class="p">,</span>
+        <span class="p">):</span>
+            <span class="bp">self</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">P</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">widget</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="s2">&quot;convergence&quot;</span><span class="p">])</span>
 
         <span class="c1"># bindings...</span>
         <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;level&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">combobox</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span class="s2">&quot;&lt;&lt;ComboboxSelected&gt;&gt;&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">reset_calculation</span><span class="p">)</span>
@@ -520,7 +556,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;advanced_method&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">combobox</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span class="s2">&quot;&lt;Return&gt;&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">reset_calculation</span><span class="p">)</span>
         <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;advanced_method&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">combobox</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span class="s2">&quot;&lt;FocusOut&gt;&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">reset_calculation</span><span class="p">)</span>
 
-        <span class="c1"># self.setup_results(psi4_step.properties, calculation=calculation)</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;use damping&quot;</span><span class="p">,</span> <span class="s2">&quot;use level shift&quot;</span><span class="p">,</span> <span class="s2">&quot;use soscf&quot;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span class="s2">&quot;&lt;&lt;ComboboxSelected&gt;&gt;&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">reset_convergence</span><span class="p">)</span>
+            <span class="bp">self</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span class="s2">&quot;&lt;Return&gt;&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">reset_convergence</span><span class="p">)</span>
+            <span class="bp">self</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span class="s2">&quot;&lt;FocusOut&gt;&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">reset_convergence</span><span class="p">)</span>
 
         <span class="c1"># Top level needs to call reset_dialog</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">node</span><span class="o">.</span><span class="n">calculation</span> <span class="o">==</span> <span class="s2">&quot;energy&quot;</span><span class="p">:</span>
@@ -537,7 +576,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
         <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;calculation&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">row</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">reset_calculation</span><span class="p">()</span>
-        <span class="k">return</span> <span class="mi">1</span></div>
+        <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;convergence&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">row</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">reset_convergence</span><span class="p">()</span>
+        <span class="k">return</span> <span class="mi">2</span></div>
 
 <div class="viewcode-block" id="TkEnergy.reset_calculation"><a class="viewcode-back" href="../../api/psi4_step.html#psi4_step.tk_energy.TkEnergy.reset_calculation">[docs]</a>    <span class="k">def</span> <span class="nf">reset_calculation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">widget</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="n">level</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;level&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
@@ -613,9 +654,69 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;spin-restricted&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">row</span><span class="o">=</span><span class="n">row</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">columnspan</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">sticky</span><span class="o">=</span><span class="n">tk</span><span class="o">.</span><span class="n">EW</span><span class="p">)</span>
         <span class="n">widgets</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="s2">&quot;spin-restricted&quot;</span><span class="p">])</span>
         <span class="n">row</span> <span class="o">+=</span> <span class="mi">1</span>
-        <span class="n">sw</span><span class="o">.</span><span class="n">align_labels</span><span class="p">(</span><span class="n">widgets</span><span class="p">)</span>
+        <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;stability analysis&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">row</span><span class="o">=</span><span class="n">row</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">columnspan</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">sticky</span><span class="o">=</span><span class="n">tk</span><span class="o">.</span><span class="n">EW</span><span class="p">)</span>
+        <span class="n">widgets</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="s2">&quot;stability analysis&quot;</span><span class="p">])</span>
+        <span class="n">row</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="n">sw</span><span class="o">.</span><span class="n">align_labels</span><span class="p">(</span><span class="n">widgets</span><span class="p">,</span> <span class="n">sticky</span><span class="o">=</span><span class="n">tk</span><span class="o">.</span><span class="n">E</span><span class="p">)</span>
 
-        <span class="k">return</span> <span class="n">row</span></div></div>
+        <span class="k">return</span> <span class="n">row</span></div>
+
+<div class="viewcode-block" id="TkEnergy.reset_convergence"><a class="viewcode-back" href="../../api/psi4_step.html#psi4_step.tk_energy.TkEnergy.reset_convergence">[docs]</a>    <span class="k">def</span> <span class="nf">reset_convergence</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">widget</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Layout the convergence widgets as needed for the current state&quot;&quot;&quot;</span>
+
+        <span class="n">frame</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;convergence&quot;</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">slave</span> <span class="ow">in</span> <span class="n">frame</span><span class="o">.</span><span class="n">grid_slaves</span><span class="p">():</span>
+            <span class="n">slave</span><span class="o">.</span><span class="n">grid_forget</span><span class="p">()</span>
+
+        <span class="n">widgets</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">widgets2</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">row</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="p">(</span>
+            <span class="s2">&quot;maximum iterations&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;density convergence&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;energy convergence&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;convergence error&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;use damping&quot;</span><span class="p">,</span>
+        <span class="p">):</span>
+            <span class="bp">self</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">row</span><span class="o">=</span><span class="n">row</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">columnspan</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">sticky</span><span class="o">=</span><span class="n">tk</span><span class="o">.</span><span class="n">EW</span><span class="p">)</span>
+            <span class="n">widgets</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="n">key</span><span class="p">])</span>
+            <span class="n">row</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;use damping&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">()</span> <span class="o">!=</span> <span class="s2">&quot;no&quot;</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;damping percentage&quot;</span><span class="p">,</span> <span class="s2">&quot;damping convergence&quot;</span><span class="p">):</span>
+                <span class="bp">self</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">row</span><span class="o">=</span><span class="n">row</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">sticky</span><span class="o">=</span><span class="n">tk</span><span class="o">.</span><span class="n">EW</span><span class="p">)</span>
+                <span class="n">widgets2</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="n">key</span><span class="p">])</span>
+                <span class="n">row</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;use level shift&quot;</span><span class="p">,):</span>
+            <span class="bp">self</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">row</span><span class="o">=</span><span class="n">row</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">columnspan</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">sticky</span><span class="o">=</span><span class="n">tk</span><span class="o">.</span><span class="n">EW</span><span class="p">)</span>
+            <span class="n">widgets</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="n">key</span><span class="p">])</span>
+            <span class="n">row</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;use level shift&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">()</span> <span class="o">!=</span> <span class="s2">&quot;no&quot;</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;level shift&quot;</span><span class="p">,</span> <span class="s2">&quot;level shift convergence&quot;</span><span class="p">):</span>
+                <span class="bp">self</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">row</span><span class="o">=</span><span class="n">row</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">sticky</span><span class="o">=</span><span class="n">tk</span><span class="o">.</span><span class="n">EW</span><span class="p">)</span>
+                <span class="n">widgets2</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="n">key</span><span class="p">])</span>
+                <span class="n">row</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;use soscf&quot;</span><span class="p">,):</span>
+            <span class="bp">self</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">row</span><span class="o">=</span><span class="n">row</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">columnspan</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">sticky</span><span class="o">=</span><span class="n">tk</span><span class="o">.</span><span class="n">EW</span><span class="p">)</span>
+            <span class="n">widgets</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="n">key</span><span class="p">])</span>
+            <span class="n">row</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;use soscf&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">()</span> <span class="o">!=</span> <span class="s2">&quot;no&quot;</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="p">(</span>
+                <span class="s2">&quot;soscf starting convergence&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;soscf convergence&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;soscf max iterations&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;soscf print iterations&quot;</span><span class="p">,</span>
+            <span class="p">):</span>
+                <span class="bp">self</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">row</span><span class="o">=</span><span class="n">row</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">sticky</span><span class="o">=</span><span class="n">tk</span><span class="o">.</span><span class="n">EW</span><span class="p">)</span>
+                <span class="n">widgets2</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="n">key</span><span class="p">])</span>
+                <span class="n">row</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="n">frame</span><span class="o">.</span><span class="n">columnconfigure</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">minsize</span><span class="o">=</span><span class="mi">150</span><span class="p">)</span>
+        <span class="n">sw</span><span class="o">.</span><span class="n">align_labels</span><span class="p">(</span><span class="n">widgets</span><span class="p">,</span> <span class="n">sticky</span><span class="o">=</span><span class="n">tk</span><span class="o">.</span><span class="n">E</span><span class="p">)</span>
+        <span class="n">sw</span><span class="o">.</span><span class="n">align_labels</span><span class="p">(</span><span class="n">widgets2</span><span class="p">,</span> <span class="n">sticky</span><span class="o">=</span><span class="n">tk</span><span class="o">.</span><span class="n">E</span><span class="p">)</span></div></div>
 </pre></div>
 
             </article>
