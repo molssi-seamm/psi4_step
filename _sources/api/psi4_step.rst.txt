@@ -148,6 +148,30 @@ psi4\_step.psi4\_step module
    :undoc-members:
    :show-inheritance:
 
+psi4\_step.thermochemistry module
+---------------------------------
+
+.. automodule:: psi4_step.thermochemistry
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+psi4\_step.thermochemistry\_parameters module
+---------------------------------------------
+
+.. automodule:: psi4_step.thermochemistry_parameters
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+psi4\_step.thermochemistry\_step module
+---------------------------------------
+
+.. automodule:: psi4_step.thermochemistry_step
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 psi4\_step.tk\_accelerated\_optimization module
 -----------------------------------------------
 
@@ -184,6 +208,14 @@ psi4\_step.tk\_psi4 module
 --------------------------
 
 .. automodule:: psi4_step.tk_psi4
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+psi4\_step.tk\_thermochemistry module
+-------------------------------------
+
+.. automodule:: psi4_step.tk_thermochemistry
    :members:
    :undoc-members:
    :show-inheritance:

@@ -8,7 +8,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>psi4_step.tk_initialization &#8212; SEAMM Psi4 Plug-in 2023.6.4 documentation</title>
+    <title>psi4_step.tk_thermochemistry &#8212; SEAMM Psi4 Plug-in 2023.6.4 documentation</title>
   
   
   
@@ -51,7 +51,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     <script src="../../_static/clipboard.min.js"></script>
     <script src="../../_static/copybutton.js"></script>
     <script src="../../_static/design-tabs.js"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/psi4_step/tk_initialization';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/psi4_step/tk_thermochemistry';</script>
 
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -458,7 +458,7 @@ document.write(`
     
     <li class="breadcrumb-item"><a href="../index.html" class="nav-link">Module code</a></li>
     
-    <li class="breadcrumb-item active" aria-current="page">psi4_step.tk_initialization</li>
+    <li class="breadcrumb-item active" aria-current="page">psi4_step.tk_thermochemistry</li>
   </ul>
 </nav>
 </div>
@@ -475,46 +475,91 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article" role="main">
                   
-  <h1>Source code for psi4_step.tk_initialization</h1><div class="highlight"><pre>
+  <h1>Source code for psi4_step.tk_thermochemistry</h1><div class="highlight"><pre>
 <span></span><span class="c1"># -*- coding: utf-8 -*-</span>
 
-<span class="sd">&quot;&quot;&quot;The graphical part of a Psi4 Initialization node&quot;&quot;&quot;</span>
+<span class="sd">&quot;&quot;&quot;The graphical part of a Thermochemistry step&quot;&quot;&quot;</span>
 
 <span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">import</span> <span class="nn">tkinter</span> <span class="k">as</span> <span class="nn">tk</span>
+<span class="kn">import</span> <span class="nn">tkinter.ttk</span> <span class="k">as</span> <span class="nn">ttk</span>
 
-<span class="kn">import</span> <span class="nn">seamm</span>
+<span class="kn">import</span> <span class="nn">psi4_step</span>
 <span class="kn">import</span> <span class="nn">seamm_widgets</span> <span class="k">as</span> <span class="nn">sw</span>
 
 <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="TkInitialization"><a class="viewcode-back" href="../../api/psi4_step.html#psi4_step.tk_initialization.TkInitialization">[docs]</a><span class="k">class</span> <span class="nc">TkInitialization</span><span class="p">(</span><span class="n">seamm</span><span class="o">.</span><span class="n">TkNode</span><span class="p">):</span>
+<div class="viewcode-block" id="TkThermochemistry"><a class="viewcode-back" href="../../api/psi4_step.html#psi4_step.tk_thermochemistry.TkThermochemistry">[docs]</a><span class="k">class</span> <span class="nc">TkThermochemistry</span><span class="p">(</span><span class="n">psi4_step</span><span class="o">.</span><span class="n">TkEnergy</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    The graphical part of a Thermochemistry step in a flowchart.</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    tk_flowchart : TkFlowchart = None</span>
+<span class="sd">        The flowchart that we belong to.</span>
+<span class="sd">    node : Node = None</span>
+<span class="sd">        The corresponding node of the non-graphical flowchart</span>
+<span class="sd">    canvas: tkCanvas = None</span>
+<span class="sd">        The Tk Canvas to draw on</span>
+<span class="sd">    dialog : Dialog</span>
+<span class="sd">        The Pmw dialog object</span>
+<span class="sd">    x : int = None</span>
+<span class="sd">        The x-coordinate of the center of the picture of the node</span>
+<span class="sd">    y : int = None</span>
+<span class="sd">        The y-coordinate of the center of the picture of the node</span>
+<span class="sd">    w : int = 200</span>
+<span class="sd">        The width in pixels of the picture of the node</span>
+<span class="sd">    h : int = 50</span>
+<span class="sd">        The height in pixels of the picture of the node</span>
+<span class="sd">    self[widget] : dict</span>
+<span class="sd">        A dictionary of tk widgets built using the information</span>
+<span class="sd">        contained in Thermochemistry_parameters.py</span>
+
+<span class="sd">    See Also</span>
+<span class="sd">    --------</span>
+<span class="sd">    Thermochemistry, TkThermochemistry,</span>
+<span class="sd">    ThermochemistryParameters,</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">tk_flowchart</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">node</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">canvas</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-        <span class="n">x</span><span class="o">=</span><span class="mi">120</span><span class="p">,</span>
-        <span class="n">y</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
+        <span class="n">x</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">y</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">w</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span>
         <span class="n">h</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>
         <span class="n">my_logger</span><span class="o">=</span><span class="n">logger</span><span class="p">,</span>
     <span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize the graphical Tk Psi4 initialization step</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initialize a graphical node.</span>
 
-<span class="sd">        Keyword arguments:</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        tk_flowchart: Tk_Flowchart</span>
+<span class="sd">            The graphical flowchart that we are in.</span>
+<span class="sd">        node: Node</span>
+<span class="sd">            The non-graphical node for this step.</span>
+<span class="sd">        namespace: str</span>
+<span class="sd">            The stevedore namespace for finding sub-nodes.</span>
+<span class="sd">        canvas: Canvas</span>
+<span class="sd">           The Tk canvas to draw on.</span>
+<span class="sd">        x: float</span>
+<span class="sd">            The x position of the nodes center on the canvas.</span>
+<span class="sd">        y: float</span>
+<span class="sd">            The y position of the nodes cetner on the canvas.</span>
+<span class="sd">        w: float</span>
+<span class="sd">            The nodes graphical width, in pixels.</span>
+<span class="sd">        h: float</span>
+<span class="sd">            The nodes graphical height, in pixels.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        None</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">results_widgets</span> <span class="o">=</span> <span class="p">[]</span>
-
-        <span class="c1"># Set the logging level for this module if requested</span>
-        <span class="c1"># if &#39;psi4_tk_initialization_log_level&#39; in self.options:</span>
-        <span class="c1">#     my_logger.setLevel(self.options.psi4_tk_initialization_log_level)</span>
-        <span class="c1">#     my_logger.critical(</span>
-        <span class="c1">#         &#39;Set log level to {}&#39;.format(</span>
-        <span class="c1">#             self.options.psi4_tk_initialization_log_level</span>
-        <span class="c1">#         )</span>
-        <span class="c1">#     )</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dialog</span> <span class="o">=</span> <span class="kc">None</span>
 
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
             <span class="n">tk_flowchart</span><span class="o">=</span><span class="n">tk_flowchart</span><span class="p">,</span>
@@ -527,43 +572,112 @@ document.write(`
             <span class="n">my_logger</span><span class="o">=</span><span class="n">my_logger</span><span class="p">,</span>
         <span class="p">)</span>
 
-<div class="viewcode-block" id="TkInitialization.right_click"><a class="viewcode-back" href="../../api/psi4_step.html#psi4_step.tk_initialization.TkInitialization.right_click">[docs]</a>    <span class="k">def</span> <span class="nf">right_click</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Probably need to add our dialog...&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="TkThermochemistry.create_dialog"><a class="viewcode-back" href="../../api/psi4_step.html#psi4_step.tk_thermochemistry.TkThermochemistry.create_dialog">[docs]</a>    <span class="k">def</span> <span class="nf">create_dialog</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create the dialog. A set of widgets will be chosen by default</span>
+<span class="sd">        based on what is specified in the Thermochemistry_parameters</span>
+<span class="sd">        module.</span>
 
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">right_click</span><span class="p">(</span><span class="n">event</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">popup_menu</span><span class="o">.</span><span class="n">add_command</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s2">&quot;Edit..&quot;</span><span class="p">,</span> <span class="n">command</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">edit</span><span class="p">)</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        None</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">popup_menu</span><span class="o">.</span><span class="n">tk_popup</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">x_root</span><span class="p">,</span> <span class="n">event</span><span class="o">.</span><span class="n">y_root</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span></div>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        None</span>
 
-<div class="viewcode-block" id="TkInitialization.create_dialog"><a class="viewcode-back" href="../../api/psi4_step.html#psi4_step.tk_initialization.TkInitialization.create_dialog">[docs]</a>    <span class="k">def</span> <span class="nf">create_dialog</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Edit Psi4 Initialization Step&quot;</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create the dialog!&quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Creating the dialog&quot;</span><span class="p">)</span>
-        <span class="n">frame</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">create_dialog</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">)</span>
+<span class="sd">        See Also</span>
+<span class="sd">        --------</span>
+<span class="sd">        TkThermochemistry.reset_dialog</span>
+<span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="c1"># Create all the widgets</span>
+        <span class="n">frame</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">create_dialog</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;Thermochemistry&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Shortcut for parameters</span>
         <span class="n">P</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">node</span><span class="o">.</span><span class="n">parameters</span>
-        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">P</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;results&quot;</span><span class="p">,</span> <span class="s2">&quot;extra keywords&quot;</span><span class="p">,</span> <span class="s2">&quot;create tables&quot;</span><span class="p">):</span>
-                <span class="bp">self</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">P</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">widget</span><span class="p">(</span><span class="n">frame</span><span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Finished creating the dialog&quot;</span><span class="p">)</span></div>
+        <span class="c1"># Frame to isolate widgets</span>
+        <span class="n">thermo_frame</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;thermochemistry&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ttk</span><span class="o">.</span><span class="n">LabelFrame</span><span class="p">(</span>
+            <span class="n">frame</span><span class="p">,</span>
+            <span class="n">borderwidth</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
+            <span class="n">relief</span><span class="o">=</span><span class="s2">&quot;sunken&quot;</span><span class="p">,</span>
+            <span class="n">text</span><span class="o">=</span><span class="s2">&quot;Thermochemistry&quot;</span><span class="p">,</span>
+            <span class="n">labelanchor</span><span class="o">=</span><span class="s2">&quot;n&quot;</span><span class="p">,</span>
+            <span class="n">padding</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="c1"># Then create the widgets</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">psi4_step</span><span class="o">.</span><span class="n">ThermochemistryParameters</span><span class="o">.</span><span class="n">parameters</span><span class="p">:</span>
+            <span class="bp">self</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">P</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">widget</span><span class="p">(</span><span class="n">thermo_frame</span><span class="p">)</span>
 
-<div class="viewcode-block" id="TkInitialization.reset_dialog"><a class="viewcode-back" href="../../api/psi4_step.html#psi4_step.tk_initialization.TkInitialization.reset_dialog">[docs]</a>    <span class="k">def</span> <span class="nf">reset_dialog</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">widget</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="c1"># and binding to change as needed</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;use existing parameters&quot;</span><span class="p">,):</span>
+            <span class="bp">self</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">combobox</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span class="s2">&quot;&lt;&lt;ComboboxSelected&gt;&gt;&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">reset_thermochemistry</span><span class="p">)</span>
+            <span class="bp">self</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">combobox</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span class="s2">&quot;&lt;Return&gt;&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">reset_thermochemistry</span><span class="p">)</span>
+            <span class="bp">self</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">combobox</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span class="s2">&quot;&lt;FocusOut&gt;&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">reset_thermochemistry</span><span class="p">)</span>
+
+        <span class="c1"># Top level needs to call reset_dialog</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">node</span><span class="o">.</span><span class="n">calculation</span> <span class="o">==</span> <span class="s2">&quot;thermochemistry&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">reset_dialog</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="n">frame</span></div>
+
+<div class="viewcode-block" id="TkThermochemistry.reset_dialog"><a class="viewcode-back" href="../../api/psi4_step.html#psi4_step.tk_thermochemistry.TkThermochemistry.reset_dialog">[docs]</a>    <span class="k">def</span> <span class="nf">reset_dialog</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">widget</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">row</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Layout the widgets in the dialog.</span>
+
+<span class="sd">        The widgets are chosen by default from the information in</span>
+<span class="sd">        Thermochemistry_parameter.</span>
+
+<span class="sd">        This function simply lays them out row by row with</span>
+<span class="sd">        aligned labels. You may wish a more complicated layout that</span>
+<span class="sd">        is controlled by values of some of the control parameters.</span>
+<span class="sd">        If so, edit or override this method</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        widget : Tk Widget = None</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        None</span>
+
+<span class="sd">        See Also</span>
+<span class="sd">        --------</span>
+<span class="sd">        TkThermochemistry.create_dialog</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Remove any widgets previously packed</span>
         <span class="n">frame</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;frame&quot;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">row</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">slave</span> <span class="ow">in</span> <span class="n">frame</span><span class="o">.</span><span class="n">grid_slaves</span><span class="p">():</span>
+                <span class="n">slave</span><span class="o">.</span><span class="n">grid_forget</span><span class="p">()</span>
+
+        <span class="c1"># Shortcut for parameters</span>
+        <span class="n">P</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">node</span><span class="o">.</span><span class="n">parameters</span>
+
+        <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;thermochemistry&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">row</span><span class="o">=</span><span class="n">row</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">row</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">reset_thermochemistry</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">P</span><span class="p">[</span><span class="s2">&quot;use existing parameters&quot;</span><span class="p">]:</span>
+            <span class="n">row</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">reset_dialog</span><span class="p">(</span><span class="n">row</span><span class="o">=</span><span class="n">row</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">reset_calculation</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">row</span></div>
+
+<div class="viewcode-block" id="TkThermochemistry.reset_thermochemistry"><a class="viewcode-back" href="../../api/psi4_step.html#psi4_step.tk_thermochemistry.TkThermochemistry.reset_thermochemistry">[docs]</a>    <span class="k">def</span> <span class="nf">reset_thermochemistry</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">widget</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="n">frame</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;thermochemistry&quot;</span><span class="p">]</span>
         <span class="k">for</span> <span class="n">slave</span> <span class="ow">in</span> <span class="n">frame</span><span class="o">.</span><span class="n">grid_slaves</span><span class="p">():</span>
             <span class="n">slave</span><span class="o">.</span><span class="n">grid_forget</span><span class="p">()</span>
 
         <span class="n">widgets</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">row</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;basis&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">row</span><span class="o">=</span><span class="n">row</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">sticky</span><span class="o">=</span><span class="n">tk</span><span class="o">.</span><span class="n">EW</span><span class="p">)</span>
-        <span class="n">widgets</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="s2">&quot;basis&quot;</span><span class="p">])</span>
-        <span class="n">row</span> <span class="o">+=</span> <span class="mi">1</span>
-        <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;symmetry_tolerance&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">row</span><span class="o">=</span><span class="n">row</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">sticky</span><span class="o">=</span><span class="n">tk</span><span class="o">.</span><span class="n">EW</span><span class="p">)</span>
-        <span class="n">widgets</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="s2">&quot;symmetry_tolerance&quot;</span><span class="p">])</span>
-        <span class="n">row</span> <span class="o">+=</span> <span class="mi">1</span>
-        <span class="n">sw</span><span class="o">.</span><span class="n">align_labels</span><span class="p">(</span><span class="n">widgets</span><span class="p">)</span>
 
-        <span class="k">return</span> <span class="n">row</span></div></div>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;use existing parameters&quot;</span><span class="p">,</span> <span class="s2">&quot;T&quot;</span><span class="p">,</span> <span class="s2">&quot;P&quot;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">row</span><span class="o">=</span><span class="n">row</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">sticky</span><span class="o">=</span><span class="n">tk</span><span class="o">.</span><span class="n">EW</span><span class="p">)</span>
+            <span class="n">widgets</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="n">key</span><span class="p">])</span>
+            <span class="n">row</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="n">sw</span><span class="o">.</span><span class="n">align_labels</span><span class="p">(</span><span class="n">widgets</span><span class="p">)</span></div></div>
 </pre></div>
 
                 </article>

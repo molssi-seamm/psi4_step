@@ -8,7 +8,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>psi4_step.tk_initialization &#8212; SEAMM Psi4 Plug-in 2023.6.4 documentation</title>
+    <title>psi4_step.thermochemistry_parameters &#8212; SEAMM Psi4 Plug-in 2023.6.4 documentation</title>
   
   
   
@@ -51,7 +51,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     <script src="../../_static/clipboard.min.js"></script>
     <script src="../../_static/copybutton.js"></script>
     <script src="../../_static/design-tabs.js"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/psi4_step/tk_initialization';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/psi4_step/thermochemistry_parameters';</script>
 
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -458,7 +458,7 @@ document.write(`
     
     <li class="breadcrumb-item"><a href="../index.html" class="nav-link">Module code</a></li>
     
-    <li class="breadcrumb-item active" aria-current="page">psi4_step.tk_initialization</li>
+    <li class="breadcrumb-item active" aria-current="page">psi4_step.thermochemistry_parameters</li>
   </ul>
 </nav>
 </div>
@@ -475,95 +475,146 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article" role="main">
                   
-  <h1>Source code for psi4_step.tk_initialization</h1><div class="highlight"><pre>
+  <h1>Source code for psi4_step.thermochemistry_parameters</h1><div class="highlight"><pre>
 <span></span><span class="c1"># -*- coding: utf-8 -*-</span>
-
-<span class="sd">&quot;&quot;&quot;The graphical part of a Psi4 Initialization node&quot;&quot;&quot;</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Control parameters for the Thermochemistry step in a Psi4 flowchart</span>
+<span class="sd">&quot;&quot;&quot;</span>
 
 <span class="kn">import</span> <span class="nn">logging</span>
-<span class="kn">import</span> <span class="nn">tkinter</span> <span class="k">as</span> <span class="nn">tk</span>
 
-<span class="kn">import</span> <span class="nn">seamm</span>
-<span class="kn">import</span> <span class="nn">seamm_widgets</span> <span class="k">as</span> <span class="nn">sw</span>
+<span class="kn">from</span> <span class="nn">.energy_parameters</span> <span class="kn">import</span> <span class="n">EnergyParameters</span>
 
 <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="TkInitialization"><a class="viewcode-back" href="../../api/psi4_step.html#psi4_step.tk_initialization.TkInitialization">[docs]</a><span class="k">class</span> <span class="nc">TkInitialization</span><span class="p">(</span><span class="n">seamm</span><span class="o">.</span><span class="n">TkNode</span><span class="p">):</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span>
-        <span class="n">tk_flowchart</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-        <span class="n">node</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-        <span class="n">canvas</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-        <span class="n">x</span><span class="o">=</span><span class="mi">120</span><span class="p">,</span>
-        <span class="n">y</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
-        <span class="n">w</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span>
-        <span class="n">h</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>
-        <span class="n">my_logger</span><span class="o">=</span><span class="n">logger</span><span class="p">,</span>
-    <span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize the graphical Tk Psi4 initialization step</span>
+<div class="viewcode-block" id="ThermochemistryParameters"><a class="viewcode-back" href="../../api/psi4_step.html#psi4_step.thermochemistry_parameters.ThermochemistryParameters">[docs]</a><span class="k">class</span> <span class="nc">ThermochemistryParameters</span><span class="p">(</span><span class="n">EnergyParameters</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    The control parameters for Thermochemistry.</span>
 
-<span class="sd">        Keyword arguments:</span>
+<span class="sd">    You need to replace the &quot;time&quot; entry in dictionary below these comments with the</span>
+<span class="sd">    definitions of parameters to control this step. The keys are parameters for the</span>
+<span class="sd">    current plugin,the values are dictionaries as outlined below.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    ::</span>
+
+<span class="sd">        parameters = {</span>
+<span class="sd">            &quot;time&quot;: {</span>
+<span class="sd">                &quot;default&quot;: 100.0,</span>
+<span class="sd">                &quot;kind&quot;: &quot;float&quot;,</span>
+<span class="sd">                &quot;default_units&quot;: &quot;ps&quot;,</span>
+<span class="sd">                &quot;enumeration&quot;: tuple(),</span>
+<span class="sd">                &quot;format_string&quot;: &quot;.1f&quot;,</span>
+<span class="sd">                &quot;description&quot;: &quot;Simulation time:&quot;,</span>
+<span class="sd">                &quot;help_text&quot;: (&quot;The time to simulate in the dynamics run.&quot;)</span>
+<span class="sd">            },</span>
+<span class="sd">        }</span>
+
+<span class="sd">    parameters : {str: {str: str}}</span>
+<span class="sd">        A dictionary containing the parameters for the current step.</span>
+<span class="sd">        Each key of the dictionary is a dictionary that contains the</span>
+<span class="sd">        the following keys:</span>
+
+<span class="sd">    parameters[&quot;default&quot;] :</span>
+<span class="sd">        The default value of the parameter, used to reset it.</span>
+
+<span class="sd">    parameters[&quot;kind&quot;] : enum()</span>
+<span class="sd">        Specifies the kind of a variable. One of  &quot;integer&quot;, &quot;float&quot;, &quot;string&quot;,</span>
+<span class="sd">        &quot;boolean&quot;, or &quot;enum&quot;</span>
+
+<span class="sd">        While the &quot;kind&quot; of a variable might be a numeric value, it may still have</span>
+<span class="sd">        enumerated custom values meaningful to the user. For instance, if the parameter</span>
+<span class="sd">        is a convergence criterion for an optimizer, custom values like &quot;normal&quot;,</span>
+<span class="sd">        &quot;precise&quot;, etc, might be adequate. In addition, any parameter can be set to a</span>
+<span class="sd">        variable of expression, indicated by having &quot;$&quot; as the first character in the</span>
+<span class="sd">        field. For example, $OPTIMIZER_CONV.</span>
+
+<span class="sd">    parameters[&quot;default_units&quot;] : str</span>
+<span class="sd">        The default units, used for resetting the value.</span>
+
+<span class="sd">    parameters[&quot;enumeration&quot;]: tuple</span>
+<span class="sd">        A tuple of enumerated values.</span>
+
+<span class="sd">    parameters[&quot;format_string&quot;]: str</span>
+<span class="sd">        A format string for &quot;pretty&quot; output.</span>
+
+<span class="sd">    parameters[&quot;description&quot;]: str</span>
+<span class="sd">        A short string used as a prompt in the GUI.</span>
+
+<span class="sd">    parameters[&quot;help_text&quot;]: str</span>
+<span class="sd">        A longer string to display as help for the user.</span>
+
+<span class="sd">    See Also</span>
+<span class="sd">    --------</span>
+<span class="sd">    Thermochemistry, TkThermochemistry, Thermochemistry</span>
+<span class="sd">    ThermochemistryParameters, ThermochemistryStep</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">parameters</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;use existing parameters&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="s2">&quot;yes&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;kind&quot;</span><span class="p">:</span> <span class="s2">&quot;boolean&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;default_units&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="s2">&quot;enumeration&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;yes&quot;</span><span class="p">,</span> <span class="s2">&quot;no&quot;</span><span class="p">),</span>
+            <span class="s2">&quot;format_string&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Use existing parameters&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;help_text&quot;</span><span class="p">:</span> <span class="s2">&quot;Whether to use existing parameters from the previous step&quot;</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;T&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="mf">298.15</span><span class="p">,</span>
+            <span class="s2">&quot;kind&quot;</span><span class="p">:</span> <span class="s2">&quot;float&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;default_units&quot;</span><span class="p">:</span> <span class="s2">&quot;K&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;enumeration&quot;</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">(),</span>
+            <span class="s2">&quot;format_string&quot;</span><span class="p">:</span> <span class="s2">&quot;.2f&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Temperature:&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;help_text&quot;</span><span class="p">:</span> <span class="s2">&quot;The temperature for the thermochemistry.&quot;</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;P&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span>
+            <span class="s2">&quot;kind&quot;</span><span class="p">:</span> <span class="s2">&quot;float&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;default_units&quot;</span><span class="p">:</span> <span class="s2">&quot;bar&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;enumeration&quot;</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">(),</span>
+            <span class="s2">&quot;format_string&quot;</span><span class="p">:</span> <span class="s2">&quot;.2f&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Pressure:&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;help_text&quot;</span><span class="p">:</span> <span class="s2">&quot;The pressure for the thermochemistry.&quot;</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="c1"># # Results handling ... uncomment if needed</span>
+        <span class="c1"># &quot;results&quot;: {</span>
+        <span class="c1">#     &quot;default&quot;: {},</span>
+        <span class="c1">#     &quot;kind&quot;: &quot;dictionary&quot;,</span>
+        <span class="c1">#     &quot;default_units&quot;: &quot;&quot;,</span>
+        <span class="c1">#     &quot;enumeration&quot;: tuple(),</span>
+        <span class="c1">#     &quot;format_string&quot;: &quot;&quot;,</span>
+        <span class="c1">#     &quot;description&quot;: &quot;results&quot;,</span>
+        <span class="c1">#     &quot;help_text&quot;: &quot;The results to save to variables or in tables.&quot;,</span>
+        <span class="c1"># },</span>
+    <span class="p">}</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">defaults</span><span class="o">=</span><span class="p">{},</span> <span class="n">data</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initialize the parameters, by default with the parameters defined above</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        defaults: dict</span>
+<span class="sd">            A dictionary of parameters to initialize. The parameters</span>
+<span class="sd">            above are used first and any given will override/add to them.</span>
+<span class="sd">        data: dict</span>
+<span class="sd">            A dictionary of keys and a subdictionary with value and units</span>
+<span class="sd">            for updating the current, default values.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        None</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">results_widgets</span> <span class="o">=</span> <span class="p">[]</span>
 
-        <span class="c1"># Set the logging level for this module if requested</span>
-        <span class="c1"># if &#39;psi4_tk_initialization_log_level&#39; in self.options:</span>
-        <span class="c1">#     my_logger.setLevel(self.options.psi4_tk_initialization_log_level)</span>
-        <span class="c1">#     my_logger.critical(</span>
-        <span class="c1">#         &#39;Set log level to {}&#39;.format(</span>
-        <span class="c1">#             self.options.psi4_tk_initialization_log_level</span>
-        <span class="c1">#         )</span>
-        <span class="c1">#     )</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;ThermochemistryParameters.__init__&quot;</span><span class="p">)</span>
 
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
-            <span class="n">tk_flowchart</span><span class="o">=</span><span class="n">tk_flowchart</span><span class="p">,</span>
-            <span class="n">node</span><span class="o">=</span><span class="n">node</span><span class="p">,</span>
-            <span class="n">canvas</span><span class="o">=</span><span class="n">canvas</span><span class="p">,</span>
-            <span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">,</span>
-            <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">,</span>
-            <span class="n">w</span><span class="o">=</span><span class="n">w</span><span class="p">,</span>
-            <span class="n">h</span><span class="o">=</span><span class="n">h</span><span class="p">,</span>
-            <span class="n">my_logger</span><span class="o">=</span><span class="n">my_logger</span><span class="p">,</span>
-        <span class="p">)</span>
-
-<div class="viewcode-block" id="TkInitialization.right_click"><a class="viewcode-back" href="../../api/psi4_step.html#psi4_step.tk_initialization.TkInitialization.right_click">[docs]</a>    <span class="k">def</span> <span class="nf">right_click</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Probably need to add our dialog...&quot;&quot;&quot;</span>
-
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">right_click</span><span class="p">(</span><span class="n">event</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">popup_menu</span><span class="o">.</span><span class="n">add_command</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s2">&quot;Edit..&quot;</span><span class="p">,</span> <span class="n">command</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">edit</span><span class="p">)</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">popup_menu</span><span class="o">.</span><span class="n">tk_popup</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">x_root</span><span class="p">,</span> <span class="n">event</span><span class="o">.</span><span class="n">y_root</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span></div>
-
-<div class="viewcode-block" id="TkInitialization.create_dialog"><a class="viewcode-back" href="../../api/psi4_step.html#psi4_step.tk_initialization.TkInitialization.create_dialog">[docs]</a>    <span class="k">def</span> <span class="nf">create_dialog</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Edit Psi4 Initialization Step&quot;</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create the dialog!&quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Creating the dialog&quot;</span><span class="p">)</span>
-        <span class="n">frame</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">create_dialog</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">)</span>
-
-        <span class="c1"># Create all the widgets</span>
-        <span class="n">P</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">node</span><span class="o">.</span><span class="n">parameters</span>
-        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">P</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;results&quot;</span><span class="p">,</span> <span class="s2">&quot;extra keywords&quot;</span><span class="p">,</span> <span class="s2">&quot;create tables&quot;</span><span class="p">):</span>
-                <span class="bp">self</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">P</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">widget</span><span class="p">(</span><span class="n">frame</span><span class="p">)</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Finished creating the dialog&quot;</span><span class="p">)</span></div>
-
-<div class="viewcode-block" id="TkInitialization.reset_dialog"><a class="viewcode-back" href="../../api/psi4_step.html#psi4_step.tk_initialization.TkInitialization.reset_dialog">[docs]</a>    <span class="k">def</span> <span class="nf">reset_dialog</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">widget</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="n">frame</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;frame&quot;</span><span class="p">]</span>
-        <span class="k">for</span> <span class="n">slave</span> <span class="ow">in</span> <span class="n">frame</span><span class="o">.</span><span class="n">grid_slaves</span><span class="p">():</span>
-            <span class="n">slave</span><span class="o">.</span><span class="n">grid_forget</span><span class="p">()</span>
-
-        <span class="n">widgets</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="n">row</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;basis&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">row</span><span class="o">=</span><span class="n">row</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">sticky</span><span class="o">=</span><span class="n">tk</span><span class="o">.</span><span class="n">EW</span><span class="p">)</span>
-        <span class="n">widgets</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="s2">&quot;basis&quot;</span><span class="p">])</span>
-        <span class="n">row</span> <span class="o">+=</span> <span class="mi">1</span>
-        <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;symmetry_tolerance&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">row</span><span class="o">=</span><span class="n">row</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">sticky</span><span class="o">=</span><span class="n">tk</span><span class="o">.</span><span class="n">EW</span><span class="p">)</span>
-        <span class="n">widgets</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="s2">&quot;symmetry_tolerance&quot;</span><span class="p">])</span>
-        <span class="n">row</span> <span class="o">+=</span> <span class="mi">1</span>
-        <span class="n">sw</span><span class="o">.</span><span class="n">align_labels</span><span class="p">(</span><span class="n">widgets</span><span class="p">)</span>
-
-        <span class="k">return</span> <span class="n">row</span></div></div>
+            <span class="n">defaults</span><span class="o">=</span><span class="p">{</span><span class="o">**</span><span class="n">ThermochemistryParameters</span><span class="o">.</span><span class="n">parameters</span><span class="p">,</span> <span class="o">**</span><span class="n">defaults</span><span class="p">},</span> <span class="n">data</span><span class="o">=</span><span class="n">data</span>
+        <span class="p">)</span></div>
 </pre></div>
 
                 </article>
