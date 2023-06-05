@@ -2,6 +2,11 @@
 History
 =======
 
+2023.6.4 -- Enhancements
+   * Added thermochemistry substep to compute the vibrational and other corrections for
+     thermochemistry.
+   * Added ability to create .cube files for plotting the density and orbitals.
+     
 2023.2.21 -- Added control over SCF convergence
    * Able to set convergence criteria.
    * Options for damping. level shifting and second-order SCF
