@@ -14,6 +14,7 @@ dependencies:
   - psutil
   - scipy
   - seamm
+  - tabulate
 
   # Testing
   - black
