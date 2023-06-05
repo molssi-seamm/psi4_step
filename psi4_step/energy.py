@@ -19,7 +19,7 @@ printer = printing.getPrinter("psi4")
 
 
 class Energy(seamm.Node):
-    def __init__(self, flowchart=None, title="Energy", extension=None):
+    def __init__(self, flowchart=None, title="Energy", extension=None, logger=logger):
         """Initialize the node"""
 
         logger.debug("Creating Energy {}".format(self))
@@ -91,6 +91,14 @@ class Energy(seamm.Node):
         else:
             text += " The spin will not be restricted and may not be a "
             text += "proper eigenstate."
+
+        # Plotting
+        if P["density"]:
+            if P["orbitals"]:
+                text += "\nThe alpha and beta electron, total, and spin densities, "
+                text += f"and orbitals {P['selected orbitals']} will be plotted."
+        elif P["orbitals"]:
+            text += f"\nThe orbitals {P['selected orbitals']} will be plotted."
 
         return self.header + "\n" + __(text, **P, indent=4 * " ").__str__()
 
@@ -277,7 +285,9 @@ class Energy(seamm.Node):
             lines.append(
                 "    json.dump(fix_multipoles(variables), fd, sort_keys=True, indent=3)"
             )
-        lines.append("")
+
+        # Orbital plots
+        lines.append(self.plot_input())
 
         return "\n".join(lines)
 
@@ -303,7 +313,7 @@ class Energy(seamm.Node):
                 create_tables=self.parameters["create tables"].get(),
             )
 
-            text = "The calculated energy is {Eelec:.6f} Ha."
+            text = "The calculated energy is {Eelec:.6f} E_h."
         else:
             data = {}
             tmp = str(json_file)
@@ -315,3 +325,106 @@ class Energy(seamm.Node):
             raise RuntimeError(text)
 
         printer.normal(__(text, **data, indent=self.indent + 4 * " "))
+
+    def plot_input(self):
+        """Generate the input for plotting to cube files."""
+        _, configuration = self.get_system_configuration(None)
+
+        P = self.parameters.current_values_to_dict(
+            context=seamm.flowchart_variables._data
+        )
+
+        tasks = []
+        if P["density"]:
+            tasks.append("density")
+
+        orbitals = []
+        if P["orbitals"]:
+            tasks.append("orbitals")
+            # and work out the orbitals
+            txt = P["selected orbitals"]
+            if txt == "all":
+                pass
+            else:
+                # Which is the HOMO orbital?
+                # This will not work with ECPs.
+                n_electrons = (
+                    sum(configuration.atoms.atomic_numbers) - configuration.charge
+                )
+                multiplicity = configuration.spin_multiplicity
+                homo = (n_electrons - (multiplicity - 1)) // 2 + (multiplicity - 1)
+
+                for chunk in txt.split(","):
+                    chunk = chunk.strip()
+                    if ":" in chunk or ".." in chunk:
+                        if ":" in chunk:
+                            first, last = chunk.split(":")
+                        elif ".." in chunk:
+                            first, last = chunk.split("..")
+                        first = first.strip().upper()
+                        last = last.strip().upper()
+
+                        if first == "HOMO":
+                            first = homo
+                        elif first == "LUMO":
+                            first = homo + 1
+                        else:
+                            first = int(first.removeprefix("HOMO").removeprefix("LUMO"))
+                            if first < 0:
+                                first = homo + first
+                            else:
+                                first = homo + 1 + first
+
+                        if last == "HOMO":
+                            last = homo
+                        elif last == "LUMO":
+                            last = homo + 1
+                        else:
+                            last = int(last.removeprefix("HOMO").removeprefix("LUMO"))
+                            if last < 0:
+                                last = homo + last
+                            else:
+                                last = homo + 1 + last
+
+                        orbitals.extend(range(first, last + 1))
+                    else:
+                        first = chunk.strip().upper()
+
+                        if first == "HOMO":
+                            first = homo
+                        elif first == "LUMO":
+                            first = homo + 1
+                        else:
+                            first = int(first.removeprefix("HOMO").removeprefix("LUMO"))
+                            if first < 0:
+                                first = homo + first
+                            else:
+                                first = homo + 1 + first
+                        orbitals.append(first)
+
+        if len(tasks) == 0:
+            return ""
+
+        lines = []
+        txt = "', '".join(tasks)
+        lines.append("")
+        lines.append("# Cube files for density and orbitals")
+        lines.append(f"set cubeprop_tasks ['{txt}']")
+        if len(orbitals) > 0:
+            txt = ", ".join([f"{i}, {-i}" for i in orbitals])
+            lines.append(f"set cubeprop_orbitals [{txt}]")
+
+        lines.append("")
+        lines.append("cubeprop(wfn)")
+        lines.append(
+            f"""
+# Prefix the files with the substep number
+paths = Path.cwd().glob('*.cube')
+for path in paths:
+    name = path.name
+    newpath = path.with_name('@{self._id[-1]}+' + name)
+    path.rename(newpath)
+"""
+        )
+
+        return "\n".join(lines)

@@ -272,10 +272,45 @@ class EnergyParameters(seamm.Parameters):
         },
     }
 
+    output = {
+        "density": {
+            "default": "no",
+            "kind": "boolean",
+            "default_units": "",
+            "enumeration": ("yes", "no"),
+            "format_string": "",
+            "description": "Plot total density:",
+            "help_text": "Whether to plot the total charge density.",
+        },
+        "orbitals": {
+            "default": "no",
+            "kind": "boolean",
+            "default_units": "",
+            "enumeration": ("yes", "no"),
+            "format_string": "",
+            "description": "Plot orbitals:",
+            "help_text": "Whether to plot orbitals.",
+        },
+        "selected orbitals": {
+            "default": "-1, HOMO, LUMO, +1",
+            "kind": "string",
+            "default_units": "",
+            "enumeration": ("all", "-1, HOMO, LUMO, +1"),
+            "format_string": "",
+            "description": "Selected orbitals:",
+            "help_text": "Which orbitals to plot.",
+        },
+    }
+
     def __init__(self, defaults={}, data=None):
         """Initialize the instance, by default from the default
         parameters given in the class"""
 
         super().__init__(
-            defaults={**EnergyParameters.parameters, **defaults}, data=data
+            defaults={
+                **EnergyParameters.parameters,
+                **EnergyParameters.output,
+                **defaults,
+            },
+            data=data,
         )

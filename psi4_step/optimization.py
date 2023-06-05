@@ -19,7 +19,13 @@ printer = printing.getPrinter("psi4")
 
 
 class Optimization(psi4_step.Energy):
-    def __init__(self, flowchart=None, title="Optimization", extension=None):
+    def __init__(
+        self,
+        flowchart=None,
+        title="Optimization",
+        extension=None,
+        logger=logger,
+    ):
         """Initialize the node"""
 
         logger.debug("Creating Optimization {}".format(self))

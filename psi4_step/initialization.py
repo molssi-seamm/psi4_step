@@ -87,7 +87,7 @@ class Initialization(seamm.Node):
 
         result.append(f"set basis {P['basis']}")
         result.append("")
-        # result.append(f"initial.symmetrize({P['symmetry_tolerance']})")
+        result.append(f"initial.symmetrize({P['symmetry_tolerance']})")
         result.append("point_group = initial.point_group().symbol()")
 
         # Dump the properties to a json file
