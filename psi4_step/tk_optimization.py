@@ -83,7 +83,7 @@ class TkOptimization(psi4_step.TkEnergy):
         logger.debug("TkOptimization.create_dialog")
 
         # Let parent classes do their thing.
-        super().create_dialog(title=title)
+        frame = super().create_dialog(title=title)
 
         # Shortcut for parameters
         P = self.node.parameters
@@ -92,7 +92,7 @@ class TkOptimization(psi4_step.TkEnergy):
 
         # Frame to isolate widgets
         opt_frame = self["optimization"] = ttk.LabelFrame(
-            self["frame"],
+            frame,
             borderwidth=4,
             relief="sunken",
             text="Geometry Optimization",
@@ -115,6 +115,8 @@ class TkOptimization(psi4_step.TkEnergy):
         # Top level needs to call reset_dialog
         if self.node.calculation == "optimization":
             self.reset_dialog()
+
+        return frame
 
     def reset_dialog(self, widget=None):
         """Layout the widgets, letting our parents go first."""

@@ -135,24 +135,58 @@ class TkEnergy(seamm.TkNode):
             self[key].bind("<Return>", self.reset_convergence)
             self[key].bind("<FocusOut>", self.reset_convergence)
 
+        # A tab for output -- orbitals, etc.
+        notebook = self["notebook"]
+        self["output frame"] = oframe = ttk.Frame(notebook)
+        notebook.insert(self["results frame"], oframe, text="Output", sticky="new")
+
+        # Frame to isolate widgets
+        p_frame = self["plot frame"] = ttk.LabelFrame(
+            self["output frame"],
+            borderwidth=4,
+            relief="sunken",
+            text="Plots",
+            labelanchor="n",
+            padding=10,
+        )
+
+        for key in psi4_step.EnergyParameters.output:
+            self[key] = P[key].widget(p_frame)
+
+        # Set the callbacks for changes
+        for widget in ("orbitals",):
+            w = self[widget]
+            w.combobox.bind("<<ComboboxSelected>>", self.reset_plotting)
+            w.combobox.bind("<Return>", self.reset_plotting)
+            w.combobox.bind("<FocusOut>", self.reset_plotting)
+        p_frame.grid(row=0, column=0, sticky="new")
+        oframe.columnconfigure(0, weight=1)
+
+        self.reset_plotting()
+
         # Top level needs to call reset_dialog
         if self.node.calculation == "energy":
             self.reset_dialog()
 
         self.logger.debug("Finished creating the dialog")
 
-    def reset_dialog(self, widget=None):
+        return frame
+
+    def reset_dialog(self, row=0, widget=None):
         """Layout the widgets as needed for the current state"""
 
         frame = self["frame"]
-        for slave in frame.grid_slaves():
-            slave.grid_forget()
+        if row == 0:
+            for slave in frame.grid_slaves():
+                slave.grid_forget()
 
-        self["calculation"].grid(row=0, column=0)
+        self["calculation"].grid(row=row, column=0)
         self.reset_calculation()
-        self["convergence"].grid(row=1, column=0)
+        row += 1
+        self["convergence"].grid(row=row, column=0)
         self.reset_convergence()
-        return 2
+        row += 1
+        return row
 
     def reset_calculation(self, widget=None):
         level = self["level"].get()
@@ -291,3 +325,32 @@ class TkEnergy(seamm.TkNode):
         frame.columnconfigure(0, minsize=150)
         sw.align_labels(widgets, sticky=tk.E)
         sw.align_labels(widgets2, sticky=tk.E)
+
+    def reset_plotting(self, widget=None):
+        frame = self["plot frame"]
+        for slave in frame.grid_slaves():
+            slave.grid_forget()
+
+        plot_orbitals = self["orbitals"].get() == "yes"
+
+        widgets = []
+
+        row = 0
+        for key in (
+            "density",
+            "orbitals",
+        ):
+            self[key].grid(row=row, column=0, columnspan=4, sticky=tk.EW)
+            widgets.append(self[key])
+            row += 1
+
+        if plot_orbitals:
+            key = "selected orbitals"
+            self[key].grid(row=row, column=1, columnspan=4, sticky=tk.EW)
+            row += 1
+
+        sw.align_labels(widgets, sticky=tk.E)
+        frame.columnconfigure(0, minsize=50)
+        frame.columnconfigure(4, weight=1)
+
+        return row

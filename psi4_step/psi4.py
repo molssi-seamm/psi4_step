@@ -422,6 +422,7 @@ class Psi4(seamm.Node):
         input_data = []
         input_data.append("import json")
         input_data.append("import numpy as np")
+        input_data.append("from pathlib import Path")
         input_data.append("import pprint")
         input_data.append("")
         input_data.append(f"memory {memory}")
@@ -461,36 +462,55 @@ class Psi4(seamm.Node):
         directory = Path(self.directory)
         directory.mkdir(parents=True, exist_ok=True)
 
-        return_files = ["output.dat", "*properties.json", "*structure.json"]
-        exe_path = Path(options["psi4_path"])
-        env = {
-            "PSIPATH": str(exe_path),
-            "PATH": str(exe_path),
-        }
+        return_files = ["output.dat", "*.json", "*.cube"]
 
-        local = seamm.ExecLocal()
-        exe = exe_path / "psi4"
-        result = local.run(
-            cmd=[str(exe), f"-n {n_threads}"],
-            files=files,
-            return_files=return_files,
-            env=env,
-            directory=directory,
-            in_situ=True,
-        )  # yapf: disable
+        # Check for already having run
+        path = Path(self.directory) / "success.dat"
+        if path.exists():
+            result = {}
+            path = Path(self.directory) / "stdout.txt"
+            if path.exists():
+                result["stdout"] = path.read_text()
+            result["stderr"] = ""
+            failed = False
+        else:
+            exe_path = Path(options["psi4_path"])
+            env = {
+                "PSIPATH": str(exe_path),
+                "PATH": str(exe_path),
+            }
 
-        if result is None:
-            self.logger.error("There was an error running Psi4")
-            raise RuntimeError("There was an error running Psi4")
+            local = seamm.ExecLocal()
+            exe = exe_path / "psi4"
+            result = local.run(
+                cmd=[str(exe), f"-n {n_threads}"],
+                files=files,
+                return_files=return_files,
+                env=env,
+                directory=directory,
+                in_situ=True,
+            )  # yapf: disable
 
-        self.logger.debug("\n" + pprint.pformat(result))
+            if result is None:
+                self.logger.error("There was an error running Psi4")
+                raise RuntimeError("There was an error running Psi4")
 
-        failed = False
-        if "output.dat" in result["files"]:
-            if result["output.dat"]["data"] is not None:
-                if "*** Psi4 exiting successfully." not in result["output.dat"]["data"]:
-                    self.logger.warning("Psi4 did not complete successfully.")
-                    failed = True
+            self.logger.debug("\n" + pprint.pformat(result))
+
+            failed = False
+            if "output.dat" in result["files"]:
+                if result["output.dat"]["data"] is not None:
+                    if (
+                        "*** Psi4 exiting successfully."
+                        not in result["output.dat"]["data"]
+                    ):
+                        self.logger.warning("Psi4 did not complete successfully.")
+                        failed = True
+            if not failed:
+                # Write a small file to say that LAMMPS ran successfully, so cancel
+                # skip if rerunning.
+                path = Path(self.directory) / "success.dat"
+                path.write_text("success")
 
         # Analyze the results
         self.analyze()

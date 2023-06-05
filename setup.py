@@ -69,11 +69,13 @@ setup(
             'Psi4 = psi4_step:Psi4Step',
         ],
         'org.molssi.seamm.psi4': [
+            'Thermochemistry = psi4_step:ThermochemistryStep',
             'Energy = psi4_step:EnergyStep',
             'Initialization = psi4_step:InitializationStep',
             'Optimization = psi4_step:OptimizationStep',
         ],
         'org.molssi.seamm.psi4.tk': [
+            'Thermochemistry = psi4_step:ThermochemistryStep',
             'Energy = psi4_step:EnergyStep',
             'Initialization = psi4_step:InitializationStep',
             'Optimization = psi4_step:OptimizationStep',
