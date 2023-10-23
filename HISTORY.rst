@@ -2,9 +2,14 @@
 History
 =======
 
+2023.8.23 -- Fix for installation of Psi4
+   * Psi4 is now available on CondaForge, so install from there if requested.
+   * Psi4 crashes if asked to optimize and atom, so change to doing a single point
+     energy is optimization is requested for and atom.
+
 2023.8.22 -- Enhancement of orbital plots
    * Added structure to the orbital plots
-   * Fixed a bug if the default nouber of cores was not 'available'
+   * Fixed a bug if the default number of cores was not 'available'
 
 2023.6.4 -- Enhancements
    * Added thermochemistry substep to compute the vibrational and other corrections for

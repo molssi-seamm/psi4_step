@@ -1,9 +1,10 @@
 name: seamm-psi4
 channels:
-  - psi4
   - conda-forge
+  - conda-forge/label/libint_dev
 dependencies:
+  - geometric
   - python
     # Executables, etc.
   - psi4
-  - psi4-rt
+#  - psi4-rt

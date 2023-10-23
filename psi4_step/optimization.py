@@ -2,7 +2,6 @@
 
 """Setup and run Psi4"""
 
-import json
 import logging
 from pathlib import Path
 
@@ -74,6 +73,10 @@ class Optimization(psi4_step.Energy):
         directory = Path(self.directory)
         directory.mkdir(parents=True, exist_ok=True)
 
+        # Check for atoms and bypass optimization
+        if configuration.n_atoms == 1:
+            return super().get_input()
+
         # references = self.parent.references
 
         P = self.parameters.current_values_to_dict(
@@ -136,32 +139,3 @@ class Optimization(psi4_step.Energy):
         lines.append(super().get_input(calculation_type=calculation_type))
 
         return "\n".join(lines)
-
-    def analyze_sv(self, indent="", data={}, out=[]):
-        """Parse the output and generating the text output and store the
-        data in variables for other stages to access
-        """
-        # Read in the results from json
-        directory = Path(self.directory)
-        json_file = directory / "properties.json"
-        if json_file.exists():
-            with json_file.open() as fd:
-                data = json.load(fd)
-
-            # Put any requested results into variables or tables
-            self.store_results(
-                data=data,
-                create_tables=self.parameters["create tables"].get(),
-            )
-
-            text = "The calculated energy is {Eelec:.6f} Ha."
-        else:
-            data = {}
-            text = (
-                "\nThere are no results from Psi4. Perhaps it "
-                f"failed? Looking for {str(json_file)}."
-            )
-            printer.normal(__(text, **data, indent=self.indent + 4 * " "))
-            raise RuntimeError(text)
-
-        printer.normal(__(text, **data, indent=self.indent + 4 * " "))
