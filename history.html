@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>History &#8212; SEAMM Psi4 Plug-in 2023.10.22 documentation</title>
+    <title>History &#8212; SEAMM Psi4 Plug-in 2023.10.23 documentation</title>
   
   
   
@@ -46,7 +46,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-PQXXTJ2');</script>
 <!-- End Google Tag Manager -->
 
-    <script src="_static/documentation_options.js?v=cbfbbac7"></script>
+    <script src="_static/documentation_options.js?v=62bbcea1"></script>
     <script src="_static/doctools.js?v=888ff710"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/clipboard.min.js?v=a7894cd8"></script>
@@ -494,9 +494,15 @@ document.write(`
   <section id="history">
 <h1>History<a class="headerlink" href="#history" title="Link to this heading">#</a></h1>
 <dl class="simple">
+<dt>2023.8.23 – Fix for installation of Psi4</dt><dd><ul class="simple">
+<li><p>Psi4 is now available on CondaForge, so install from there if requested.</p></li>
+<li><p>Psi4 crashes if asked to optimize and atom, so change to doing a single point
+energy is optimization is requested for and atom.</p></li>
+</ul>
+</dd>
 <dt>2023.8.22 – Enhancement of orbital plots</dt><dd><ul class="simple">
 <li><p>Added structure to the orbital plots</p></li>
-<li><p>Fixed a bug if the default nouber of cores was not ‘available’</p></li>
+<li><p>Fixed a bug if the default number of cores was not ‘available’</p></li>
 </ul>
 </dd>
 <dt>2023.6.4 – Enhancements</dt><dd><ul class="simple">
