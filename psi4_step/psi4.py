@@ -358,7 +358,7 @@ class Psi4(seamm.Node):
         if n_threads < 1:
             n_threads = 1
         if seamm_options["ncores"] != "available":
-            n_threads = min(n_threads, int(options["max_cores"]))
+            n_threads = min(n_threads, int(options["ncores"]))
         self.logger.info(f"Psi4 will use {n_threads} threads.")
 
         # How much memory to use
@@ -531,21 +531,6 @@ class Psi4(seamm.Node):
             indent: str
                 An extra indentation for the output
         """
-
-        # Get the first real node
-        node = self.subflowchart.get_node("1").next()
-
-        # Loop over the subnodes, asking them to do their analysis
-        while node is not None:
-            for value in node.description:
-                printer.important(value)
-
-            node.analyze()
-
-            printer.normal("")
-
-            node = node.next()
-
         # Update the structure
         directory = Path(self.directory)
         structure_file = directory / "final_structure.json"
@@ -570,6 +555,20 @@ class Psi4(seamm.Node):
                     self.indent + "    Updated the system with the structure from Psi4",
                 )
                 printer.important("")
+
+        # Get the first real node
+        node = self.subflowchart.get_node("1").next()
+
+        # Loop over the subnodes, asking them to do their analysis
+        while node is not None:
+            for value in node.description:
+                printer.important(value)
+
+            node.analyze()
+
+            printer.normal("")
+
+            node = node.next()
 
     def _convert_structure(self, name=None, no_com=True, no_reorient=True):
         """Convert the structure to the input for Psi4."""

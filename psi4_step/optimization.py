@@ -137,15 +137,10 @@ class Optimization(psi4_step.Energy):
 
         return "\n".join(lines)
 
-    def analyze(self, indent="", data={}, out=[]):
+    def analyze_sv(self, indent="", data={}, out=[]):
         """Parse the output and generating the text output and store the
         data in variables for other stages to access
         """
-
-        # P = self.parameters.current_values_to_dict(
-        #     context=seamm.flowchart_variables._data
-        # )
-
         # Read in the results from json
         directory = Path(self.directory)
         json_file = directory / "properties.json"

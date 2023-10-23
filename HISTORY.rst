@@ -2,6 +2,10 @@
 History
 =======
 
+2023.8.22 -- Enhancement of orbital plots
+   * Added structure to the orbital plots
+   * Fixed a bug if the default nouber of cores was not 'available'
+
 2023.6.4 -- Enhancements
    * Added thermochemistry substep to compute the vibrational and other corrections for
      thermochemistry.

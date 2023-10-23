@@ -6,6 +6,8 @@ import json
 import logging
 from pathlib import Path
 
+from openbabel import openbabel
+
 import psi4_step
 import seamm
 import seamm.data
@@ -295,11 +297,6 @@ class Energy(seamm.Node):
         """Parse the output and generating the text output and store the
         data in variables for other stages to access
         """
-
-        # P = self.parameters.current_values_to_dict(
-        #     context=seamm.flowchart_variables._data
-        # )
-
         # Read in the results from json
         directory = Path(self.directory)
         json_file = directory / "properties.json"
@@ -323,6 +320,17 @@ class Energy(seamm.Node):
             )
             printer.normal(__(text, **data, indent=self.indent + 4 * " "))
             raise RuntimeError(text)
+
+        # Write the structure locally for use in density and orbital plots
+        system, configuration = self.get_system_configuration()
+        obConversion = openbabel.OBConversion()
+        obConversion.SetOutFormat("sdf")
+        obMol = configuration.to_OBMol(properties="all")
+        title = f"SEAMM={system.name}/{configuration.name}"
+        obMol.SetTitle(title)
+        sdf = obConversion.WriteString(obMol)
+        path = directory / "structure.sdf"
+        path.write_text(sdf)
 
         printer.normal(__(text, **data, indent=self.indent + 4 * " "))
 
