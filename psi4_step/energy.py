@@ -75,7 +75,8 @@ class Energy(seamm.Node):
             text = f"{calculation_type} using {method} with an "
             text += f"exchange-correlation potential of {functional}"
             if (
-                len(psi4_step.dft_functionals[functional]["dispersion"]) > 1
+                functional in psi4_step.dft_functionals
+                and len(psi4_step.dft_functionals[functional]["dispersion"]) > 1
                 and P["dispersion"] != "none"
             ):
                 text += f" with the {P['dispersion']} dispersion correction."

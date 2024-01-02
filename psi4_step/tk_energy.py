@@ -248,17 +248,18 @@ class TkEnergy(seamm.TkNode):
                 widgets2.append(self["freeze-cores"])
                 row += 1
         if self.node.method is None or self.node.method == "dft":
-            dispersions = psi4_step.dft_functionals[functional]["dispersion"]
-            if len(dispersions) > 1:
-                w = self["dispersion"]
-                w.config(values=dispersions)
-                if w.get() not in dispersions:
-                    w.value(dispersions[1])
-                w.grid(row=row, column=1, sticky=tk.W)
-                widgets2.append(self["dispersion"])
-                row += 1
+            if functional in psi4_step.dft_functionals:
+                dispersions = psi4_step.dft_functionals[functional]["dispersion"]
+                if len(dispersions) > 1:
+                    w = self["dispersion"]
+                    w.config(values=dispersions)
+                    if w.get() not in dispersions:
+                        w.value(dispersions[1])
+                    w.grid(row=row, column=1, sticky=tk.W)
+                    widgets2.append(self["dispersion"])
+                    row += 1
                 sw.align_labels(widgets2)
-            frame.columnconfigure(0, minsize=30)
+                frame.columnconfigure(0, minsize=30)
         self["spin-restricted"].grid(row=row, column=0, columnspan=2, sticky=tk.EW)
         widgets.append(self["spin-restricted"])
         row += 1
