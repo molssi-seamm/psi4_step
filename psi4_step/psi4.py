@@ -3,6 +3,7 @@
 """Non-graphical part of the Psi4 step in a SEAMM flowchart
 """
 
+import configparser
 import json
 import logging
 from pathlib import Path
@@ -480,18 +481,25 @@ class Psi4(seamm.Node):
                 "PATH": str(exe_path),
             }
 
-            local = seamm.ExecLocal()
-            exe = exe_path / "psi4"
-            result = local.run(
-                cmd=[str(exe), f"-n {n_threads}"],
+            # Read configuration file for Psi4
+            ini_dir = Path(seamm_options["root"]).expanduser()
+            config = configparser.ConfigParser()
+            config.read(ini_dir / "psi4.ini")
+
+            executor = self.flowchart.executor
+
+            result = executor.run(
+                cmd=["{code}", "-n", f"{n_threads}"],
+                config=config,
+                directory=self.directory,
                 files=files,
                 return_files=return_files,
                 env=env,
-                directory=directory,
                 in_situ=True,
-            )  # yapf: disable
+                shell=True,
+            )
 
-            if result is None:
+            if not result:
                 self.logger.error("There was an error running Psi4")
                 raise RuntimeError("There was an error running Psi4")
 
