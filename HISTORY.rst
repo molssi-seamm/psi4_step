@@ -1,6 +1,7 @@
 =======
 History
 =======
+2024.1.2 -- Changes to allow running in containers.
 
 2023.8.23 -- Fix for installation of Psi4
    * Psi4 is now available on CondaForge, so install from there if requested.

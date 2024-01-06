@@ -486,8 +486,8 @@ class Psi4(seamm.Node):
             config = configparser.ConfigParser()
             config.read(ini_dir / "psi4.ini")
 
+            # Get the default executor and run Psi4
             executor = self.flowchart.executor
-
             result = executor.run(
                 cmd=["{code}", "-n", f"{n_threads}"],
                 config=config,
