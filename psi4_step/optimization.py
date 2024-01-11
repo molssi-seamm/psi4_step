@@ -38,15 +38,22 @@ class Optimization(psi4_step.Energy):
 
         self.description = "A geometry optimization"
 
-    def description_text(self, P=None):
+    def description_text(
+        self,
+        P=None,
+        calculation_type="Geometry optimization",
+        configuration=None,
+    ):
         """Prepare information about what this node will do"""
 
         if not P:
             P = self.parameters.values_to_dict()
 
-        text = super().description_text(P=P, calculation_type="Geometry optimization")
+        text = super().description_text(
+            P=P, calculation_type=calculation_type, configuration=configuration
+        )
 
-        added = "The geometry optimization will use the {optimization method} "
+        added = "\nThe geometry optimization will use the {optimization method} "
         if P["max geometry steps"] == "default":
             added += "method, using the default maximum number of steps, which"
             added += " is based on the system size."
@@ -89,7 +96,13 @@ class Optimization(psi4_step.Energy):
                 PP[key] = "{:~P}".format(PP[key])
 
         self.description = []
-        self.description.append(__(self.description_text(PP), **PP, indent=self.indent))
+        self.description.append(
+            __(
+                self.description_text(PP, configuration=configuration),
+                **PP,
+                indent=self.indent,
+            )
+        )
 
         lines = []
         lines.append("")

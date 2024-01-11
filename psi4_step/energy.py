@@ -52,10 +52,15 @@ class Energy(seamm.Node):
         """The git version of this module."""
         return psi4_step.__git_revision__
 
-    def description_text(self, P=None, calculation_type="Single-point energy"):
+    def description_text(
+        self,
+        P=None,
+        calculation_type="Single-point energy",
+        configuration=None,
+    ):
         """Prepare information about what this node will do"""
 
-        if not P:
+        if P is not None:
             P = self.parameters.values_to_dict()
 
         if P["level"] == "recommended":
@@ -88,6 +93,17 @@ class Energy(seamm.Node):
         # Spin
         if P["spin-restricted"] == "yes":
             text += " The spin will be restricted to a pure eigenstate."
+        elif P["spin-restricted"] == "default":
+            if configuration is not None:
+                if configuration.spin_multiplicity == 1:
+                    text += " The spin will be restricted to a pure eigenstate."
+                else:
+                    text += " The spin will not be restricted and may not be a "
+                    text += "proper eigenstate."
+            else:
+                text += " The spin will be restricted to a pure "
+                text += "eigenstate for singlet states. Otherwise it will not "
+                text += "be restricted and may not be a proper eigenstate."
         elif self.is_expr(P["spin-restricted"]):
             text += " Whether the spin will be restricted to a pure "
             text += "eigenstate will be determined by {P['spin-restricted']}"
@@ -96,11 +112,21 @@ class Energy(seamm.Node):
             text += "proper eigenstate."
 
         # Plotting
-        if P["density"] != "no":
-            if P["orbitals"] != "no":
+        if isinstance(P["density"], str):
+            density = P["density"] != "no"
+        else:
+            density = P["density"]
+
+        if isinstance(P["orbitals"], str):
+            orbitals = P["orbitals"] != "no"
+        else:
+            orbitals = P["orbitals"]
+
+        if density:
+            if orbitals:
                 text += "\nThe alpha and beta electron, total, and spin densities, "
                 text += f"and orbitals {P['selected orbitals']} will be plotted."
-        elif P["orbitals"] != "no":
+        elif orbitals:
             text += f"\nThe orbitals {P['selected orbitals']} will be plotted."
 
         return self.header + "\n" + __(text, **P, indent=4 * " ").__str__()
@@ -123,7 +149,13 @@ class Energy(seamm.Node):
                 PP[key] = "{:~P}".format(PP[key])
 
         self.description = []
-        self.description.append(__(self.description_text(PP), **PP, indent=self.indent))
+        self.description.append(
+            __(
+                self.description_text(PP, configuration=configuration),
+                **PP,
+                indent=self.indent,
+            )
+        )
 
         lines = []
         if calculation_type == "energy":
