@@ -13,7 +13,6 @@ dependencies:
   - optking
   - scipy
   - seamm
-  - seamm-exec
   - tabulate
 
   # Testing
@@ -29,5 +28,6 @@ dependencies:
 
   # Pip-only installs
   - pip:
-    # Documentation
-    - sphinx-copybutton
+      - seamm-exec
+      # Documentation
+      - sphinx-copybutton
