@@ -11,9 +11,9 @@ dependencies:
   # Of the code
   - numpy
   - optking
-  - psutil
   - scipy
   - seamm
+  - seamm-exec
   - tabulate
 
   # Testing
