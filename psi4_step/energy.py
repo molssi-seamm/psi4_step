@@ -96,11 +96,11 @@ class Energy(seamm.Node):
             text += "proper eigenstate."
 
         # Plotting
-        if P["density"]:
-            if P["orbitals"]:
+        if P["density"] != "no":
+            if P["orbitals"] != "no":
                 text += "\nThe alpha and beta electron, total, and spin densities, "
                 text += f"and orbitals {P['selected orbitals']} will be plotted."
-        elif P["orbitals"]:
+        elif P["orbitals"] != "no":
             text += f"\nThe orbitals {P['selected orbitals']} will be plotted."
 
         return self.header + "\n" + __(text, **P, indent=4 * " ").__str__()
