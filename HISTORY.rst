@@ -1,6 +1,9 @@
 =======
 History
 =======
+2024.1.11 -- Changes to allow running in containers.
+   * Moved to the new executor and ensured it still runs directly.
+   * Fixed bugs in printing the summary output.
 
 2023.8.23 -- Fix for installation of Psi4
    * Psi4 is now available on CondaForge, so install from there if requested.

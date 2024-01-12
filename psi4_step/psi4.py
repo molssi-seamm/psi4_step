@@ -3,16 +3,15 @@
 """Non-graphical part of the Psi4 step in a SEAMM flowchart
 """
 
+import configparser
 import json
 import logging
 from pathlib import Path
 import pprint
 
-import psutil
-
 import psi4_step
 import seamm
-from seamm_util import ureg, Q_  # noqa: F401
+import seamm_exec
 import seamm_util.printing as printing
 from seamm_util.printing import FormattedText as __
 
@@ -238,13 +237,6 @@ class Psi4(seamm.Node):
         # Options for Psi4
         parser.add_argument(
             parser_name,
-            "--psi4-path",
-            default="",
-            help="the path to the Psi4 executable",
-        )
-
-        parser.add_argument(
-            parser_name,
             "--ncores",
             default="available",
             help="How many threads to use in Psi4",
@@ -324,7 +316,7 @@ class Psi4(seamm.Node):
         printer.important(self.header)
         printer.important("")
 
-        # Add the main citation for DFTB+
+        # Add the main citation for Psi4
         self.references.cite(
             raw=self._bibliography["doi:10.1063/5.0006002"],
             alias="psi4",
@@ -344,41 +336,39 @@ class Psi4(seamm.Node):
         options = self.options
         seamm_options = self.global_options
 
-        # How many processors does this node have?
-        n_cores = psutil.cpu_count(logical=False)
-        self.logger.info("The number of cores is {}".format(n_cores))
+        # Get the computational environment and set limits
+        ce = seamm_exec.computational_environment()
 
-        # How many threads to use
+        # Maximum number of threads
+        n_threads = ce["NTASKS"]
         if options["ncores"] == "available":
-            n_threads = n_cores
+            pass
         else:
             n_threads = int(options["ncores"])
-        if n_threads > n_cores:
-            n_threads = n_cores
-        if n_threads < 1:
-            n_threads = 1
+            if n_threads < 1:
+                n_threads = 1
         if seamm_options["ncores"] != "available":
-            n_threads = min(n_threads, int(options["ncores"]))
-        self.logger.info(f"Psi4 will use {n_threads} threads.")
+            tmp = int(seamm_options["ncores"])
+            if tmp < n_threads:
+                n_threads = tmp
+        ce["NTASKS"] = n_threads
 
-        # How much memory to use
-        svmem = psutil.virtual_memory()
-
+        # And memory
         if seamm_options["memory"] == "all":
-            mem_limit = svmem.total
+            mem_limit = ce["MEM_PER_NODE"]
         elif seamm_options["memory"] == "available":
             # For the default, 'available', use in proportion to number of
             # cores used
-            mem_limit = svmem.total * (n_threads / n_cores)
+            mem_limit = n_threads * ce["MEM_PER_CPU"]
         else:
             mem_limit = dehumanize(seamm_options["memory"])
 
         if options["memory"] == "all":
-            memory = svmem.total
+            memory = ce["MEM_PER_NODE"]
         elif options["memory"] == "available":
             # For the default, 'available', use in proportion to number of
             # cores used
-            memory = svmem.total * (n_threads / n_cores)
+            memory = n_threads * ce["MEM_PER_CPU"]
         else:
             memory = dehumanize(options["memory"])
 
@@ -395,11 +385,8 @@ class Psi4(seamm.Node):
         min_memory = dehumanize("250 MiB")
         if min_memory > memory:
             memory = min_memory
+        ce["MEM_PER_NODE"] = memory
         memory = humanize(memory, kilo=1024)
-
-        printer.important(
-            self.indent + f"    Psi4 will use {n_threads} threads and {memory} memory\n"
-        )
 
         # Work through the subflowchart to find out what to do.
         self.subflowchart.root_directory = self.flowchart.root_directory
@@ -408,15 +395,6 @@ class Psi4(seamm.Node):
 
         # Get the first real node
         node0 = self.subflowchart.get_node("1").next()
-
-        # See if this is a normal or special run
-        # node = node0
-        # while node is not None:
-        #     if isinstance(node, psi4_step.AcceleratedOptimization):
-        #         node.run(node0, memory, n_threads)
-        #         return next_node
-
-        #     node = node.next()
 
         # Start the input data
         input_data = []
@@ -474,24 +452,37 @@ class Psi4(seamm.Node):
             result["stderr"] = ""
             failed = False
         else:
-            exe_path = Path(options["psi4_path"])
-            env = {
-                "PSIPATH": str(exe_path),
-                "PATH": str(exe_path),
-            }
+            executor = self.flowchart.executor
 
-            local = seamm.ExecLocal()
-            exe = exe_path / "psi4"
-            result = local.run(
-                cmd=[str(exe), f"-n {n_threads}"],
+            # Read configuration file for Psi4
+            ini_dir = Path(seamm_options["root"]).expanduser()
+            full_config = configparser.ConfigParser()
+            full_config.read(ini_dir / "psi4.ini")
+            executor_type = executor.name
+            if executor_type not in full_config:
+                raise RuntimeError(
+                    f"No section for '{executor_type}' in Psi4 ini file "
+                    f"({ini_dir / 'psi4.ini'})"
+                )
+            config = dict(full_config.items(executor_type))
+
+            printer.important(
+                self.indent
+                + f"    Psi4 will use {ce['NTASKS']} threads and {memory} memory\n"
+            )
+
+            result = executor.run(
+                cmd=["{code}"],
+                config=config,
+                directory=self.directory,
                 files=files,
                 return_files=return_files,
-                env=env,
-                directory=directory,
                 in_situ=True,
-            )  # yapf: disable
+                shell=True,
+                ce=ce,
+            )
 
-            if result is None:
+            if not result:
                 self.logger.error("There was an error running Psi4")
                 raise RuntimeError("There was an error running Psi4")
 

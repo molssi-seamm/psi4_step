@@ -11,7 +11,6 @@ dependencies:
   # Of the code
   - numpy
   - optking
-  - psutil
   - scipy
   - seamm
   - tabulate
@@ -29,5 +28,6 @@ dependencies:
 
   # Pip-only installs
   - pip:
-    # Documentation
-    - sphinx-copybutton
+      - seamm-exec
+      # Documentation
+      - sphinx-copybutton
