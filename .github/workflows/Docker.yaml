@@ -12,4 +12,5 @@ jobs:
     with:
       image : molssi-seamm/seamm-psi4
       description: An Psi4 executable packaged for use with SEAMM or standalone
+      platforms: linux/amd64
     secrets: inherit
