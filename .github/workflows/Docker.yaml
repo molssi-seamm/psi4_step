@@ -8,7 +8,6 @@ on:
 jobs:
   docker:
     name: Docker
-    needs: release
     uses: molssi-seamm/devops/.github/workflows/Docker.yaml@main
     with:
       image : molssi-seamm/seamm-psi4
