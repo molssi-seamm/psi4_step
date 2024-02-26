@@ -1,19 +1,11 @@
-name: Release
+name: Docker
 
 on:
-  release:
-    types: [published]
+  push:
     branches:
       - "main"
 
 jobs:
-  release:
-    name: Release
-    uses: molssi-seamm/devops/.github/workflows/Release.yaml@main
-    with:
-      src : psi4_step
-    secrets: inherit
-
   docker:
     name: Docker
     needs: release

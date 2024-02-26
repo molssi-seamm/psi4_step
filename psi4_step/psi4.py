@@ -4,10 +4,12 @@
 """
 
 import configparser
+import importlib
 import json
 import logging
 from pathlib import Path
 import pprint
+import shutil
 
 import psi4_step
 import seamm
@@ -454,17 +456,39 @@ class Psi4(seamm.Node):
         else:
             executor = self.flowchart.executor
 
-            # Read configuration file for Psi4
-            ini_dir = Path(seamm_options["root"]).expanduser()
-            full_config = configparser.ConfigParser()
-            full_config.read(ini_dir / "psi4.ini")
+            # Read configuration file for Psi4 if it exists
             executor_type = executor.name
+            full_config = configparser.ConfigParser()
+            ini_dir = Path(seamm_options["root"]).expanduser()
+            path = ini_dir / "psi4.ini"
+
+            if path.exists():
+                full_config.read(ini_dir / "psi4.ini")
+
+            # If the section we need doesn't exists, get the default
+            if not path.exists() or executor_type not in full_config:
+                resources = importlib.resources.files("psi4_step") / "data"
+                ini_text = (resources / "psi4.ini").read_text()
+                full_config.read_string(ini_text)
+
+            # Getting desperate! Look for an executable in the path
             if executor_type not in full_config:
-                raise RuntimeError(
-                    f"No section for '{executor_type}' in Psi4 ini file "
-                    f"({ini_dir / 'psi4.ini'})"
-                )
+                path = shutil.which("psi4")
+                if path is None:
+                    raise RuntimeError(
+                        f"No section for '{executor_type}' in Psi4 ini file "
+                        f"({ini_dir / 'psi4.ini'}), nor in the defaults, nor "
+                        "in the path!"
+                    )
+                else:
+                    full_config[executor_type] = {
+                        "installation": "local",
+                        "code": f"{path} -n {{NTASKS}}",
+                    }
+
             config = dict(full_config.items(executor_type))
+            # Use the matching version of the seamm-psi4 image by default.
+            config["version"] = self.version
 
             printer.important(
                 self.indent
