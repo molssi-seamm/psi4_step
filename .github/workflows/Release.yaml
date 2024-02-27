@@ -1,6 +1,7 @@
 name: Release
 
 on:
+  workflow_dispatch:
   release:
     types: [published]
     branches:
@@ -17,9 +18,13 @@ jobs:
   docker:
     name: Docker
     needs: release
+    env:
+      # Psi4 on conda forge does not supply ARM versions
+      CONDA_SUBDIR=linux-64
     uses: molssi-seamm/devops/.github/workflows/Docker.yaml@main
     with:
       image : molssi-seamm/seamm-psi4
       description: An Psi4 executable packaged for use with SEAMM or standalone
-      platforms: linux/amd64
+      # Can limit platforms, e.g., linux/amd64, linux/arm64
+      # platforms: linux/amd64
     secrets: inherit
