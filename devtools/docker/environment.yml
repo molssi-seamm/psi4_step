@@ -1,6 +1,6 @@
 name: base
 channels:
-  - conda-forge
+  - conda-forge/linux-64
 dependencies:
   - python
   - geometric

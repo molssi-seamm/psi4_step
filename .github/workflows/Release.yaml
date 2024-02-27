@@ -12,15 +12,12 @@ jobs:
     name: Release
     uses: molssi-seamm/devops/.github/workflows/Release.yaml@main
     with:
-      src : psi4_step
+      src: psi4_step
     secrets: inherit
 
   docker:
     name: Docker
     needs: release
-    env:
-      # Psi4 on conda forge does not supply ARM versions
-      CONDA_SUBDIR=linux-64
     uses: molssi-seamm/devops/.github/workflows/Docker.yaml@main
     with:
       image : molssi-seamm/seamm-psi4
