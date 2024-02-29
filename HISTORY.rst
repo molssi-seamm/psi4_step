@@ -1,6 +1,9 @@
 =======
 History
 =======
+2024.2.29 -- Completed support for containers
+   * Fixed issues with running amd64 containers on arm64 systems.
+     
 2024.1.11 -- Changes to allow running in containers.
    * Moved to the new executor and ensured it still runs directly.
    * Fixed bugs in printing the summary output.
