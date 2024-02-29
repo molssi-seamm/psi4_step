@@ -1,22 +1,4 @@
 [psi4-step]
-# Information about where/how the executables are installed
-# installation may be 'user', 'conda' or 'module'. If a module is
-# specified it will be loaded and those executables used.  In this
-# case, any path specified using -path will be ignored.
-
-installation = 
-conda-environment = 
-modules = 
-
-# The path to the executable. Can be empty or not present, in which
-# case the default PATH is used.  If a path is given, psi4
-# from this location will be used.
-#
-# Ignored if a module is used. The default is to use the PATH
-# environment variable.
-
-psi4-path =
-
 # Maximum number of threads (cores) to use
 # ncores = available
 
