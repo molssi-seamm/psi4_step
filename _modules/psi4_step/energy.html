@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>psi4_step.energy &#8212; SEAMM Psi4 Plug-in 2024.2.29 documentation</title>
+    <title>psi4_step.energy &#8212; SEAMM Psi4 Plug-in 2024.3.4 documentation</title>
   
   
   
@@ -45,7 +45,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-PQXXTJ2');</script>
 <!-- End Google Tag Manager -->
 
-    <script src="../../_static/documentation_options.js?v=012e7e09"></script>
+    <script src="../../_static/documentation_options.js?v=875c6697"></script>
     <script src="../../_static/doctools.js?v=888ff710"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -668,10 +668,16 @@ document.write(`
         <span class="k">else</span><span class="p">:</span>
             <span class="n">method_string</span> <span class="o">=</span> <span class="n">P</span><span class="p">[</span><span class="s2">&quot;advanced_method&quot;</span><span class="p">]</span>
 
+        <span class="c1"># Allow the full name, or the short name, or just pray.</span>
         <span class="k">if</span> <span class="n">method_string</span> <span class="ow">in</span> <span class="n">psi4_step</span><span class="o">.</span><span class="n">methods</span><span class="p">:</span>
             <span class="n">method</span> <span class="o">=</span> <span class="n">psi4_step</span><span class="o">.</span><span class="n">methods</span><span class="p">[</span><span class="n">method_string</span><span class="p">][</span><span class="s2">&quot;method&quot;</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">method</span> <span class="o">=</span> <span class="n">method_string</span>
+            <span class="n">method</span> <span class="o">=</span> <span class="n">method_string</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">psi4_step</span><span class="o">.</span><span class="n">methods</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">psi4_step</span><span class="o">.</span><span class="n">methods</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="s2">&quot;method&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">method</span><span class="p">:</span>
+                    <span class="k">break</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">method</span> <span class="o">=</span> <span class="n">method_string</span>
 
         <span class="c1"># lines.append(&#39;set scf_type df&#39;)</span>
         <span class="c1"># lines.append(&#39;set guess sad&#39;)</span>
@@ -744,7 +750,18 @@ document.write(`
                 <span class="n">functional_string</span> <span class="o">=</span> <span class="n">P</span><span class="p">[</span><span class="s2">&quot;functional&quot;</span><span class="p">]</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">functional_string</span> <span class="o">=</span> <span class="n">P</span><span class="p">[</span><span class="s2">&quot;advanced_functional&quot;</span><span class="p">]</span>
-            <span class="n">functional</span> <span class="o">=</span> <span class="n">psi4_step</span><span class="o">.</span><span class="n">dft_functionals</span><span class="p">[</span><span class="n">functional_string</span><span class="p">][</span><span class="s2">&quot;name&quot;</span><span class="p">]</span>
+
+            <span class="c1"># Allow the full name, or the short name, or just pray.</span>
+            <span class="k">if</span> <span class="n">functional_string</span> <span class="ow">in</span> <span class="n">psi4_step</span><span class="o">.</span><span class="n">dft_functionals</span><span class="p">:</span>
+                <span class="n">functional</span> <span class="o">=</span> <span class="n">psi4_step</span><span class="o">.</span><span class="n">dft_functionals</span><span class="p">[</span><span class="n">functional_string</span><span class="p">][</span><span class="s2">&quot;name&quot;</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">functional</span> <span class="o">=</span> <span class="n">functional_string</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+                <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">psi4_step</span><span class="o">.</span><span class="n">dft_functionals</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">psi4_step</span><span class="o">.</span><span class="n">dft_functionals</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">functional</span><span class="p">:</span>
+                        <span class="k">break</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">functional</span> <span class="o">=</span> <span class="n">functional_string</span>
+
             <span class="k">if</span> <span class="p">(</span>
                 <span class="n">P</span><span class="p">[</span><span class="s2">&quot;dispersion&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;none&quot;</span>
                 <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">psi4_step</span><span class="o">.</span><span class="n">dft_functionals</span><span class="p">[</span><span class="n">functional_string</span><span class="p">][</span><span class="s2">&quot;dispersion&quot;</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mi">1</span>
@@ -787,36 +804,39 @@ document.write(`
         <span class="k">if</span> <span class="n">calculation_type</span> <span class="o">!=</span> <span class="s2">&quot;gradient&quot;</span><span class="p">:</span>
             <span class="c1"># Dump the properties to a json file</span>
             <span class="n">filename</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;@</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_id</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">+properties.json&quot;</span>
-            <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
-            <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;oeprop(&quot;</span><span class="p">)</span>
-            <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;    wfn,&quot;</span><span class="p">)</span>
-            <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;    &#39;MULTIPOLE(5)&#39;,&quot;</span><span class="p">)</span>
-            <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;    &#39;ESP_AT_NUCLEI&#39;,&quot;</span><span class="p">)</span>
-            <span class="c1"># lines.append(&quot;    &#39;MO_EXTENTS&#39;,&quot;)</span>
-            <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;    &#39;LOWDIN_CHARGES&#39;,&quot;</span><span class="p">)</span>
-            <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;    &#39;MULLIKEN_CHARGES&#39;,&quot;</span><span class="p">)</span>
-            <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;    &#39;WIBERG_LOWDIN_INDICES&#39;,&quot;</span><span class="p">)</span>
-            <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;    &#39;MAYER_INDICES&#39;,&quot;</span><span class="p">)</span>
-            <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;    &#39;NO_OCCUPATIONS&#39;,&quot;</span><span class="p">)</span>
-            <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;    title=&#39;PROP&#39;&quot;</span><span class="p">)</span>
-            <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;)&quot;</span><span class="p">)</span>
-            <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
-            <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;variables = scalar_variables()&quot;</span><span class="p">)</span>
-            <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;variables.update(wfn.scalar_variables())&quot;</span><span class="p">)</span>
-            <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;arrays = array_variables()&quot;</span><span class="p">)</span>
-            <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;for item in arrays:&quot;</span><span class="p">)</span>
-            <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;    variables[item] = array_variable(item).np.tolist()&quot;</span><span class="p">)</span>
-            <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;arrays = wfn.array_variables()&quot;</span><span class="p">)</span>
-            <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;for item in arrays:&quot;</span><span class="p">)</span>
-            <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;    variables[item] = wfn.array_variable(item).np.tolist()&quot;</span><span class="p">)</span>
-            <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;variables[&#39;Eelec&#39;] = Eelec&quot;</span><span class="p">)</span>
-            <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;variables[&#39;_method&#39;] = &#39;</span><span class="si">{</span><span class="n">method</span><span class="si">}</span><span class="s2">&#39;&quot;</span><span class="p">)</span>
-            <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;variables[&#39;_method_string&#39;] = &#39;</span><span class="si">{</span><span class="n">method_string</span><span class="si">}</span><span class="s2">&#39;&quot;</span><span class="p">)</span>
-            <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
-            <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
-            <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;with open(&#39;</span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2">&#39;, &#39;w&#39;) as fd:&quot;</span><span class="p">)</span>
             <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-                <span class="s2">&quot;    json.dump(fix_multipoles(variables), fd, sort_keys=True, indent=3)&quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">try:</span>
+<span class="s2">    oeprop(</span>
+<span class="s2">        wfn,</span>
+<span class="s2">        &quot;MULTIPOLE(5)&quot;,</span>
+<span class="s2">        &quot;ESP_AT_NUCLEI&quot;,</span>
+<span class="s2">        &quot;LOWDIN_CHARGES&quot;,</span>
+<span class="s2">        &quot;MULLIKEN_CHARGES&quot;,</span>
+<span class="s2">        &quot;WIBERG_LOWDIN_INDICES&quot;,</span>
+<span class="s2">        &quot;MAYER_INDICES&quot;,</span>
+<span class="s2">        &quot;NO_OCCUPATIONS&quot;,</span>
+<span class="s2">        title=&quot;PROP&quot;</span>
+<span class="s2">    )</span>
+<span class="s2">except Exception:</span>
+<span class="s2">    print(&quot;Failed to calculate properties&quot;)</span>
+
+<span class="s2">variables = scalar_variables()</span>
+<span class="s2">variables.update(wfn.scalar_variables())</span>
+<span class="s2">arrays = array_variables()</span>
+<span class="s2">for item in arrays:</span>
+<span class="s2">    variables[item] = array_variable(item).np.tolist()</span>
+<span class="s2">arrays = wfn.array_variables()</span>
+<span class="s2">for item in arrays:</span>
+<span class="s2">    variables[item] = wfn.array_variable(item).np.tolist()</span>
+<span class="s2">variables[&quot;Eelec&quot;] = Eelec</span>
+<span class="s2">variables[&quot;_method&quot;] = &quot;</span><span class="si">{</span><span class="n">method</span><span class="si">}</span><span class="s2">&quot;</span>
+<span class="s2">variables[&quot;_method_string&quot;] = &quot;</span><span class="si">{</span><span class="n">method_string</span><span class="si">}</span><span class="s2">&quot;</span>
+
+
+<span class="s2">with open(&quot;</span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2">&quot;, &quot;w&quot;) as fd:</span>
+<span class="s2">    json.dump(fix_multipoles(variables), fd, sort_keys=True, indent=3)</span>
+<span class="s2">&quot;&quot;&quot;</span>
             <span class="p">)</span>
 
         <span class="c1"># Orbital plots</span>
