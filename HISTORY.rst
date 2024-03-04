@@ -1,6 +1,10 @@
 =======
 History
 =======
+2024.3.4 -- Allowing short names for method and DFT functionals
+   * Added short names for the methods (Hamiltonians)  and DFT functionals.
+   * Catch errors in Psi4 calculating properties for e.g. CISD(T) method
+
 2024.2.29 -- Completed support for containers
    * Fixed issues with running amd64 containers on arm64 systems.
      

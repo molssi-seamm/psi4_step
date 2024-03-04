@@ -170,10 +170,16 @@ class Energy(seamm.Node):
         else:
             method_string = P["advanced_method"]
 
+        # Allow the full name, or the short name, or just pray.
         if method_string in psi4_step.methods:
             method = psi4_step.methods[method_string]["method"]
         else:
-            method = method_string
+            method = method_string.lower()
+            for key in psi4_step.methods:
+                if psi4_step.methods[key]["method"] == method:
+                    break
+            else:
+                method = method_string
 
         # lines.append('set scf_type df')
         # lines.append('set guess sad')
@@ -246,7 +252,18 @@ class Energy(seamm.Node):
                 functional_string = P["functional"]
             else:
                 functional_string = P["advanced_functional"]
-            functional = psi4_step.dft_functionals[functional_string]["name"]
+
+            # Allow the full name, or the short name, or just pray.
+            if functional_string in psi4_step.dft_functionals:
+                functional = psi4_step.dft_functionals[functional_string]["name"]
+            else:
+                functional = functional_string.lower()
+                for key in psi4_step.dft_functionals:
+                    if psi4_step.dft_functionals[key]["name"] == functional:
+                        break
+                else:
+                    functional = functional_string
+
             if (
                 P["dispersion"] != "none"
                 and len(psi4_step.dft_functionals[functional_string]["dispersion"]) > 1
@@ -289,36 +306,39 @@ class Energy(seamm.Node):
         if calculation_type != "gradient":
             # Dump the properties to a json file
             filename = f"@{self._id[-1]}+properties.json"
-            lines.append("")
-            lines.append("oeprop(")
-            lines.append("    wfn,")
-            lines.append("    'MULTIPOLE(5)',")
-            lines.append("    'ESP_AT_NUCLEI',")
-            # lines.append("    'MO_EXTENTS',")
-            lines.append("    'LOWDIN_CHARGES',")
-            lines.append("    'MULLIKEN_CHARGES',")
-            lines.append("    'WIBERG_LOWDIN_INDICES',")
-            lines.append("    'MAYER_INDICES',")
-            lines.append("    'NO_OCCUPATIONS',")
-            lines.append("    title='PROP'")
-            lines.append(")")
-            lines.append("")
-            lines.append("variables = scalar_variables()")
-            lines.append("variables.update(wfn.scalar_variables())")
-            lines.append("arrays = array_variables()")
-            lines.append("for item in arrays:")
-            lines.append("    variables[item] = array_variable(item).np.tolist()")
-            lines.append("arrays = wfn.array_variables()")
-            lines.append("for item in arrays:")
-            lines.append("    variables[item] = wfn.array_variable(item).np.tolist()")
-            lines.append("variables['Eelec'] = Eelec")
-            lines.append(f"variables['_method'] = '{method}'")
-            lines.append(f"variables['_method_string'] = '{method_string}'")
-            lines.append("")
-            lines.append("")
-            lines.append(f"with open('{filename}', 'w') as fd:")
             lines.append(
-                "    json.dump(fix_multipoles(variables), fd, sort_keys=True, indent=3)"
+                f"""
+try:
+    oeprop(
+        wfn,
+        "MULTIPOLE(5)",
+        "ESP_AT_NUCLEI",
+        "LOWDIN_CHARGES",
+        "MULLIKEN_CHARGES",
+        "WIBERG_LOWDIN_INDICES",
+        "MAYER_INDICES",
+        "NO_OCCUPATIONS",
+        title="PROP"
+    )
+except Exception:
+    print("Failed to calculate properties")
+
+variables = scalar_variables()
+variables.update(wfn.scalar_variables())
+arrays = array_variables()
+for item in arrays:
+    variables[item] = array_variable(item).np.tolist()
+arrays = wfn.array_variables()
+for item in arrays:
+    variables[item] = wfn.array_variable(item).np.tolist()
+variables["Eelec"] = Eelec
+variables["_method"] = "{method}"
+variables["_method_string"] = "{method_string}"
+
+
+with open("{filename}", "w") as fd:
+    json.dump(fix_multipoles(variables), fd, sort_keys=True, indent=3)
+"""
             )
 
         # Orbital plots
