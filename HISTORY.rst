@@ -1,6 +1,10 @@
 =======
 History
 =======
+2024.3.17 -- Updated the installer
+   * Updated the installer to use the new version of the SEAMM installer.
+   * Finalizes installing either with Conda or Docker
+     
 2024.3.4 -- Allowing short names for method and DFT functionals
    * Added short names for the methods (Hamiltonians)  and DFT functionals.
    * Catch errors in Psi4 calculating properties for e.g. CISD(T) method
