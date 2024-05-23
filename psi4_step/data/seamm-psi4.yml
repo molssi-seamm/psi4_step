@@ -1,10 +1,16 @@
 name: seamm-psi4
 channels:
   - conda-forge
-  - conda-forge/label/libint_dev
 dependencies:
   - python
 
-    # Executables, etc.
-  - geometric
   - psi4
+
+  # Optional packages
+  - basis_set_exchange
+  - dftd3-python>=1.0
+  - dftd4-python
+  - gcp-correction
+  - geometric
+  - pymdi
+  - toml # req'd with dftd4-python
