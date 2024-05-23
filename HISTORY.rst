@@ -1,6 +1,11 @@
 =======
 History
 =======
+2024.5.23.2 -- Bugfix: incorrect name for gradients
+   * There was a typo in the name for the gradients, such that they could not be output
+     to Results.json.
+   * The units for the energy and gradients in Results.json were incorrect.
+     
 2024.5.23.1 -- Internal fix for creating Docker image.
 
 2024.5.23 -- Added standard energy and gradients to results
