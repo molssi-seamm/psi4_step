@@ -60,7 +60,7 @@ class Energy(seamm.Node):
     ):
         """Prepare information about what this node will do"""
 
-        if P is not None:
+        if P is None:
             P = self.parameters.values_to_dict()
 
         if P["level"] == "recommended":
@@ -273,6 +273,7 @@ class Energy(seamm.Node):
                 lines.append(
                     f"Eelec, wfn = {calculation_type}('{functional}', return_wfn=True)"
                 )
+                lines.append(f"G = gradient('{functional}', ref_wfn=wfn)")
             else:
                 if calculation_type == "gradient":
                     lines.append(
@@ -290,6 +291,7 @@ class Energy(seamm.Node):
                 lines.append(
                     f"Eelec, wfn = {calculation_type}('{method}', return_wfn=True)"
                 )
+                lines.append(f"G = gradient('{method}', ref_wfn=wfn)")
             else:
                 if calculation_type == "gradient":
                     lines.append(
@@ -332,6 +334,11 @@ arrays = wfn.array_variables()
 for item in arrays:
     variables[item] = wfn.array_variable(item).np.tolist()
 variables["Eelec"] = Eelec
+variables["energy"] = Eelec
+try:
+    variables["gradient"] = np.array(G).tolist()
+except Exception:
+    pass
 variables["_method"] = "{method}"
 variables["_method_string"] = "{method_string}"
 
