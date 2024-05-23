@@ -3,8 +3,8 @@ channels:
   - conda-forge
   - conda-forge/label/libint_dev
 dependencies:
-  - geometric
   - python
+
     # Executables, etc.
+  - geometric
   - psi4
-#  - psi4-rt

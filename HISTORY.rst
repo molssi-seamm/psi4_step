@@ -1,6 +1,8 @@
 =======
 History
 =======
+2024.5.23.1 -- Internal fix for creating Docker image.
+
 2024.5.23 -- Added standard energy and gradients to results
    * Added 'energy' and 'gradients' to optional results to support e.g. Energy Scan
    * Fixed crashing bug in description of the Energy substep.
