@@ -13,6 +13,7 @@ dependencies:
   - optking
   - scipy
   - seamm
+  - seamm-installer
   - tabulate
 
   # Testing
