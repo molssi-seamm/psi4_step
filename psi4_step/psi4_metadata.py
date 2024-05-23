@@ -1629,13 +1629,13 @@ metadata["results"] = {
         "dimensionality": "scalar",
         "property": "total energy#Psi4#{model}",
         "type": "float",
-        "units": "kJ/mol",
+        "units": "E_h",
     },
     "gradients": {
         "description": "The gradients",
         "dimensionality": "[3, n_atoms]",
         "type": "float",
-        "units": "kJ/mol/Å",
+        "units": "E_h/a_0",
     },
     "(T) CORRECTION ENERGY": {
         "calculation": ["energy", "optimization", "thermochemistry", "vibrations"],

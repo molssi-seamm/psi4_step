@@ -336,9 +336,11 @@ for item in arrays:
 variables["Eelec"] = Eelec
 variables["energy"] = Eelec
 try:
-    variables["gradient"] = np.array(G).tolist()
-except Exception:
-    pass
+    variables["gradients"] = np.array(G).tolist()
+except Exception as e:
+    print("Problem with gradients!")
+    print(e)
+
 variables["_method"] = "{method}"
 variables["_method_string"] = "{method_string}"
 
