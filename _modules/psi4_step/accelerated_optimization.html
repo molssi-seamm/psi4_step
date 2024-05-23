@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>psi4_step.accelerated_optimization &#8212; SEAMM Psi4 Plug-in 2024.5.23.1 documentation</title>
+    <title>psi4_step.accelerated_optimization &#8212; SEAMM Psi4 Plug-in 2024.5.23.2 documentation</title>
   
   
   
@@ -45,7 +45,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-PQXXTJ2');</script>
 <!-- End Google Tag Manager -->
 
-    <script src="../../_static/documentation_options.js?v=f65062db"></script>
+    <script src="../../_static/documentation_options.js?v=c1a8e8b1"></script>
     <script src="../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -502,7 +502,8 @@ document.write(`
 <span class="kn">import</span> <span class="nn">traceback</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">optking</span>
+
+<span class="c1"># import optking</span>
 <span class="kn">from</span> <span class="nn">scipy.optimize</span> <span class="kn">import</span> <span class="n">minimize</span><span class="p">,</span> <span class="n">OptimizeResult</span>
 <span class="kn">from</span> <span class="nn">scipy.optimize._optimize</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">_prepare_scalar_function</span><span class="p">,</span>
@@ -776,7 +777,7 @@ document.write(`
                     <span class="n">printer</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="s2">&quot;NOT Converged!!!!!!&quot;</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="c1"># Iterate</span>
-            <span class="n">molecule</span> <span class="o">=</span> <span class="n">configuration</span><span class="o">.</span><span class="n">to_qcschema_dict</span><span class="p">()</span>
+            <span class="c1"># molecule = configuration.to_qcschema_dict()</span>
             <span class="n">optking_options</span> <span class="o">=</span> <span class="p">{</span>
                 <span class="s2">&quot;step_type&quot;</span><span class="p">:</span> <span class="n">P</span><span class="p">[</span><span class="s2">&quot;optimization method&quot;</span><span class="p">],</span>
                 <span class="s2">&quot;g_convergence&quot;</span><span class="p">:</span> <span class="n">P</span><span class="p">[</span><span class="s2">&quot;geometry convergence&quot;</span><span class="p">],</span>
@@ -796,7 +797,8 @@ document.write(`
             <span class="c1"># &quot;rms_force_g_convergence&quot;: 3.0e-04,</span>
             <span class="c1"># &quot;intrafrag_hess&quot;: &quot;SIMPLE&quot;,</span>
 
-            <span class="n">optimizer</span> <span class="o">=</span> <span class="n">optking</span><span class="o">.</span><span class="n">CustomHelper</span><span class="p">(</span><span class="n">molecule</span><span class="p">,</span> <span class="n">optking_options</span><span class="p">)</span>
+            <span class="c1"># optimizer = optking.CustomHelper(molecule, optking_options)</span>
+            <span class="n">optimizer</span> <span class="o">=</span> <span class="kc">None</span>
 
             <span class="c1"># The initial coordinates as NUMPY array. Psi4 may reorient, so need</span>
             <span class="c1"># to run and cache the first results</span>
@@ -891,18 +893,19 @@ document.write(`
         <span class="c1"># Handle the system</span>
         <span class="n">_</span><span class="p">,</span> <span class="n">configuration</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_system_configuration</span><span class="p">()</span>
 
-        <span class="n">molecule</span> <span class="o">=</span> <span class="n">configuration</span><span class="o">.</span><span class="n">to_qcschema_dict</span><span class="p">()</span>
-        <span class="c1"># &quot;g_convergence&quot;: &quot;gau&quot;,</span>
-        <span class="n">optking_options</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s2">&quot;opt_coordinates&quot;</span><span class="p">:</span> <span class="s2">&quot;cartesian&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;g_convergence&quot;</span><span class="p">:</span> <span class="s2">&quot;cfour&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;max_force_g_convergence&quot;</span><span class="p">:</span> <span class="mf">4.5e-04</span><span class="p">,</span>
-            <span class="s2">&quot;rms_force_g_convergence&quot;</span><span class="p">:</span> <span class="mf">3.0e-04</span><span class="p">,</span>
-            <span class="s2">&quot;FULL_HESS_EVERY&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
-            <span class="s2">&quot;intrafrag_hess&quot;</span><span class="p">:</span> <span class="s2">&quot;SIMPLE&quot;</span><span class="p">,</span>
-        <span class="p">}</span>
+        <span class="c1"># molecule = configuration.to_qcschema_dict()</span>
+        <span class="c1"># # &quot;g_convergence&quot;: &quot;gau&quot;,</span>
+        <span class="c1"># optking_options = {</span>
+        <span class="c1">#     &quot;opt_coordinates&quot;: &quot;cartesian&quot;,</span>
+        <span class="c1">#     &quot;g_convergence&quot;: &quot;cfour&quot;,</span>
+        <span class="c1">#     &quot;max_force_g_convergence&quot;: 4.5e-04,</span>
+        <span class="c1">#     &quot;rms_force_g_convergence&quot;: 3.0e-04,</span>
+        <span class="c1">#     &quot;FULL_HESS_EVERY&quot;: 1,</span>
+        <span class="c1">#     &quot;intrafrag_hess&quot;: &quot;SIMPLE&quot;,</span>
+        <span class="c1"># }</span>
         <span class="c1"># &quot;hess_update&quot;: &quot;none&quot;,</span>
-        <span class="n">optimizer</span> <span class="o">=</span> <span class="n">optking</span><span class="o">.</span><span class="n">CustomHelper</span><span class="p">(</span><span class="n">molecule</span><span class="p">,</span> <span class="n">optking_options</span><span class="p">)</span>
+        <span class="c1"># optimizer = optking.CustomHelper(molecule, optking_options)</span>
+        <span class="n">optimizer</span> <span class="o">=</span> <span class="kc">None</span>
 
         <span class="c1"># First calculate the derivatives with both Psi4 and MOPAC</span>
         <span class="n">xyz0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">optimizer</span><span class="o">.</span><span class="n">geom</span><span class="p">)</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
