@@ -11,7 +11,8 @@ import textwrap
 import traceback
 
 import numpy as np
-import optking
+
+# import optking
 from scipy.optimize import minimize, OptimizeResult
 from scipy.optimize._optimize import (
     _prepare_scalar_function,
@@ -263,7 +264,7 @@ class AcceleratedOptimization(psi4_step.Energy):
                     printer.normal("NOT Converged!!!!!!")
         else:
             # Iterate
-            molecule = configuration.to_qcschema_dict()
+            # molecule = configuration.to_qcschema_dict()
             optking_options = {
                 "step_type": P["optimization method"],
                 "g_convergence": P["geometry convergence"],
@@ -283,7 +284,8 @@ class AcceleratedOptimization(psi4_step.Energy):
             # "rms_force_g_convergence": 3.0e-04,
             # "intrafrag_hess": "SIMPLE",
 
-            optimizer = optking.CustomHelper(molecule, optking_options)
+            # optimizer = optking.CustomHelper(molecule, optking_options)
+            optimizer = None
 
             # The initial coordinates as NUMPY array. Psi4 may reorient, so need
             # to run and cache the first results
@@ -377,18 +379,19 @@ class AcceleratedOptimization(psi4_step.Energy):
         # Handle the system
         _, configuration = self.get_system_configuration()
 
-        molecule = configuration.to_qcschema_dict()
-        # "g_convergence": "gau",
-        optking_options = {
-            "opt_coordinates": "cartesian",
-            "g_convergence": "cfour",
-            "max_force_g_convergence": 4.5e-04,
-            "rms_force_g_convergence": 3.0e-04,
-            "FULL_HESS_EVERY": 1,
-            "intrafrag_hess": "SIMPLE",
-        }
+        # molecule = configuration.to_qcschema_dict()
+        # # "g_convergence": "gau",
+        # optking_options = {
+        #     "opt_coordinates": "cartesian",
+        #     "g_convergence": "cfour",
+        #     "max_force_g_convergence": 4.5e-04,
+        #     "rms_force_g_convergence": 3.0e-04,
+        #     "FULL_HESS_EVERY": 1,
+        #     "intrafrag_hess": "SIMPLE",
+        # }
         # "hess_update": "none",
-        optimizer = optking.CustomHelper(molecule, optking_options)
+        # optimizer = optking.CustomHelper(molecule, optking_options)
+        optimizer = None
 
         # First calculate the derivatives with both Psi4 and MOPAC
         xyz0 = np.array(optimizer.geom).flatten()
