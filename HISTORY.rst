@@ -1,6 +1,10 @@
 =======
 History
 =======
+2024.5.23 -- Added standard energy and gradients to results
+   * Added 'energy' and 'gradients' to optional results to support e.g. Energy Scan
+   * Fixed crashing bug in description of the Energy substep.
+     
 2024.3.17 -- Updated the installer
    * Updated the installer to use the new version of the SEAMM installer.
    * Finalizes installing either with Conda or Docker

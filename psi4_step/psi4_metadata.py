@@ -1624,6 +1624,19 @@ units : str
     Optional units for the result. If present, the value should be in these units.
 """
 metadata["results"] = {
+    "energy": {
+        "description": "The total energy",
+        "dimensionality": "scalar",
+        "property": "total energy#Psi4#{model}",
+        "type": "float",
+        "units": "kJ/mol",
+    },
+    "gradients": {
+        "description": "The gradients",
+        "dimensionality": "[3, n_atoms]",
+        "type": "float",
+        "units": "kJ/mol/Å",
+    },
     "(T) CORRECTION ENERGY": {
         "calculation": ["energy", "optimization", "thermochemistry", "vibrations"],
         "description": "",
@@ -1816,7 +1829,6 @@ metadata["results"] = {
         "description": "the electronic energy from the current method",
         "dimensionality": "scalar",
         "methods": ["ccsd", "ccsd(t)", "dft", "hf", "lccd", "mp2", "mp3", "mp4"],
-        "property": "total energy#Psi4#{model}",
         "type": "float",
         "units": "E_h",
     },
