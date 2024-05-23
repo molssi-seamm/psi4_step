@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>psi4_step.energy &#8212; SEAMM Psi4 Plug-in 2024.3.17 documentation</title>
+    <title>psi4_step.energy &#8212; SEAMM Psi4 Plug-in 2024.5.23 documentation</title>
   
   
   
@@ -45,8 +45,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-PQXXTJ2');</script>
 <!-- End Google Tag Manager -->
 
-    <script src="../../_static/documentation_options.js?v=f2da1504"></script>
-    <script src="../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../_static/documentation_options.js?v=cd6ff733"></script>
+    <script src="../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../../_static/copybutton.js?v=f281be69"></script>
@@ -555,7 +555,7 @@ document.write(`
     <span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Prepare information about what this node will do&quot;&quot;&quot;</span>
 
-        <span class="k">if</span> <span class="n">P</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">P</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">P</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">values_to_dict</span><span class="p">()</span>
 
         <span class="k">if</span> <span class="n">P</span><span class="p">[</span><span class="s2">&quot;level&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;recommended&quot;</span><span class="p">:</span>
@@ -771,6 +771,7 @@ document.write(`
                 <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
                     <span class="sa">f</span><span class="s2">&quot;Eelec, wfn = </span><span class="si">{</span><span class="n">calculation_type</span><span class="si">}</span><span class="s2">(&#39;</span><span class="si">{</span><span class="n">functional</span><span class="si">}</span><span class="s2">&#39;, return_wfn=True)&quot;</span>
                 <span class="p">)</span>
+                <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;G = gradient(&#39;</span><span class="si">{</span><span class="n">functional</span><span class="si">}</span><span class="s2">&#39;, ref_wfn=wfn)&quot;</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">calculation_type</span> <span class="o">==</span> <span class="s2">&quot;gradient&quot;</span><span class="p">:</span>
                     <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
@@ -788,6 +789,7 @@ document.write(`
                 <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
                     <span class="sa">f</span><span class="s2">&quot;Eelec, wfn = </span><span class="si">{</span><span class="n">calculation_type</span><span class="si">}</span><span class="s2">(&#39;</span><span class="si">{</span><span class="n">method</span><span class="si">}</span><span class="s2">&#39;, return_wfn=True)&quot;</span>
                 <span class="p">)</span>
+                <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;G = gradient(&#39;</span><span class="si">{</span><span class="n">method</span><span class="si">}</span><span class="s2">&#39;, ref_wfn=wfn)&quot;</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">calculation_type</span> <span class="o">==</span> <span class="s2">&quot;gradient&quot;</span><span class="p">:</span>
                     <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
@@ -830,6 +832,11 @@ document.write(`
 <span class="s2">for item in arrays:</span>
 <span class="s2">    variables[item] = wfn.array_variable(item).np.tolist()</span>
 <span class="s2">variables[&quot;Eelec&quot;] = Eelec</span>
+<span class="s2">variables[&quot;energy&quot;] = Eelec</span>
+<span class="s2">try:</span>
+<span class="s2">    variables[&quot;gradient&quot;] = np.array(G).tolist()</span>
+<span class="s2">except Exception:</span>
+<span class="s2">    pass</span>
 <span class="s2">variables[&quot;_method&quot;] = &quot;</span><span class="si">{</span><span class="n">method</span><span class="si">}</span><span class="s2">&quot;</span>
 <span class="s2">variables[&quot;_method_string&quot;] = &quot;</span><span class="si">{</span><span class="n">method_string</span><span class="si">}</span><span class="s2">&quot;</span>
 

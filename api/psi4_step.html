@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>psi4_step package &#8212; SEAMM Psi4 Plug-in 2024.3.17 documentation</title>
+    <title>psi4_step package &#8212; SEAMM Psi4 Plug-in 2024.5.23 documentation</title>
   
   
   
@@ -46,8 +46,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-PQXXTJ2');</script>
 <!-- End Google Tag Manager -->
 
-    <script src="../_static/documentation_options.js?v=f2da1504"></script>
-    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/documentation_options.js?v=cd6ff733"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../_static/copybutton.js?v=f281be69"></script>
@@ -861,8 +861,97 @@ data in variables for other stages to access</p>
 </dd></dl>
 
 </section>
-<section id="psi4-step-installer-module">
-<h2>psi4_step.installer module<a class="headerlink" href="#psi4-step-installer-module" title="Link to this heading">#</a></h2>
+<section id="module-psi4_step.installer">
+<span id="psi4-step-installer-module"></span><h2>psi4_step.installer module<a class="headerlink" href="#module-psi4_step.installer" title="Link to this heading">#</a></h2>
+<p>Installer for the Psi4 plug-in.</p>
+<p>This handles any further installation needed after installing the Python
+package <cite>psi4-step</cite>.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="psi4_step.installer.Installer">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">psi4_step.installer.</span></span><span class="sig-name descname"><span class="pre">Installer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">logger=&lt;Logger</span> <span class="pre">psi4_step.installer</span> <span class="pre">(WARNING)&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/psi4_step/installer.html#Installer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#psi4_step.installer.Installer" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">InstallerBase</span></code></p>
+<p>Handle further installation needed after installing psi4-step.</p>
+<p>The Python package <cite>psi4-step</cite> should already be installed, using <cite>pip</cite>,
+<cite>conda</cite>, or similar. This plug-in-specific installer then checks for the
+Psi4 executable, installing it if needed, and registers its
+location in seamm.ini.</p>
+<p>There are a number of ways to determine which are the correct Psi4
+executables to use. The aim of this installer is to help the user locate
+the executables. There are a number of possibilities</p>
+<ol class="arabic">
+<li><p>The correct executables are already available.</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>If they are already registered in <cite>seamm.ini</cite> there is nothing else
+to do.</p></li>
+<li><p>They may be in the current path, in which case they need to be added
+to <cite>seamm.ini</cite>.</p></li>
+<li><p>If a module system is in use, a module may need to be loaded to give
+access to Psi4.</p></li>
+<li><p>They cannot be found automatically, so the user needs to locate the
+executables for the installer.</p></li>
+</ol>
+</div></blockquote>
+</li>
+<li><p>Psi4 is not installed on the machine. In this case they can be
+installed in a Conda environment. There is one choice</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>They can be installed in a separate environment, <cite>seamm-psi4</cite> by
+default.</p></li>
+</ol>
+</div></blockquote>
+</li>
+</ol>
+<dl class="py method">
+<dt class="sig sig-object py" id="psi4_step.installer.Installer.check">
+<span class="sig-name descname"><span class="pre">check</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/psi4_step/installer.html#Installer.check"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#psi4_step.installer.Installer.check" title="Link to this definition">#</a></dt>
+<dd><p>Check the status of the Psi4 installation.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="psi4_step.installer.Installer.exe_version">
+<span class="sig-name descname"><span class="pre">exe_version</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/psi4_step/installer.html#Installer.exe_version"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#psi4_step.installer.Installer.exe_version" title="Link to this definition">#</a></dt>
+<dd><p>Get the version of the Psi4 executable.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>config</strong> (<em>dict</em>) – Dictionary of configuration parameters from psi4.ini</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>“Psi4” and the version reported by the executable, or ‘unknown’.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str, str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="psi4_step.installer.Installer.install">
+<span class="sig-name descname"><span class="pre">install</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/psi4_step/installer.html#Installer.install"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#psi4_step.installer.Installer.install" title="Link to this definition">#</a></dt>
+<dd><p>Install Psi4 in a conda environment.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="psi4_step.installer.Installer.show">
+<span class="sig-name descname"><span class="pre">show</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/psi4_step/installer.html#Installer.show"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#psi4_step.installer.Installer.show" title="Link to this definition">#</a></dt>
+<dd><p>Show the status of the Psi4 installation.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="psi4_step.installer.Installer.uninstall">
+<span class="sig-name descname"><span class="pre">uninstall</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/psi4_step/installer.html#Installer.uninstall"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#psi4_step.installer.Installer.uninstall" title="Link to this definition">#</a></dt>
+<dd><p>Uninstall the Psi4 installation.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="psi4_step.installer.Installer.update">
+<span class="sig-name descname"><span class="pre">update</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/psi4_step/installer.html#Installer.update"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#psi4_step.installer.Installer.update" title="Link to this definition">#</a></dt>
+<dd><p>Updates the Psi4 installation.</p>
+</dd></dl>
+
+</dd></dl>
+
 </section>
 <section id="module-psi4_step.optimization">
 <span id="psi4-step-optimization-module"></span><h2>psi4_step.optimization module<a class="headerlink" href="#module-psi4_step.optimization" title="Link to this heading">#</a></h2>
@@ -1211,7 +1300,7 @@ definitions of the control parameters for your plugin and application.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>parameters</strong> (<em>{'kind'</em><em>, </em><em>'default'</em><em>, </em><em>'default_units'</em><em>, </em><em>'enumeration'</em><em>,</em>) – </p></li>
+<li><p><strong>parameters</strong> (<em>{'kind'</em><em>, </em><em>'default'</em><em>, </em><em>'default_units'</em><em>, </em><em>'enumeration'</em><em>,</em>)</p></li>
 <li><p><strong>'format_string'</strong> – A dictionary containing the parameters for the current step.
 Each key of the dictionary is a dictionary that contains the
 the following keys: kind, default, default_units, enumeration,
@@ -2066,7 +2155,7 @@ based on what is specified in the Thermochemistry_parameters
 module.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>None</strong> – </p>
+<dd class="field-odd"><p><strong>None</strong></p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>None</p>
@@ -2090,7 +2179,7 @@ is controlled by values of some of the control parameters.
 If so, edit or override this method</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>widget</strong> (<em>Tk Widget = None</em>) – </p>
+<dd class="field-odd"><p><strong>widget</strong> (<em>Tk Widget = None</em>)</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>None</p>
@@ -2257,7 +2346,18 @@ A step for Psi4 in a SEAMM flowchart</p>
 </li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#psi4-step-installer-module">psi4_step.installer module</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-psi4_step.installer">psi4_step.installer module</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#psi4_step.installer.Installer"><code class="docutils literal notranslate"><span class="pre">Installer</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#psi4_step.installer.Installer.check"><code class="docutils literal notranslate"><span class="pre">Installer.check()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#psi4_step.installer.Installer.exe_version"><code class="docutils literal notranslate"><span class="pre">Installer.exe_version()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#psi4_step.installer.Installer.install"><code class="docutils literal notranslate"><span class="pre">Installer.install()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#psi4_step.installer.Installer.show"><code class="docutils literal notranslate"><span class="pre">Installer.show()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#psi4_step.installer.Installer.uninstall"><code class="docutils literal notranslate"><span class="pre">Installer.uninstall()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#psi4_step.installer.Installer.update"><code class="docutils literal notranslate"><span class="pre">Installer.update()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-psi4_step.optimization">psi4_step.optimization module</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#psi4_step.optimization.Optimization"><code class="docutils literal notranslate"><span class="pre">Optimization</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#psi4_step.optimization.Optimization.description_text"><code class="docutils literal notranslate"><span class="pre">Optimization.description_text()</span></code></a></li>

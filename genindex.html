@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Index &#8212; SEAMM Psi4 Plug-in 2024.3.17 documentation</title>
+    <title>Index &#8212; SEAMM Psi4 Plug-in 2024.5.23 documentation</title>
   
   
   
@@ -45,8 +45,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-PQXXTJ2');</script>
 <!-- End Google Tag Manager -->
 
-    <script src="_static/documentation_options.js?v=f2da1504"></script>
-    <script src="_static/doctools.js?v=888ff710"></script>
+    <script src="_static/documentation_options.js?v=cd6ff733"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="_static/copybutton.js?v=f281be69"></script>
@@ -526,6 +526,8 @@ document.write(`
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/psi4_step.html#psi4_step.tk_thermochemistry.TkThermochemistry.canvas">canvas (psi4_step.tk_thermochemistry.TkThermochemistry attribute)</a>
 </li>
+      <li><a href="api/psi4_step.html#psi4_step.installer.Installer.check">check() (psi4_step.installer.Installer method)</a>
+</li>
       <li><a href="api/psi4_step.html#psi4_step.tk_accelerated_optimization.TkAcceleratedOptimization.create_dialog">create_dialog() (psi4_step.tk_accelerated_optimization.TkAcceleratedOptimization method)</a>
 
       <ul>
@@ -630,13 +632,15 @@ document.write(`
 </li>
       <li><a href="api/psi4_step.html#psi4_step.tk_psi4.TkPsi4.edit">edit() (psi4_step.tk_psi4.TkPsi4 method)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/psi4_step.html#psi4_step.energy.Energy">Energy (class in psi4_step.energy)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/psi4_step.html#psi4_step.energy_parameters.EnergyParameters">EnergyParameters (class in psi4_step.energy_parameters)</a>
 </li>
       <li><a href="api/psi4_step.html#psi4_step.energy_step.EnergyStep">EnergyStep (class in psi4_step.energy_step)</a>
+</li>
+      <li><a href="api/psi4_step.html#psi4_step.installer.Installer.exe_version">exe_version() (psi4_step.installer.Installer method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -708,11 +712,15 @@ document.write(`
 </li>
       <li><a href="api/psi4_step.html#psi4_step.initialization_parameters.InitializationParameters">InitializationParameters (class in psi4_step.initialization_parameters)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/psi4_step.html#psi4_step.initialization_step.InitializationStep">InitializationStep (class in psi4_step.initialization_step)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/psi4_step.html#psi4_step.accelerated_optimization.AcceleratedOptimization.input_text">input_text() (psi4_step.accelerated_optimization.AcceleratedOptimization method)</a>
+</li>
+      <li><a href="api/psi4_step.html#psi4_step.installer.Installer.install">install() (psi4_step.installer.Installer method)</a>
+</li>
+      <li><a href="api/psi4_step.html#psi4_step.installer.Installer">Installer (class in psi4_step.installer)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -743,6 +751,8 @@ document.write(`
         <li><a href="api/psi4_step.html#module-psi4_step.initialization_parameters">psi4_step.initialization_parameters</a>
 </li>
         <li><a href="api/psi4_step.html#module-psi4_step.initialization_step">psi4_step.initialization_step</a>
+</li>
+        <li><a href="api/psi4_step.html#module-psi4_step.installer">psi4_step.installer</a>
 </li>
         <li><a href="api/psi4_step.html#module-psi4_step.optimization">psi4_step.optimization</a>
 </li>
@@ -943,6 +953,13 @@ document.write(`
 
       <ul>
         <li><a href="api/psi4_step.html#module-psi4_step.initialization_step">module</a>
+</li>
+      </ul></li>
+      <li>
+    psi4_step.installer
+
+      <ul>
+        <li><a href="api/psi4_step.html#module-psi4_step.installer">module</a>
 </li>
       </ul></li>
       <li>
@@ -1150,6 +1167,8 @@ document.write(`
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/psi4_step.html#psi4_step.installer.Installer.show">show() (psi4_step.installer.Installer method)</a>
+</li>
       <li><a href="api/psi4_step.html#psi4_step.tk_psi4.TkPsi4.sub_tk_flowchart">sub_tk_flowchart (psi4_step.tk_psi4.TkPsi4 attribute)</a>
 </li>
       <li><a href="api/psi4_step.html#psi4_step.psi4.Psi4.subflowchart">subflowchart (psi4_step.psi4.Psi4 attribute)</a>
@@ -1192,6 +1211,12 @@ document.write(`
 <h2 id="U">U</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/psi4_step.html#psi4_step.installer.Installer.uninstall">uninstall() (psi4_step.installer.Installer method)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/psi4_step.html#psi4_step.installer.Installer.update">update() (psi4_step.installer.Installer method)</a>
+</li>
       <li><a href="api/psi4_step.html#psi4_step.tk_psi4.TkPsi4.update_flowchart">update_flowchart() (psi4_step.tk_psi4.TkPsi4 method)</a>
 </li>
   </ul></td>
