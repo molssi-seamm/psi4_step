@@ -1,8 +1,0 @@
-name: base
-channels:
-  - conda-forge/linux-64
-dependencies:
-  - python
-  - geometric
-  - psi4
-
