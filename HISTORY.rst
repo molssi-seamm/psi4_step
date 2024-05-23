@@ -1,6 +1,10 @@
 =======
 History
 =======
+2024.5.23.3 -- Added auxialliary codes that help Psi4
+   * Psi4 uses codes like DFTD4 and DFTD4 for parts of e.g. dispersion
+     calculations. This release adds them to the Conda install SEAMM uses for Psi4.
+     
 2024.5.23.2 -- Bugfix: incorrect name for gradients
    * There was a typo in the name for the gradients, such that they could not be output
      to Results.json.
