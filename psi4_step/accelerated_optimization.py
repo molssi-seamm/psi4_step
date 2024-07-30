@@ -1123,7 +1123,7 @@ class AcceleratedOptimization(psi4_step.Energy):
         jac=None,
         callback=None,
         gtol=1e-5,
-        norm=np.Inf,
+        norm=np.inf,
         eps=_epsilon,
         maxiter=None,
         disp=False,
