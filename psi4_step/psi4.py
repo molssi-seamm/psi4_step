@@ -7,6 +7,7 @@ import configparser
 import importlib
 import json
 import logging
+import os
 from pathlib import Path
 import pprint
 import shutil
@@ -14,6 +15,7 @@ import shutil
 import psi4_step
 import seamm
 import seamm_exec
+from seamm_util import Configuration
 import seamm_util.printing as printing
 from seamm_util.printing import FormattedText as __
 
@@ -462,14 +464,19 @@ class Psi4(seamm.Node):
             ini_dir = Path(seamm_options["root"]).expanduser()
             path = ini_dir / "psi4.ini"
 
-            if path.exists():
-                full_config.read(ini_dir / "psi4.ini")
-
-            # If the section we need doesn't exists, get the default
-            if not path.exists() or executor_type not in full_config:
+            # If the config file doesn't exists, get the default
+            if not path.exists():
                 resources = importlib.resources.files("psi4_step") / "data"
                 ini_text = (resources / "psi4.ini").read_text()
-                full_config.read_string(ini_text)
+                txt_config = Configuration(path)
+                txt_config.from_string(ini_text)
+
+                # Work out the conda info needed
+                txt_config.set_value("local", "conda", os.environ["CONDA_EXE"])
+                txt_config.set_value("local", "conda-environment", "seamm-psi4")
+                txt_config.save()
+
+            full_config.read(ini_dir / "psi4.ini")
 
             # Getting desperate! Look for an executable in the path
             if executor_type not in full_config:
@@ -481,10 +488,12 @@ class Psi4(seamm.Node):
                         "in the path!"
                     )
                 else:
-                    full_config[executor_type] = {
-                        "installation": "local",
-                        "code": f"{path} -n {{NTASKS}}",
-                    }
+                    txt_config = Configuration(path)
+                    txt_config.add_section(executor_type)
+                    txt_config.set_value(executor_type, "installation", "local")
+                    txt_config.set_value(executor_type, "code", f"{path} -n {{NTASKS}}")
+                    txt_config.save()
+                    full_config.read(ini_dir / "psi4.ini")
 
             config = dict(full_config.items(executor_type))
             # Use the matching version of the seamm-psi4 image by default.

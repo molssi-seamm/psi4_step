@@ -5,8 +5,11 @@
 import json
 import logging
 from pathlib import Path
+import pprint
 
 from openbabel import openbabel
+import cclib
+import numpy as np
 
 import psi4_step
 import seamm
@@ -359,12 +362,25 @@ with open("{filename}", "w") as fd:
         """Parse the output and generating the text output and store the
         data in variables for other stages to access
         """
+        directory = Path(self.directory)
+
+        # Use cclib to get results
+        path = directory / "output.dat"
+        if path.exists():
+            data = vars(cclib.io.ccread(path))
+            pprint.pformat(data)
+            data = self.process_data(data)
+            pprint.pformat(data)
+        else:
+            data = {}
+
         # Read in the results from json
         directory = Path(self.directory)
         json_file = directory / "properties.json"
         if json_file.exists():
             with json_file.open() as fd:
-                data = json.load(fd)
+                tmp = json.load(fd)
+            data.update(**tmp)
 
             # Put any requested results into variables or tables
             self.store_results(
@@ -498,3 +514,102 @@ for path in paths:
         )
 
         return "\n".join(lines)
+
+    def process_data(self, data):
+        """Massage the cclib data to a more easily used form."""
+        logger.debug(pprint.pformat(data))
+        # Convert numpy arrays to Python lists
+        new = {}
+        for key, value in data.items():
+            if isinstance(value, np.ndarray):
+                new[key] = value.tolist()
+            elif isinstance(value, list):
+                if len(value) > 0 and isinstance(value[0], np.ndarray):
+                    new[key] = [i.tolist() for i in value]
+                else:
+                    new[key] = value
+            elif isinstance(value, dict):
+                for k, v in value.items():
+                    newkey = f"{key}/{k}"
+                    if isinstance(v, np.ndarray):
+                        new[newkey] = v.tolist()
+                    else:
+                        new[newkey] = v
+            else:
+                new[key] = value
+
+        for key in ("metadata/cpu_time", "metadata/wall_time"):
+            if key in new:
+                time = new[key][0]
+                for tmp in new[key][1:]:
+                    time += tmp
+                new[key] = str(time).lstrip("0:")
+                if "." in new[key]:
+                    new[key] = new[key].rstrip("0")
+
+        # Pull out the HOMO and LUMO energies as scalars
+        if "homos" in new and "moenergies" in new:
+            homos = new["homos"]
+            if len(homos) == 2:
+                for i, letter in enumerate(["α", "β"]):
+                    Es = new["moenergies"][i]
+                    homo = homos[i]
+                    new[f"N({letter}-homo)"] = homo + 1
+                    new[f"E({letter}-homo)"] = Es[homo]
+                    if homo > 0:
+                        new[f"E({letter}-homo-1)"] = Es[homo - 1]
+                    if homo + 1 < len(Es):
+                        new[f"E({letter}-lumo)"] = Es[homo + 1]
+                        new[f"E({letter}-gap)"] = Es[homo + 1] - Es[homo]
+                    if homo + 2 < len(Es):
+                        new[f"E({letter}-lumo+1)"] = Es[homo + 2]
+                    if "mosyms" in new:
+                        syms = new["mosyms"][i]
+                        new[f"Sym({letter}-homo)"] = syms[homo]
+                        if homo > 0:
+                            new[f"Sym({letter}-homo-1)"] = syms[homo - 1]
+                        if homo + 1 < len(syms):
+                            new[f"Sym({letter}-lumo)"] = syms[homo + 1]
+                        if homo + 2 < len(syms):
+                            new[f"Sym({letter}-lumo+1)"] = syms[homo + 2]
+            else:
+                Es = new["moenergies"][0]
+                homo = homos[0]
+                new["N(homo)"] = homo + 1
+                new["E(homo)"] = Es[homo]
+                if homo > 0:
+                    new["E(homo-1)"] = Es[homo - 1]
+                if homo + 1 < len(Es):
+                    new["E(lumo)"] = Es[homo + 1]
+                    new["E(gap)"] = Es[homo + 1] - Es[homo]
+                if homo + 2 < len(Es):
+                    new["E(lumo+1)"] = Es[homo + 2]
+                if "mosyms" in new:
+                    syms = new["mosyms"][0]
+                    new["Sym(homo)"] = syms[homo]
+                    if homo > 0:
+                        new["Sym(homo-1)"] = syms[homo - 1]
+                    if homo + 1 < len(syms):
+                        new["Sym(lumo)"] = syms[homo + 1]
+                    if homo + 2 < len(syms):
+                        new["Sym(lumo+1)"] = syms[homo + 2]
+
+        # moments
+        if "moments" in new:
+            moments = new["moments"]
+            new["multipole_reference"] = moments[0]
+            new["dipole_moment"] = moments[1]
+            new["dipole_moment_magnitude"] = np.linalg.norm(moments[1])
+            if len(moments) > 2:
+                new["quadrupole_moment"] = moments[2]
+            if len(moments) > 3:
+                new["octapole_moment"] = moments[3]
+            if len(moments) > 4:
+                new["hexadecapole_moment"] = moments[4]
+            del new["moments"]
+
+        for key in ("metadata/symmetry_detected", "metadata/symmetry_used"):
+            if key in new:
+                new[key] = new[key].capitalize()
+
+        return new

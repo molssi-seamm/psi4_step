@@ -9,6 +9,7 @@ dependencies:
   - pip
 
   # Of the code
+  - cclib
   - numpy
   - optking
   - scipy
