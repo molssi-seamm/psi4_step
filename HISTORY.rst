@@ -1,7 +1,12 @@
 =======
 History
 =======
-2024.5.23.3 -- Added auxialliary codes that help Psi4
+2024.7.30 -- Enhanced results and fixed problem with psi4.ini
+   * Added to the results by using cclib to parse the output.
+   * If ~/SEAMM/psi4.ini did not exist the version that was automatically created was
+     not complete, causing calculations to fail.
+     
+2024.5.23.3 -- Added auxiliary codes that help Psi4
    * Psi4 uses codes like DFTD4 and DFTD4 for parts of e.g. dispersion
      calculations. This release adds them to the Conda install SEAMM uses for Psi4.
      
