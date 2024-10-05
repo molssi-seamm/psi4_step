@@ -1,6 +1,11 @@
 =======
 History
 =======
+2024.10.5 -- Enhancements and bug fixes for thermochemistry
+   * Improved GUI for thermochemistry so that it automatically recognizes whether it is
+     after e.g. an optimization and configures appropriately.
+   * Fixed and issue with transferring the multipole moments to the JSON file
+     
 2024.7.30 -- Enhanced results and fixed problem with psi4.ini
    * Added to the results by using cclib to parse the output.
    * If ~/SEAMM/psi4.ini did not exist the version that was automatically created was

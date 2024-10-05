@@ -38,57 +38,7 @@ def fix_multipoles(data):
     it = iter(data.items())
     for key, value in it:
         if 'PROP ' == key[0:5]:
-            result[key[6:]] = value[0]
-        elif 'SCF DIPOLE' == key:
-            result[key] = value[0]
-        elif 'CURRENT DIPOLE' == key:
-            result[key] = value[0]
-        elif '32-POLE' in key:
-            tmp = []
-            while True:
-                value = 0.0 if abs(value) < 1.0e-10 else value
-                tmp.append(value)
-                if 'ZZZZZ' in key:
-                    break
-                key, value = next(it)
-            result['32-POLE'] = tmp
-        elif 'HEXADECAPOLE' in key:
-            tmp = []
-            while True:
-                value = 0.0 if abs(value) < 1.0e-10 else value
-                tmp.append(value)
-                if 'ZZZZ' in key:
-                    break
-                key, value = next(it)
-            result['HEXADECAPOLE'] = tmp
-        elif 'OCTUPOLE' in key:
-            tmp = []
-            while True:
-                value = 0.0 if abs(value) < 1.0e-10 else value
-                tmp.append(value)
-                if 'ZZZ' in key:
-                    break
-                key, value = next(it)
-            result['OCTUPOLE'] = tmp
-        elif 'QUADRUPOLE' in key:
-            tmp = []
-            while True:
-                value = 0.0 if abs(value) < 1.0e-10 else value
-                tmp.append(value)
-                if 'ZZ' in key:
-                    break
-                key, value = next(it)
-            result['QUADRUPOLE'] = tmp
-        elif 'DIPOLE' in key:
-            tmp = []
-            while True:
-                value = 0.0 if abs(value) < 1.0e-10 else value
-                tmp.append(value)
-                result[key] = value
-                if 'Z' in key:
-                    break
-                key, value = next(it)
-            result[key[0:-2]] = tmp
+            result[key[5:]] = value[0]
         elif 'ESP AT CENTER' in key:
             esp.append(value)
         else:
@@ -96,6 +46,7 @@ def fix_multipoles(data):
 
     if len(esp) > 0:
         result['ELECTROSTATIC POTENTIAL'] = esp
+
     return result
 """
 
@@ -420,8 +371,8 @@ class Psi4(seamm.Node):
             text = node.get_input()
             input_data.append(text)
 
-            input_data.append("clean()")
-            input_data.append("clean_variables()")
+            # input_data.append("clean()")
+            # input_data.append("clean_variables()")
             # input_data.append('clean_options()')
 
             node = node.next()

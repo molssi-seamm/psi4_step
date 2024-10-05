@@ -118,7 +118,7 @@ class Thermochemistry(psi4_step.Energy):
         """The git version of this module."""
         return psi4_step.__git_revision__
 
-    def description_text(self, P=None):
+    def description_text(self, P=None, configuration=None):
         """Create the text description of what this step will do.
         The dictionary of control values is passed in as P so that
         the code can test values, etc.
@@ -136,7 +136,9 @@ class Thermochemistry(psi4_step.Energy):
         if not P:
             P = self.parameters.values_to_dict()
 
-        text = super().description_text(P=P, calculation_type="Thermochemistry")
+        text = super().description_text(
+            P=P, calculation_type="Thermochemistry", configuration=configuration
+        )
 
         added = (
             "\nThe thermodynamic functions will be calculated at temperature {T} and "
@@ -146,7 +148,7 @@ class Thermochemistry(psi4_step.Energy):
         return text + "\n" + __(added, **P, indent=4 * " ").__str__()
 
     def get_input(self, calculation_type="frequency"):
-        """Get the input for an optimization calculation for Psi4"""
+        """Get the input for a frequency calculation for Psi4"""
         _, configuration = self.get_system_configuration()
 
         # Create the directory
@@ -165,29 +167,14 @@ class Thermochemistry(psi4_step.Energy):
                 PP[key] = "{:~P}".format(PP[key])
 
         self.description = []
-        self.description.append(__(self.description_text(PP), **PP, indent=self.indent))
+        self.description.append(
+            __(
+                self.description_text(PP, configuration=configuration),
+                **PP,
+                indent=self.indent,
+            )
+        )
         # Figure out what we are doing! The method is HF, B3LYP, CCSD, etc.
-        if P["level"] == "recommended":
-            method_string = P["method"]
-        else:
-            method_string = P["advanced_method"]
-
-        if method_string in psi4_step.methods:
-            method = psi4_step.methods[method_string]["method"]
-        else:
-            method = method_string
-
-        if method == "dft":
-            if P["level"] == "recommended":
-                functional_string = P["functional"]
-            else:
-                functional_string = P["advanced_functional"]
-            method = psi4_step.dft_functionals[functional_string]["name"]
-            if (
-                P["dispersion"] != "none"
-                and len(psi4_step.dft_functionals[functional_string]["dispersion"]) > 1
-            ):
-                method = method + "-" + P["dispersion"]
 
         lines = []
         lines.append("")
@@ -196,18 +183,21 @@ class Thermochemistry(psi4_step.Energy):
         lines.append("#" * 80)
         lines.append("")
         # lines.append("initial.find_point_group(tolerance=1.0e-5)")
-        lines.append("initial.symmetrize(1.0e-5)")
-        lines.append("point_group = initial.point_group().symbol()")
-        lines.append("")
+        # lines.append("initial.symmetrize(1.0e-5)")
+        # lines.append("point_group = initial.point_group().symbol()")
+        # lines.append("")
 
         if not P["use existing parameters"]:
             # Add in the input from the energy part of things
             lines.append(super().get_input(calculation_type=calculation_type))
         else:
-            lines.append(f"Eelec, wfn = frequency('{method}', return_wfn=True)")
+            previous = self.previous()
+            method, functional, _ = previous.get_method()
 
-            # Orbital plots
-            lines.append(self.plot_input())
+            if method == "dft":
+                lines.append(f"Eelec, wfn = frequency('{functional}', return_wfn=True)")
+            else:
+                lines.append(f"Eelec, wfn = frequency('{method}', return_wfn=True)")
 
         lines.append(
             f"""
