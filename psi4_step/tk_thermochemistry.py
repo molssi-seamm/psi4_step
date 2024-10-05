@@ -82,6 +82,7 @@ class TkThermochemistry(psi4_step.TkEnergy):
         None
         """
         self.dialog = None
+        self.first_calculation = False
 
         super().__init__(
             tk_flowchart=tk_flowchart,
@@ -133,15 +134,27 @@ class TkThermochemistry(psi4_step.TkEnergy):
 
         # and binding to change as needed
         for key in ("use existing parameters",):
-            self[key].combobox.bind("<<ComboboxSelected>>", self.reset_thermochemistry)
-            self[key].combobox.bind("<Return>", self.reset_thermochemistry)
-            self[key].combobox.bind("<FocusOut>", self.reset_thermochemistry)
+            self[key].combobox.bind("<<ComboboxSelected>>", self.reset_dialog)
+            self[key].combobox.bind("<Return>", self.reset_dialog)
+            self[key].combobox.bind("<FocusOut>", self.reset_dialog)
 
         # Top level needs to call reset_dialog
         if self.node.calculation == "thermochemistry":
             self.reset_dialog()
 
         return frame
+
+    def edit(self):
+        """Present a dialog for editing this step's parameters.
+        Look at the flowchart to see if a previous step was a calculation.
+        """
+        previous = self.node.previous()
+        self.first_calculation = isinstance(previous, psi4_step.Initialization)
+
+        super().edit()
+
+        if self.first_calculation:
+            self["use existing parameters"].set("no")
 
     def reset_dialog(self, widget=None, row=0):
         """Layout the widgets in the dialog.
@@ -172,18 +185,16 @@ class TkThermochemistry(psi4_step.TkEnergy):
             for slave in frame.grid_slaves():
                 slave.grid_forget()
 
-        # Shortcut for parameters
-        P = self.node.parameters
-
         self["thermochemistry"].grid(row=row, column=0)
         row += 1
 
         self.reset_thermochemistry()
 
-        if not P["use existing parameters"]:
+        if self.first_calculation or self["use existing parameters"].get() != "yes":
             row = super().reset_dialog(row=row)
-        else:
-            self.reset_calculation()
+
+        self.fit_dialog()
+
         return row
 
     def reset_thermochemistry(self, widget=None):
@@ -194,7 +205,11 @@ class TkThermochemistry(psi4_step.TkEnergy):
         widgets = []
         row = 0
 
-        for key in ("use existing parameters", "T", "P"):
+        if not self.first_calculation:
+            self["use existing parameters"].grid(row=row, column=0, sticky=tk.EW)
+            widgets.append(self["use existing parameters"])
+            row += 1
+        for key in ("T", "P"):
             self[key].grid(row=row, column=0, sticky=tk.EW)
             widgets.append(self[key])
             row += 1

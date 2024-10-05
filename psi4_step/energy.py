@@ -168,21 +168,7 @@ class Energy(seamm.Node):
             lines.append("#" * 80)
 
         # Figure out what we are doing!
-        if P["level"] == "recommended":
-            method_string = P["method"]
-        else:
-            method_string = P["advanced_method"]
-
-        # Allow the full name, or the short name, or just pray.
-        if method_string in psi4_step.methods:
-            method = psi4_step.methods[method_string]["method"]
-        else:
-            method = method_string.lower()
-            for key in psi4_step.methods:
-                if psi4_step.methods[key]["method"] == method:
-                    break
-            else:
-                method = method_string
+        method, functional, method_string = self.get_method()
 
         # lines.append('set scf_type df')
         # lines.append('set guess sad')
@@ -251,32 +237,12 @@ class Energy(seamm.Node):
 
         lines.append("")
         if method == "dft":
-            if P["level"] == "recommended":
-                functional_string = P["functional"]
-            else:
-                functional_string = P["advanced_functional"]
-
-            # Allow the full name, or the short name, or just pray.
-            if functional_string in psi4_step.dft_functionals:
-                functional = psi4_step.dft_functionals[functional_string]["name"]
-            else:
-                functional = functional_string.lower()
-                for key in psi4_step.dft_functionals:
-                    if psi4_step.dft_functionals[key]["name"] == functional:
-                        break
-                else:
-                    functional = functional_string
-
-            if (
-                P["dispersion"] != "none"
-                and len(psi4_step.dft_functionals[functional_string]["dispersion"]) > 1
-            ):
-                functional = functional + "-" + P["dispersion"]
             if restart is None:
                 lines.append(
                     f"Eelec, wfn = {calculation_type}('{functional}', return_wfn=True)"
                 )
-                lines.append(f"G = gradient('{functional}', ref_wfn=wfn)")
+                if calculation_type == "energy":
+                    lines.append(f"G = gradient('{functional}', ref_wfn=wfn)")
             else:
                 if calculation_type == "gradient":
                     lines.append(
@@ -294,7 +260,8 @@ class Energy(seamm.Node):
                 lines.append(
                     f"Eelec, wfn = {calculation_type}('{method}', return_wfn=True)"
                 )
-                lines.append(f"G = gradient('{method}', ref_wfn=wfn)")
+                if calculation_type == "energy":
+                    lines.append(f"G = gradient('{method}', ref_wfn=wfn)")
             else:
                 if calculation_type == "gradient":
                     lines.append(
@@ -347,9 +314,9 @@ except Exception as e:
 variables["_method"] = "{method}"
 variables["_method_string"] = "{method_string}"
 
-
+tmp = fix_multipoles(variables)
 with open("{filename}", "w") as fd:
-    json.dump(fix_multipoles(variables), fd, sort_keys=True, indent=3)
+    json.dump(tmp, fd, sort_keys=True, indent=3)
 """
             )
 
@@ -357,6 +324,54 @@ with open("{filename}", "w") as fd:
         lines.append(self.plot_input())
 
         return "\n".join(lines)
+
+    def get_method(self):
+        """Get the method and functional to use"""
+        P = self.parameters.current_values_to_dict(
+            context=seamm.flowchart_variables._data
+        )
+
+        if P["level"] == "recommended":
+            method_string = P["method"]
+        else:
+            method_string = P["advanced_method"]
+
+        # Allow the full name, or the short name, or just pray.
+        if method_string in psi4_step.methods:
+            method = psi4_step.methods[method_string]["method"]
+        else:
+            method = method_string.lower()
+            for key in psi4_step.methods:
+                if psi4_step.methods[key]["method"] == method:
+                    break
+            else:
+                method = method_string
+
+        if method == "dft":
+            if P["level"] == "recommended":
+                functional_string = P["functional"]
+            else:
+                functional_string = P["advanced_functional"]
+
+            # Allow the full name, or the short name, or just pray.
+            if functional_string in psi4_step.dft_functionals:
+                functional = psi4_step.dft_functionals[functional_string]["name"]
+            else:
+                functional = functional_string.lower()
+                for key in psi4_step.dft_functionals:
+                    if psi4_step.dft_functionals[key]["name"] == functional:
+                        break
+                else:
+                    functional = functional_string
+
+            if (
+                P["dispersion"] != "none"
+                and len(psi4_step.dft_functionals[functional_string]["dispersion"]) > 1
+            ):
+                functional = functional + "-" + P["dispersion"]
+        else:
+            functional = method
+        return method, functional, method_string
 
     def analyze(self, indent="", data={}, out=[]):
         """Parse the output and generating the text output and store the
