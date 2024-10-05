@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>psi4_step package &#8212; SEAMM Psi4 Plug-in 2024.7.30 documentation</title>
+    <title>psi4_step package &#8212; SEAMM Psi4 Plug-in 2024.10.5 documentation</title>
   
   
   
@@ -30,7 +30,7 @@
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=80d5e7a1" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=87e54e7c" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
     <link rel="stylesheet" type="text/css" href="../_static/css/custom.css?v=c224919a" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
@@ -46,7 +46,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-PQXXTJ2');</script>
 <!-- End Google Tag Manager -->
 
-    <script src="../_static/documentation_options.js?v=bbd4d529"></script>
+    <script src="../_static/documentation_options.js?v=7c4a9830"></script>
     <script src="../_static/doctools.js?v=9a2dae69"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -680,6 +680,12 @@ data in variables for other stages to access</p>
 <dt class="sig sig-object py" id="psi4_step.energy.Energy.get_input">
 <span class="sig-name descname"><span class="pre">get_input</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">calculation_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'energy'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">restart</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/psi4_step/energy.html#Energy.get_input"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#psi4_step.energy.Energy.get_input" title="Link to this definition">#</a></dt>
 <dd><p>Get the input for an energy calculation for Psi4</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="psi4_step.energy.Energy.get_method">
+<span class="sig-name descname"><span class="pre">get_method</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/psi4_step/energy.html#Energy.get_method"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#psi4_step.energy.Energy.get_method" title="Link to this definition">#</a></dt>
+<dd><p>Get the method and functional to use</p>
 </dd></dl>
 
 <dl class="py property">
@@ -1517,7 +1523,7 @@ list of remaining argument strings.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="psi4_step.thermochemistry.Thermochemistry.description_text">
-<span class="sig-name descname"><span class="pre">description_text</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">P</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/psi4_step/thermochemistry.html#Thermochemistry.description_text"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#psi4_step.thermochemistry.Thermochemistry.description_text" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">description_text</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">P</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">configuration</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/psi4_step/thermochemistry.html#Thermochemistry.description_text"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#psi4_step.thermochemistry.Thermochemistry.description_text" title="Link to this definition">#</a></dt>
 <dd><p>Create the text description of what this step will do.
 The dictionary of control values is passed in as P so that
 the code can test values, etc.</p>
@@ -1538,7 +1544,7 @@ parameters.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="psi4_step.thermochemistry.Thermochemistry.get_input">
 <span class="sig-name descname"><span class="pre">get_input</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">calculation_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'frequency'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/psi4_step/thermochemistry.html#Thermochemistry.get_input"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#psi4_step.thermochemistry.Thermochemistry.get_input" title="Link to this definition">#</a></dt>
-<dd><p>Get the input for an optimization calculation for Psi4</p>
+<dd><p>Get the input for a frequency calculation for Psi4</p>
 </dd></dl>
 
 <dl class="py property">
@@ -2172,6 +2178,13 @@ module.</p>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="psi4_step.tk_thermochemistry.TkThermochemistry.edit">
+<span class="sig-name descname"><span class="pre">edit</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/psi4_step/tk_thermochemistry.html#TkThermochemistry.edit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#psi4_step.tk_thermochemistry.TkThermochemistry.edit" title="Link to this definition">#</a></dt>
+<dd><p>Present a dialog for editing this step’s parameters.
+Look at the flowchart to see if a previous step was a calculation.</p>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="psi4_step.tk_thermochemistry.TkThermochemistry.reset_dialog">
 <span class="sig-name descname"><span class="pre">reset_dialog</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">widget</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">row</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/psi4_step/tk_thermochemistry.html#TkThermochemistry.reset_dialog"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#psi4_step.tk_thermochemistry.TkThermochemistry.reset_dialog" title="Link to this definition">#</a></dt>
 <dd><p>Layout the widgets in the dialog.</p>
@@ -2295,6 +2308,7 @@ A step for Psi4 in a SEAMM flowchart</p>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#psi4_step.energy.Energy.analyze"><code class="docutils literal notranslate"><span class="pre">Energy.analyze()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#psi4_step.energy.Energy.description_text"><code class="docutils literal notranslate"><span class="pre">Energy.description_text()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#psi4_step.energy.Energy.get_input"><code class="docutils literal notranslate"><span class="pre">Energy.get_input()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#psi4_step.energy.Energy.get_method"><code class="docutils literal notranslate"><span class="pre">Energy.get_method()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#psi4_step.energy.Energy.git_revision"><code class="docutils literal notranslate"><span class="pre">Energy.git_revision</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#psi4_step.energy.Energy.header"><code class="docutils literal notranslate"><span class="pre">Energy.header</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#psi4_step.energy.Energy.plot_input"><code class="docutils literal notranslate"><span class="pre">Energy.plot_input()</span></code></a></li>
@@ -2545,6 +2559,7 @@ A step for Psi4 in a SEAMM flowchart</p>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#psi4_step.tk_thermochemistry.TkThermochemistry.h"><code class="docutils literal notranslate"><span class="pre">TkThermochemistry.h</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#psi4_step.tk_thermochemistry.TkThermochemistry.self"><code class="docutils literal notranslate"><span class="pre">TkThermochemistry.self</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#psi4_step.tk_thermochemistry.TkThermochemistry.create_dialog"><code class="docutils literal notranslate"><span class="pre">TkThermochemistry.create_dialog()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#psi4_step.tk_thermochemistry.TkThermochemistry.edit"><code class="docutils literal notranslate"><span class="pre">TkThermochemistry.edit()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#psi4_step.tk_thermochemistry.TkThermochemistry.reset_dialog"><code class="docutils literal notranslate"><span class="pre">TkThermochemistry.reset_dialog()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#psi4_step.tk_thermochemistry.TkThermochemistry.reset_thermochemistry"><code class="docutils literal notranslate"><span class="pre">TkThermochemistry.reset_thermochemistry()</span></code></a></li>
 </ul>

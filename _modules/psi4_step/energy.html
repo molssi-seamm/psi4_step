@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>psi4_step.energy &#8212; SEAMM Psi4 Plug-in 2024.7.30 documentation</title>
+    <title>psi4_step.energy &#8212; SEAMM Psi4 Plug-in 2024.10.5 documentation</title>
   
   
   
@@ -29,7 +29,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
     <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=87e54e7c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
     <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css?v=c224919a" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
@@ -45,7 +45,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-PQXXTJ2');</script>
 <!-- End Google Tag Manager -->
 
-    <script src="../../_static/documentation_options.js?v=bbd4d529"></script>
+    <script src="../../_static/documentation_options.js?v=7c4a9830"></script>
     <script src="../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -664,21 +664,7 @@ document.write(`
             <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;#&quot;</span> <span class="o">*</span> <span class="mi">80</span><span class="p">)</span>
 
         <span class="c1"># Figure out what we are doing!</span>
-        <span class="k">if</span> <span class="n">P</span><span class="p">[</span><span class="s2">&quot;level&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;recommended&quot;</span><span class="p">:</span>
-            <span class="n">method_string</span> <span class="o">=</span> <span class="n">P</span><span class="p">[</span><span class="s2">&quot;method&quot;</span><span class="p">]</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">method_string</span> <span class="o">=</span> <span class="n">P</span><span class="p">[</span><span class="s2">&quot;advanced_method&quot;</span><span class="p">]</span>
-
-        <span class="c1"># Allow the full name, or the short name, or just pray.</span>
-        <span class="k">if</span> <span class="n">method_string</span> <span class="ow">in</span> <span class="n">psi4_step</span><span class="o">.</span><span class="n">methods</span><span class="p">:</span>
-            <span class="n">method</span> <span class="o">=</span> <span class="n">psi4_step</span><span class="o">.</span><span class="n">methods</span><span class="p">[</span><span class="n">method_string</span><span class="p">][</span><span class="s2">&quot;method&quot;</span><span class="p">]</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">method</span> <span class="o">=</span> <span class="n">method_string</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
-            <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">psi4_step</span><span class="o">.</span><span class="n">methods</span><span class="p">:</span>
-                <span class="k">if</span> <span class="n">psi4_step</span><span class="o">.</span><span class="n">methods</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="s2">&quot;method&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">method</span><span class="p">:</span>
-                    <span class="k">break</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">method</span> <span class="o">=</span> <span class="n">method_string</span>
+        <span class="n">method</span><span class="p">,</span> <span class="n">functional</span><span class="p">,</span> <span class="n">method_string</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_method</span><span class="p">()</span>
 
         <span class="c1"># lines.append(&#39;set scf_type df&#39;)</span>
         <span class="c1"># lines.append(&#39;set guess sad&#39;)</span>
@@ -747,32 +733,12 @@ document.write(`
 
         <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;dft&quot;</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">P</span><span class="p">[</span><span class="s2">&quot;level&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;recommended&quot;</span><span class="p">:</span>
-                <span class="n">functional_string</span> <span class="o">=</span> <span class="n">P</span><span class="p">[</span><span class="s2">&quot;functional&quot;</span><span class="p">]</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">functional_string</span> <span class="o">=</span> <span class="n">P</span><span class="p">[</span><span class="s2">&quot;advanced_functional&quot;</span><span class="p">]</span>
-
-            <span class="c1"># Allow the full name, or the short name, or just pray.</span>
-            <span class="k">if</span> <span class="n">functional_string</span> <span class="ow">in</span> <span class="n">psi4_step</span><span class="o">.</span><span class="n">dft_functionals</span><span class="p">:</span>
-                <span class="n">functional</span> <span class="o">=</span> <span class="n">psi4_step</span><span class="o">.</span><span class="n">dft_functionals</span><span class="p">[</span><span class="n">functional_string</span><span class="p">][</span><span class="s2">&quot;name&quot;</span><span class="p">]</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">functional</span> <span class="o">=</span> <span class="n">functional_string</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
-                <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">psi4_step</span><span class="o">.</span><span class="n">dft_functionals</span><span class="p">:</span>
-                    <span class="k">if</span> <span class="n">psi4_step</span><span class="o">.</span><span class="n">dft_functionals</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">functional</span><span class="p">:</span>
-                        <span class="k">break</span>
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="n">functional</span> <span class="o">=</span> <span class="n">functional_string</span>
-
-            <span class="k">if</span> <span class="p">(</span>
-                <span class="n">P</span><span class="p">[</span><span class="s2">&quot;dispersion&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;none&quot;</span>
-                <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">psi4_step</span><span class="o">.</span><span class="n">dft_functionals</span><span class="p">[</span><span class="n">functional_string</span><span class="p">][</span><span class="s2">&quot;dispersion&quot;</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mi">1</span>
-            <span class="p">):</span>
-                <span class="n">functional</span> <span class="o">=</span> <span class="n">functional</span> <span class="o">+</span> <span class="s2">&quot;-&quot;</span> <span class="o">+</span> <span class="n">P</span><span class="p">[</span><span class="s2">&quot;dispersion&quot;</span><span class="p">]</span>
             <span class="k">if</span> <span class="n">restart</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
                     <span class="sa">f</span><span class="s2">&quot;Eelec, wfn = </span><span class="si">{</span><span class="n">calculation_type</span><span class="si">}</span><span class="s2">(&#39;</span><span class="si">{</span><span class="n">functional</span><span class="si">}</span><span class="s2">&#39;, return_wfn=True)&quot;</span>
                 <span class="p">)</span>
-                <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;G = gradient(&#39;</span><span class="si">{</span><span class="n">functional</span><span class="si">}</span><span class="s2">&#39;, ref_wfn=wfn)&quot;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">calculation_type</span> <span class="o">==</span> <span class="s2">&quot;energy&quot;</span><span class="p">:</span>
+                    <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;G = gradient(&#39;</span><span class="si">{</span><span class="n">functional</span><span class="si">}</span><span class="s2">&#39;, ref_wfn=wfn)&quot;</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">calculation_type</span> <span class="o">==</span> <span class="s2">&quot;gradient&quot;</span><span class="p">:</span>
                     <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
@@ -790,7 +756,8 @@ document.write(`
                 <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
                     <span class="sa">f</span><span class="s2">&quot;Eelec, wfn = </span><span class="si">{</span><span class="n">calculation_type</span><span class="si">}</span><span class="s2">(&#39;</span><span class="si">{</span><span class="n">method</span><span class="si">}</span><span class="s2">&#39;, return_wfn=True)&quot;</span>
                 <span class="p">)</span>
-                <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;G = gradient(&#39;</span><span class="si">{</span><span class="n">method</span><span class="si">}</span><span class="s2">&#39;, ref_wfn=wfn)&quot;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">calculation_type</span> <span class="o">==</span> <span class="s2">&quot;energy&quot;</span><span class="p">:</span>
+                    <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;G = gradient(&#39;</span><span class="si">{</span><span class="n">method</span><span class="si">}</span><span class="s2">&#39;, ref_wfn=wfn)&quot;</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">calculation_type</span> <span class="o">==</span> <span class="s2">&quot;gradient&quot;</span><span class="p">:</span>
                     <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
@@ -843,9 +810,9 @@ document.write(`
 <span class="s2">variables[&quot;_method&quot;] = &quot;</span><span class="si">{</span><span class="n">method</span><span class="si">}</span><span class="s2">&quot;</span>
 <span class="s2">variables[&quot;_method_string&quot;] = &quot;</span><span class="si">{</span><span class="n">method_string</span><span class="si">}</span><span class="s2">&quot;</span>
 
-
+<span class="s2">tmp = fix_multipoles(variables)</span>
 <span class="s2">with open(&quot;</span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2">&quot;, &quot;w&quot;) as fd:</span>
-<span class="s2">    json.dump(fix_multipoles(variables), fd, sort_keys=True, indent=3)</span>
+<span class="s2">    json.dump(tmp, fd, sort_keys=True, indent=3)</span>
 <span class="s2">&quot;&quot;&quot;</span>
             <span class="p">)</span>
 
@@ -853,6 +820,57 @@ document.write(`
         <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">plot_input</span><span class="p">())</span>
 
         <span class="k">return</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">lines</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Energy.get_method">
+<a class="viewcode-back" href="../../api/psi4_step.html#psi4_step.energy.Energy.get_method">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_method</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the method and functional to use&quot;&quot;&quot;</span>
+        <span class="n">P</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">current_values_to_dict</span><span class="p">(</span>
+            <span class="n">context</span><span class="o">=</span><span class="n">seamm</span><span class="o">.</span><span class="n">flowchart_variables</span><span class="o">.</span><span class="n">_data</span>
+        <span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">P</span><span class="p">[</span><span class="s2">&quot;level&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;recommended&quot;</span><span class="p">:</span>
+            <span class="n">method_string</span> <span class="o">=</span> <span class="n">P</span><span class="p">[</span><span class="s2">&quot;method&quot;</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">method_string</span> <span class="o">=</span> <span class="n">P</span><span class="p">[</span><span class="s2">&quot;advanced_method&quot;</span><span class="p">]</span>
+
+        <span class="c1"># Allow the full name, or the short name, or just pray.</span>
+        <span class="k">if</span> <span class="n">method_string</span> <span class="ow">in</span> <span class="n">psi4_step</span><span class="o">.</span><span class="n">methods</span><span class="p">:</span>
+            <span class="n">method</span> <span class="o">=</span> <span class="n">psi4_step</span><span class="o">.</span><span class="n">methods</span><span class="p">[</span><span class="n">method_string</span><span class="p">][</span><span class="s2">&quot;method&quot;</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">method</span> <span class="o">=</span> <span class="n">method_string</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">psi4_step</span><span class="o">.</span><span class="n">methods</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">psi4_step</span><span class="o">.</span><span class="n">methods</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="s2">&quot;method&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">method</span><span class="p">:</span>
+                    <span class="k">break</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">method</span> <span class="o">=</span> <span class="n">method_string</span>
+
+        <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;dft&quot;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">P</span><span class="p">[</span><span class="s2">&quot;level&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;recommended&quot;</span><span class="p">:</span>
+                <span class="n">functional_string</span> <span class="o">=</span> <span class="n">P</span><span class="p">[</span><span class="s2">&quot;functional&quot;</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">functional_string</span> <span class="o">=</span> <span class="n">P</span><span class="p">[</span><span class="s2">&quot;advanced_functional&quot;</span><span class="p">]</span>
+
+            <span class="c1"># Allow the full name, or the short name, or just pray.</span>
+            <span class="k">if</span> <span class="n">functional_string</span> <span class="ow">in</span> <span class="n">psi4_step</span><span class="o">.</span><span class="n">dft_functionals</span><span class="p">:</span>
+                <span class="n">functional</span> <span class="o">=</span> <span class="n">psi4_step</span><span class="o">.</span><span class="n">dft_functionals</span><span class="p">[</span><span class="n">functional_string</span><span class="p">][</span><span class="s2">&quot;name&quot;</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">functional</span> <span class="o">=</span> <span class="n">functional_string</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+                <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">psi4_step</span><span class="o">.</span><span class="n">dft_functionals</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">psi4_step</span><span class="o">.</span><span class="n">dft_functionals</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">functional</span><span class="p">:</span>
+                        <span class="k">break</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">functional</span> <span class="o">=</span> <span class="n">functional_string</span>
+
+            <span class="k">if</span> <span class="p">(</span>
+                <span class="n">P</span><span class="p">[</span><span class="s2">&quot;dispersion&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;none&quot;</span>
+                <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">psi4_step</span><span class="o">.</span><span class="n">dft_functionals</span><span class="p">[</span><span class="n">functional_string</span><span class="p">][</span><span class="s2">&quot;dispersion&quot;</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mi">1</span>
+            <span class="p">):</span>
+                <span class="n">functional</span> <span class="o">=</span> <span class="n">functional</span> <span class="o">+</span> <span class="s2">&quot;-&quot;</span> <span class="o">+</span> <span class="n">P</span><span class="p">[</span><span class="s2">&quot;dispersion&quot;</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">functional</span> <span class="o">=</span> <span class="n">method</span>
+        <span class="k">return</span> <span class="n">method</span><span class="p">,</span> <span class="n">functional</span><span class="p">,</span> <span class="n">method_string</span></div>
 
 
 <div class="viewcode-block" id="Energy.analyze">

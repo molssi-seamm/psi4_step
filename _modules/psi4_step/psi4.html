@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>psi4_step.psi4 &#8212; SEAMM Psi4 Plug-in 2024.7.30 documentation</title>
+    <title>psi4_step.psi4 &#8212; SEAMM Psi4 Plug-in 2024.10.5 documentation</title>
   
   
   
@@ -29,7 +29,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
     <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=87e54e7c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
     <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css?v=c224919a" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
@@ -45,7 +45,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-PQXXTJ2');</script>
 <!-- End Google Tag Manager -->
 
-    <script src="../../_static/documentation_options.js?v=bbd4d529"></script>
+    <script src="../../_static/documentation_options.js?v=7c4a9830"></script>
     <script src="../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -527,57 +527,7 @@ document.write(`
 <span class="s2">    it = iter(data.items())</span>
 <span class="s2">    for key, value in it:</span>
 <span class="s2">        if &#39;PROP &#39; == key[0:5]:</span>
-<span class="s2">            result[key[6:]] = value[0]</span>
-<span class="s2">        elif &#39;SCF DIPOLE&#39; == key:</span>
-<span class="s2">            result[key] = value[0]</span>
-<span class="s2">        elif &#39;CURRENT DIPOLE&#39; == key:</span>
-<span class="s2">            result[key] = value[0]</span>
-<span class="s2">        elif &#39;32-POLE&#39; in key:</span>
-<span class="s2">            tmp = []</span>
-<span class="s2">            while True:</span>
-<span class="s2">                value = 0.0 if abs(value) &lt; 1.0e-10 else value</span>
-<span class="s2">                tmp.append(value)</span>
-<span class="s2">                if &#39;ZZZZZ&#39; in key:</span>
-<span class="s2">                    break</span>
-<span class="s2">                key, value = next(it)</span>
-<span class="s2">            result[&#39;32-POLE&#39;] = tmp</span>
-<span class="s2">        elif &#39;HEXADECAPOLE&#39; in key:</span>
-<span class="s2">            tmp = []</span>
-<span class="s2">            while True:</span>
-<span class="s2">                value = 0.0 if abs(value) &lt; 1.0e-10 else value</span>
-<span class="s2">                tmp.append(value)</span>
-<span class="s2">                if &#39;ZZZZ&#39; in key:</span>
-<span class="s2">                    break</span>
-<span class="s2">                key, value = next(it)</span>
-<span class="s2">            result[&#39;HEXADECAPOLE&#39;] = tmp</span>
-<span class="s2">        elif &#39;OCTUPOLE&#39; in key:</span>
-<span class="s2">            tmp = []</span>
-<span class="s2">            while True:</span>
-<span class="s2">                value = 0.0 if abs(value) &lt; 1.0e-10 else value</span>
-<span class="s2">                tmp.append(value)</span>
-<span class="s2">                if &#39;ZZZ&#39; in key:</span>
-<span class="s2">                    break</span>
-<span class="s2">                key, value = next(it)</span>
-<span class="s2">            result[&#39;OCTUPOLE&#39;] = tmp</span>
-<span class="s2">        elif &#39;QUADRUPOLE&#39; in key:</span>
-<span class="s2">            tmp = []</span>
-<span class="s2">            while True:</span>
-<span class="s2">                value = 0.0 if abs(value) &lt; 1.0e-10 else value</span>
-<span class="s2">                tmp.append(value)</span>
-<span class="s2">                if &#39;ZZ&#39; in key:</span>
-<span class="s2">                    break</span>
-<span class="s2">                key, value = next(it)</span>
-<span class="s2">            result[&#39;QUADRUPOLE&#39;] = tmp</span>
-<span class="s2">        elif &#39;DIPOLE&#39; in key:</span>
-<span class="s2">            tmp = []</span>
-<span class="s2">            while True:</span>
-<span class="s2">                value = 0.0 if abs(value) &lt; 1.0e-10 else value</span>
-<span class="s2">                tmp.append(value)</span>
-<span class="s2">                result[key] = value</span>
-<span class="s2">                if &#39;Z&#39; in key:</span>
-<span class="s2">                    break</span>
-<span class="s2">                key, value = next(it)</span>
-<span class="s2">            result[key[0:-2]] = tmp</span>
+<span class="s2">            result[key[5:]] = value[0]</span>
 <span class="s2">        elif &#39;ESP AT CENTER&#39; in key:</span>
 <span class="s2">            esp.append(value)</span>
 <span class="s2">        else:</span>
@@ -585,6 +535,7 @@ document.write(`
 
 <span class="s2">    if len(esp) &gt; 0:</span>
 <span class="s2">        result[&#39;ELECTROSTATIC POTENTIAL&#39;] = esp</span>
+
 <span class="s2">    return result</span>
 <span class="s2">&quot;&quot;&quot;</span>
 
@@ -928,8 +879,8 @@ document.write(`
             <span class="n">text</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">get_input</span><span class="p">()</span>
             <span class="n">input_data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
 
-            <span class="n">input_data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;clean()&quot;</span><span class="p">)</span>
-            <span class="n">input_data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;clean_variables()&quot;</span><span class="p">)</span>
+            <span class="c1"># input_data.append(&quot;clean()&quot;)</span>
+            <span class="c1"># input_data.append(&quot;clean_variables()&quot;)</span>
             <span class="c1"># input_data.append(&#39;clean_options()&#39;)</span>
 
             <span class="n">node</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">next</span><span class="p">()</span>
