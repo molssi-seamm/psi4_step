@@ -1,6 +1,10 @@
 =======
 History
 =======
+2024.10.15 -- Bugfix: error if used in a loop and previous directories deleted.
+   * The code crashed if called with a loop in the flowchart, and the last directory of
+     a previous loop iteration was deleted before running the next iteration.
+     
 2024.10.5 -- Enhancements and bug fixes for thermochemistry
    * Improved GUI for thermochemistry so that it automatically recognizes whether it is
      after e.g. an optimization and configures appropriately.

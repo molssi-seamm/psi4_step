@@ -268,6 +268,8 @@ class Psi4(seamm.Node):
             The next node object in the flowchart.
 
         """
+        next_node = super().run(printer)
+
         printer.important(self.header)
         printer.important("")
 
@@ -345,8 +347,6 @@ class Psi4(seamm.Node):
 
         # Work through the subflowchart to find out what to do.
         self.subflowchart.root_directory = self.flowchart.root_directory
-
-        next_node = super().run(printer)
 
         # Get the first real node
         node0 = self.subflowchart.get_node("1").next()
