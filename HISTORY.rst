@@ -1,6 +1,10 @@
 =======
 History
 =======
+2024.12.7 -- Minor update due to changes in molsystem
+   * The molsystem was updated to improve the handling of properties. This required
+     changes in this module to match the new molsystem.
+    
 2024.10.15 -- Bugfix: error if used in a loop and previous directories deleted.
    * The code crashed if called with a loop in the flowchart, and the last directory of
      a previous loop iteration was deleted before running the next iteration.
