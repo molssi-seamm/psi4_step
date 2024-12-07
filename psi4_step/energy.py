@@ -418,7 +418,7 @@ with open("{filename}", "w") as fd:
         system, configuration = self.get_system_configuration()
         obConversion = openbabel.OBConversion()
         obConversion.SetOutFormat("sdf")
-        obMol = configuration.to_OBMol(properties="all")
+        obMol = configuration.to_OBMol(properties="*")
         title = f"SEAMM={system.name}/{configuration.name}"
         obMol.SetTitle(title)
         sdf = obConversion.WriteString(obMol)
