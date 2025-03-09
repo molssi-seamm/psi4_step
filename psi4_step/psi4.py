@@ -1,21 +1,26 @@
 # -*- coding: utf-8 -*-
 
-"""Non-graphical part of the Psi4 step in a SEAMM flowchart
-"""
+"""Non-graphical part of the Psi4 step in a SEAMM flowchart"""
 
 import configparser
+import csv
+from datetime import datetime, timezone
 import importlib
 import json
 import logging
 import os
 from pathlib import Path
+import platform
 import pprint
 import shutil
+import time
+
+from cpuinfo import get_cpu_info
 
 import psi4_step
 import seamm
 import seamm_exec
-from seamm_util import Configuration
+from seamm_util import Configuration, units_class
 import seamm_util.printing as printing
 from seamm_util.printing import FormattedText as __
 
@@ -162,6 +167,50 @@ class Psi4(seamm.Node):
         )
 
         self.parameters = psi4_step.Psi4Parameters()
+        self._basis = None
+        self._model = None
+        self._extended_model = None
+
+        # Set up the timing information
+        self._timing_data = []
+        self._timing_path = Path("~/.seamm.d/timing/psi4.csv").expanduser()
+        self._timing_header = [
+            "node",  # 0
+            "cpu",  # 1
+            "cpu_version",  # 2
+            "cpu_count",  # 3
+            "cpu_speed",  # 4
+            "date",  # 5
+            "H_SMILES",  # 6
+            "ISOMERIC_SMILES",  # 7
+            "formula",  # 8
+            "net_charge",  # 9
+            "spin_multiplicity",  # 10
+            "keywords",  # 11
+            "nproc",  # 12
+            "time",  # 13
+        ]
+        try:
+            self._timing_path.parent.mkdir(parents=True, exist_ok=True)
+
+            self._timing_data = 14 * [""]
+            self._timing_data[0] = platform.node()
+            tmp = get_cpu_info()
+            if "arch" in tmp:
+                self._timing_data[1] = tmp["arch"]
+            if "cpuinfo_version_string" in tmp:
+                self._timing_data[2] = tmp["cpuinfo_version_string"]
+            if "count" in tmp:
+                self._timing_data[3] = str(tmp["count"])
+            if "hz_advertized_friendly" in tmp:
+                self._timing_data[4] = tmp["hz_advertized_friendly"]
+
+            if not self._timing_path.exists():
+                with self._timing_path.open("w", newline="") as fd:
+                    writer = csv.writer(fd)
+                    writer.writerow(self._timing_header)
+        except Exception:
+            self._timing_data = None
 
     @property
     def version(self):
@@ -172,6 +221,39 @@ class Psi4(seamm.Node):
     def git_revision(self):
         """The git version of this module."""
         return psi4_step.__git_revision__
+
+    @property
+    def basis(self):
+        """The basis set"""
+        return self._basis
+
+    @basis.setter
+    def basis(self, value):
+        # Convert *'s to (d,p) notation
+        if "**" in value:
+            self._basis = value.replace("**", "(d,p)")
+        elif "*" in value:
+            self._basis = value.replace("*", "(d)")
+        else:
+            self._basis = value
+
+    @property
+    def model(self):
+        """The model chemistry"""
+        return self._model
+
+    @model.setter
+    def model(self, value):
+        self._model = value
+
+    @property
+    def extended_model(self):
+        """The extended_model chemistry"""
+        return self._extended_model
+
+    @extended_model.setter
+    def extended_model(self, value):
+        self._extended_model = value
 
     def create_parser(self):
         """Setup the command-line / config file parser"""
@@ -366,14 +448,24 @@ class Psi4(seamm.Node):
         # Put the structure into the input
         input_data.append(self._convert_structure(name="initial"))
 
+        control = []
         node = node0
         while node is not None:
             text = node.get_input()
             input_data.append(text)
 
-            # input_data.append("clean()")
-            # input_data.append("clean_variables()")
-            # input_data.append('clean_options()')
+            # For the timing data, get the parameters used
+            Pnode = node.parameters.current_values_to_dict(
+                context=seamm.flowchart_variables._data
+            )
+
+            tmp = []
+            for key, value in Pnode.items():
+                if isinstance(value, units_class):
+                    tmp.append((key, f"{value:~P}"))
+                else:
+                    tmp.append((key, value))
+            control.append(tmp)
 
             node = node.next()
 
@@ -400,6 +492,7 @@ class Psi4(seamm.Node):
         # Check for already having run
         path = Path(self.directory) / "success.dat"
         if path.exists():
+            self._timing_data = None
             result = {}
             path = Path(self.directory) / "stdout.txt"
             if path.exists():
@@ -455,6 +548,34 @@ class Psi4(seamm.Node):
                 + f"    Psi4 will use {ce['NTASKS']} threads and {memory} memory\n"
             )
 
+            if self._timing_data is not None:
+                try:
+                    self._timing_data[6] = configuration.to_smiles(
+                        canonical=True, hydrogens=True
+                    )
+                except Exception:
+                    self._timing_data[6] = ""
+                try:
+                    self._timing_data[7] = configuration.isomeric_smiles
+                except Exception:
+                    self._timing_data[7] = ""
+                try:
+                    self._timing_data[8] = configuration.formula[0]
+                except Exception:
+                    self._timing_data[7] = ""
+                try:
+                    self._timing_data[9] = str(configuration.charge)
+                except Exception:
+                    self._timing_data[9] = ""
+                try:
+                    self._timing_data[10] = str(configuration.spin_multiplicity)
+                except Exception:
+                    self._timing_data[10] = ""
+                self._timing_data[11] = json.dumps(control)
+                self._timing_data[5] = datetime.now(timezone.utc).isoformat()
+
+            t0 = time.time_ns()
+
             result = executor.run(
                 cmd=["{code}"],
                 config=config,
@@ -465,6 +586,17 @@ class Psi4(seamm.Node):
                 shell=True,
                 ce=ce,
             )
+
+            t = (time.time_ns() - t0) / 1.0e9
+            if self._timing_data is not None:
+                self._timing_data[13] = f"{t:.3f}"
+                self._timing_data[12] = str(ce["NTASKS"])
+                try:
+                    with self._timing_path.open("a", newline="") as fd:
+                        writer = csv.writer(fd)
+                        writer.writerow(self._timing_data)
+                except Exception:
+                    pass
 
             if not result:
                 self.logger.error("There was an error running Psi4")
@@ -506,31 +638,6 @@ class Psi4(seamm.Node):
             indent: str
                 An extra indentation for the output
         """
-        # Update the structure
-        directory = Path(self.directory)
-        structure_file = directory / "final_structure.json"
-        if structure_file.exists():
-            with structure_file.open(mode="r") as fd:
-                structure = json.load(fd)
-            if "geom" in structure:
-                system_db = self.get_variable("_system_db")
-                configuration = system_db.system.configuration
-                xs = []
-                ys = []
-                zs = []
-                it = iter(structure["geom"])
-                for x in it:
-                    xs.append(x)
-                    ys.append(next(it))
-                    zs.append(next(it))
-                configuration.atoms["x"][0:] = xs
-                configuration.atoms["y"][0:] = ys
-                configuration.atoms["z"][0:] = zs
-                printer.important(
-                    self.indent + "    Updated the system with the structure from Psi4",
-                )
-                printer.important("")
-
         # Get the first real node
         node = self.subflowchart.get_node("1").next()
 

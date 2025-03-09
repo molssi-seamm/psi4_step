@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Global control parameters for Psi4
-"""
+"""Global control parameters for Psi4"""
 
 import logging
 

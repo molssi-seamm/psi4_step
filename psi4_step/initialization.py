@@ -85,6 +85,7 @@ class Initialization(seamm.Node):
         result.append(f"# {self.header}")
         result.append("#" * 80)
 
+        self.parent.basis = P["basis"]
         result.append(f"set basis {P['basis']}")
         result.append("")
         result.append(f"initial.symmetrize({P['symmetry_tolerance']})")

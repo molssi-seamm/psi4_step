@@ -1,12 +1,10 @@
 # -*- coding: utf-8 -*-
-"""Global control parameters for Psi4
-"""
+"""Global control parameters for Psi4"""
 
 import logging
 
 import psi4_step
-
-# import seamm
+import seamm
 
 logger = logging.getLogger(__name__)
 
@@ -92,5 +90,22 @@ class OptimizationParameters(psi4_step.EnergyParameters):
         parameters given in the class"""
 
         super().__init__(
-            defaults={**OptimizationParameters.parameters, **defaults}, data=data
+            defaults={
+                **OptimizationParameters.parameters,
+                **seamm.standard_parameters.structure_handling_parameters,
+                **defaults,
+            },
+            data=data,
         )
+
+        # Do any local editing of defaults
+        tmp = self["structure handling"]
+        tmp.description = "Structure handling:"
+
+        tmp = self["system name"]
+        tmp._data["enumeration"] = (*tmp.enumeration, "optimized with {model}")
+        tmp.default = "keep current name"
+
+        tmp = self["configuration name"]
+        tmp._data["enumeration"] = ["optimized with {model}", *tmp.enumeration]
+        tmp.default = "optimized with {model}"

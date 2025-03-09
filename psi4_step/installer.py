@@ -56,6 +56,8 @@ class Installer(seamm_installer.InstallerBase):
 
         logger.debug("Initializing the Psi4 installer object.")
 
+        # Define this step's details
+        self.environment = "seamm-psi4"
         self.section = "psi4-step"
         self.executables = ["psi4"]
         self.resource_path = Path(pkg_resources.resource_filename(__name__, "data/"))
@@ -63,144 +65,6 @@ class Installer(seamm_installer.InstallerBase):
         # The environment.yaml file for Conda installations.
         logger.debug(f"data directory: {self.resource_path}")
         self.environment_file = self.resource_path / "seamm-psi4.yml"
-
-    def check(self):
-        """Check the status of the Psi4 installation."""
-        print("Checking the Psi4 installation.")
-
-        # What Conda environment is the default?
-        path = self.configuration.path.parent / "psi4.ini"
-        if not path.exists():
-            text = (self.resource_path / "psi4.ini").read_text()
-            path.write_text(text)
-            print(f"    The psi4.ini file did not exist. Created {path}")
-
-        self.exe_config.path = path
-
-        # Get the current values
-        data = self.exe_config.get_values("local")
-
-        if "conda-environment" in data and data["conda-environment"] != "":
-            self.environment = data["conda-environment"]
-        else:
-            self.environment = "seamm-psi4"
-
-        super().check()
-
-    def install(self):
-        """Install Psi4 in a conda environment."""
-        print("Installing Psi4.")
-
-        # What Conda environment is the default?
-        path = self.configuration.path.parent / "psi4.ini"
-        if not path.exists():
-            text = (self.resource_path / "psi4.ini").read_text()
-            path.write_text(text)
-            print(f"    The psi4.ini file did not exist. Created {path}")
-
-        self.exe_config.path = path
-
-        # Get the current values
-        data = self.exe_config.get_values("local")
-
-        if "conda-environment" in data and data["conda-environment"] != "":
-            self.environment = data["conda-environment"]
-        else:
-            self.environment = "seamm-psi4"
-
-        super().install()
-
-    def show(self):
-        """Show the status of the Psi4 installation."""
-        print("Showing the Psi4 installation.")
-
-        # What Conda environment is the default?
-        path = self.configuration.path.parent / "psi4.ini"
-        if not path.exists():
-            text = (self.resource_path / "psi4.ini").read_text()
-            path.write_text(text)
-            print(f"    The psi4.ini file does not exist at {path}")
-            print("    The 'check' command will create it if Psi4 is installed.")
-            print("    Otherwise 'install' will install Psi4.")
-            return
-
-        self.exe_config.path = path
-
-        if not self.exe_config.section_exists("local"):
-            print(
-                "    Psi4 is not configured: there is no 'local' section in "
-                f"     {path}."
-            )
-            return
-
-        # Get the current values
-        data = self.exe_config.get_values("local")
-
-        if "conda-environment" in data and data["conda-environment"] != "":
-            self.environment = data["conda-environment"]
-        else:
-            self.environment = "seamm-psi4"
-
-        super().show()
-
-    def uninstall(self):
-        """Uninstall the Psi4 installation."""
-        print("Uninstall the Psi4 installation.")
-
-        # What Conda environment is the default?
-        path = self.configuration.path.parent / "psi4.ini"
-        if not path.exists():
-            text = (self.resource_path / "psi4.ini").read_text()
-            path.write_text(text)
-            print(
-                f""""    The psi4.ini file does not exist at {path}
-    Perhaps Psi4 is not installed, but if it is the 'check' command may locate it
-    and create the ini file, after which 'uninstall' will remove it."""
-            )
-            return
-
-        self.exe_config.path = path
-
-        if not self.exe_config.section_exists("local"):
-            print(
-                f""""    The psi4.ini file at {path} does not have local section.
-    Perhaps Psi4 not installed, but if it is the 'check' command may locate it
-    and update the ini file, after which 'uninstall' will remove it."""
-            )
-            return
-
-        # Get the current values
-        data = self.exe_config.get_values("local")
-
-        if "conda-environment" in data and data["conda-environment"] != "":
-            self.environment = data["conda-environment"]
-        else:
-            self.environment = "seamm-psi4"
-
-        super().uninstall()
-
-    def update(self):
-        """Updates the Psi4 installation."""
-        print("Updating the Psi4 installation.")
-
-        # What Conda environment is the default?
-        path = self.configuration.path.parent / "psi4.ini"
-        if not path.exists():
-            text = (self.resource_path / "psi4.ini").read_text()
-            path.write_text(text)
-            print(f"    The psi4.ini file did not exist. Created {path}")
-
-        self.exe_config.path = path
-
-        # Get the current values
-        data = self.exe_config.get_values("local")
-
-        if "conda-environment" in data and data["conda-environment"] != "":
-            self.environment = data["conda-environment"]
-        else:
-            self.environment = "seamm-psi4"
-
-        super().update()
 
     def exe_version(self, config):
         """Get the version of the Psi4 executable.
