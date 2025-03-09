@@ -34,17 +34,6 @@ from .optimization_parameters import OptimizationParameters  # noqa: F401
 from .optimization_step import OptimizationStep  # noqa: F401
 from .tk_optimization import TkOptimization  # noqa: F401
 
-# from .accelerated_optimization import AcceleratedOptimization  # noqa: F401
-# from .accelerated_optimization_parameters import (  # noqa: F401
-#     AcceleratedOptimizationParameters,
-# )
-# from .accelerated_optimization_step import (  # noqa: F401
-#     AcceleratedOptimizationStep,
-# )
-# from .tk_accelerated_optimization import (  # noqa: F401
-#     TkAcceleratedOptimization,
-# )
-
 from .thermochemistry_step import ThermochemistryStep  # noqa: F401
 from .thermochemistry import Thermochemistry  # noqa: F401
 from .thermochemistry_parameters import ThermochemistryParameters  # noqa: F401

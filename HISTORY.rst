@@ -1,6 +1,13 @@
 =======
 History
 =======
+2025.3.9 -- Optimization and thermochemistry enhancements
+   * Expanded the output to include gap, HOMO, LUMO, RMSD between initial and final
+     structure for optimizations, dipole moment, etc.
+   * Added control for updating the structure after optimization.
+   * Added enthalpy of formation to the thermochemistry output for known basis sets.
+   * Updated the installation to work with recent changes.
+     
 2024.12.7 -- Minor update due to changes in molsystem
    * The molsystem was updated to improve the handling of properties. This required
      changes in this module to match the new molsystem.

@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
-"""Non-graphical part of the Thermochemistry step in a Psi4 flowchart
-"""
+"""Non-graphical part of the Thermochemistry step in a Psi4 flowchart"""
 
 import json
 import logging
@@ -192,10 +191,12 @@ class Thermochemistry(psi4_step.Energy):
             lines.append(super().get_input(calculation_type=calculation_type))
         else:
             previous = self.previous()
-            method, functional, _ = previous.get_method()
+            method, functional, extended_functional, _ = previous.get_method()
 
             if method == "dft":
-                lines.append(f"Eelec, wfn = frequency('{functional}', return_wfn=True)")
+                lines.append(
+                    f"Eelec, wfn = frequency('{extended_functional}', return_wfn=True)"
+                )
             else:
                 lines.append(f"Eelec, wfn = frequency('{method}', return_wfn=True)")
 
@@ -253,7 +254,10 @@ with path.with_name('@{self._id[-1]}+thermochemistry.json').open('w') as fd:
                         d[key] = Q_(value["data"], from_units).m_as(to_units)
 
             # Put any requested results into variables or tables
-            self.store_results(data=d, create_tables=True)
+            # self.store_results(data=d, create_tables=True)
+
+            # Need the electronic energy as "energy" in data for thermochemistry
+            d["energy"] = d["E_tot"]
 
             # And the output
             table = {
@@ -349,6 +353,8 @@ with path.with_name('@{self._id[-1]}+thermochemistry.json').open('w') as fd:
             text += tmp
             text += "\n"
             printer.normal(__(text, indent=8 * " ", wrap=False, dedent=False))
+
+            super().analyze(data=d)
         else:
             text = (
                 "\nThere are no thermochemistry results from Psi4. Perhaps it "

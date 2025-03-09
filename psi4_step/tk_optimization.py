@@ -8,8 +8,7 @@ import tkinter as tk
 import tkinter.ttk as ttk
 
 import psi4_step
-
-# import seamm
+import seamm
 import seamm_widgets as sw
 
 logger = logging.getLogger(__name__)
@@ -102,6 +101,8 @@ class TkOptimization(psi4_step.TkEnergy):
 
         for key in psi4_step.OptimizationParameters.parameters:
             self[key] = P[key].widget(opt_frame)
+        for key in seamm.standard_parameters.structure_handling_parameters:
+            self[key] = P[key].widget(opt_frame)
 
         # and binding to change as needed
         self["geometry convergence"].combobox.bind(
@@ -166,5 +167,10 @@ class TkOptimization(psi4_step.TkEnergy):
         self["hessian update"].grid(row=row, column=0, columnspan=2, sticky=tk.EW)
         widgets.append(self["hessian update"])
         row += 1
+
+        for key in ("structure handling", "system name", "configuration name"):
+            self[key].grid(row=row, column=0, columnspan=2, sticky=tk.EW)
+            widgets.append(self[key])
+            row += 1
 
         sw.align_labels(widgets)

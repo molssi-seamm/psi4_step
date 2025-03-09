@@ -1,6 +1,8 @@
 cclib
 numpy
 # optking
+pandas
+py-cpuinfo
 scipy
 seamm
 tabulate

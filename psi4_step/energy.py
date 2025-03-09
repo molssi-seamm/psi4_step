@@ -2,25 +2,104 @@
 
 """Setup and run Psi4"""
 
+from collections import Counter
 import json
 import logging
+from math import isnan
 from pathlib import Path
+import pkg_resources
 import pprint
+import textwrap
 
-from openbabel import openbabel
 import cclib
+from openbabel import openbabel
+import pandas
 import numpy as np
+from tabulate import tabulate
 
+from molsystem import elements
 import psi4_step
 import seamm
 import seamm.data
-from seamm_util import units_class
+from seamm_util import Q_, units_class
 import seamm_util.printing as printing
 from seamm_util.printing import FormattedText as __
 
 logger = logging.getLogger(__name__)
 job = printing.getPrinter()
 printer = printing.getPrinter("psi4")
+
+_subscript = {
+    "0": "\N{SUBSCRIPT ZERO}",
+    "1": "\N{SUBSCRIPT ONE}",
+    "2": "\N{SUBSCRIPT TWO}",
+    "3": "\N{SUBSCRIPT THREE}",
+    "4": "\N{SUBSCRIPT FOUR}",
+    "5": "\N{SUBSCRIPT FIVE}",
+    "6": "\N{SUBSCRIPT SIX}",
+    "7": "\N{SUBSCRIPT SEVEN}",
+    "8": "\N{SUBSCRIPT EIGHT}",
+    "9": "\N{SUBSCRIPT NINE}",
+}
+
+superscript = {
+    "1": "\N{SUPERSCRIPT ONE}",
+    "2": "\N{SUPERSCRIPT TWO}",
+    "3": "\N{SUPERSCRIPT THREE}",
+    "4": "\N{SUPERSCRIPT FOUR}",
+    "5": "\N{SUPERSCRIPT FIVE}",
+    "6": "\N{SUPERSCRIPT SIX}",
+    "7": "\N{SUPERSCRIPT SEVEN}",
+    "8": "\N{SUPERSCRIPT EIGHT}",
+    "9": "\N{SUPERSCRIPT NINE}",
+}
+
+
+def subscript(n):
+    """Return the number using Unicode subscript characters."""
+    return "".join([_subscript[c] for c in str(n)])
+
+
+one_half = "\N{VULGAR FRACTION ONE HALF}"
+degree_sign = "\N{DEGREE SIGN}"
+standard_state = {
+    "H": f"{one_half}H{subscript(2)}(g)",
+    "He": "He(g)",
+    "Li": "Li(s)",
+    "Be": "Be(s)",
+    "B": "B(s)",
+    "C": "C(s,gr)",
+    "N": f"{one_half}N{subscript(2)}(g)",
+    "O": f"{one_half}O{subscript(2)}(g)",
+    "F": f"{one_half}F{subscript(2)}(g)",
+    "Ne": "Ne(g)",
+    "Na": "Na(s)",
+    "Mg": "Mg(s)",
+    "Al": "Al(s)",
+    "Si": "Si(s)",
+    "P": "P(s)",
+    "S": "S(s)",
+    "Cl": f"{one_half}Cl{subscript(2)}(g)",
+    "Ar": "Ar(g)",
+    "K": "K(s)",
+    "Ca": "Ca(s)",
+    "Sc": "Sc(s)",
+    "Ti": "Ti(s)",
+    "V": "V(s)",
+    "Cr": "Cr(s)",
+    "Mn": "Mn(s)",
+    "Fe": "Fe(s)",
+    "Co": "Co(s)",
+    "Ni": "Ni(s)",
+    "Cu": "Cu(s)",
+    "Zn": "Zn(s)",
+    "Ga": "Ga(s)",
+    "Ge": "Ge(s)",
+    "As": "As(s)",
+    "Se": "Se(s)",
+    "Br": f"{one_half}Br{subscript(2)}(l)",
+    "Kr": "(g)",
+}
 
 
 class Energy(seamm.Node):
@@ -54,6 +133,448 @@ class Energy(seamm.Node):
     def git_revision(self):
         """The git version of this module."""
         return psi4_step.__git_revision__
+
+    @property
+    def model(self):
+        """The model chemistry"""
+        return self._model
+
+    @model.setter
+    def model(self, value):
+        self._model = value
+
+    def calculate_enthalpy_of_formation(self, data):
+        """Calculate the enthalpy of formation from the results of a calculation.
+
+        This uses tabulated values of the enthalpy of formation of the atoms for
+        the elements and tabulated energies calculated for atoms with the current
+        method.
+
+        Parameters
+        ----------
+        data : dict
+            The results of the calculation.
+        """
+
+        # Read the tabulated values from either user or data directory
+        personal_file = Path("~/.seamm.d/data/atom_energies.csv").expanduser()
+        if personal_file.exists():
+            personal_table = pandas.read_csv(personal_file, index_col=False)
+        else:
+            personal_table = None
+
+        path = Path(pkg_resources.resource_filename(__name__, "data/"))
+        csv_file = path / "atom_energies.csv"
+        table = pandas.read_csv(csv_file, index_col=False)
+
+        self.logger.debug(f"self.parent.model = {self.parent.model}")
+
+        # Check if have the data
+        atom_energies = None
+        correction_energy = None
+        if self.parent.model.startswith("U") or self.parent.model.startswith("R"):
+            column = self.parent.model[1:]
+        else:
+            column = self.parent.model
+
+        self.logger.debug(f"Looking for '{column}'")
+
+        column2 = column + " correction"
+        if personal_table is not None and column in personal_table.columns:
+            atom_energies = personal_table[column].to_list()
+            if column2 in personal_table.columns:
+                correction_energy = personal_table[column2].to_list()
+        elif column in table.columns:
+            atom_energies = table[column].to_list()
+            if column2 in table.columns:
+                correction_energy = table[column2].to_list()
+
+        if atom_energies is None:
+            self.logger.debug("     and didn't find it!")
+
+        DfH0gas = None
+        references = None
+        term_symbols = None
+        if personal_table is not None and "ΔfH°gas" in personal_table.columns:
+            DfH0gas = personal_table["ΔfH°gas"].to_list()
+            if "Reference" in personal_table.columns:
+                references = personal_table["Reference"].to_list()
+            if "Term Symbol" in personal_table.columns:
+                term_symbols = personal_table["Term Symbols"].to_list()
+        elif "ΔfH°gas" in table.columns:
+            DfH0gas = table["ΔfH°gas"].to_list()
+            if "Reference" in table.columns:
+                references = table["Reference"].to_list()
+            if "Term Symbol" in table.columns:
+                term_symbols = table["Term Symbol"].to_list()
+        if references is not None:
+            len(references)
+
+        if atom_energies is None:
+            return f"There are no tabulated atom energies for {column}"
+
+        # Get the atomic numbers and counts
+        _, configuration = self.get_system_configuration(None)
+        counts = Counter(configuration.atoms.atomic_numbers)
+
+        # Get the Hill formula as a list
+        symbols = sorted(elements.to_symbols(counts.keys()))
+        composition = []
+        if "C" in symbols:
+            composition.append((6, "C", counts[6]))
+            symbols.remove("C")
+            if "H" in symbols:
+                composition.append((1, "H", counts[1]))
+                symbols.remove("H")
+
+        for symbol in symbols:
+            atno = elements.symbol_to_atno[symbol]
+            composition.append((atno, symbol, counts[atno]))
+
+        # And the reactions. First, for atomization energy
+        middot = "\N{MIDDLE DOT}"
+        lDelta = "\N{GREEK CAPITAL LETTER DELTA}"
+        formula = ""
+        tmp = []
+        for atno, symbol, count in composition:
+            if count == 1:
+                formula += symbol
+                tmp.append(f"{symbol}(g)")
+            else:
+                formula += f"{symbol}{subscript(count)}"
+                tmp.append(f"{count}{middot}{symbol}(g)")
+        gas_atoms = " + ".join(tmp)
+        tmp = []
+        for atno, symbol, count in composition:
+            if count == 1:
+                tmp.append(standard_state[symbol])
+            else:
+                tmp.append(f"{count}{middot}{standard_state[symbol]}")
+        standard_elements = " + ".join(tmp)
+
+        # The atomization energy is the electronic energy minus the energy of the atoms
+        try:
+            name = "SMILES: " + configuration.canonical_smiles
+            if name is None:
+                name = "Formula: " + formula
+        except Exception:
+            name = "Formula: " + formula
+        try:
+            name = configuration.PC_iupac_name(fallback=name)
+        except Exception:
+            pass
+
+        if name is None:
+            name = "Formula: " + formula
+
+        text = f"Thermochemistry of {name} with {column}\n\n"
+        text += "Atomization Energy\n"
+        text += "------------------\n"
+        text += textwrap.fill(
+            f"The atomization energy,  {lDelta}atE{degree_sign}, is the energy to break"
+            " all the bonds in the system, separating the atoms from each other."
+        )
+        text += f"\n\n    {formula} --> {gas_atoms}\n\n"
+        text += textwrap.fill(
+            "The following table shows in detail the calculation. The first line is "
+            "the system and its calculated energy. The next lines are the energies "
+            "of each type of atom in the system. These have been tabulated by running "
+            "calculations on each atom, and are included in the SEAMM release. "
+            "The last two lines give the formation energy from atoms in atomic units "
+            "and as kJ/mol.",
+        )
+        text += "\n\n"
+        table = {
+            "System": [],
+            "Term": [],
+            "Value": [],
+            "Units": [],
+        }
+
+        E = data["energy"]
+
+        Eatoms = 0.0
+        for atno, symbol, count in composition:
+            Eatom = atom_energies[atno - 1]
+            if isnan(Eatom):
+                # Don't have the data for this element
+                return f"Do not have tabulated atom energies for {symbol} in {column}"
+            Eatoms += count * Eatom
+            tmp = Q_(Eatom, "kJ/mol").m_as("E_h")
+            table["System"].append(f"{symbol}(g)")
+            table["Term"].append(f"{count} * {tmp:.6f}")
+            table["Value"].append(f"{count * tmp:.6f}")
+            table["Units"].append("")
+
+        table["Units"][0] = "E_h"
+
+        table["System"].append("^")
+        table["Term"].append("-")
+        table["Value"].append("-")
+        table["Units"].append("")
+
+        table["System"].append(formula)
+        table["Term"].append(f"{-E:.6f}")
+        table["Value"].append(f"{-E:.6f}")
+        table["Units"].append("E_h")
+
+        data["E atomization"] = Eatoms - Q_(E, "E_h").m_as("kJ/mol")
+
+        table["System"].append("")
+        table["Term"].append("")
+        table["Value"].append("=")
+        table["Units"].append("")
+
+        result = f'{Q_(data["E atomization"], "kJ/mol").m_as("E_h"):.6f}'
+        table["System"].append(f"{lDelta}atE")
+        table["Term"].append("")
+        table["Value"].append(result)
+        table["Units"].append("E_h")
+
+        table["System"].append("")
+        table["Term"].append("")
+        table["Value"].append(f'{data["E atomization"]:.2f}')
+        table["Units"].append("kJ/mol")
+
+        tmp = tabulate(
+            table,
+            headers="keys",
+            tablefmt="rounded_outline",
+            colalign=("center", "center", "decimal", "center"),
+            disable_numparse=True,
+        )
+        length = len(tmp.splitlines()[0])
+        text_lines = []
+        text_lines.append(f"Atomization Energy for {formula}".center(length))
+        text_lines.append(tmp)
+        text += textwrap.indent("\n".join(text_lines), 4 * " ")
+
+        if "H_tot" not in data:
+            text += "\n\n"
+            text += "Cannot calculate enthalpy of formation without the enthalpy"
+            return text
+        if DfH0gas is None:
+            text += "\n\n"
+            text += "Cannot calculate enthalpy of formation without the tabulated\n"
+            text += "atomization enthalpies of the elements."
+            return text
+
+        # Atomization enthalpy of the elements, experimental
+        table = {
+            "System": [],
+            "Term": [],
+            "Value": [],
+            "Units": [],
+            "Reference": [],
+        }
+
+        E = data["energy"]
+
+        DfH_at = 0.0
+        refno = 1
+        for atno, symbol, count in composition:
+            DfH_atom = DfH0gas[atno - 1]
+            DfH_at += count * DfH_atom
+            tmp = Q_(DfH_atom, "kJ/mol").m_as("E_h")
+            table["System"].append(f"{symbol}(g)")
+            if count == 1:
+                table["Term"].append(f"{tmp:.6f}")
+            else:
+                table["Term"].append(f"{count} * {tmp:.6f}")
+            table["Value"].append(f"{count * tmp:.6f}")
+            table["Units"].append("")
+            refno += 1
+            table["Reference"].append(refno)
+
+        table["Units"][0] = "E_h"
+
+        table["System"].append("^")
+        table["Term"].append("-")
+        table["Value"].append("-")
+        table["Units"].append("")
+        table["Reference"].append("")
+
+        table["System"].append(standard_elements)
+        table["Term"].append("")
+        table["Value"].append("0.0")
+        table["Units"].append("E_h")
+        table["Reference"].append("")
+
+        table["System"].append("")
+        table["Term"].append("")
+        table["Value"].append("=")
+        table["Units"].append("")
+        table["Reference"].append("")
+
+        result = f'{Q_(DfH_at, "kJ/mol").m_as("E_h"):.6f}'
+        table["System"].append(f"{lDelta}atH{degree_sign}")
+        table["Term"].append("")
+        table["Value"].append(result)
+        table["Units"].append("E_h")
+        table["Reference"].append("")
+
+        table["System"].append("")
+        table["Term"].append("")
+        table["Value"].append(f"{DfH_at:.2f}")
+        table["Units"].append("kJ/mol")
+        table["Reference"].append("")
+
+        tmp = tabulate(
+            table,
+            headers="keys",
+            tablefmt="rounded_outline",
+            colalign=("center", "center", "decimal", "center", "center"),
+            disable_numparse=True,
+        )
+        length = len(tmp.splitlines()[0])
+        text_lines = []
+        text_lines.append(
+            "Atomization enthalpy of the elements (experimental)".center(length)
+        )
+        text_lines.append(tmp)
+
+        text += "\n\n"
+        text += "Enthalpy of Formation\n"
+        text += "---------------------\n"
+        text += textwrap.fill(
+            f"The enthalpy of formation, {lDelta}fHº, is the enthalpy of creating the "
+            "molecule from the elements in their standard state:"
+        )
+        text += f"\n\n   {standard_elements} --> {formula} (1)\n\n"
+        text += textwrap.fill(
+            "The standard state of the element, denoted by the superscript º,"
+            " is its form at 298.15 K and 1 atm pressure, e.g. graphite for carbon, "
+            "H2 gas for hydrogen, etc."
+        )
+        text += "\n\n"
+        text += textwrap.fill(
+            "Since it is not easy to calculate the enthalpy of e.g. graphite we will "
+            "use two sequential reactions that are equivalent. First, we will create "
+            "gas phase atoms from the elements:"
+        )
+        text += f"\n\n    {standard_elements} --> {gas_atoms} (2)\n\n"
+        text += textwrap.fill(
+            "This will use the experimental values of the enthalpy of formation of the "
+            "atoms in the gas phase to calculate the enthalpy of this reaction. "
+            "Then we react the atoms to get the desired system:"
+        )
+        text += f"\n\n    {gas_atoms} --> {formula} (3)\n\n"
+        text += textwrap.fill(
+            "Note that this is reverse of the atomization reaction, so "
+            f"{lDelta}H = -{lDelta}atH."
+        )
+        text += "\n\n"
+        text += textwrap.fill(
+            "First we calculate the enthalpy of the atomization of the elements in "
+            "their standard state, using tabulated experimental values:"
+        )
+        text += "\n\n"
+        text += textwrap.indent("\n".join(text_lines), 4 * " ")
+
+        # And the calculated atomization enthalpy
+        table = {
+            "System": [],
+            "Term": [],
+            "Value": [],
+            "Units": [],
+        }
+
+        Hatoms = 0.0
+        dH = Q_(6.197, "kJ/mol").m_as("E_h")
+        for atno, symbol, count in composition:
+            Eatom = atom_energies[atno - 1]
+            # 6.197 is the H298-H0 for an atom
+            Hatoms += count * (Eatom + 6.197)
+            if correction_energy is not None and not isnan(correction_energy[atno - 1]):
+                Hatoms += count * correction_energy[atno - 1]
+
+            tmp = Q_(Eatom, "kJ/mol").m_as("E_h")
+            table["System"].append(f"{symbol}(g)")
+            if count == 1:
+                table["Term"].append(f"{-tmp:.6f} + {dH:.6f}")
+            else:
+                table["Term"].append(f"{count} * ({-tmp:.6f} + {dH:.6f})")
+            table["Value"].append(f"{-count * (tmp + dH):.6f}")
+            table["Units"].append("")
+
+        table["System"].append("^")
+        table["Term"].append("-")
+        table["Value"].append("-")
+        table["Units"].append("")
+
+        H = data["H_tot"]
+
+        table["System"].append(formula)
+        table["Term"].append(f"{H:.6f}")
+        table["Value"].append("")
+        table["Units"].append("E_h")
+
+        data["H atomization"] = Hatoms - Q_(H, "E_h").m_as("kJ/mol")
+        data["DfH0"] = DfH_at - data["H atomization"]
+        table["System"].append("")
+        table["Term"].append("")
+        table["Value"].append("=")
+        table["Units"].append("")
+
+        result = f'{Q_(data["H atomization"], "kJ/mol").m_as("E_h"):.6f}'
+        table["System"].append(f"{lDelta}atH{degree_sign}")
+        table["Term"].append("")
+        table["Value"].append(result)
+        table["Units"].append("E_h")
+
+        table["System"].append("")
+        table["Term"].append("")
+        table["Value"].append(f'{data["H atomization"]:.2f}')
+        table["Units"].append("kJ/mol")
+
+        tmp = tabulate(
+            table,
+            headers="keys",
+            tablefmt="rounded_outline",
+            colalign=("center", "center", "decimal", "center"),
+            disable_numparse=True,
+        )
+        length = len(tmp.splitlines()[0])
+        text_lines = []
+        text_lines.append("Atomization Enthalpy (calculated)".center(length))
+        text_lines.append(tmp)
+        text += "\n\n"
+
+        text += textwrap.fill(
+            "Next we calculate the atomization enthalpy of the system. We have the "
+            "calculated enthalpy of the system, but need the enthalpy of gas phase "
+            f"atoms at the standard state (25{degree_sign}C, 1 atm). The tabulated "
+            "energies for the atoms, used above, are identical to H0 for an atom. "
+            "We will add H298 - H0 to each atom, which [1] is 5/2RT = 0.002360 E_h"
+        )
+        text += "\n\n"
+        text += textwrap.indent("\n".join(text_lines), 4 * " ")
+        text += "\n\n"
+        text += textwrap.fill(
+            "The enthalpy change for reaction (3) is the negative of this atomization"
+            " enthalpy. Putting the two reactions together with the negative for Rxn 3:"
+        )
+        text += "\n\n"
+        text += f"{lDelta}fH{degree_sign} = {lDelta}H(rxn 2) - {lDelta}H(rxn 3)\n"
+        text += f"     = {DfH_at:.2f} - {data['H atomization']:.2f}\n"
+        text += f"     = {DfH_at - data['H atomization']:.2f} kJ/mol\n"
+
+        text += "\n\n"
+        text += "References\n"
+        text += "----------\n"
+        text += "1. https://en.wikipedia.org/wiki/Monatomic_gas\n"
+        refno = 1
+        for atno, symbol, count in composition:
+            refno += 1
+            text += f"{refno}. {lDelta}fH{degree_sign} = {DfH0gas[atno - 1]} kJ/mol"
+            if term_symbols is not None:
+                text += f" for {term_symbols[atno - 1]} {symbol}"
+            else:
+                text += f" for {symbol}"
+            if references is not None:
+                text += f" from {references[atno-1]}\n"
+
+        return text
 
     def description_text(
         self,
@@ -168,7 +689,17 @@ class Energy(seamm.Node):
             lines.append("#" * 80)
 
         # Figure out what we are doing!
-        method, functional, method_string = self.get_method()
+        method, functional, extended_functional, method_string = self.get_method()
+
+        if self.parent.basis is not None:
+            basis_set = self.parent.basis
+            if method == "dft":
+                self.parent.model = f"{functional.upper()}/{basis_set}"
+                self.parent.extended_model = (
+                    f"{extended_functional.upper()}/{basis_set}"
+                )
+            else:
+                self.parent.model = f"{method.upper()}/{basis_set}"
 
         # lines.append('set scf_type df')
         # lines.append('set guess sad')
@@ -239,20 +770,21 @@ class Energy(seamm.Node):
         if method == "dft":
             if restart is None:
                 lines.append(
-                    f"Eelec, wfn = {calculation_type}('{functional}', return_wfn=True)"
+                    f"Eelec, wfn = {calculation_type}('{extended_functional}', "
+                    "return_wfn=True)"
                 )
                 if calculation_type == "energy":
-                    lines.append(f"G = gradient('{functional}', ref_wfn=wfn)")
+                    lines.append(f"G = gradient('{extended_functional}', ref_wfn=wfn)")
             else:
                 if calculation_type == "gradient":
                     lines.append(
-                        f"Eelec, wfn = energy('{functional}', return_wfn=True,"
+                        f"Eelec, wfn = energy('{extended_functional}', return_wfn=True,"
                         f" restart_file='{restart}')"
                     )
-                    lines.append(f"G = gradient('{functional}', ref_wfn=wfn)")
+                    lines.append(f"G = gradient('{extended_functional}', ref_wfn=wfn)")
                 else:
                     lines.append(
-                        f"Eelec, wfn = {calculation_type}('{functional}', "
+                        f"Eelec, wfn = {calculation_type}('{extended_functional}', "
                         f"return_wfn=True, restart_file='{restart}')"
                     )
         else:
@@ -368,54 +900,179 @@ with open("{filename}", "w") as fd:
                 P["dispersion"] != "none"
                 and len(psi4_step.dft_functionals[functional_string]["dispersion"]) > 1
             ):
-                functional = functional + "-" + P["dispersion"]
+                extended_functional = functional + "-" + P["dispersion"]
+            else:
+                extended_functional = functional
         else:
             functional = method
-        return method, functional, method_string
+            extended_functional = functional
+        return method, functional, extended_functional, method_string
 
-    def analyze(self, indent="", data={}, out=[]):
+    def analyze(self, indent="", data=None, out=[], table=None):
         """Parse the output and generating the text output and store the
         data in variables for other stages to access
         """
+        P = self.parameters.current_values_to_dict(
+            context=seamm.flowchart_variables._data
+        )
+        system, configuration = self.get_system_configuration()
+        method, functional, extended_functional, method_string = self.get_method()
+
         directory = Path(self.directory)
 
-        # Use cclib to get results
-        path = directory / "output.dat"
-        if path.exists():
-            data = vars(cclib.io.ccread(path))
-            pprint.pformat(data)
-            data = self.process_data(data)
-            pprint.pformat(data)
-        else:
-            data = {}
+        if data is None:
+            # Use cclib to get results. Note the file is one level up.
+            path = directory.parent / "output.dat"
+            if path.exists():
+                data = vars(cclib.io.ccread(path))
+                data = self.process_data(data)
+            else:
+                data = {}
 
-        # Read in the results from json
-        directory = Path(self.directory)
-        json_file = directory / "properties.json"
-        if json_file.exists():
+            # Read in the results from json
+            directory = Path(self.directory)
+            json_file = directory / "properties.json"
+            if not json_file.exists():
+                data = {}
+                tmp = str(json_file)
+                text = (
+                    "\nThere are no results from Psi4. Perhaps it "
+                    f"failed? Looking for {tmp}."
+                )
+                printer.normal(__(text, **data, indent=self.indent + 4 * " "))
+                raise RuntimeError(text)
+
             with json_file.open() as fd:
                 tmp = json.load(fd)
             data.update(**tmp)
 
-            # Put any requested results into variables or tables
-            self.store_results(
-                data=data,
-                create_tables=self.parameters["create tables"].get(),
-            )
+        # Put any requested results into variables or tables
+        self.store_results(
+            data=data,
+            create_tables=self.parameters["create tables"].get(),
+        )
 
-            text = "The calculated energy is {Eelec:.6f} E_h."
-        else:
-            data = {}
-            tmp = str(json_file)
-            text = (
-                "\nThere are no results from Psi4. Perhaps it "
-                f"failed? Looking for {tmp}."
+        text = ""
+
+        # Calculate the enthalpy of formation, if possible
+        tmp_text = self.calculate_enthalpy_of_formation(data)
+        if tmp_text != "":
+            path = Path(self.directory) / "Thermochemistry.txt"
+            path.write_text(tmp_text)
+
+        if table is None:
+            table = {
+                "Property": [],
+                "Value": [],
+                "Units": [],
+            }
+
+        # Special handling for DfH0 if it exists
+        if "DfH0" in data:
+            tmp = data["DfH0"]
+            table["Property"].append(
+                "\N{GREEK CAPITAL LETTER DELTA}fH\N{SUPERSCRIPT ZERO}"
             )
-            printer.normal(__(text, **data, indent=self.indent + 4 * " "))
-            raise RuntimeError(text)
+            table["Value"].append(f"{Q_(tmp, 'kJ/mol').m_as('kcal/mol'):.2f}")
+            table["Units"].append("kcal/mol")
+            table["Property"].append("")
+            table["Value"].append(f"{tmp:.2f}")
+            table["Units"].append("kJ/mol")
+
+        if "ZPE_corr" in data:
+            tmp = data["ZPE_corr"]
+            table["Property"].append("ZPE")
+            table["Value"].append(f"{Q_(tmp, 'kJ/mol').m_as('kcal/mol'):.2f}")
+            table["Units"].append("kcal/mol")
+            table["Property"].append("")
+            table["Value"].append(f"{tmp:.2f}")
+            table["Units"].append("kJ/mol")
+
+        keys = [
+            "H atomization",
+            "DfE0",
+            "E atomization",
+            "energy",
+        ]
+        metadata = psi4_step.metadata["results"]
+        for key in keys:
+            if key in data:
+                tmp = data[key]
+                mdata = metadata[key]
+                table["Property"].append(key)
+                if "format" in mdata:
+                    table["Value"].append(f"{tmp:{mdata['format']}}")
+                else:
+                    table["Value"].append(f"{tmp}")
+                if "units" in mdata:
+                    table["Units"].append(mdata["units"])
+                else:
+                    table["Units"].append("")
+
+        keys = (
+            ("metadata/symmetry_detected", "Symmetry"),
+            ("metadata/symmetry_used", "Symmetry used"),
+            ("E(gap)", ""),
+            ("E(lumo+1)", "E(LUMO+1)"),
+            ("E(lumo)", "E(LUMO)"),
+            ("E(homo)", "E(HOMO)"),
+            ("E(homo-1)", "E(HOMO-1)"),
+            ("dipole_moment_magnitude", "Dipole moment"),
+        )
+        for key, name in keys:
+            if name == "":
+                name = key
+            if key in data:
+                tmp = data[key]
+                if key == "state":
+                    tmp = superscript[tmp[0]] + tmp[1:]
+                mdata = metadata[key]
+                table["Property"].append(name)
+                table["Value"].append(f"{tmp:{mdata['format']}}")
+                if "units" in mdata:
+                    table["Units"].append(mdata["units"])
+                else:
+                    table["Units"].append("")
+
+        tmp = tabulate(
+            table,
+            headers="keys",
+            tablefmt="rounded_outline",
+            colalign=("center", "decimal", "left"),
+            disable_numparse=True,
+        )
+        length = len(tmp.splitlines()[0])
+        text_lines = []
+
+        multiplicity = configuration.spin_multiplicity
+        spin_restricted = P["spin-restricted"]
+        spin_text = ""
+        if spin_restricted == "default":
+            if multiplicity == 1:
+                spin_text = "R-"
+            else:
+                spin_text = "U-"
+        elif spin_restricted == "yes":
+            if multiplicity == 1:
+                spin_text = "R-"
+            else:
+                spin_text = "RO-"
+        else:
+            spin_text = "U-"
+
+        text_lines.append(
+            f"Results for {spin_text}{self.parent.extended_model}".center(length)
+        )
+        text_lines.append(method_string.center(length))
+        text_lines.append(tmp)
+
+        if text != "":
+            text = str(__(text, **data, indent=self.indent + 4 * " "))
+            text += "\n\n"
+        text += textwrap.indent("\n".join(text_lines), self.indent + 7 * " ")
+        printer.normal(text)
 
         # Write the structure locally for use in density and orbital plots
-        system, configuration = self.get_system_configuration()
         obConversion = openbabel.OBConversion()
         obConversion.SetOutFormat("sdf")
         obMol = configuration.to_OBMol(properties="*")
@@ -424,8 +1081,6 @@ with open("{filename}", "w") as fd:
         sdf = obConversion.WriteString(obMol)
         path = directory / "structure.sdf"
         path.write_text(sdf)
-
-        printer.normal(__(text, **data, indent=self.indent + 4 * " "))
 
     def plot_input(self):
         """Generate the input for plotting to cube files."""

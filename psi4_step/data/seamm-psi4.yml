@@ -5,6 +5,7 @@ dependencies:
   - python
 
   - psi4
+  - packaging
 
   # Optional packages
   - basis_set_exchange

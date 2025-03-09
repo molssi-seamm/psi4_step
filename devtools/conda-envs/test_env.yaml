@@ -11,7 +11,9 @@ dependencies:
   # Of the code
   - cclib
   - numpy
-  - optking
+  # - optking
+  - pandas
+  - py-cpuinfo
   - scipy
   - seamm
   - seamm-installer
