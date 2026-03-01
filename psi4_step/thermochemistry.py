@@ -2,10 +2,10 @@
 
 """Non-graphical part of the Thermochemistry step in a Psi4 flowchart"""
 
+import importlib
 import json
 import logging
 from pathlib import Path
-import pkg_resources
 
 from tabulate import tabulate
 
@@ -29,7 +29,7 @@ job = printing.getPrinter()
 printer = printing.getPrinter("Psi4")
 
 # Add this module's properties to the standard properties
-path = Path(pkg_resources.resource_filename(__name__, "data/"))
+path = importlib.resources.files("psi4_step") / "data"
 csv_file = path / "properties.csv"
 if path.exists():
     molsystem.add_properties_from_file(csv_file)
@@ -200,8 +200,7 @@ class Thermochemistry(psi4_step.Energy):
             else:
                 lines.append(f"Eelec, wfn = frequency('{method}', return_wfn=True)")
 
-        lines.append(
-            f"""
+        lines.append(f"""
 set writer_file_label thermo
 set hessian_write on
 
@@ -218,8 +217,7 @@ for key, value in tmp.items():
 
 with path.with_name('@{self._id[-1]}+thermochemistry.json').open('w') as fd:
     json.dump(tmp2, fd, sort_keys=True, indent=3)
-"""
-        )
+""")
 
         return "\n".join(lines)
 

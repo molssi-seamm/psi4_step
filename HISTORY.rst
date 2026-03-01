@@ -1,6 +1,8 @@
 =======
 History
 =======
+2026.3.1 -- Internal: switching from deprecated library pkg_resources to importlib
+
 2025.3.9 -- Optimization and thermochemistry enhancements
    * Expanded the output to include gap, HOMO, LUMO, RMSD between initial and final
      structure for optimizations, dipole moment, etc.
