@@ -2,10 +2,10 @@
 
 """Non-graphical part of the Thermochemistry step in a Psi4 flowchart"""
 
+import importlib
 import json
 import logging
 from pathlib import Path
-import pkg_resources
 
 from tabulate import tabulate
 
@@ -29,7 +29,7 @@ job = printing.getPrinter()
 printer = printing.getPrinter("Psi4")
 
 # Add this module's properties to the standard properties
-path = Path(pkg_resources.resource_filename(__name__, "data/"))
+path = importlib.resources.files("psi4_step") / "data"
 csv_file = path / "properties.csv"
 if path.exists():
     molsystem.add_properties_from_file(csv_file)

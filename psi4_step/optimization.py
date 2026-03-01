@@ -125,7 +125,7 @@ class Optimization(psi4_step.Energy):
 
         # Align the structure
         if update_structure:
-            configuration.from_RDKMol(final)
+            configuration.coordinates_from_RDKMol(final)
 
             # And the name of the configuration.
             text = seamm.standard_parameters.set_names(
