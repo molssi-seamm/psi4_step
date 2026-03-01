@@ -16,7 +16,6 @@ from seamm_util import units_class
 import seamm_util.printing as printing
 from seamm_util.printing import FormattedText as __
 
-
 try:
     from itertools import batched
 except ImportError:

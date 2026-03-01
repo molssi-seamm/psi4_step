@@ -810,8 +810,7 @@ class Energy(seamm.Node):
         if calculation_type != "gradient":
             # Dump the properties to a json file
             filename = f"@{self._id[-1]}+properties.json"
-            lines.append(
-                f"""
+            lines.append(f"""
 try:
     oeprop(
         wfn,
@@ -849,8 +848,7 @@ variables["_method_string"] = "{method_string}"
 tmp = fix_multipoles(variables)
 with open("{filename}", "w") as fd:
     json.dump(tmp, fd, sort_keys=True, indent=3)
-"""
-            )
+""")
 
         # Orbital plots
         lines.append(self.plot_input())
@@ -1172,16 +1170,14 @@ with open("{filename}", "w") as fd:
 
         lines.append("")
         lines.append("cubeprop(wfn)")
-        lines.append(
-            f"""
+        lines.append(f"""
 # Prefix the files with the substep number
 paths = Path.cwd().glob('*.cube')
 for path in paths:
     name = path.name
     newpath = path.with_name('@{self._id[-1]}+' + name)
     path.rename(newpath)
-"""
-        )
+""")
 
         return "\n".join(lines)
 

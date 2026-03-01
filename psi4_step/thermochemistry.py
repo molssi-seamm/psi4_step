@@ -200,8 +200,7 @@ class Thermochemistry(psi4_step.Energy):
             else:
                 lines.append(f"Eelec, wfn = frequency('{method}', return_wfn=True)")
 
-        lines.append(
-            f"""
+        lines.append(f"""
 set writer_file_label thermo
 set hessian_write on
 
@@ -218,8 +217,7 @@ for key, value in tmp.items():
 
 with path.with_name('@{self._id[-1]}+thermochemistry.json').open('w') as fd:
     json.dump(tmp2, fd, sort_keys=True, indent=3)
-"""
-        )
+""")
 
         return "\n".join(lines)
 
