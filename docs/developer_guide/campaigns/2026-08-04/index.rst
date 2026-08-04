@@ -71,15 +71,54 @@ Validation
    ``orca_step``'s Compound-script comparison, which validates the new
    *plumbing* against old plumbing of the *same* code).
 
+:download:`validate_psi4_bsse_m3.py <validate_psi4_bsse_m3.py>`
+   Charged fragments and N = 3, **through this sub-step's own
+   ``get_input()``/``analyze()``** (not hand-written ``psi4`` scripts) --
+   the gap the first validation script left open. Same geometries and level
+   of theory (B3LYP-D3BJ/def2-TZVP) as ``orca_step``'s M3/N3 legs, so the
+   two codes' numbers are directly comparable:
+
+   .. list-table::
+      :header-rows: 1
+
+      * - System
+        - Psi4
+        - ORCA (M3/N3)
+      * - Na\ :sup:`+`\ ···Cl\ :sup:`-`
+        - -136.352
+        - -136.289
+      * - Na\ :sup:`+`\ ···H\ :sub:`2`\ O
+        - -26.176
+        - -26.110
+      * - Cl\ :sup:`-`\ ···H\ :sub:`2`\ O
+        - -15.699
+        - -15.638
+      * - Na\ :sup:`+`\ ···Cl\ :sup:`-`\ ···H\ :sub:`2`\ O (N=3)
+        - -150.332
+        - -150.204
+
+   (kcal/mol, CP-corrected interaction energy.) Agreement is ~0.05-0.13
+   kcal/mol throughout -- the same healthy, code-vs-code level the neutral
+   water-dimer check showed, now confirmed for per-fragment charge (``"1;
+   2"``/``"1, -1"`` in ``specified`` mode -- these hand-built configurations
+   have no bond table, so ``"auto (molecules)"`` would see every atom as its
+   own fragment, the same gotcha ``orca_step``'s M3/N3 scripts hit) and for
+   N = 3 (2N + 1 = 7 equivalent internal sub-calculations, all through
+   Psi4's native driver in one call). One bug caught and fixed *in this
+   validation script* (not the sub-step): an early run divided the raw
+   Hartree value in ``bsse.json`` by 4.184 (the kJ->kcal factor) instead of
+   converting Hartree->kcal directly, producing near-zero "interaction
+   energies" even though ``bsse.json`` and Psi4's own printed ManyBody table
+   already agreed -- a reminder to sanity-check a validation script's own
+   arithmetic before suspecting the code under test.
+
 Not done
 --------
 
 * Unit tests for the fragment/molecule-block-building logic in isolation
-  (no Psi4) -- planned, mirroring ``orca_step``'s test style.
-* Charged fragments and N = 3 through this sub-step specifically (validated
-  for ``orca_step`` in the M3/N=3 legs; the native Psi4 driver was separately
-  confirmed on charged fragments directly via ``psi4`` scripts, not yet
-  through this sub-step's own ``get_input()``/``analyze()``).
+  (no Psi4) -- done (``tests/test_bsse.py``), except real-Psi4 execution
+  itself is (deliberately) not unit-tested, only exercised by the
+  validation scripts above.
 * Energy-of-formation (``DfE0``) support -- ``orca_step``'s BSSE computes
   this via ``seamm_thermochemistry``; ``psi4_step`` uses a different,
   older, self-contained mechanism (``Energy.calculate_enthalpy_of_formation``,
