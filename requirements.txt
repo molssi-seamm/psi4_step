@@ -5,4 +5,5 @@ pandas
 py-cpuinfo
 scipy
 seamm
+seamm-bsse
 tabulate

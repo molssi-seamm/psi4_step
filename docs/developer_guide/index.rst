@@ -9,3 +9,13 @@ Contents:
    installation
    usage
    contributing
+
+Campaigns
+---------
+Notes from each development campaign on this plug-in.
+
+.. toctree::
+   :glob:
+   :maxdepth: 2
+
+   campaigns/index

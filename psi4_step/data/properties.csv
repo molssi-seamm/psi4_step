@@ -2,3 +2,7 @@ Property,Type,Units,Description,URL
 dielectric energy#Psi4#{model},float,E_h,"The dielectric energy from the PCM model."
 electronic energy#Psi4#{model},float,E_h,"The {model} electronic energy.",
 total energy#Psi4#{model},float,E_h,"The {model} total energy (electronic + nuclear).",
+uncorrected energy#Psi4#{model},float,E_h,"The {model} total energy before the counterpoise (BSSE) correction.",
+BSSE correction#Psi4#{model},float,E_h,"The counterpoise (BSSE) correction, corrected minus uncorrected total energy.",
+interaction energy#Psi4#{model},float,kJ/mol,"The counterpoise-corrected interaction (binding) energy relative to the separated fragments.",
+uncorrected interaction energy#Psi4#{model},float,kJ/mol,"The uncorrected interaction (binding) energy relative to the separated fragments.",
