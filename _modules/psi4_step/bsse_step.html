@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>psi4_step.installer &#8212; SEAMM Psi4 Plug-in 2026.8.4 documentation</title>
+    <title>psi4_step.bsse_step &#8212; SEAMM Psi4 Plug-in 2026.8.4 documentation</title>
   
   
   
@@ -54,7 +54,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../../_static/copybutton.js?v=f281be69"></script>
     <script src="../../_static/design-tabs.js?v=f930bc37"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/psi4_step/installer';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/psi4_step/bsse_step';</script>
     <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
 
     <link rel="index" title="Index" href="../../genindex.html" />
@@ -468,7 +468,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     
     <li class="breadcrumb-item"><a href="../index.html" class="nav-link">Module code</a></li>
     
-    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">psi4_step.installer</span></li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">psi4_step.bsse_step</span></li>
   </ul>
 </nav>
 </div>
@@ -485,133 +485,42 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <h1>Source code for psi4_step.installer</h1><div class="highlight"><pre>
+  <h1>Source code for psi4_step.bsse_step</h1><div class="highlight"><pre>
 <span></span><span class="c1"># -*- coding: utf-8 -*-</span>
 
-<span class="sd">&quot;&quot;&quot;Installer for the Psi4 plug-in.</span>
+<span class="sd">&quot;&quot;&quot;Stevedore helper for the Psi4 BSSE (counterpoise) sub-step.&quot;&quot;&quot;</span>
 
-<span class="sd">This handles any further installation needed after installing the Python</span>
-<span class="sd">package `psi4-step`.</span>
-<span class="sd">&quot;&quot;&quot;</span>
-
-<span class="kn">import</span><span class="w"> </span><span class="nn">importlib</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">subprocess</span>
-
-<span class="kn">import</span><span class="w"> </span><span class="nn">seamm_installer</span>
-
-<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">psi4_step</span>
 
 
-<div class="viewcode-block" id="Installer">
-<a class="viewcode-back" href="../../api/psi4_step.html#psi4_step.installer.Installer">[docs]</a>
-<span class="k">class</span><span class="w"> </span><span class="nc">Installer</span><span class="p">(</span><span class="n">seamm_installer</span><span class="o">.</span><span class="n">InstallerBase</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Handle further installation needed after installing psi4-step.</span>
+<div class="viewcode-block" id="BSSEStep">
+<a class="viewcode-back" href="../../api/psi4_step.html#psi4_step.bsse_step.BSSEStep">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">BSSEStep</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="n">my_description</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Counterpoise (BSSE) corrected energy and gradient with Psi4&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;group&quot;</span><span class="p">:</span> <span class="s2">&quot;Calculations&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;BSSE&quot;</span><span class="p">,</span>
+    <span class="p">}</span>
 
-<span class="sd">    The Python package `psi4-step` should already be installed, using `pip`,</span>
-<span class="sd">    `conda`, or similar. This plug-in-specific installer then checks for the</span>
-<span class="sd">    Psi4 executable, installing it if needed, and registers its</span>
-<span class="sd">    location in seamm.ini.</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">flowchart</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">gui</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="k">pass</span>
 
-<span class="sd">    There are a number of ways to determine which are the correct Psi4</span>
-<span class="sd">    executables to use. The aim of this installer is to help the user locate</span>
-<span class="sd">    the executables. There are a number of possibilities</span>
+<div class="viewcode-block" id="BSSEStep.description">
+<a class="viewcode-back" href="../../api/psi4_step.html#psi4_step.bsse_step.BSSEStep.description">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">description</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">BSSEStep</span><span class="o">.</span><span class="n">my_description</span></div>
 
-<span class="sd">    1. The correct executables are already available.</span>
 
-<span class="sd">        #. If they are already registered in `seamm.ini` there is nothing else</span>
-<span class="sd">           to do.</span>
+<div class="viewcode-block" id="BSSEStep.create_node">
+<a class="viewcode-back" href="../../api/psi4_step.html#psi4_step.bsse_step.BSSEStep.create_node">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">create_node</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">flowchart</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">psi4_step</span><span class="o">.</span><span class="n">BSSE</span><span class="p">(</span><span class="n">flowchart</span><span class="o">=</span><span class="n">flowchart</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
-<span class="sd">        #. They may be in the current path, in which case they need to be added</span>
-<span class="sd">           to `seamm.ini`.</span>
 
-<span class="sd">        #. If a module system is in use, a module may need to be loaded to give</span>
-<span class="sd">           access to Psi4.</span>
-
-<span class="sd">        #. They cannot be found automatically, so the user needs to locate the</span>
-<span class="sd">           executables for the installer.</span>
-
-<span class="sd">    #. Psi4 is not installed on the machine. In this case they can be</span>
-<span class="sd">       installed in a Conda environment. There is one choice</span>
-
-<span class="sd">        #. They can be installed in a separate environment, `seamm-psi4` by</span>
-<span class="sd">           default.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">logger</span><span class="o">=</span><span class="n">logger</span><span class="p">):</span>
-        <span class="c1"># Call the base class initialization, which sets up the commandline</span>
-        <span class="c1"># parser, amongst other things.</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">logger</span><span class="o">=</span><span class="n">logger</span><span class="p">)</span>
-
-        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Initializing the Psi4 installer object.&quot;</span><span class="p">)</span>
-
-        <span class="c1"># Define this step&#39;s details</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">environment</span> <span class="o">=</span> <span class="s2">&quot;seamm-psi4&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">section</span> <span class="o">=</span> <span class="s2">&quot;psi4-step&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">executables</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;psi4&quot;</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">resource_path</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">resources</span><span class="o">.</span><span class="n">files</span><span class="p">(</span><span class="s2">&quot;psi4_step&quot;</span><span class="p">)</span> <span class="o">/</span> <span class="s2">&quot;data&quot;</span>
-
-        <span class="c1"># The environment.yaml file for Conda installations.</span>
-        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;data directory: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">resource_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">environment_file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">resource_path</span> <span class="o">/</span> <span class="s2">&quot;seamm-psi4.yml&quot;</span>
-
-<div class="viewcode-block" id="Installer.exe_version">
-<a class="viewcode-back" href="../../api/psi4_step.html#psi4_step.installer.Installer.exe_version">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">exe_version</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the version of the Psi4 executable.</span>
-
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        config : dict</span>
-<span class="sd">            Dictionary of configuration parameters from psi4.ini</span>
-
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        str, str</span>
-<span class="sd">            &quot;Psi4&quot; and the version reported by the executable, or &#39;unknown&#39;.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">environment</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;conda-environment&quot;</span><span class="p">]</span>
-        <span class="n">conda</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;conda&quot;</span><span class="p">]</span>
-        <span class="k">if</span> <span class="n">environment</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;~&quot;</span><span class="p">:</span>
-            <span class="n">environment</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="n">environment</span><span class="p">)</span><span class="o">.</span><span class="n">expanduser</span><span class="p">())</span>
-            <span class="n">command</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&#39;</span><span class="si">{</span><span class="n">conda</span><span class="si">}</span><span class="s2">&#39; run --live-stream -p &#39;</span><span class="si">{</span><span class="n">environment</span><span class="si">}</span><span class="s2">&#39; psi4 --version&quot;</span>
-        <span class="k">elif</span> <span class="n">Path</span><span class="p">(</span><span class="n">environment</span><span class="p">)</span><span class="o">.</span><span class="n">is_absolute</span><span class="p">():</span>
-            <span class="n">command</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&#39;</span><span class="si">{</span><span class="n">conda</span><span class="si">}</span><span class="s2">&#39; run --live-stream -p &#39;</span><span class="si">{</span><span class="n">environment</span><span class="si">}</span><span class="s2">&#39; psi4 --version&quot;</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">command</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&#39;</span><span class="si">{</span><span class="n">conda</span><span class="si">}</span><span class="s2">&#39; run --live-stream -n &#39;</span><span class="si">{</span><span class="n">environment</span><span class="si">}</span><span class="s2">&#39; psi4 --version&quot;</span>
-
-        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;    Running </span><span class="si">{</span><span class="n">command</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="n">result</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
-                <span class="n">command</span><span class="p">,</span>
-                <span class="n">stdin</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">DEVNULL</span><span class="p">,</span>
-                <span class="n">capture_output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                <span class="n">text</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-            <span class="p">)</span>
-        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;    Failed to run </span><span class="si">{</span><span class="n">command</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-            <span class="n">version</span> <span class="o">=</span> <span class="s2">&quot;unknown&quot;</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">version</span> <span class="o">=</span> <span class="s2">&quot;unknown&quot;</span>
-            <span class="n">lines</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()</span>
-            <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">lines</span><span class="p">:</span>
-                <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
-                <span class="n">tmp</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
-                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">tmp</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-                    <span class="n">version</span> <span class="o">=</span> <span class="n">tmp</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-                    <span class="k">break</span>
-
-        <span class="c1"># Psi4 tends to leave timing.dat floating around. :-(</span>
-        <span class="n">timing</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">&quot;timer.dat&quot;</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">timing</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
-            <span class="k">try</span><span class="p">:</span>
-                <span class="n">timing</span><span class="o">.</span><span class="n">unlink</span><span class="p">()</span>
-            <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
-                <span class="k">pass</span>
-
-        <span class="k">return</span> <span class="s2">&quot;Psi4&quot;</span><span class="p">,</span> <span class="n">version</span></div>
+<div class="viewcode-block" id="BSSEStep.create_tk_node">
+<a class="viewcode-back" href="../../api/psi4_step.html#psi4_step.bsse_step.BSSEStep.create_tk_node">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">create_tk_node</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">canvas</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">psi4_step</span><span class="o">.</span><span class="n">TkBSSE</span><span class="p">(</span><span class="n">canvas</span><span class="o">=</span><span class="n">canvas</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 </div>
 
 </pre></div>

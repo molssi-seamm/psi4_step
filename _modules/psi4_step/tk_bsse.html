@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>psi4_step.installer &#8212; SEAMM Psi4 Plug-in 2026.8.4 documentation</title>
+    <title>psi4_step.tk_bsse &#8212; SEAMM Psi4 Plug-in 2026.8.4 documentation</title>
   
   
   
@@ -54,7 +54,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../../_static/copybutton.js?v=f281be69"></script>
     <script src="../../_static/design-tabs.js?v=f930bc37"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/psi4_step/installer';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/psi4_step/tk_bsse';</script>
     <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
 
     <link rel="index" title="Index" href="../../genindex.html" />
@@ -468,7 +468,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     
     <li class="breadcrumb-item"><a href="../index.html" class="nav-link">Module code</a></li>
     
-    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">psi4_step.installer</span></li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">psi4_step.tk_bsse</span></li>
   </ul>
 </nav>
 </div>
@@ -485,133 +485,134 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <h1>Source code for psi4_step.installer</h1><div class="highlight"><pre>
+  <h1>Source code for psi4_step.tk_bsse</h1><div class="highlight"><pre>
 <span></span><span class="c1"># -*- coding: utf-8 -*-</span>
 
-<span class="sd">&quot;&quot;&quot;Installer for the Psi4 plug-in.</span>
+<span class="sd">&quot;&quot;&quot;The graphical part of a Psi4 BSSE (counterpoise) sub-step.&quot;&quot;&quot;</span>
 
-<span class="sd">This handles any further installation needed after installing the Python</span>
-<span class="sd">package `psi4-step`.</span>
-<span class="sd">&quot;&quot;&quot;</span>
-
-<span class="kn">import</span><span class="w"> </span><span class="nn">importlib</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">subprocess</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">tkinter</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">tk</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">tkinter.ttk</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">ttk</span>
 
-<span class="kn">import</span><span class="w"> </span><span class="nn">seamm_installer</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">psi4_step</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">seamm_widgets</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sw</span>
 
 <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="Installer">
-<a class="viewcode-back" href="../../api/psi4_step.html#psi4_step.installer.Installer">[docs]</a>
-<span class="k">class</span><span class="w"> </span><span class="nc">Installer</span><span class="p">(</span><span class="n">seamm_installer</span><span class="o">.</span><span class="n">InstallerBase</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Handle further installation needed after installing psi4-step.</span>
+<div class="viewcode-block" id="TkBSSE">
+<a class="viewcode-back" href="../../api/psi4_step.html#psi4_step.tk_bsse.TkBSSE">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">TkBSSE</span><span class="p">(</span><span class="n">psi4_step</span><span class="o">.</span><span class="n">TkEnergy</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Graphical Psi4 BSSE sub-step: the energy dialog&#39;s level-of-theory</span>
+<span class="sd">    controls plus the fragment definition.&quot;&quot;&quot;</span>
 
-<span class="sd">    The Python package `psi4-step` should already be installed, using `pip`,</span>
-<span class="sd">    `conda`, or similar. This plug-in-specific installer then checks for the</span>
-<span class="sd">    Psi4 executable, installing it if needed, and registers its</span>
-<span class="sd">    location in seamm.ini.</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">tk_flowchart</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">node</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">canvas</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">x</span><span class="o">=</span><span class="mi">120</span><span class="p">,</span>
+        <span class="n">y</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
+        <span class="n">w</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span>
+        <span class="n">h</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>
+        <span class="n">my_logger</span><span class="o">=</span><span class="n">logger</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">results_widgets</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="n">tk_flowchart</span><span class="o">=</span><span class="n">tk_flowchart</span><span class="p">,</span>
+            <span class="n">node</span><span class="o">=</span><span class="n">node</span><span class="p">,</span>
+            <span class="n">canvas</span><span class="o">=</span><span class="n">canvas</span><span class="p">,</span>
+            <span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">,</span>
+            <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">,</span>
+            <span class="n">w</span><span class="o">=</span><span class="n">w</span><span class="p">,</span>
+            <span class="n">h</span><span class="o">=</span><span class="n">h</span><span class="p">,</span>
+            <span class="n">my_logger</span><span class="o">=</span><span class="n">my_logger</span><span class="p">,</span>
+        <span class="p">)</span>
 
-<span class="sd">    There are a number of ways to determine which are the correct Psi4</span>
-<span class="sd">    executables to use. The aim of this installer is to help the user locate</span>
-<span class="sd">    the executables. There are a number of possibilities</span>
+<div class="viewcode-block" id="TkBSSE.right_click">
+<a class="viewcode-back" href="../../api/psi4_step.html#psi4_step.tk_bsse.TkBSSE.right_click">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">right_click</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">right_click</span><span class="p">(</span><span class="n">event</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">popup_menu</span><span class="o">.</span><span class="n">add_command</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s2">&quot;Edit..&quot;</span><span class="p">,</span> <span class="n">command</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">edit</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">popup_menu</span><span class="o">.</span><span class="n">tk_popup</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">x_root</span><span class="p">,</span> <span class="n">event</span><span class="o">.</span><span class="n">y_root</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span></div>
 
-<span class="sd">    1. The correct executables are already available.</span>
 
-<span class="sd">        #. If they are already registered in `seamm.ini` there is nothing else</span>
-<span class="sd">           to do.</span>
+<div class="viewcode-block" id="TkBSSE.create_dialog">
+<a class="viewcode-back" href="../../api/psi4_step.html#psi4_step.tk_bsse.TkBSSE.create_dialog">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">create_dialog</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Edit Psi4 BSSE Step&quot;</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create the edit dialog: the Energy superclass builds the</span>
+<span class="sd">        level-of-theory &#39;calculation&#39;/&#39;convergence&#39; frames; this adds a</span>
+<span class="sd">        &#39;fragments&#39; frame alongside them, reactive to the &#39;fragments&#39; mode</span>
+<span class="sd">        (the &#39;Fragment atoms&#39; field only applies when it is &#39;specified&#39;).&quot;&quot;&quot;</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;TkBSSE.create_dialog&quot;</span><span class="p">)</span>
 
-<span class="sd">        #. They may be in the current path, in which case they need to be added</span>
-<span class="sd">           to `seamm.ini`.</span>
+        <span class="n">frame</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">create_dialog</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">)</span>
 
-<span class="sd">        #. If a module system is in use, a module may need to be loaded to give</span>
-<span class="sd">           access to Psi4.</span>
+        <span class="n">P</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">node</span><span class="o">.</span><span class="n">parameters</span>
 
-<span class="sd">        #. They cannot be found automatically, so the user needs to locate the</span>
-<span class="sd">           executables for the installer.</span>
+        <span class="n">fragments_frame</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;fragments frame&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ttk</span><span class="o">.</span><span class="n">LabelFrame</span><span class="p">(</span>
+            <span class="n">frame</span><span class="p">,</span>
+            <span class="n">borderwidth</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
+            <span class="n">relief</span><span class="o">=</span><span class="s2">&quot;sunken&quot;</span><span class="p">,</span>
+            <span class="n">text</span><span class="o">=</span><span class="s2">&quot;Fragments&quot;</span><span class="p">,</span>
+            <span class="n">labelanchor</span><span class="o">=</span><span class="s2">&quot;n&quot;</span><span class="p">,</span>
+            <span class="n">padding</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+        <span class="p">)</span>
 
-<span class="sd">    #. Psi4 is not installed on the machine. In this case they can be</span>
-<span class="sd">       installed in a Conda environment. There is one choice</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="p">(</span>
+            <span class="s2">&quot;fragments&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;fragment atoms&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;fragment charges&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;compute gradient&quot;</span><span class="p">,</span>
+        <span class="p">):</span>
+            <span class="bp">self</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">P</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">widget</span><span class="p">(</span><span class="n">fragments_frame</span><span class="p">)</span>
 
-<span class="sd">        #. They can be installed in a separate environment, `seamm-psi4` by</span>
-<span class="sd">           default.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">sequence</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;&lt;&lt;ComboboxSelected&gt;&gt;&quot;</span><span class="p">,</span> <span class="s2">&quot;&lt;Return&gt;&quot;</span><span class="p">,</span> <span class="s2">&quot;&lt;FocusOut&gt;&quot;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;fragments&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">combobox</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span class="n">sequence</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">reset_fragments</span><span class="p">)</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">logger</span><span class="o">=</span><span class="n">logger</span><span class="p">):</span>
-        <span class="c1"># Call the base class initialization, which sets up the commandline</span>
-        <span class="c1"># parser, amongst other things.</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">logger</span><span class="o">=</span><span class="n">logger</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">node</span><span class="o">.</span><span class="n">calculation</span> <span class="o">==</span> <span class="s2">&quot;bsse&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">reset_dialog</span><span class="p">()</span>
 
-        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Initializing the Psi4 installer object.&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">frame</span></div>
 
-        <span class="c1"># Define this step&#39;s details</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">environment</span> <span class="o">=</span> <span class="s2">&quot;seamm-psi4&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">section</span> <span class="o">=</span> <span class="s2">&quot;psi4-step&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">executables</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;psi4&quot;</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">resource_path</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">resources</span><span class="o">.</span><span class="n">files</span><span class="p">(</span><span class="s2">&quot;psi4_step&quot;</span><span class="p">)</span> <span class="o">/</span> <span class="s2">&quot;data&quot;</span>
 
-        <span class="c1"># The environment.yaml file for Conda installations.</span>
-        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;data directory: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">resource_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">environment_file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">resource_path</span> <span class="o">/</span> <span class="s2">&quot;seamm-psi4.yml&quot;</span>
+<div class="viewcode-block" id="TkBSSE.reset_dialog">
+<a class="viewcode-back" href="../../api/psi4_step.html#psi4_step.tk_bsse.TkBSSE.reset_dialog">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">reset_dialog</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">widget</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Lay out the widgets, letting the Energy superclass go first.&quot;&quot;&quot;</span>
+        <span class="n">rows</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">reset_dialog</span><span class="p">()</span>
 
-<div class="viewcode-block" id="Installer.exe_version">
-<a class="viewcode-back" href="../../api/psi4_step.html#psi4_step.installer.Installer.exe_version">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">exe_version</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the version of the Psi4 executable.</span>
+        <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;fragments frame&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">row</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">rowspan</span><span class="o">=</span><span class="n">rows</span><span class="p">,</span> <span class="n">sticky</span><span class="o">=</span><span class="n">tk</span><span class="o">.</span><span class="n">N</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">reset_fragments</span><span class="p">()</span>
 
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        config : dict</span>
-<span class="sd">            Dictionary of configuration parameters from psi4.ini</span>
+        <span class="k">return</span> <span class="n">rows</span></div>
 
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        str, str</span>
-<span class="sd">            &quot;Psi4&quot; and the version reported by the executable, or &#39;unknown&#39;.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">environment</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;conda-environment&quot;</span><span class="p">]</span>
-        <span class="n">conda</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;conda&quot;</span><span class="p">]</span>
-        <span class="k">if</span> <span class="n">environment</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;~&quot;</span><span class="p">:</span>
-            <span class="n">environment</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="n">environment</span><span class="p">)</span><span class="o">.</span><span class="n">expanduser</span><span class="p">())</span>
-            <span class="n">command</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&#39;</span><span class="si">{</span><span class="n">conda</span><span class="si">}</span><span class="s2">&#39; run --live-stream -p &#39;</span><span class="si">{</span><span class="n">environment</span><span class="si">}</span><span class="s2">&#39; psi4 --version&quot;</span>
-        <span class="k">elif</span> <span class="n">Path</span><span class="p">(</span><span class="n">environment</span><span class="p">)</span><span class="o">.</span><span class="n">is_absolute</span><span class="p">():</span>
-            <span class="n">command</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&#39;</span><span class="si">{</span><span class="n">conda</span><span class="si">}</span><span class="s2">&#39; run --live-stream -p &#39;</span><span class="si">{</span><span class="n">environment</span><span class="si">}</span><span class="s2">&#39; psi4 --version&quot;</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">command</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&#39;</span><span class="si">{</span><span class="n">conda</span><span class="si">}</span><span class="s2">&#39; run --live-stream -n &#39;</span><span class="si">{</span><span class="n">environment</span><span class="si">}</span><span class="s2">&#39; psi4 --version&quot;</span>
 
-        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;    Running </span><span class="si">{</span><span class="n">command</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="n">result</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
-                <span class="n">command</span><span class="p">,</span>
-                <span class="n">stdin</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">DEVNULL</span><span class="p">,</span>
-                <span class="n">capture_output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                <span class="n">text</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-            <span class="p">)</span>
-        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;    Failed to run </span><span class="si">{</span><span class="n">command</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-            <span class="n">version</span> <span class="o">=</span> <span class="s2">&quot;unknown&quot;</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">version</span> <span class="o">=</span> <span class="s2">&quot;unknown&quot;</span>
-            <span class="n">lines</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()</span>
-            <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">lines</span><span class="p">:</span>
-                <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
-                <span class="n">tmp</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
-                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">tmp</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-                    <span class="n">version</span> <span class="o">=</span> <span class="n">tmp</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-                    <span class="k">break</span>
+<div class="viewcode-block" id="TkBSSE.reset_fragments">
+<a class="viewcode-back" href="../../api/psi4_step.html#psi4_step.tk_bsse.TkBSSE.reset_fragments">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">reset_fragments</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">widget</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;&#39;Fragment atoms&#39; only applies when defining the fragments by</span>
+<span class="sd">        hand; &#39;Fragment charges&#39;/&#39;compute gradient&#39; apply either way.&quot;&quot;&quot;</span>
+        <span class="n">frame</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;fragments frame&quot;</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">slave</span> <span class="ow">in</span> <span class="n">frame</span><span class="o">.</span><span class="n">grid_slaves</span><span class="p">():</span>
+            <span class="n">slave</span><span class="o">.</span><span class="n">grid_forget</span><span class="p">()</span>
 
-        <span class="c1"># Psi4 tends to leave timing.dat floating around. :-(</span>
-        <span class="n">timing</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">&quot;timer.dat&quot;</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">timing</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
-            <span class="k">try</span><span class="p">:</span>
-                <span class="n">timing</span><span class="o">.</span><span class="n">unlink</span><span class="p">()</span>
-            <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
-                <span class="k">pass</span>
+        <span class="n">widgets</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">row</span> <span class="o">=</span> <span class="mi">0</span>
 
-        <span class="k">return</span> <span class="s2">&quot;Psi4&quot;</span><span class="p">,</span> <span class="n">version</span></div>
+        <span class="k">def</span><span class="w"> </span><span class="nf">add</span><span class="p">(</span><span class="n">key</span><span class="p">):</span>
+            <span class="k">nonlocal</span> <span class="n">row</span>
+            <span class="bp">self</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">row</span><span class="o">=</span><span class="n">row</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">columnspan</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">sticky</span><span class="o">=</span><span class="n">tk</span><span class="o">.</span><span class="n">EW</span><span class="p">)</span>
+            <span class="n">widgets</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="n">key</span><span class="p">])</span>
+            <span class="n">row</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="n">add</span><span class="p">(</span><span class="s2">&quot;fragments&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="p">[</span><span class="s2">&quot;fragments&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;specified&quot;</span><span class="p">:</span>
+            <span class="n">add</span><span class="p">(</span><span class="s2">&quot;fragment atoms&quot;</span><span class="p">)</span>
+        <span class="n">add</span><span class="p">(</span><span class="s2">&quot;fragment charges&quot;</span><span class="p">)</span>
+        <span class="n">add</span><span class="p">(</span><span class="s2">&quot;compute gradient&quot;</span><span class="p">)</span>
+
+        <span class="n">sw</span><span class="o">.</span><span class="n">align_labels</span><span class="p">(</span><span class="n">widgets</span><span class="p">)</span></div>
 </div>
 
 </pre></div>

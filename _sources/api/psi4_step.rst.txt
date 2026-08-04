@@ -4,6 +4,30 @@ psi4\_step package
 Submodules
 ----------
 
+psi4\_step.bsse module
+----------------------
+
+.. automodule:: psi4_step.bsse
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+psi4\_step.bsse\_parameters module
+----------------------------------
+
+.. automodule:: psi4_step.bsse_parameters
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+psi4\_step.bsse\_step module
+----------------------------
+
+.. automodule:: psi4_step.bsse_step
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
 psi4\_step.energy module
 ------------------------
 
@@ -144,6 +168,14 @@ psi4\_step.thermochemistry\_step module
 ---------------------------------------
 
 .. automodule:: psi4_step.thermochemistry_step
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+psi4\_step.tk\_bsse module
+--------------------------
+
+.. automodule:: psi4_step.tk_bsse
    :members:
    :show-inheritance:
    :undoc-members:
