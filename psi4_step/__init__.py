@@ -39,6 +39,11 @@ from .thermochemistry import Thermochemistry  # noqa: F401
 from .thermochemistry_parameters import ThermochemistryParameters  # noqa: F401
 from .tk_thermochemistry import TkThermochemistry  # noqa: F401
 
+from .bsse_step import BSSEStep  # noqa: F401
+from .bsse import BSSE  # noqa: F401
+from .bsse_parameters import BSSEParameters  # noqa: F401
+from .tk_bsse import TkBSSE  # noqa: F401
+
 # Handle versioneer
 from ._version import get_versions
 
