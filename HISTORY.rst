@@ -1,6 +1,19 @@
 =======
 History
 =======
+2026.8.4 -- Added a BSSE (counterpoise) sub-step
+   * New BSSE sub-step: computes the counterpoise-corrected (Boys-Bernardi)
+     energy and gradient of an N-fragment complex, with an independent charge
+     per fragment -- needed for ions, e.g. a Na+/Cl- pair or a Na+/Cl-/H2O
+     cluster. A thin wrapper around Psi4's own native N-fragment counterpoise
+     driver (``bsse_type=['cp', 'nocp']``); requires the new ``seamm-bsse``
+     package for the fragment-definition/validation layer shared with
+     orca_step's own BSSE sub-step. Validated against real Psi4 and
+     cross-checked against orca_step's independently-implemented BSSE
+     sub-step on the water dimer, charged ion/water pairs, and a
+     three-fragment Na+/Cl-/H2O cluster -- agreement to a few hundredths of
+     a kcal/mol throughout.
+
 2026.3.1 -- Internal: switching from deprecated library pkg_resources to importlib
 
 2025.3.9 -- Optimization and thermochemistry enhancements
