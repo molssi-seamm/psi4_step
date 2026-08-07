@@ -54,7 +54,12 @@ def test_bsse_fragments_specified_charged_na_cl():
     """The Na+/Cl- pilot case: 'specified' fragments, per-fragment charge,
     neutral overall complex."""
     node = psi4_step.BSSE()
-    configuration = SimpleNamespace(n_atoms=2, charge=0, spin_multiplicity=1)
+    configuration = SimpleNamespace(
+        n_atoms=2,
+        charge=0,
+        spin_multiplicity=1,
+        atoms=SimpleNamespace(atomic_numbers=[11, 17]),
+    )
     P = {
         "fragments": "specified",
         "fragment atoms": "1; 2",
@@ -67,7 +72,12 @@ def test_bsse_fragments_specified_charged_na_cl():
 
 def test_bsse_fragments_charge_mismatch_raises():
     node = psi4_step.BSSE()
-    configuration = SimpleNamespace(n_atoms=2, charge=0, spin_multiplicity=1)
+    configuration = SimpleNamespace(
+        n_atoms=2,
+        charge=0,
+        spin_multiplicity=1,
+        atoms=SimpleNamespace(atomic_numbers=[11, 17]),
+    )
     P = {
         "fragments": "specified",
         "fragment atoms": "1; 2",
@@ -91,9 +101,10 @@ def test_bsse_fragments_auto_needs_at_least_two_molecules():
 
 
 class _FakeAtoms:
-    def __init__(self, symbols, coords):
+    def __init__(self, symbols, coords, atomic_numbers=None):
         self.symbols = symbols
         self._coords = coords
+        self.atomic_numbers = atomic_numbers
 
     def get_coordinates(self, fractionals=False, in_cell=True):
         return self._coords
@@ -109,6 +120,7 @@ def test_bsse_molecule_block_two_fragments():
         atoms=_FakeAtoms(
             ["Na", "Cl"],
             [(0.0, 0.0, 0.0), (0.0, 0.0, 2.44)],
+            atomic_numbers=[11, 17],
         )
     )
     fragments = node._fragments(
@@ -117,7 +129,12 @@ def test_bsse_molecule_block_two_fragments():
             "fragment atoms": "1; 2",
             "fragment charges": "1, -1",
         },
-        SimpleNamespace(n_atoms=2, charge=0, spin_multiplicity=1),
+        SimpleNamespace(
+            n_atoms=2,
+            charge=0,
+            spin_multiplicity=1,
+            atoms=SimpleNamespace(atomic_numbers=[11, 17]),
+        ),
     )
     block = node._molecule_block(fragments, configuration, name="bsse_cluster")
     lines = block.splitlines()

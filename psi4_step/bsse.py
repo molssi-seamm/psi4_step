@@ -135,6 +135,7 @@ class BSSE(psi4_step.Energy):
                 fragments,
                 cluster_charge=configuration.charge,
                 cluster_multiplicity=configuration.spin_multiplicity,
+                atomic_numbers=configuration.atoms.atomic_numbers,
             )
         except ValueError as e:
             raise RuntimeError(f"BSSE: {e}") from e
