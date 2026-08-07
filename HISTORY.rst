@@ -10,6 +10,14 @@ History
      complex's own charge and pass validation, only to fail deep inside Psi4
      once that fragment ran as an impossible odd-electron singlet. This is now
      caught up front with a clear message naming the offending fragment.
+   * Leaving ``fragment charges`` empty no longer always means all-neutral: if
+     the structure carries per-atom formal charges (e.g. an ion marked with an
+     SDF/MOL ``M  CHG`` record, such as the Na+ in a ``Na+..H2O`` complex), each
+     fragment now defaults to the sum of its own atoms' formal charge. This
+     covers monatomic ions (Na+, Cl-) and polyatomic ions (NH4+, BF4-) alike
+     without the caller needing to spell out ``fragment charges`` at all --
+     removing the main way to trigger the mis-assignment above in the first
+     place. An explicit ``fragment charges`` still overrides it.
 
 2026.8.4 -- Added a BSSE (counterpoise) sub-step
    * New BSSE sub-step: computes the counterpoise-corrected (Boys-Bernardi)
