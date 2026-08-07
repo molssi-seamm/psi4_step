@@ -62,10 +62,13 @@ class BSSEParameters(EnergyParameters):
                 "fragments (the order 'auto' finds molecules, or the "
                 "semicolon-separated groups in 'Fragment atoms') -- a "
                 "comma/space separated list of integers, e.g. '1, -1' for a "
-                "Na+/Cl- pair. Leave empty for all-neutral fragments (the usual "
-                "case for a neutral H-bonded complex). Every fragment is "
-                "closed-shell (multiplicity 1); the complex's own charge and "
-                "multiplicity are checked against these for consistency."
+                "Na+/Cl- pair. Leave empty to use each fragment's net formal "
+                "charge from the input structure, if the structure format "
+                "carries one (e.g. an ion marked with an SDF/MOL 'M  CHG' "
+                "record) -- otherwise all-neutral (the usual case for a "
+                "neutral H-bonded complex). Every fragment is closed-shell "
+                "(multiplicity 1); the complex's own charge and multiplicity "
+                "are checked against these for consistency."
             ),
         },
         "compute gradient": {

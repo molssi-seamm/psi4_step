@@ -1,6 +1,24 @@
 =======
 History
 =======
+2026.8.7 -- Bugfix: catch a mis-assigned per-fragment BSSE charge before running Psi4
+   * The BSSE (counterpoise) sub-step now passes the cluster's atomic numbers into
+     ``seamm_bsse.validate_fragments``, which checks that every fragment has an
+     even electron count at its assigned charge. Previously, a per-fragment
+     charge given to the wrong fragment (e.g. an ion's charge assigned to its
+     neutral partner instead of the ion) could still sum correctly to the
+     complex's own charge and pass validation, only to fail deep inside Psi4
+     once that fragment ran as an impossible odd-electron singlet. This is now
+     caught up front with a clear message naming the offending fragment.
+   * Leaving ``fragment charges`` empty no longer always means all-neutral: if
+     the structure carries per-atom formal charges (e.g. an ion marked with an
+     SDF/MOL ``M  CHG`` record, such as the Na+ in a ``Na+..H2O`` complex), each
+     fragment now defaults to the sum of its own atoms' formal charge. This
+     covers monatomic ions (Na+, Cl-) and polyatomic ions (NH4+, BF4-) alike
+     without the caller needing to spell out ``fragment charges`` at all --
+     removing the main way to trigger the mis-assignment above in the first
+     place. An explicit ``fragment charges`` still overrides it.
+
 2026.8.4 -- Added a BSSE (counterpoise) sub-step
    * New BSSE sub-step: computes the counterpoise-corrected (Boys-Bernardi)
      energy and gradient of an N-fragment complex, with an independent charge
