@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>psi4_step.bsse &#8212; SEAMM Psi4 Plug-in 2026.8.4 documentation</title>
+    <title>psi4_step.bsse &#8212; SEAMM Psi4 Plug-in 2026.8.7 documentation</title>
   
   
   
@@ -48,7 +48,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-PQXXTJ2');</script>
 <!-- End Google Tag Manager -->
 
-    <script src="../../_static/documentation_options.js?v=0cfa9efb"></script>
+    <script src="../../_static/documentation_options.js?v=3b021491"></script>
     <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -61,7 +61,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     <link rel="search" title="Search" href="../../search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2026.8.4" />
+  <meta name="docsearch:version" content="2026.8.7" />
   
     
     <script src="../../_static/searchtools.js"></script>
@@ -590,8 +590,12 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     <span class="k">def</span><span class="w"> </span><span class="nf">_fragments</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">P</span><span class="p">,</span> <span class="n">configuration</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the N ``seamm_bsse.Fragment`` for this complex, per the</span>
 <span class="sd">        &#39;fragments&#39; parameter, with per-fragment charge threaded in from</span>
-<span class="sd">        &#39;fragment charges&#39;. Validates against the complex&#39;s own</span>
-<span class="sd">        charge/multiplicity before returning.&quot;&quot;&quot;</span>
+<span class="sd">        &#39;fragment charges&#39; -- or, if that is left empty, from the sum of each</span>
+<span class="sd">        fragment&#39;s atoms&#39; ``formal_charge`` (set on ``configuration.atoms``</span>
+<span class="sd">        when the structure came from a format that carries per-atom formal</span>
+<span class="sd">        charges, e.g. an SDF/MOL file&#39;s ``M  CHG`` record), falling back to</span>
+<span class="sd">        all-neutral if neither is available. Validates against the complex&#39;s</span>
+<span class="sd">        own charge/multiplicity before returning.&quot;&quot;&quot;</span>
         <span class="n">n_atoms</span> <span class="o">=</span> <span class="n">configuration</span><span class="o">.</span><span class="n">n_atoms</span>
         <span class="n">mode</span> <span class="o">=</span> <span class="n">P</span><span class="p">[</span><span class="s2">&quot;fragments&quot;</span><span class="p">]</span>
         <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="s2">&quot;specified&quot;</span><span class="p">:</span>
@@ -610,7 +614,18 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
         <span class="n">charges</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse_charges</span><span class="p">(</span><span class="n">P</span><span class="p">[</span><span class="s2">&quot;fragment charges&quot;</span><span class="p">])</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">charges</span><span class="p">:</span>
-            <span class="n">charges</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">groups</span><span class="p">)</span>
+            <span class="k">if</span> <span class="s2">&quot;formal_charge&quot;</span> <span class="ow">in</span> <span class="n">configuration</span><span class="o">.</span><span class="n">atoms</span><span class="p">:</span>
+                <span class="n">formal_charges</span> <span class="o">=</span> <span class="n">configuration</span><span class="o">.</span><span class="n">atoms</span><span class="p">[</span><span class="s2">&quot;formal_charge&quot;</span><span class="p">]</span>
+                <span class="n">charges</span> <span class="o">=</span> <span class="p">[</span><span class="nb">sum</span><span class="p">(</span><span class="n">formal_charges</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">group</span><span class="p">)</span> <span class="k">for</span> <span class="n">group</span> <span class="ow">in</span> <span class="n">groups</span><span class="p">]</span>
+                <span class="n">printer</span><span class="o">.</span><span class="n">important</span><span class="p">(</span>
+                    <span class="n">__</span><span class="p">(</span>
+                        <span class="s2">&quot;No &#39;fragment charges&#39; given; using each fragment&#39;s &quot;</span>
+                        <span class="s2">&quot;net formal charge from the input structure.&quot;</span><span class="p">,</span>
+                        <span class="n">indent</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">indent</span> <span class="o">+</span> <span class="mi">4</span> <span class="o">*</span> <span class="s2">&quot; &quot;</span><span class="p">,</span>
+                    <span class="p">)</span>
+                <span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">charges</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">groups</span><span class="p">)</span>
         <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">charges</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">groups</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
                 <span class="sa">f</span><span class="s2">&quot;BSSE: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">charges</span><span class="p">)</span><span class="si">}</span><span class="s2"> &#39;fragment charges&#39; given but &quot;</span>
@@ -628,6 +643,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 <span class="n">fragments</span><span class="p">,</span>
                 <span class="n">cluster_charge</span><span class="o">=</span><span class="n">configuration</span><span class="o">.</span><span class="n">charge</span><span class="p">,</span>
                 <span class="n">cluster_multiplicity</span><span class="o">=</span><span class="n">configuration</span><span class="o">.</span><span class="n">spin_multiplicity</span><span class="p">,</span>
+                <span class="n">atomic_numbers</span><span class="o">=</span><span class="n">configuration</span><span class="o">.</span><span class="n">atoms</span><span class="o">.</span><span class="n">atomic_numbers</span><span class="p">,</span>
             <span class="p">)</span>
         <span class="k">except</span> <span class="ne">ValueError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;BSSE: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">e</span>

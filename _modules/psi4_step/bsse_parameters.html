@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>psi4_step.bsse_parameters &#8212; SEAMM Psi4 Plug-in 2026.8.4 documentation</title>
+    <title>psi4_step.bsse_parameters &#8212; SEAMM Psi4 Plug-in 2026.8.7 documentation</title>
   
   
   
@@ -48,7 +48,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-PQXXTJ2');</script>
 <!-- End Google Tag Manager -->
 
-    <script src="../../_static/documentation_options.js?v=0cfa9efb"></script>
+    <script src="../../_static/documentation_options.js?v=3b021491"></script>
     <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -61,7 +61,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     <link rel="search" title="Search" href="../../search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2026.8.4" />
+  <meta name="docsearch:version" content="2026.8.7" />
   
     
     <script src="../../_static/searchtools.js"></script>
@@ -552,10 +552,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 <span class="s2">&quot;fragments (the order &#39;auto&#39; finds molecules, or the &quot;</span>
                 <span class="s2">&quot;semicolon-separated groups in &#39;Fragment atoms&#39;) -- a &quot;</span>
                 <span class="s2">&quot;comma/space separated list of integers, e.g. &#39;1, -1&#39; for a &quot;</span>
-                <span class="s2">&quot;Na+/Cl- pair. Leave empty for all-neutral fragments (the usual &quot;</span>
-                <span class="s2">&quot;case for a neutral H-bonded complex). Every fragment is &quot;</span>
-                <span class="s2">&quot;closed-shell (multiplicity 1); the complex&#39;s own charge and &quot;</span>
-                <span class="s2">&quot;multiplicity are checked against these for consistency.&quot;</span>
+                <span class="s2">&quot;Na+/Cl- pair. Leave empty to use each fragment&#39;s net formal &quot;</span>
+                <span class="s2">&quot;charge from the input structure, if the structure format &quot;</span>
+                <span class="s2">&quot;carries one (e.g. an ion marked with an SDF/MOL &#39;M  CHG&#39; &quot;</span>
+                <span class="s2">&quot;record) -- otherwise all-neutral (the usual case for a &quot;</span>
+                <span class="s2">&quot;neutral H-bonded complex). Every fragment is closed-shell &quot;</span>
+                <span class="s2">&quot;(multiplicity 1); the complex&#39;s own charge and multiplicity &quot;</span>
+                <span class="s2">&quot;are checked against these for consistency.&quot;</span>
             <span class="p">),</span>
         <span class="p">},</span>
         <span class="s2">&quot;compute gradient&quot;</span><span class="p">:</span> <span class="p">{</span>
