@@ -135,5 +135,41 @@ class ThermochemistryParameters(EnergyParameters):
         logger.debug("ThermochemistryParameters.__init__")
 
         super().__init__(
-            defaults={**ThermochemistryParameters.parameters, **defaults}, data=data
+            defaults={
+                **self.energy_settings(),
+                **ThermochemistryParameters.parameters,
+                **defaults,
+            },
+            data=data,
         )
+
+    @staticmethod
+    def energy_settings():
+        """The Energy step's calculation settings, which apply only when not using
+        the parameters of the previous step (a rule shared by the dialog and the
+        flowchart builder, see seamm.Parameters)."""
+        result = {}
+        for key, definition in EnergyParameters.parameters.items():
+            if key in ("results", "create tables"):
+                continue
+            conditions = {
+                "use existing parameters": "no",
+                **definition.get("applies_when", {}),
+            }
+            result[key] = {**definition, "applies_when": conditions}
+        return result
+
+    def not_applicable_reason(self, key, values=None):
+        """Why a parameter does not apply: first, because the previous step's
+        parameters are used."""
+        if values is None:
+            values = self.current_values()
+        if (
+            key in self.energy_settings()
+            and values.get("use existing parameters") == "yes"
+        ):
+            return (
+                "the parameters of the previous step are used ('use existing "
+                "parameters' is 'yes')"
+            )
+        return super().not_applicable_reason(key, values)

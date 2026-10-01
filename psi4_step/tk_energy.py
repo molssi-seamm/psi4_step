@@ -130,6 +130,12 @@ class TkEnergy(seamm.TkNode):
         self["advanced_method"].combobox.bind("<Return>", self.reset_calculation)
         self["advanced_method"].combobox.bind("<FocusOut>", self.reset_calculation)
 
+        # The dispersion corrections offered depend on the functional
+        for key in ("functional", "advanced_functional"):
+            self[key].combobox.bind("<<ComboboxSelected>>", self.reset_calculation)
+            self[key].combobox.bind("<Return>", self.reset_calculation)
+            self[key].combobox.bind("<FocusOut>", self.reset_calculation)
+
         for key in ("use damping", "use level shift", "use soscf"):
             self[key].bind("<<ComboboxSelected>>", self.reset_convergence)
             self[key].bind("<Return>", self.reset_convergence)
@@ -188,27 +194,34 @@ class TkEnergy(seamm.TkNode):
         row += 1
         return row
 
-    def reset_calculation(self, widget=None):
-        level = self["level"].get()
+    def _widget_values(self):
+        """The dialog's current values, {name: value}, for the parameters' rules."""
+        values = {}
+        for key in self.node.parameters:
+            if key == "results" or key not in self:
+                continue
+            try:
+                value = self[key].get()
+            except Exception:
+                continue
+            values[key] = value[0] if isinstance(value, tuple) else value
+        return values
 
-        if level == "recommended":
-            long_method = self["method"].get()
-            if self.is_expr(long_method):
-                self.node.method = None
-                meta = None
-            else:
-                self.node.method = psi4_step.methods[long_method]["method"]
-                meta = psi4_step.methods[long_method]
-            functional = self["functional"].get()
+    def reset_calculation(self, widget=None):
+        # Which controls to show, and what they offer, come from the parameters'
+        # rules (psi4_step.EnergyParameters), which the flowchart builder uses too.
+        P = self.node.parameters
+        values = self._widget_values()
+
+        def applies(key):
+            return P.applies(key, values)
+
+        if applies("method"):
+            long_method = values["method"]
         else:
-            long_method = self["advanced_method"].get()
-            if self.is_expr(long_method):
-                self.node.method = None
-                meta = None
-            else:
-                self.node.method = psi4_step.methods[long_method]["method"]
-                meta = psi4_step.methods[long_method]
-            functional = self["advanced_functional"].get()
+            long_method = values["advanced_method"]
+        meta = None if self.is_expr(long_method) else P._method_record(long_method)
+        self.node.method = None if meta is None else meta["method"]
 
         # Set up the results table because it depends on the method
         self.results_widgets = []
@@ -223,43 +236,42 @@ class TkEnergy(seamm.TkNode):
         row = 0
         self["level"].grid(row=row, column=0, columnspan=2, sticky=tk.EW)
         row += 1
-        if level == "recommended":
-            self["method"].grid(row=row, column=0, columnspan=2, sticky=tk.EW)
-            widgets.append(self["method"])
+        is_dft = False
+        for method, functional in (
+            ("method", "functional"),
+            ("advanced_method", "advanced_functional"),
+        ):
+            if not applies(method):
+                continue
+            self[method].grid(row=row, column=0, columnspan=2, sticky=tk.EW)
+            widgets.append(self[method])
             row += 1
-            if self.node.method is None or self.node.method == "dft":
-                self["functional"].grid(row=row, column=1, sticky=tk.EW)
-                widgets2.append(self["functional"])
+            if applies(functional):
+                is_dft = True
+                self[functional].grid(row=row, column=1, sticky=tk.EW)
+                widgets2.append(self[functional])
                 row += 1
-            if meta is None or "freeze core?" in meta and meta["freeze core?"]:
+            if applies("freeze-cores"):
                 self["freeze-cores"].grid(row=row, column=1, sticky=tk.EW)
                 widgets2.append(self["freeze-cores"])
                 row += 1
-        else:
-            self["advanced_method"].grid(row=row, column=0, columnspan=2, sticky=tk.EW)
-            widgets.append(self["advanced_method"])
+        if applies("dispersion"):
+            # Offer only the functional's dispersion corrections, keeping the
+            # choice valid.
+            w = self["dispersion"]
+            dispersions = P.choices("dispersion", values)
+            if dispersions is None:
+                dispersions = P["dispersion"].enumeration
+            w.config(values=list(dispersions))
+            implied = P.implied(values)
+            if "dispersion" in implied:
+                w.set(implied["dispersion"])
+            w.grid(row=row, column=1, sticky=tk.W)
+            widgets2.append(w)
             row += 1
-            if self.node.method is None or self.node.method == "dft":
-                self["advanced_functional"].grid(row=row, column=1, sticky=tk.EW)
-                widgets2.append(self["advanced_functional"])
-                row += 1
-            if meta is None or "freeze core?" in meta and meta["freeze core?"]:
-                self["freeze-cores"].grid(row=row, column=1, sticky=tk.EW)
-                widgets2.append(self["freeze-cores"])
-                row += 1
-        if self.node.method is None or self.node.method == "dft":
-            if functional in psi4_step.dft_functionals:
-                dispersions = psi4_step.dft_functionals[functional]["dispersion"]
-                if len(dispersions) > 1:
-                    w = self["dispersion"]
-                    w.config(values=dispersions)
-                    if w.get() not in dispersions:
-                        w.value(dispersions[1])
-                    w.grid(row=row, column=1, sticky=tk.W)
-                    widgets2.append(self["dispersion"])
-                    row += 1
-                sw.align_labels(widgets2)
-                frame.columnconfigure(0, minsize=30)
+        if is_dft:
+            sw.align_labels(widgets2)
+            frame.columnconfigure(0, minsize=30)
         self["spin-restricted"].grid(row=row, column=0, columnspan=2, sticky=tk.EW)
         widgets.append(self["spin-restricted"])
         row += 1
@@ -277,6 +289,9 @@ class TkEnergy(seamm.TkNode):
         for slave in frame.grid_slaves():
             slave.grid_forget()
 
+        P = self.node.parameters
+        values = self._widget_values()
+
         widgets = []
         widgets2 = []
         row = 0
@@ -286,42 +301,34 @@ class TkEnergy(seamm.TkNode):
             "density convergence",
             "energy convergence",
             "convergence error",
-            "use damping",
         ):
             self[key].grid(row=row, column=0, columnspan=2, sticky=tk.EW)
             widgets.append(self[key])
             row += 1
 
-        if self["use damping"].get() != "no":
-            for key in ("damping percentage", "damping convergence"):
-                self[key].grid(row=row, column=1, sticky=tk.EW)
-                widgets2.append(self[key])
-                row += 1
-
-        for key in ("use level shift",):
-            self[key].grid(row=row, column=0, columnspan=2, sticky=tk.EW)
-            widgets.append(self[key])
+        # Each switch is followed by its indented sub-controls, which apply only
+        # when it is on.
+        for switch, keys in (
+            ("use damping", ("damping percentage", "damping convergence")),
+            ("use level shift", ("level shift", "level shift convergence")),
+            (
+                "use soscf",
+                (
+                    "soscf starting convergence",
+                    "soscf convergence",
+                    "soscf max iterations",
+                    "soscf print iterations",
+                ),
+            ),
+        ):
+            self[switch].grid(row=row, column=0, columnspan=2, sticky=tk.EW)
+            widgets.append(self[switch])
             row += 1
-        if self["use level shift"].get() != "no":
-            for key in ("level shift", "level shift convergence"):
-                self[key].grid(row=row, column=1, sticky=tk.EW)
-                widgets2.append(self[key])
-                row += 1
-
-        for key in ("use soscf",):
-            self[key].grid(row=row, column=0, columnspan=2, sticky=tk.EW)
-            widgets.append(self[key])
-            row += 1
-        if self["use soscf"].get() != "no":
-            for key in (
-                "soscf starting convergence",
-                "soscf convergence",
-                "soscf max iterations",
-                "soscf print iterations",
-            ):
-                self[key].grid(row=row, column=1, sticky=tk.EW)
-                widgets2.append(self[key])
-                row += 1
+            for key in keys:
+                if P.applies(key, values):
+                    self[key].grid(row=row, column=1, sticky=tk.EW)
+                    widgets2.append(self[key])
+                    row += 1
 
         frame.columnconfigure(0, minsize=150)
         sw.align_labels(widgets, sticky=tk.E)
@@ -332,7 +339,8 @@ class TkEnergy(seamm.TkNode):
         for slave in frame.grid_slaves():
             slave.grid_forget()
 
-        plot_orbitals = self["orbitals"].get() == "yes"
+        P = self.node.parameters
+        values = self._widget_values()
 
         widgets = []
 
@@ -345,8 +353,8 @@ class TkEnergy(seamm.TkNode):
             widgets.append(self[key])
             row += 1
 
-        if plot_orbitals:
-            key = "selected orbitals"
+        key = "selected orbitals"
+        if P.applies(key, values):
             self[key].grid(row=row, column=1, columnspan=4, sticky=tk.EW)
             row += 1
 

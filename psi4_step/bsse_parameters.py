@@ -36,6 +36,7 @@ class BSSEParameters(EnergyParameters):
             ),
         },
         "fragment atoms": {
+            "applies_when": {"fragments": "specified"},
             "default": "",
             "kind": "string",
             "default_units": "",
