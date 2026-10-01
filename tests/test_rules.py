@@ -142,3 +142,22 @@ def test_builder():
     )
     assert energy.parameters["dispersion"].value == "d3bj"
     assert "Psi4" in fb.to_text()
+
+
+@pytest.mark.parametrize(
+    "functional",
+    ["B1LYP Hyb-GGA Exchange-Correlation Functional", "b1lyp", "B1LYP"],
+)
+def test_get_method_accepts_the_short_name(functional, monkeypatch):
+    """A functional given by its short name (e.g. from a variable) raised KeyError."""
+    import seamm
+    import psi4_step
+
+    monkeypatch.setattr(seamm, "flowchart_variables", seamm.Variables())
+    node = psi4_step.Energy(flowchart=seamm.Flowchart())
+    P = node.parameters
+    P["method"].value = "Kohn-Sham (KS) density functional theory (DFT)"
+    P["functional"].value = functional
+    P["dispersion"].value = "d3bj"
+    method, name, extended, _ = node.get_method()
+    assert (method, name, extended) == ("dft", "b1lyp", "b1lyp-d3bj")

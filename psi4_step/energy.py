@@ -884,19 +884,23 @@ with open("{filename}", "w") as fd:
                 functional_string = P["advanced_functional"]
 
             # Allow the full name, or the short name, or just pray.
+            entry = None
             if functional_string in psi4_step.dft_functionals:
-                functional = psi4_step.dft_functionals[functional_string]["name"]
+                entry = psi4_step.dft_functionals[functional_string]
+                functional = entry["name"]
             else:
                 functional = functional_string.lower()
-                for key in psi4_step.dft_functionals:
-                    if psi4_step.dft_functionals[key]["name"] == functional:
+                for key, data in psi4_step.dft_functionals.items():
+                    if data["name"] == functional:
+                        entry = data
                         break
                 else:
                     functional = functional_string
 
             if (
                 P["dispersion"] != "none"
-                and len(psi4_step.dft_functionals[functional_string]["dispersion"]) > 1
+                and entry is not None
+                and len(entry["dispersion"]) > 1
             ):
                 extended_functional = functional + "-" + P["dispersion"]
             else:
