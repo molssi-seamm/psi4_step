@@ -161,3 +161,26 @@ def test_get_method_accepts_the_short_name(functional, monkeypatch):
     P["dispersion"].value = "d3bj"
     method, name, extended, _ = node.get_method()
     assert (method, name, extended) == ("dft", "b1lyp", "b1lyp-d3bj")
+
+
+def test_bsse_refuses_the_settings_it_ignores():
+    """The counterpoise calculation uses Psi4's own SCF settings and makes no plots,
+    so the Energy settings for those are refused, saying why."""
+    import seamm
+
+    flowchart = seamm.Flowchart(namespace="org.molssi.seamm.psi4", directory=".")
+    node = flowchart.create_node("BSSE")
+    flowchart.add_node(node)
+    for key, value in (("use damping", "yes"), ("orbitals", "yes")):
+        with pytest.raises(FlowchartBuildError, match="does not use it"):
+            set_parameters(node, {key: value})
+    set_parameters(node, {"maximum iterations": 200, "fragments": "specified"})
+
+
+def test_thermochemistry_plots_only_with_its_own_settings():
+    P = psi4_step.ThermochemistryParameters()
+    values = {**P.current_values(), "use existing parameters": "yes"}
+    assert not P.applies("orbitals", values)
+    assert "previous step" in P.not_applicable_reason("density", values)
+    values["use existing parameters"] = "no"
+    assert P.applies("orbitals", values)

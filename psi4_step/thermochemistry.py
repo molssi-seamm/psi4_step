@@ -186,11 +186,15 @@ class Thermochemistry(psi4_step.Energy):
         # lines.append("point_group = initial.point_group().symbol()")
         # lines.append("")
 
-        if not P["use existing parameters"]:
+        # Right after the Initialization step there is no previous calculation
+        # whose parameters could be used (the dialog does not offer the choice).
+        previous = self.previous()
+        if not P["use existing parameters"] or not isinstance(
+            previous, psi4_step.Energy
+        ):
             # Add in the input from the energy part of things
             lines.append(super().get_input(calculation_type=calculation_type))
         else:
-            previous = self.previous()
             method, functional, extended_functional, _ = previous.get_method()
 
             if method == "dft":

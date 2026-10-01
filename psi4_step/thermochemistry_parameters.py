@@ -149,7 +149,8 @@ class ThermochemistryParameters(EnergyParameters):
         the parameters of the previous step (a rule shared by the dialog and the
         flowchart builder, see seamm.Parameters)."""
         result = {}
-        for key, definition in EnergyParameters.parameters.items():
+        energy = {**EnergyParameters.parameters, **EnergyParameters.output}
+        for key, definition in energy.items():
             if key in ("results", "create tables"):
                 continue
             conditions = {

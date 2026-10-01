@@ -194,6 +194,8 @@ class TkThermochemistry(psi4_step.TkEnergy):
         # (from the parameters' rules, psi4_step.ThermochemistryParameters).
         if self.node.parameters.applies("level", self._widget_values()):
             row = super().reset_dialog(row=row)
+        else:
+            self.reset_plotting()
 
         self.fit_dialog()
 

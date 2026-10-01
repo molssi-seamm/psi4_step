@@ -52,6 +52,8 @@ def shown(tk_node, key):
             return True
         if manager == "":
             return False
+        if manager == "notebook" and widget.master.tab(widget, "state") == "hidden":
+            return False
         widget = widget.master
     return True
 
@@ -87,6 +89,8 @@ def test_layouts_follow_the_rules(root, substep):
     if substep == "Thermochemistry":
         set_and_check(tk_node, "use existing parameters", "yes")
         assert not shown(tk_node, "method")
+        # The plots are made only with this step's own settings
+        assert not shown(tk_node, "orbitals")
         set_and_check(tk_node, "use existing parameters", "no")
         assert shown(tk_node, "method")
 
@@ -138,6 +142,11 @@ def test_layouts_follow_the_rules(root, substep):
             set_and_check(tk_node, switch, value)
 
     if substep == "BSSE":
+        # The Energy settings that the counterpoise calculation ignores
+        for key in psi4_step.BSSEParameters.unused:
+            assert not shown(tk_node, key)
+        for key in ("maximum iterations", "energy convergence"):
+            assert shown(tk_node, key)
         for fragments in P["fragments"].enumeration:
             set_and_check(tk_node, "fragments", fragments)
             assert shown(tk_node, "fragment atoms") == (fragments == "specified")

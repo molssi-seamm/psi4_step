@@ -192,6 +192,7 @@ class TkEnergy(seamm.TkNode):
         self["convergence"].grid(row=row, column=0)
         self.reset_convergence()
         row += 1
+        self.reset_plotting()
         return row
 
     def _widget_values(self):
@@ -272,12 +273,11 @@ class TkEnergy(seamm.TkNode):
         if is_dft:
             sw.align_labels(widgets2)
             frame.columnconfigure(0, minsize=30)
-        self["spin-restricted"].grid(row=row, column=0, columnspan=2, sticky=tk.EW)
-        widgets.append(self["spin-restricted"])
-        row += 1
-        self["stability analysis"].grid(row=row, column=0, columnspan=2, sticky=tk.EW)
-        widgets.append(self["stability analysis"])
-        row += 1
+        for key in ("spin-restricted", "stability analysis"):
+            if applies(key):
+                self[key].grid(row=row, column=0, columnspan=2, sticky=tk.EW)
+                widgets.append(self[key])
+                row += 1
         sw.align_labels(widgets, sticky=tk.E)
 
         return row
@@ -302,9 +302,10 @@ class TkEnergy(seamm.TkNode):
             "energy convergence",
             "convergence error",
         ):
-            self[key].grid(row=row, column=0, columnspan=2, sticky=tk.EW)
-            widgets.append(self[key])
-            row += 1
+            if P.applies(key, values):
+                self[key].grid(row=row, column=0, columnspan=2, sticky=tk.EW)
+                widgets.append(self[key])
+                row += 1
 
         # Each switch is followed by its indented sub-controls, which apply only
         # when it is on.
@@ -321,6 +322,8 @@ class TkEnergy(seamm.TkNode):
                 ),
             ),
         ):
+            if not P.applies(switch, values):
+                continue
             self[switch].grid(row=row, column=0, columnspan=2, sticky=tk.EW)
             widgets.append(self[switch])
             row += 1
@@ -344,11 +347,22 @@ class TkEnergy(seamm.TkNode):
 
         widgets = []
 
+        # The Output tab is shown only if some of its plots apply
+        notebook = self["notebook"]
+        oframe = self["output frame"]
+        output = psi4_step.EnergyParameters.output
+        if any(P.applies(key, values) for key in output):
+            notebook.add(oframe)
+        else:
+            notebook.hide(oframe)
+
         row = 0
         for key in (
             "density",
             "orbitals",
         ):
+            if not P.applies(key, values):
+                continue
             self[key].grid(row=row, column=0, columnspan=4, sticky=tk.EW)
             widgets.append(self[key])
             row += 1
