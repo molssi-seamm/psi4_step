@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 
 
@@ -7,7 +6,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>psi4_step.optimizer &#8212; SEAMM Psi4 Plug-in 2026.8.7 documentation</title>
+    <title>psi4_step.optimizer &#8212; SEAMM Psi4 Plug-in 2026.10.1 documentation</title>
   
   
   
@@ -26,8 +25,8 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
-<link href="../../_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+  <link href="../../_static/styles/theme.css?digest=64cc4de3f052d77215f0" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=64cc4de3f052d77215f0" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
     <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
@@ -35,10 +34,10 @@
     <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css?v=c224919a" />
   
   <!-- So that users can add custom icons -->
-  <script defer src="../../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
+  <script defer src="../../_static/scripts/fontawesome.js?digest=64cc4de3f052d77215f0"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
-<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=64cc4de3f052d77215f0" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=64cc4de3f052d77215f0" />
 
 <!-- Google Tag Manager -->
 <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
@@ -48,7 +47,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-PQXXTJ2');</script>
 <!-- End Google Tag Manager -->
 
-    <script src="../../_static/documentation_options.js?v=3b021491"></script>
+    <script src="../../_static/documentation_options.js?v=65cfade2"></script>
     <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -61,7 +60,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     <link rel="search" title="Search" href="../../search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2026.8.7" />
+  <meta name="docsearch:version" content="2026.10.1" />
   
     
     <script src="../../_static/searchtools.js"></script>
@@ -109,7 +108,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   
     <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
 <div class="bd-header__inner bd-page-width">
-  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+  <button type="button" class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
     <span class="fa-solid fa-bars"></span>
   </button>
   
@@ -227,7 +226,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <div class="navbar-item navbar-persistent--container">
           
 
-<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
  <i class="fa-solid fa-magnifying-glass"></i>
  <span class="search-button__default-text">Search</span>
  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
@@ -238,15 +237,15 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <div class="navbar-item">
 
 <div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
-  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
     <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
     <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
     <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
   </button>
   <ul class="dropdown-menu dropdown-menu-end">
-    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
-    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
-    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
   </ul>
 </div></div>
       
@@ -283,7 +282,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   
     <div class="navbar-persistent--mobile">
 
-<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
  <i class="fa-solid fa-magnifying-glass"></i>
  <span class="search-button__default-text">Search</span>
  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
@@ -388,15 +387,15 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           <div class="navbar-item">
 
 <div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
-  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
     <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
     <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
     <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
   </button>
   <ul class="dropdown-menu dropdown-menu-end">
-    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
-    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
-    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
   </ul>
 </div></div>
         
@@ -488,7 +487,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <h1>Source code for psi4_step.optimizer</h1><div class="highlight"><pre>
 <span></span><span class="c1"># -*- coding: utf-8 -*-</span>
 
-<span class="sd">&quot;&quot;&quot;Acclerated optimization using MOPAC for Hessians.&quot;&quot;&quot;</span>
+<span class="sd">"""Acclerated optimization using MOPAC for Hessians."""</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
 
@@ -540,23 +539,23 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">E</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;The energy.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""The energy."""</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_E</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">dE</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;The derivatives of the energy.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""The derivatives of the energy."""</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dE</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">d2E</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;The second derivatives of the energy.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""The second derivatives of the energy."""</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_d2E</span>
 
 <div class="viewcode-block" id="Optimizer.optimize">
 <a class="viewcode-back" href="../../api/psi4_step.html#psi4_step.optimizer.Optimizer.optimize">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">optimize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_x0</span><span class="p">,</span> <span class="n">n_steps</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Do the optimization!&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Do the optimization!"""</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">x0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">_x0</span><span class="p">)</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
         <span class="n">n_dof</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x0</span><span class="p">)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_linear</span><span class="p">:</span>
@@ -570,16 +569,16 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x0</span><span class="p">)</span>
         <span class="n">xlast</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="nb">print</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;Step&#39;</span><span class="si">:</span><span class="s2">4</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="s1">&#39;Energy&#39;</span><span class="si">:</span><span class="s2">12</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="s1">&#39;Max dE&#39;</span><span class="si">:</span><span class="s2">9</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="s1">&#39;rms dE&#39;</span><span class="si">:</span><span class="s2">9</span><span class="si">}</span><span class="s2"> &quot;</span>
-            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;Max step&#39;</span><span class="si">:</span><span class="s2">9</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="s1">&#39;rms step&#39;</span><span class="si">:</span><span class="s2">9</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="s1">'Step'</span><span class="si">:</span><span class="s2">4</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="s1">'Energy'</span><span class="si">:</span><span class="s2">12</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="s1">'Max dE'</span><span class="si">:</span><span class="s2">9</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="s1">'rms dE'</span><span class="si">:</span><span class="s2">9</span><span class="si">}</span><span class="s2"> "</span>
+            <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="s1">'Max step'</span><span class="si">:</span><span class="s2">9</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="s1">'rms step'</span><span class="si">:</span><span class="s2">9</span><span class="si">}</span><span class="s2">"</span>
         <span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;---- ------------ --------- --------- --------- ---------&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"---- ------------ --------- --------- --------- ---------"</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">step</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">n_steps</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_surrogate_callback</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">E</span><span class="p">,</span> <span class="n">dE</span><span class="p">,</span> <span class="n">d2E</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_energy_callback</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="p">(</span><span class="s2">&quot;E&quot;</span><span class="p">,</span> <span class="s2">&quot;dE&quot;</span><span class="p">,</span> <span class="s2">&quot;d2E&quot;</span><span class="p">))</span>
+                <span class="n">E</span><span class="p">,</span> <span class="n">dE</span><span class="p">,</span> <span class="n">d2E</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_energy_callback</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="p">(</span><span class="s2">"E"</span><span class="p">,</span> <span class="s2">"dE"</span><span class="p">,</span> <span class="s2">"d2E"</span><span class="p">))</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="n">Es</span><span class="p">,</span> <span class="n">dEs</span><span class="p">,</span> <span class="n">d2Es</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_surrogate_callback</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="p">(</span><span class="s2">&quot;E&quot;</span><span class="p">,</span> <span class="s2">&quot;dE&quot;</span><span class="p">,</span> <span class="s2">&quot;d2E&quot;</span><span class="p">))</span>
-                <span class="n">E0</span><span class="p">,</span> <span class="n">dE0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_energy_callback</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="p">(</span><span class="s2">&quot;E&quot;</span><span class="p">,</span> <span class="s2">&quot;dE&quot;</span><span class="p">))</span>
+                <span class="n">Es</span><span class="p">,</span> <span class="n">dEs</span><span class="p">,</span> <span class="n">d2Es</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_surrogate_callback</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="p">(</span><span class="s2">"E"</span><span class="p">,</span> <span class="s2">"dE"</span><span class="p">,</span> <span class="s2">"d2E"</span><span class="p">))</span>
+                <span class="n">E0</span><span class="p">,</span> <span class="n">dE0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_energy_callback</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="p">(</span><span class="s2">"E"</span><span class="p">,</span> <span class="s2">"dE"</span><span class="p">))</span>
 
                 <span class="c1"># Corrections to the surrogate energy and derivatives</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">Ecorr</span> <span class="o">=</span> <span class="n">E0</span> <span class="o">-</span> <span class="n">Es</span>
@@ -601,24 +600,24 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 <span class="n">Etmp</span> <span class="o">=</span> <span class="n">Es</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ecorr</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">x0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dEcorr</span><span class="p">)</span>
                 <span class="n">dEtmp</span> <span class="o">=</span> <span class="n">dEs</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">dEcorr</span>
 
-                <span class="n">tmp</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">v</span><span class="si">:</span><span class="s2">9.6f</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">dEtmp</span><span class="o">.</span><span class="n">tolist</span><span class="p">()])</span>
-                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
-                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;MOPAC </span><span class="si">{</span><span class="n">Etmp</span><span class="si">:</span><span class="s2">12.7f</span><span class="si">}</span><span class="s2">  x: </span><span class="si">{</span><span class="n">tmp</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-                <span class="n">tmp</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">v</span><span class="si">:</span><span class="s2">9.6f</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">dE</span><span class="o">.</span><span class="n">tolist</span><span class="p">()])</span>
-                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot; Psi4 </span><span class="si">{</span><span class="n">E</span><span class="si">:</span><span class="s2">12.7f</span><span class="si">}</span><span class="s2">  x: </span><span class="si">{</span><span class="n">tmp</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+                <span class="n">tmp</span> <span class="o">=</span> <span class="s2">" "</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">v</span><span class="si">:</span><span class="s2">9.6f</span><span class="si">}</span><span class="s2">"</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">dEtmp</span><span class="o">.</span><span class="n">tolist</span><span class="p">()])</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">""</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"MOPAC </span><span class="si">{</span><span class="n">Etmp</span><span class="si">:</span><span class="s2">12.7f</span><span class="si">}</span><span class="s2">  x: </span><span class="si">{</span><span class="n">tmp</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+                <span class="n">tmp</span> <span class="o">=</span> <span class="s2">" "</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">v</span><span class="si">:</span><span class="s2">9.6f</span><span class="si">}</span><span class="s2">"</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">dE</span><span class="o">.</span><span class="n">tolist</span><span class="p">()])</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">" Psi4 </span><span class="si">{</span><span class="n">E</span><span class="si">:</span><span class="s2">12.7f</span><span class="si">}</span><span class="s2">  x: </span><span class="si">{</span><span class="n">tmp</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">""</span><span class="p">)</span>
 
             <span class="n">max_dE</span> <span class="o">=</span> <span class="n">abs_max</span><span class="p">(</span><span class="n">dE</span><span class="p">)</span>
             <span class="n">rms_dE</span> <span class="o">=</span> <span class="n">rms</span><span class="p">(</span><span class="n">dE</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">step</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">step</span><span class="si">:</span><span class="s2">4d</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">E</span><span class="si">:</span><span class="s2">12.7f</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">max_dE</span><span class="si">:</span><span class="s2">9.6f</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">rms_dE</span><span class="si">:</span><span class="s2">9.6f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">step</span><span class="si">:</span><span class="s2">4d</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">E</span><span class="si">:</span><span class="s2">12.7f</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">max_dE</span><span class="si">:</span><span class="s2">9.6f</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">rms_dE</span><span class="si">:</span><span class="s2">9.6f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">delta</span> <span class="o">=</span> <span class="n">xlast</span> <span class="o">-</span> <span class="n">x</span>
                 <span class="n">max_dx</span> <span class="o">=</span> <span class="n">abs_max</span><span class="p">(</span><span class="n">delta</span><span class="p">)</span>
                 <span class="n">rms_dx</span> <span class="o">=</span> <span class="n">rms</span><span class="p">(</span><span class="n">delta</span><span class="p">)</span>
                 <span class="nb">print</span><span class="p">(</span>
-                    <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">step</span><span class="si">:</span><span class="s2">4d</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">E</span><span class="si">:</span><span class="s2">12.7f</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">max_dE</span><span class="si">:</span><span class="s2">9.6f</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">rms_dE</span><span class="si">:</span><span class="s2">9.6f</span><span class="si">}</span><span class="s2"> &quot;</span>
-                    <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">max_dx</span><span class="si">:</span><span class="s2">9.6f</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">rms_dx</span><span class="si">:</span><span class="s2">9.6f</span><span class="si">}</span><span class="s2">&quot;</span>
+                    <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">step</span><span class="si">:</span><span class="s2">4d</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">E</span><span class="si">:</span><span class="s2">12.7f</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">max_dE</span><span class="si">:</span><span class="s2">9.6f</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">rms_dE</span><span class="si">:</span><span class="s2">9.6f</span><span class="si">}</span><span class="s2"> "</span>
+                    <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">max_dx</span><span class="si">:</span><span class="s2">9.6f</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">rms_dx</span><span class="si">:</span><span class="s2">9.6f</span><span class="si">}</span><span class="s2">"</span>
                 <span class="p">)</span>
 
             <span class="n">xlast</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
@@ -641,14 +640,14 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <span class="n">n_steps</span> <span class="o">=</span> <span class="mi">3</span> <span class="o">*</span> <span class="n">n_dof</span>
         <span class="n">xlast</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="k">for</span> <span class="n">step</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">n_steps</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
-            <span class="n">tmp</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">v</span><span class="si">:</span><span class="s2">9.6f</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">x</span><span class="o">.</span><span class="n">tolist</span><span class="p">()])</span>
-            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;coordinates: </span><span class="si">{</span><span class="n">tmp</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">tmp</span> <span class="o">=</span> <span class="s2">" "</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">v</span><span class="si">:</span><span class="s2">9.6f</span><span class="si">}</span><span class="s2">"</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">x</span><span class="o">.</span><span class="n">tolist</span><span class="p">()])</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">"coordinates: </span><span class="si">{</span><span class="n">tmp</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 
-            <span class="n">tmp</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">v</span><span class="si">:</span><span class="s2">9.6f</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">x</span><span class="o">.</span><span class="n">tolist</span><span class="p">()])</span>
-            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\t\t\t\t\t</span><span class="s2">         x: </span><span class="si">{</span><span class="n">tmp</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">tmp</span> <span class="o">=</span> <span class="s2">" "</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">v</span><span class="si">:</span><span class="s2">9.6f</span><span class="si">}</span><span class="s2">"</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">x</span><span class="o">.</span><span class="n">tolist</span><span class="p">()])</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="se">\t\t\t\t\t</span><span class="s2">         x: </span><span class="si">{</span><span class="n">tmp</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 
             <span class="k">if</span> <span class="n">step</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">:</span>
-                <span class="n">E</span><span class="p">,</span> <span class="n">dE</span><span class="p">,</span> <span class="n">d2E</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_surrogate</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="p">(</span><span class="s2">&quot;E&quot;</span><span class="p">,</span> <span class="s2">&quot;dE&quot;</span><span class="p">,</span> <span class="s2">&quot;d2E&quot;</span><span class="p">))</span>
+                <span class="n">E</span><span class="p">,</span> <span class="n">dE</span><span class="p">,</span> <span class="n">d2E</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_surrogate</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="p">(</span><span class="s2">"E"</span><span class="p">,</span> <span class="s2">"dE"</span><span class="p">,</span> <span class="s2">"d2E"</span><span class="p">))</span>
 
                 <span class="c1"># Invert the Hessian carefully</span>
                 <span class="n">s</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">svd</span><span class="p">(</span><span class="n">d2E</span><span class="p">,</span> <span class="n">compute_uv</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">hermitian</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -660,29 +659,29 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 <span class="n">A</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">pinv</span><span class="p">(</span><span class="n">d2E</span><span class="p">,</span> <span class="n">rcond</span><span class="o">=</span><span class="n">rcond</span><span class="p">,</span> <span class="n">hermitian</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
             <span class="k">if</span> <span class="kc">False</span> <span class="ow">and</span> <span class="n">step</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-                <span class="n">E0</span><span class="p">,</span> <span class="n">dE0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_energy_callback</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="p">(</span><span class="s2">&quot;E&quot;</span><span class="p">,</span> <span class="s2">&quot;dE&quot;</span><span class="p">))</span>
+                <span class="n">E0</span><span class="p">,</span> <span class="n">dE0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_energy_callback</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="p">(</span><span class="s2">"E"</span><span class="p">,</span> <span class="s2">"dE"</span><span class="p">))</span>
                 <span class="n">E</span> <span class="o">=</span> <span class="n">E0</span>
                 <span class="n">dE</span> <span class="o">=</span> <span class="n">dE0</span>
 
-                <span class="n">tmp</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">v</span><span class="si">:</span><span class="s2">9.6f</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">dE</span><span class="o">.</span><span class="n">tolist</span><span class="p">()])</span>
-                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\t\t\t\t\t</span><span class="s2">MOPAC </span><span class="si">{</span><span class="n">E</span><span class="si">:</span><span class="s2">12.7f</span><span class="si">}</span><span class="s2">  x: </span><span class="si">{</span><span class="n">tmp</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-                <span class="n">tmp</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">v</span><span class="si">:</span><span class="s2">9.6f</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">dE0</span><span class="o">.</span><span class="n">tolist</span><span class="p">()])</span>
-                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\t\t\t\t\t</span><span class="s2"> Psi4 </span><span class="si">{</span><span class="n">E0</span><span class="si">:</span><span class="s2">12.7f</span><span class="si">}</span><span class="s2">  x: </span><span class="si">{</span><span class="n">tmp</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="n">tmp</span> <span class="o">=</span> <span class="s2">" "</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">v</span><span class="si">:</span><span class="s2">9.6f</span><span class="si">}</span><span class="s2">"</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">dE</span><span class="o">.</span><span class="n">tolist</span><span class="p">()])</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="se">\t\t\t\t\t</span><span class="s2">MOPAC </span><span class="si">{</span><span class="n">E</span><span class="si">:</span><span class="s2">12.7f</span><span class="si">}</span><span class="s2">  x: </span><span class="si">{</span><span class="n">tmp</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+                <span class="n">tmp</span> <span class="o">=</span> <span class="s2">" "</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">v</span><span class="si">:</span><span class="s2">9.6f</span><span class="si">}</span><span class="s2">"</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">dE0</span><span class="o">.</span><span class="n">tolist</span><span class="p">()])</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="se">\t\t\t\t\t</span><span class="s2"> Psi4 </span><span class="si">{</span><span class="n">E0</span><span class="si">:</span><span class="s2">12.7f</span><span class="si">}</span><span class="s2">  x: </span><span class="si">{</span><span class="n">tmp</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 
-            <span class="n">tmp</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">v</span><span class="si">:</span><span class="s2">9.6f</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">dE</span><span class="o">.</span><span class="n">tolist</span><span class="p">()])</span>
-            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;         dE: </span><span class="si">{</span><span class="n">tmp</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">tmp</span> <span class="o">=</span> <span class="s2">" "</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">v</span><span class="si">:</span><span class="s2">9.6f</span><span class="si">}</span><span class="s2">"</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">dE</span><span class="o">.</span><span class="n">tolist</span><span class="p">()])</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">"         dE: </span><span class="si">{</span><span class="n">tmp</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 
             <span class="n">max_dE</span> <span class="o">=</span> <span class="n">abs_max</span><span class="p">(</span><span class="n">dE</span><span class="p">)</span>
             <span class="n">rms_dE</span> <span class="o">=</span> <span class="n">rms</span><span class="p">(</span><span class="n">dE</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">step</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\t</span><span class="si">{</span><span class="n">step</span><span class="si">:</span><span class="s2">4d</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">E</span><span class="si">:</span><span class="s2">12.7f</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">max_dE</span><span class="si">:</span><span class="s2">9.6f</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">rms_dE</span><span class="si">:</span><span class="s2">9.6f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="se">\t</span><span class="si">{</span><span class="n">step</span><span class="si">:</span><span class="s2">4d</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">E</span><span class="si">:</span><span class="s2">12.7f</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">max_dE</span><span class="si">:</span><span class="s2">9.6f</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">rms_dE</span><span class="si">:</span><span class="s2">9.6f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">delta</span> <span class="o">=</span> <span class="n">xlast</span> <span class="o">-</span> <span class="n">x</span>
                 <span class="n">max_dx</span> <span class="o">=</span> <span class="n">abs_max</span><span class="p">(</span><span class="n">delta</span><span class="p">)</span>
                 <span class="n">rms_dx</span> <span class="o">=</span> <span class="n">rms</span><span class="p">(</span><span class="n">delta</span><span class="p">)</span>
                 <span class="nb">print</span><span class="p">(</span>
-                    <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\t</span><span class="si">{</span><span class="n">step</span><span class="si">:</span><span class="s2">4d</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">E</span><span class="si">:</span><span class="s2">12.7f</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">max_dE</span><span class="si">:</span><span class="s2">9.6f</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">rms_dE</span><span class="si">:</span><span class="s2">9.6f</span><span class="si">}</span><span class="s2"> &quot;</span>
-                    <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">max_dx</span><span class="si">:</span><span class="s2">9.6f</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">rms_dx</span><span class="si">:</span><span class="s2">9.6f</span><span class="si">}</span><span class="s2">&quot;</span>
+                    <span class="sa">f</span><span class="s2">"</span><span class="se">\t</span><span class="si">{</span><span class="n">step</span><span class="si">:</span><span class="s2">4d</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">E</span><span class="si">:</span><span class="s2">12.7f</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">max_dE</span><span class="si">:</span><span class="s2">9.6f</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">rms_dE</span><span class="si">:</span><span class="s2">9.6f</span><span class="si">}</span><span class="s2"> "</span>
+                    <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">max_dx</span><span class="si">:</span><span class="s2">9.6f</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">rms_dx</span><span class="si">:</span><span class="s2">9.6f</span><span class="si">}</span><span class="s2">"</span>
                 <span class="p">)</span>
 
             <span class="k">if</span> <span class="n">max_dE</span> <span class="o">&lt;</span> <span class="mf">1.0e-04</span> <span class="ow">and</span> <span class="n">rms_dE</span> <span class="o">&lt;</span> <span class="mf">1.0e-04</span><span class="p">:</span>
@@ -693,23 +692,23 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             <span class="n">direction</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="o">-</span><span class="n">dE</span><span class="p">)</span>
             <span class="c1"># direction = -dE</span>
 
-            <span class="n">tmp</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">v</span><span class="si">:</span><span class="s2">9.6f</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">dE</span><span class="o">.</span><span class="n">tolist</span><span class="p">()])</span>
-            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\t\t\t\t\t</span><span class="s2">          dE: </span><span class="si">{</span><span class="n">tmp</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-            <span class="n">tmp</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">v</span><span class="si">:</span><span class="s2">9.6f</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">direction</span><span class="o">.</span><span class="n">tolist</span><span class="p">()])</span>
-            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\t\t\t\t\t</span><span class="s2">   direction: </span><span class="si">{</span><span class="n">tmp</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">tmp</span> <span class="o">=</span> <span class="s2">" "</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">v</span><span class="si">:</span><span class="s2">9.6f</span><span class="si">}</span><span class="s2">"</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">dE</span><span class="o">.</span><span class="n">tolist</span><span class="p">()])</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="se">\t\t\t\t\t</span><span class="s2">          dE: </span><span class="si">{</span><span class="n">tmp</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+            <span class="n">tmp</span> <span class="o">=</span> <span class="s2">" "</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">v</span><span class="si">:</span><span class="s2">9.6f</span><span class="si">}</span><span class="s2">"</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">direction</span><span class="o">.</span><span class="n">tolist</span><span class="p">()])</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="se">\t\t\t\t\t</span><span class="s2">   direction: </span><span class="si">{</span><span class="n">tmp</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 
             <span class="n">direction</span><span class="p">,</span> <span class="n">residuals</span><span class="p">,</span> <span class="n">rank</span><span class="p">,</span> <span class="n">s</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">lstsq</span><span class="p">(</span><span class="n">d2E</span><span class="p">,</span> <span class="o">-</span><span class="n">dE</span><span class="p">,</span> <span class="n">rcond</span><span class="o">=</span><span class="n">rcond</span><span class="p">)</span>
 
-            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">rank</span><span class="si">=}</span><span class="s2">&quot;</span><span class="p">)</span>
-            <span class="n">tmp</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">v</span><span class="si">:</span><span class="s2">9.6f</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">direction</span><span class="o">.</span><span class="n">tolist</span><span class="p">()])</span>
-            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\t\t\t\t\t</span><span class="s2">   direction: </span><span class="si">{</span><span class="n">tmp</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">rank</span><span class="si">=}</span><span class="s2">"</span><span class="p">)</span>
+            <span class="n">tmp</span> <span class="o">=</span> <span class="s2">" "</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">v</span><span class="si">:</span><span class="s2">9.6f</span><span class="si">}</span><span class="s2">"</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">direction</span><span class="o">.</span><span class="n">tolist</span><span class="p">()])</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="se">\t\t\t\t\t</span><span class="s2">   direction: </span><span class="si">{</span><span class="n">tmp</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 
             <span class="n">stepsize</span><span class="p">,</span> <span class="n">Enew</span><span class="p">,</span> <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_linesearch</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">E</span><span class="p">,</span> <span class="n">dE</span><span class="p">,</span> <span class="n">direction</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_surrogate</span><span class="p">)</span>
-            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;stepsize = </span><span class="si">{</span><span class="n">stepsize</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;returning x&quot;</span><span class="p">)</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">"stepsize = </span><span class="si">{</span><span class="n">stepsize</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">"returning x"</span><span class="p">)</span>
         <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-        <span class="n">tmp</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">v</span><span class="si">:</span><span class="s2">9.6f</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">x</span><span class="o">.</span><span class="n">tolist</span><span class="p">()])</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\t\t\t\t\t</span><span class="s2">         x: </span><span class="si">{</span><span class="n">tmp</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">tmp</span> <span class="o">=</span> <span class="s2">" "</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">v</span><span class="si">:</span><span class="s2">9.6f</span><span class="si">}</span><span class="s2">"</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">x</span><span class="o">.</span><span class="n">tolist</span><span class="p">()])</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="se">\t\t\t\t\t</span><span class="s2">         x: </span><span class="si">{</span><span class="n">tmp</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">x</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_linesearch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x0</span><span class="p">,</span> <span class="n">E0</span><span class="p">,</span> <span class="n">dE0</span><span class="p">,</span> <span class="n">direction</span><span class="p">,</span> <span class="n">callback</span><span class="p">):</span>
@@ -720,7 +719,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             <span class="n">E</span><span class="p">,</span> <span class="n">dE</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_surrogate</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
             <span class="n">dEline</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">dE</span><span class="p">,</span> <span class="n">direction</span><span class="p">)</span>
             <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">stepsize</span><span class="si">=}</span><span class="s2"> </span><span class="si">{</span><span class="n">E0</span><span class="si">:</span><span class="s2">9.6f</span><span class="si">}</span><span class="s2"> --&gt; </span><span class="si">{</span><span class="n">E</span><span class="si">:</span><span class="s2">9.6f</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">dE0line</span><span class="si">:</span><span class="s2">9.6f</span><span class="si">}</span><span class="s2"> --&gt; </span><span class="si">{</span><span class="n">dEline</span><span class="si">:</span><span class="s2">9.6f</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">stepsize</span><span class="si">=}</span><span class="s2"> </span><span class="si">{</span><span class="n">E0</span><span class="si">:</span><span class="s2">9.6f</span><span class="si">}</span><span class="s2"> --&gt; </span><span class="si">{</span><span class="n">E</span><span class="si">:</span><span class="s2">9.6f</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">dE0line</span><span class="si">:</span><span class="s2">9.6f</span><span class="si">}</span><span class="s2"> --&gt; </span><span class="si">{</span><span class="n">dEline</span><span class="si">:</span><span class="s2">9.6f</span><span class="si">}</span><span class="s2">"</span>
             <span class="p">)</span>
             <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">dEline</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">1.0e-8</span><span class="p">:</span>
                 <span class="k">break</span>
@@ -736,19 +735,19 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 <span class="k">else</span><span class="p">:</span>
                     <span class="k">if</span> <span class="n">b</span> <span class="o">&gt;</span> <span class="n">a</span><span class="p">:</span>
                         <span class="c1"># Stepped over a maximum?</span>
-                        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Y &gt; X stepped over a maximum?&quot;</span><span class="p">)</span>
+                        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">"Y &gt; X stepped over a maximum?"</span><span class="p">)</span>
                     <span class="k">else</span><span class="p">:</span>
                         <span class="n">delta</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">b</span> <span class="o">/</span> <span class="n">a</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Line search is backwards?&quot;</span><span class="p">)</span>
-            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">delta</span><span class="si">=:</span><span class="s2">9.6f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">"Line search is backwards?"</span><span class="p">)</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">delta</span><span class="si">=:</span><span class="s2">9.6f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
             <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">delta</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">0.1</span><span class="p">:</span>
                 <span class="k">break</span>
             <span class="n">stepsize</span> <span class="o">*=</span> <span class="n">delta</span>
         <span class="k">return</span> <span class="n">stepsize</span><span class="p">,</span> <span class="n">E</span><span class="p">,</span> <span class="n">x</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="nf">_surrogate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">needed</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;E&quot;</span><span class="p">,</span> <span class="s2">&quot;dE&quot;</span><span class="p">)):</span>
-        <span class="k">if</span> <span class="s2">&quot;d2E&quot;</span> <span class="ow">in</span> <span class="n">needed</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_surrogate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">needed</span><span class="o">=</span><span class="p">(</span><span class="s2">"E"</span><span class="p">,</span> <span class="s2">"dE"</span><span class="p">)):</span>
+        <span class="k">if</span> <span class="s2">"d2E"</span> <span class="ow">in</span> <span class="n">needed</span><span class="p">:</span>
             <span class="n">Es</span><span class="p">,</span> <span class="n">dEs</span><span class="p">,</span> <span class="n">d2E</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_surrogate_callback</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">needed</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">Es</span><span class="p">,</span> <span class="n">dEs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_surrogate_callback</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">needed</span><span class="p">)</span>
@@ -756,7 +755,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <span class="n">E</span> <span class="o">=</span> <span class="n">Es</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">Ecorr</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">x0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dEcorr</span><span class="p">)</span>
         <span class="n">dE</span> <span class="o">=</span> <span class="n">dEs</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">dEcorr</span>
 
-        <span class="k">if</span> <span class="s2">&quot;d2E&quot;</span> <span class="ow">in</span> <span class="n">needed</span><span class="p">:</span>
+        <span class="k">if</span> <span class="s2">"d2E"</span> <span class="ow">in</span> <span class="n">needed</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">E</span><span class="p">,</span> <span class="n">dE</span><span class="p">,</span> <span class="n">d2E</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">E</span><span class="p">,</span> <span class="n">dE</span></div>
@@ -790,8 +789,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
-<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
+  <script defer src="../../_static/scripts/bootstrap.js?digest=64cc4de3f052d77215f0"></script>
+<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=64cc4de3f052d77215f0"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -803,7 +802,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <div class="footer-item">
 <p class="theme-version">
   <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.20.0.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.22.0.
 </p></div>
       
     </div>

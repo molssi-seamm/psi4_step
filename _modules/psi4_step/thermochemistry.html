@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 
 
@@ -7,7 +6,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>psi4_step.thermochemistry &#8212; SEAMM Psi4 Plug-in 2026.8.7 documentation</title>
+    <title>psi4_step.thermochemistry &#8212; SEAMM Psi4 Plug-in 2026.10.1 documentation</title>
   
   
   
@@ -26,8 +25,8 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
-<link href="../../_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+  <link href="../../_static/styles/theme.css?digest=64cc4de3f052d77215f0" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=64cc4de3f052d77215f0" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
     <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
@@ -35,10 +34,10 @@
     <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css?v=c224919a" />
   
   <!-- So that users can add custom icons -->
-  <script defer src="../../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
+  <script defer src="../../_static/scripts/fontawesome.js?digest=64cc4de3f052d77215f0"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
-<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=64cc4de3f052d77215f0" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=64cc4de3f052d77215f0" />
 
 <!-- Google Tag Manager -->
 <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
@@ -48,7 +47,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-PQXXTJ2');</script>
 <!-- End Google Tag Manager -->
 
-    <script src="../../_static/documentation_options.js?v=3b021491"></script>
+    <script src="../../_static/documentation_options.js?v=65cfade2"></script>
     <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -61,7 +60,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     <link rel="search" title="Search" href="../../search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2026.8.7" />
+  <meta name="docsearch:version" content="2026.10.1" />
   
     
     <script src="../../_static/searchtools.js"></script>
@@ -109,7 +108,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   
     <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
 <div class="bd-header__inner bd-page-width">
-  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+  <button type="button" class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
     <span class="fa-solid fa-bars"></span>
   </button>
   
@@ -227,7 +226,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <div class="navbar-item navbar-persistent--container">
           
 
-<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
  <i class="fa-solid fa-magnifying-glass"></i>
  <span class="search-button__default-text">Search</span>
  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
@@ -238,15 +237,15 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <div class="navbar-item">
 
 <div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
-  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
     <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
     <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
     <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
   </button>
   <ul class="dropdown-menu dropdown-menu-end">
-    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
-    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
-    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
   </ul>
 </div></div>
       
@@ -283,7 +282,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   
     <div class="navbar-persistent--mobile">
 
-<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
  <i class="fa-solid fa-magnifying-glass"></i>
  <span class="search-button__default-text">Search</span>
  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
@@ -388,15 +387,15 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           <div class="navbar-item">
 
 <div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
-  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
     <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
     <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
     <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
   </button>
   <ul class="dropdown-menu dropdown-menu-end">
-    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
-    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
-    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
   </ul>
 </div></div>
         
@@ -488,7 +487,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <h1>Source code for psi4_step.thermochemistry</h1><div class="highlight"><pre>
 <span></span><span class="c1"># -*- coding: utf-8 -*-</span>
 
-<span class="sd">&quot;&quot;&quot;Non-graphical part of the Thermochemistry step in a Psi4 flowchart&quot;&quot;&quot;</span>
+<span class="sd">"""Non-graphical part of the Thermochemistry step in a Psi4 flowchart"""</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">importlib</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
@@ -505,20 +504,20 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <span class="kn">from</span><span class="w"> </span><span class="nn">seamm_util.printing</span><span class="w"> </span><span class="kn">import</span> <span class="n">FormattedText</span> <span class="k">as</span> <span class="n">__</span>
 
 <span class="c1"># In addition to the normal logger, two logger-like printing facilities are</span>
-<span class="c1"># defined: &quot;job&quot; and &quot;printer&quot;. &quot;job&quot; send output to the main job.out file for</span>
+<span class="c1"># defined: "job" and "printer". "job" send output to the main job.out file for</span>
 <span class="c1"># the job, and should be used very sparingly, typically to echo what this step</span>
 <span class="c1"># will do in the initial summary of the job.</span>
 <span class="c1">#</span>
-<span class="c1"># &quot;printer&quot; sends output to the file &quot;step.out&quot; in this steps working</span>
+<span class="c1"># "printer" sends output to the file "step.out" in this steps working</span>
 <span class="c1"># directory, and is used for all normal output from this step.</span>
 
 <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 <span class="n">job</span> <span class="o">=</span> <span class="n">printing</span><span class="o">.</span><span class="n">getPrinter</span><span class="p">()</span>
-<span class="n">printer</span> <span class="o">=</span> <span class="n">printing</span><span class="o">.</span><span class="n">getPrinter</span><span class="p">(</span><span class="s2">&quot;Psi4&quot;</span><span class="p">)</span>
+<span class="n">printer</span> <span class="o">=</span> <span class="n">printing</span><span class="o">.</span><span class="n">getPrinter</span><span class="p">(</span><span class="s2">"Psi4"</span><span class="p">)</span>
 
-<span class="c1"># Add this module&#39;s properties to the standard properties</span>
-<span class="n">path</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">resources</span><span class="o">.</span><span class="n">files</span><span class="p">(</span><span class="s2">&quot;psi4_step&quot;</span><span class="p">)</span> <span class="o">/</span> <span class="s2">&quot;data&quot;</span>
-<span class="n">csv_file</span> <span class="o">=</span> <span class="n">path</span> <span class="o">/</span> <span class="s2">&quot;properties.csv&quot;</span>
+<span class="c1"># Add this module's properties to the standard properties</span>
+<span class="n">path</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">resources</span><span class="o">.</span><span class="n">files</span><span class="p">(</span><span class="s2">"psi4_step"</span><span class="p">)</span> <span class="o">/</span> <span class="s2">"data"</span>
+<span class="n">csv_file</span> <span class="o">=</span> <span class="n">path</span> <span class="o">/</span> <span class="s2">"properties.csv"</span>
 <span class="k">if</span> <span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
     <span class="n">molsystem</span><span class="o">.</span><span class="n">add_properties_from_file</span><span class="p">(</span><span class="n">csv_file</span><span class="p">)</span>
 
@@ -526,7 +525,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <div class="viewcode-block" id="Thermochemistry">
 <a class="viewcode-back" href="../../api/psi4_step.html#psi4_step.thermochemistry.Thermochemistry">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">Thermochemistry</span><span class="p">(</span><span class="n">psi4_step</span><span class="o">.</span><span class="n">Energy</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    The non-graphical part of a Thermochemistry step in a flowchart.</span>
 
 <span class="sd">    Attributes</span>
@@ -548,16 +547,16 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <span class="sd">    --------</span>
 <span class="sd">    TkThermochemistry,</span>
 <span class="sd">    Thermochemistry, ThermochemistryParameters</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">flowchart</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-        <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Thermochemistry&quot;</span><span class="p">,</span>
+        <span class="n">title</span><span class="o">=</span><span class="s2">"Thermochemistry"</span><span class="p">,</span>
         <span class="n">extension</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">logger</span><span class="o">=</span><span class="n">logger</span><span class="p">,</span>
     <span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;A substep for Thermochemistry in a subflowchart for Psi4.</span>
+<span class="w">        </span><span class="sd">"""A substep for Thermochemistry in a subflowchart for Psi4.</span>
 
 <span class="sd">        You may wish to change the title above, which is the string displayed</span>
 <span class="sd">        in the box representing the step in the flowchart.</span>
@@ -577,8 +576,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        None</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Creating Thermochemistry </span><span class="si">{</span><span class="bp">self</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="sd">        """</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Creating Thermochemistry </span><span class="si">{</span><span class="bp">self</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
             <span class="n">flowchart</span><span class="o">=</span><span class="n">flowchart</span><span class="p">,</span>
@@ -587,30 +586,30 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             <span class="n">logger</span><span class="o">=</span><span class="n">logger</span><span class="p">,</span>
         <span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">_calculation</span> <span class="o">=</span> <span class="s2">&quot;thermochemistry&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_calculation</span> <span class="o">=</span> <span class="s2">"thermochemistry"</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_model</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_metadata</span> <span class="o">=</span> <span class="n">psi4_step</span><span class="o">.</span><span class="n">metadata</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span> <span class="o">=</span> <span class="n">psi4_step</span><span class="o">.</span><span class="n">ThermochemistryParameters</span><span class="p">()</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">header</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;A printable header for this section of output&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="s2">&quot;Step </span><span class="si">{}</span><span class="s2">: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_id</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">title</span><span class="p">)</span>
+<span class="w">        </span><span class="sd">"""A printable header for this section of output"""</span>
+        <span class="k">return</span> <span class="s2">"Step </span><span class="si">{}</span><span class="s2">: </span><span class="si">{}</span><span class="s2">"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s2">"."</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_id</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">title</span><span class="p">)</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">version</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;The semantic version of this module.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""The semantic version of this module."""</span>
         <span class="k">return</span> <span class="n">psi4_step</span><span class="o">.</span><span class="n">__version__</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">git_revision</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;The git version of this module.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""The git version of this module."""</span>
         <span class="k">return</span> <span class="n">psi4_step</span><span class="o">.</span><span class="n">__git_revision__</span>
 
 <div class="viewcode-block" id="Thermochemistry.description_text">
 <a class="viewcode-back" href="../../api/psi4_step.html#psi4_step.thermochemistry.Thermochemistry.description_text">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">description_text</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">P</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">configuration</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create the text description of what this step will do.</span>
+<span class="w">        </span><span class="sd">"""Create the text description of what this step will do.</span>
 <span class="sd">        The dictionary of control values is passed in as P so that</span>
 <span class="sd">        the code can test values, etc.</span>
 
@@ -623,26 +622,26 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <span class="sd">        -------</span>
 <span class="sd">        str</span>
 <span class="sd">            A description of the current step.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">P</span><span class="p">:</span>
             <span class="n">P</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">values_to_dict</span><span class="p">()</span>
 
         <span class="n">text</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">description_text</span><span class="p">(</span>
-            <span class="n">P</span><span class="o">=</span><span class="n">P</span><span class="p">,</span> <span class="n">calculation_type</span><span class="o">=</span><span class="s2">&quot;Thermochemistry&quot;</span><span class="p">,</span> <span class="n">configuration</span><span class="o">=</span><span class="n">configuration</span>
+            <span class="n">P</span><span class="o">=</span><span class="n">P</span><span class="p">,</span> <span class="n">calculation_type</span><span class="o">=</span><span class="s2">"Thermochemistry"</span><span class="p">,</span> <span class="n">configuration</span><span class="o">=</span><span class="n">configuration</span>
         <span class="p">)</span>
 
         <span class="n">added</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">The thermodynamic functions will be calculated at temperature </span><span class="si">{T}</span><span class="s2"> and &quot;</span>
-            <span class="s2">&quot;pressure </span><span class="si">{P}</span><span class="s2">.&quot;</span>
+            <span class="s2">"</span><span class="se">\n</span><span class="s2">The thermodynamic functions will be calculated at temperature </span><span class="si">{T}</span><span class="s2"> and "</span>
+            <span class="s2">"pressure </span><span class="si">{P}</span><span class="s2">."</span>
         <span class="p">)</span>
 
-        <span class="k">return</span> <span class="n">text</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="n">__</span><span class="p">(</span><span class="n">added</span><span class="p">,</span> <span class="o">**</span><span class="n">P</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span> <span class="o">*</span> <span class="s2">&quot; &quot;</span><span class="p">)</span><span class="o">.</span><span class="fm">__str__</span><span class="p">()</span></div>
+        <span class="k">return</span> <span class="n">text</span> <span class="o">+</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">"</span> <span class="o">+</span> <span class="n">__</span><span class="p">(</span><span class="n">added</span><span class="p">,</span> <span class="o">**</span><span class="n">P</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span> <span class="o">*</span> <span class="s2">" "</span><span class="p">)</span><span class="o">.</span><span class="fm">__str__</span><span class="p">()</span></div>
 
 
 <div class="viewcode-block" id="Thermochemistry.get_input">
 <a class="viewcode-back" href="../../api/psi4_step.html#psi4_step.thermochemistry.Thermochemistry.get_input">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">get_input</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">calculation_type</span><span class="o">=</span><span class="s2">&quot;frequency&quot;</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the input for a frequency calculation for Psi4&quot;&quot;&quot;</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_input</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">calculation_type</span><span class="o">=</span><span class="s2">"frequency"</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Get the input for a frequency calculation for Psi4"""</span>
         <span class="n">_</span><span class="p">,</span> <span class="n">configuration</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_system_configuration</span><span class="p">()</span>
 
         <span class="c1"># Create the directory</span>
@@ -658,7 +657,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <span class="n">PP</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">P</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">PP</span><span class="p">:</span>
             <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">PP</span><span class="p">[</span><span class="n">key</span><span class="p">],</span> <span class="n">units_class</span><span class="p">):</span>
-                <span class="n">PP</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;{:~P}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">PP</span><span class="p">[</span><span class="n">key</span><span class="p">])</span>
+                <span class="n">PP</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"{:~P}"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">PP</span><span class="p">[</span><span class="n">key</span><span class="p">])</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">description</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">description</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
@@ -671,36 +670,40 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <span class="c1"># Figure out what we are doing! The method is HF, B3LYP, CCSD, etc.</span>
 
         <span class="n">lines</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
-        <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;#&quot;</span> <span class="o">*</span> <span class="mi">80</span><span class="p">)</span>
-        <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;# </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">header</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;#&quot;</span> <span class="o">*</span> <span class="mi">80</span><span class="p">)</span>
-        <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
-        <span class="c1"># lines.append(&quot;initial.find_point_group(tolerance=1.0e-5)&quot;)</span>
-        <span class="c1"># lines.append(&quot;initial.symmetrize(1.0e-5)&quot;)</span>
-        <span class="c1"># lines.append(&quot;point_group = initial.point_group().symbol()&quot;)</span>
-        <span class="c1"># lines.append(&quot;&quot;)</span>
+        <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">""</span><span class="p">)</span>
+        <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">"#"</span> <span class="o">*</span> <span class="mi">80</span><span class="p">)</span>
+        <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">"# </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">header</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+        <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">"#"</span> <span class="o">*</span> <span class="mi">80</span><span class="p">)</span>
+        <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">""</span><span class="p">)</span>
+        <span class="c1"># lines.append("initial.find_point_group(tolerance=1.0e-5)")</span>
+        <span class="c1"># lines.append("initial.symmetrize(1.0e-5)")</span>
+        <span class="c1"># lines.append("point_group = initial.point_group().symbol()")</span>
+        <span class="c1"># lines.append("")</span>
 
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">P</span><span class="p">[</span><span class="s2">&quot;use existing parameters&quot;</span><span class="p">]:</span>
+        <span class="c1"># Right after the Initialization step there is no previous calculation</span>
+        <span class="c1"># whose parameters could be used (the dialog does not offer the choice).</span>
+        <span class="n">previous</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">previous</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">P</span><span class="p">[</span><span class="s2">"use existing parameters"</span><span class="p">]</span> <span class="ow">or</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span>
+            <span class="n">previous</span><span class="p">,</span> <span class="n">psi4_step</span><span class="o">.</span><span class="n">Energy</span>
+        <span class="p">):</span>
             <span class="c1"># Add in the input from the energy part of things</span>
             <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">get_input</span><span class="p">(</span><span class="n">calculation_type</span><span class="o">=</span><span class="n">calculation_type</span><span class="p">))</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">previous</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">previous</span><span class="p">()</span>
             <span class="n">method</span><span class="p">,</span> <span class="n">functional</span><span class="p">,</span> <span class="n">extended_functional</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">previous</span><span class="o">.</span><span class="n">get_method</span><span class="p">()</span>
 
-            <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;dft&quot;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">"dft"</span><span class="p">:</span>
                 <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-                    <span class="sa">f</span><span class="s2">&quot;Eelec, wfn = frequency(&#39;</span><span class="si">{</span><span class="n">extended_functional</span><span class="si">}</span><span class="s2">&#39;, return_wfn=True)&quot;</span>
+                    <span class="sa">f</span><span class="s2">"Eelec, wfn = frequency('</span><span class="si">{</span><span class="n">extended_functional</span><span class="si">}</span><span class="s2">', return_wfn=True)"</span>
                 <span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Eelec, wfn = frequency(&#39;</span><span class="si">{</span><span class="n">method</span><span class="si">}</span><span class="s2">&#39;, return_wfn=True)&quot;</span><span class="p">)</span>
+                <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Eelec, wfn = frequency('</span><span class="si">{</span><span class="n">method</span><span class="si">}</span><span class="s2">', return_wfn=True)"</span><span class="p">)</span>
 
-        <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+        <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">"""</span>
 <span class="s2">set writer_file_label thermo</span>
 <span class="s2">set hessian_write on</span>
 
 <span class="s2">thermo_vibinfo = vibanal_wfn(wfn)</span>
-<span class="s2">path = Path(core.get_writer_file_prefix(&#39;thermo&#39;) + &#39;.vibrec&#39;)</span>
+<span class="s2">path = Path(core.get_writer_file_prefix('thermo') + '.vibrec')</span>
 <span class="s2">with path.open() as fd:</span>
 <span class="s2">    tmp = json.load(fd)</span>
 <span class="s2">tmp2 = dict()</span>
@@ -710,153 +713,153 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <span class="s2">    else:</span>
 <span class="s2">        tmp2[key] = value</span>
 
-<span class="s2">with path.with_name(&#39;@</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_id</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">+thermochemistry.json&#39;).open(&#39;w&#39;) as fd:</span>
+<span class="s2">with path.with_name('@</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_id</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">+thermochemistry.json').open('w') as fd:</span>
 <span class="s2">    json.dump(tmp2, fd, sort_keys=True, indent=3)</span>
-<span class="s2">&quot;&quot;&quot;</span><span class="p">)</span>
+<span class="s2">"""</span><span class="p">)</span>
 
-        <span class="k">return</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">lines</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">lines</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="Thermochemistry.analyze">
 <a class="viewcode-back" href="../../api/psi4_step.html#psi4_step.thermochemistry.Thermochemistry.analyze">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">analyze</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Do any analysis of the output from this step.</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">analyze</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="s2">""</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Do any analysis of the output from this step.</span>
 
 <span class="sd">        Also print important results to the local step.out file using</span>
-<span class="sd">        &quot;printer&quot;.</span>
+<span class="sd">        "printer".</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        indent: str</span>
 <span class="sd">            An extra indentation for the output</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="c1"># Read in the results from json</span>
         <span class="n">directory</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">directory</span><span class="p">)</span>
-        <span class="n">json_file</span> <span class="o">=</span> <span class="n">directory</span> <span class="o">/</span> <span class="s2">&quot;thermochemistry.json&quot;</span>
+        <span class="n">json_file</span> <span class="o">=</span> <span class="n">directory</span> <span class="o">/</span> <span class="s2">"thermochemistry.json"</span>
         <span class="k">if</span> <span class="n">json_file</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
             <span class="k">with</span> <span class="n">json_file</span><span class="o">.</span><span class="n">open</span><span class="p">()</span> <span class="k">as</span> <span class="n">fd</span><span class="p">:</span>
                 <span class="n">tmp</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">fd</span><span class="p">)</span>
 
             <span class="c1"># Process the data, changing units</span>
             <span class="n">d</span> <span class="o">=</span> <span class="p">{}</span>
-            <span class="n">metadata</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;results&quot;</span><span class="p">]</span>
+            <span class="n">metadata</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">"results"</span><span class="p">]</span>
             <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">tmp</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
                 <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">metadata</span><span class="p">:</span>
-                    <span class="n">from_units</span> <span class="o">=</span> <span class="n">value</span><span class="p">[</span><span class="s2">&quot;units&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;Eh&quot;</span><span class="p">,</span> <span class="s2">&quot;E_h&quot;</span><span class="p">)</span>
-                    <span class="n">to_units</span> <span class="o">=</span> <span class="n">metadata</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="s2">&quot;units&quot;</span><span class="p">]</span>
+                    <span class="n">from_units</span> <span class="o">=</span> <span class="n">value</span><span class="p">[</span><span class="s2">"units"</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">"Eh"</span><span class="p">,</span> <span class="s2">"E_h"</span><span class="p">)</span>
+                    <span class="n">to_units</span> <span class="o">=</span> <span class="n">metadata</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="s2">"units"</span><span class="p">]</span>
                     <span class="k">if</span> <span class="n">from_units</span> <span class="o">==</span> <span class="n">to_units</span><span class="p">:</span>
-                        <span class="n">d</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
+                        <span class="n">d</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span>
                     <span class="k">else</span><span class="p">:</span>
-                        <span class="n">d</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">Q_</span><span class="p">(</span><span class="n">value</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">],</span> <span class="n">from_units</span><span class="p">)</span><span class="o">.</span><span class="n">m_as</span><span class="p">(</span><span class="n">to_units</span><span class="p">)</span>
+                        <span class="n">d</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">Q_</span><span class="p">(</span><span class="n">value</span><span class="p">[</span><span class="s2">"data"</span><span class="p">],</span> <span class="n">from_units</span><span class="p">)</span><span class="o">.</span><span class="n">m_as</span><span class="p">(</span><span class="n">to_units</span><span class="p">)</span>
 
             <span class="c1"># Put any requested results into variables or tables</span>
             <span class="c1"># self.store_results(data=d, create_tables=True)</span>
 
-            <span class="c1"># Need the electronic energy as &quot;energy&quot; in data for thermochemistry</span>
-            <span class="n">d</span><span class="p">[</span><span class="s2">&quot;energy&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">d</span><span class="p">[</span><span class="s2">&quot;E_tot&quot;</span><span class="p">]</span>
+            <span class="c1"># Need the electronic energy as "energy" in data for thermochemistry</span>
+            <span class="n">d</span><span class="p">[</span><span class="s2">"energy"</span><span class="p">]</span> <span class="o">=</span> <span class="n">d</span><span class="p">[</span><span class="s2">"E_tot"</span><span class="p">]</span>
 
             <span class="c1"># And the output</span>
             <span class="n">table</span> <span class="o">=</span> <span class="p">{</span>
-                <span class="s2">&quot;&quot;</span><span class="p">:</span> <span class="p">[</span>
-                    <span class="s2">&quot;Units&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;Electronic&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;Translational&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;Rotational&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;Vibrational&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;Total Correction&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;Total (E_h)&quot;</span><span class="p">,</span>
+                <span class="s2">""</span><span class="p">:</span> <span class="p">[</span>
+                    <span class="s2">"Units"</span><span class="p">,</span>
+                    <span class="s2">"Electronic"</span><span class="p">,</span>
+                    <span class="s2">"Translational"</span><span class="p">,</span>
+                    <span class="s2">"Rotational"</span><span class="p">,</span>
+                    <span class="s2">"Vibrational"</span><span class="p">,</span>
+                    <span class="s2">"Total Correction"</span><span class="p">,</span>
+                    <span class="s2">"Total (E_h)"</span><span class="p">,</span>
                 <span class="p">],</span>
-                <span class="s2">&quot;S&quot;</span><span class="p">:</span> <span class="p">[</span>
-                    <span class="s2">&quot;J/mol/K&quot;</span><span class="p">,</span>
-                    <span class="nb">round</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s2">&quot;S_elec&quot;</span><span class="p">],</span> <span class="mi">2</span><span class="p">),</span>
-                    <span class="nb">round</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s2">&quot;S_trans&quot;</span><span class="p">],</span> <span class="mi">2</span><span class="p">),</span>
-                    <span class="nb">round</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s2">&quot;S_rot&quot;</span><span class="p">],</span> <span class="mi">2</span><span class="p">),</span>
-                    <span class="nb">round</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s2">&quot;S_vib&quot;</span><span class="p">],</span> <span class="mi">2</span><span class="p">),</span>
-                    <span class="nb">round</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s2">&quot;S_tot&quot;</span><span class="p">],</span> <span class="mi">2</span><span class="p">),</span>
+                <span class="s2">"S"</span><span class="p">:</span> <span class="p">[</span>
+                    <span class="s2">"J/mol/K"</span><span class="p">,</span>
+                    <span class="nb">round</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s2">"S_elec"</span><span class="p">],</span> <span class="mi">2</span><span class="p">),</span>
+                    <span class="nb">round</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s2">"S_trans"</span><span class="p">],</span> <span class="mi">2</span><span class="p">),</span>
+                    <span class="nb">round</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s2">"S_rot"</span><span class="p">],</span> <span class="mi">2</span><span class="p">),</span>
+                    <span class="nb">round</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s2">"S_vib"</span><span class="p">],</span> <span class="mi">2</span><span class="p">),</span>
+                    <span class="nb">round</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s2">"S_tot"</span><span class="p">],</span> <span class="mi">2</span><span class="p">),</span>
                 <span class="p">],</span>
-                <span class="s2">&quot;Cv&quot;</span><span class="p">:</span> <span class="p">[</span>
-                    <span class="s2">&quot;J/mol/K&quot;</span><span class="p">,</span>
-                    <span class="nb">round</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s2">&quot;Cv_elec&quot;</span><span class="p">],</span> <span class="mi">2</span><span class="p">),</span>
-                    <span class="nb">round</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s2">&quot;Cv_trans&quot;</span><span class="p">],</span> <span class="mi">2</span><span class="p">),</span>
-                    <span class="nb">round</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s2">&quot;Cv_rot&quot;</span><span class="p">],</span> <span class="mi">2</span><span class="p">),</span>
-                    <span class="nb">round</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s2">&quot;Cv_vib&quot;</span><span class="p">],</span> <span class="mi">2</span><span class="p">),</span>
-                    <span class="nb">round</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s2">&quot;Cv_tot&quot;</span><span class="p">],</span> <span class="mi">2</span><span class="p">),</span>
+                <span class="s2">"Cv"</span><span class="p">:</span> <span class="p">[</span>
+                    <span class="s2">"J/mol/K"</span><span class="p">,</span>
+                    <span class="nb">round</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s2">"Cv_elec"</span><span class="p">],</span> <span class="mi">2</span><span class="p">),</span>
+                    <span class="nb">round</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s2">"Cv_trans"</span><span class="p">],</span> <span class="mi">2</span><span class="p">),</span>
+                    <span class="nb">round</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s2">"Cv_rot"</span><span class="p">],</span> <span class="mi">2</span><span class="p">),</span>
+                    <span class="nb">round</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s2">"Cv_vib"</span><span class="p">],</span> <span class="mi">2</span><span class="p">),</span>
+                    <span class="nb">round</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s2">"Cv_tot"</span><span class="p">],</span> <span class="mi">2</span><span class="p">),</span>
                 <span class="p">],</span>
-                <span class="s2">&quot;Cp&quot;</span><span class="p">:</span> <span class="p">[</span>
-                    <span class="s2">&quot;J/mol/K&quot;</span><span class="p">,</span>
-                    <span class="nb">round</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s2">&quot;Cp_elec&quot;</span><span class="p">],</span> <span class="mi">2</span><span class="p">),</span>
-                    <span class="nb">round</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s2">&quot;Cp_trans&quot;</span><span class="p">],</span> <span class="mi">2</span><span class="p">),</span>
-                    <span class="nb">round</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s2">&quot;Cp_rot&quot;</span><span class="p">],</span> <span class="mi">2</span><span class="p">),</span>
-                    <span class="nb">round</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s2">&quot;Cp_vib&quot;</span><span class="p">],</span> <span class="mi">2</span><span class="p">),</span>
-                    <span class="nb">round</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s2">&quot;Cp_tot&quot;</span><span class="p">],</span> <span class="mi">2</span><span class="p">),</span>
+                <span class="s2">"Cp"</span><span class="p">:</span> <span class="p">[</span>
+                    <span class="s2">"J/mol/K"</span><span class="p">,</span>
+                    <span class="nb">round</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s2">"Cp_elec"</span><span class="p">],</span> <span class="mi">2</span><span class="p">),</span>
+                    <span class="nb">round</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s2">"Cp_trans"</span><span class="p">],</span> <span class="mi">2</span><span class="p">),</span>
+                    <span class="nb">round</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s2">"Cp_rot"</span><span class="p">],</span> <span class="mi">2</span><span class="p">),</span>
+                    <span class="nb">round</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s2">"Cp_vib"</span><span class="p">],</span> <span class="mi">2</span><span class="p">),</span>
+                    <span class="nb">round</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s2">"Cp_tot"</span><span class="p">],</span> <span class="mi">2</span><span class="p">),</span>
                 <span class="p">],</span>
-                <span class="s2">&quot;E&quot;</span><span class="p">:</span> <span class="p">[</span>
-                    <span class="s2">&quot;kJ/mol&quot;</span><span class="p">,</span>
-                    <span class="nb">round</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s2">&quot;E_elec&quot;</span><span class="p">],</span> <span class="mi">2</span><span class="p">),</span>
-                    <span class="nb">round</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s2">&quot;E_trans&quot;</span><span class="p">],</span> <span class="mi">2</span><span class="p">),</span>
-                    <span class="nb">round</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s2">&quot;E_rot&quot;</span><span class="p">],</span> <span class="mi">2</span><span class="p">),</span>
-                    <span class="nb">round</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s2">&quot;E_vib&quot;</span><span class="p">],</span> <span class="mi">2</span><span class="p">),</span>
-                    <span class="nb">round</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s2">&quot;E_corr&quot;</span><span class="p">],</span> <span class="mi">2</span><span class="p">),</span>
-                    <span class="nb">round</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s2">&quot;E_tot&quot;</span><span class="p">],</span> <span class="mi">6</span><span class="p">),</span>
+                <span class="s2">"E"</span><span class="p">:</span> <span class="p">[</span>
+                    <span class="s2">"kJ/mol"</span><span class="p">,</span>
+                    <span class="nb">round</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s2">"E_elec"</span><span class="p">],</span> <span class="mi">2</span><span class="p">),</span>
+                    <span class="nb">round</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s2">"E_trans"</span><span class="p">],</span> <span class="mi">2</span><span class="p">),</span>
+                    <span class="nb">round</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s2">"E_rot"</span><span class="p">],</span> <span class="mi">2</span><span class="p">),</span>
+                    <span class="nb">round</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s2">"E_vib"</span><span class="p">],</span> <span class="mi">2</span><span class="p">),</span>
+                    <span class="nb">round</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s2">"E_corr"</span><span class="p">],</span> <span class="mi">2</span><span class="p">),</span>
+                    <span class="nb">round</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s2">"E_tot"</span><span class="p">],</span> <span class="mi">6</span><span class="p">),</span>
                 <span class="p">],</span>
-                <span class="s2">&quot;H&quot;</span><span class="p">:</span> <span class="p">[</span>
-                    <span class="s2">&quot;kJ/mol&quot;</span><span class="p">,</span>
-                    <span class="nb">round</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s2">&quot;H_elec&quot;</span><span class="p">],</span> <span class="mi">2</span><span class="p">),</span>
-                    <span class="nb">round</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s2">&quot;H_trans&quot;</span><span class="p">],</span> <span class="mi">2</span><span class="p">),</span>
-                    <span class="nb">round</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s2">&quot;H_rot&quot;</span><span class="p">],</span> <span class="mi">2</span><span class="p">),</span>
-                    <span class="nb">round</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s2">&quot;H_vib&quot;</span><span class="p">],</span> <span class="mi">2</span><span class="p">),</span>
-                    <span class="nb">round</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s2">&quot;H_corr&quot;</span><span class="p">],</span> <span class="mi">2</span><span class="p">),</span>
-                    <span class="nb">round</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s2">&quot;H_tot&quot;</span><span class="p">],</span> <span class="mi">6</span><span class="p">),</span>
+                <span class="s2">"H"</span><span class="p">:</span> <span class="p">[</span>
+                    <span class="s2">"kJ/mol"</span><span class="p">,</span>
+                    <span class="nb">round</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s2">"H_elec"</span><span class="p">],</span> <span class="mi">2</span><span class="p">),</span>
+                    <span class="nb">round</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s2">"H_trans"</span><span class="p">],</span> <span class="mi">2</span><span class="p">),</span>
+                    <span class="nb">round</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s2">"H_rot"</span><span class="p">],</span> <span class="mi">2</span><span class="p">),</span>
+                    <span class="nb">round</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s2">"H_vib"</span><span class="p">],</span> <span class="mi">2</span><span class="p">),</span>
+                    <span class="nb">round</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s2">"H_corr"</span><span class="p">],</span> <span class="mi">2</span><span class="p">),</span>
+                    <span class="nb">round</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s2">"H_tot"</span><span class="p">],</span> <span class="mi">6</span><span class="p">),</span>
                 <span class="p">],</span>
-                <span class="s2">&quot;G&quot;</span><span class="p">:</span> <span class="p">[</span>
-                    <span class="s2">&quot;kJ/mol&quot;</span><span class="p">,</span>
-                    <span class="nb">round</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s2">&quot;G_elec&quot;</span><span class="p">],</span> <span class="mi">2</span><span class="p">),</span>
-                    <span class="nb">round</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s2">&quot;G_trans&quot;</span><span class="p">],</span> <span class="mi">2</span><span class="p">),</span>
-                    <span class="nb">round</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s2">&quot;G_rot&quot;</span><span class="p">],</span> <span class="mi">2</span><span class="p">),</span>
-                    <span class="nb">round</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s2">&quot;G_vib&quot;</span><span class="p">],</span> <span class="mi">2</span><span class="p">),</span>
-                    <span class="nb">round</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s2">&quot;G_corr&quot;</span><span class="p">],</span> <span class="mi">2</span><span class="p">),</span>
-                    <span class="nb">round</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s2">&quot;G_tot&quot;</span><span class="p">],</span> <span class="mi">6</span><span class="p">),</span>
+                <span class="s2">"G"</span><span class="p">:</span> <span class="p">[</span>
+                    <span class="s2">"kJ/mol"</span><span class="p">,</span>
+                    <span class="nb">round</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s2">"G_elec"</span><span class="p">],</span> <span class="mi">2</span><span class="p">),</span>
+                    <span class="nb">round</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s2">"G_trans"</span><span class="p">],</span> <span class="mi">2</span><span class="p">),</span>
+                    <span class="nb">round</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s2">"G_rot"</span><span class="p">],</span> <span class="mi">2</span><span class="p">),</span>
+                    <span class="nb">round</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s2">"G_vib"</span><span class="p">],</span> <span class="mi">2</span><span class="p">),</span>
+                    <span class="nb">round</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s2">"G_corr"</span><span class="p">],</span> <span class="mi">2</span><span class="p">),</span>
+                    <span class="nb">round</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s2">"G_tot"</span><span class="p">],</span> <span class="mi">6</span><span class="p">),</span>
                 <span class="p">],</span>
             <span class="p">}</span>
 
-            <span class="n">text</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+            <span class="n">text</span> <span class="o">=</span> <span class="s2">""</span>
             <span class="n">tmp</span> <span class="o">=</span> <span class="n">tabulate</span><span class="p">(</span>
                 <span class="n">table</span><span class="p">,</span>
-                <span class="n">headers</span><span class="o">=</span><span class="s2">&quot;keys&quot;</span><span class="p">,</span>
-                <span class="n">tablefmt</span><span class="o">=</span><span class="s2">&quot;simple_outline&quot;</span><span class="p">,</span>
+                <span class="n">headers</span><span class="o">=</span><span class="s2">"keys"</span><span class="p">,</span>
+                <span class="n">tablefmt</span><span class="o">=</span><span class="s2">"simple_outline"</span><span class="p">,</span>
                 <span class="n">disable_numparse</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                <span class="n">numalign</span><span class="o">=</span><span class="s2">&quot;decimal&quot;</span><span class="p">,</span>
-                <span class="n">stralign</span><span class="o">=</span><span class="s2">&quot;center&quot;</span><span class="p">,</span>
+                <span class="n">numalign</span><span class="o">=</span><span class="s2">"decimal"</span><span class="p">,</span>
+                <span class="n">stralign</span><span class="o">=</span><span class="s2">"center"</span><span class="p">,</span>
                 <span class="n">colalign</span><span class="o">=</span><span class="p">(</span>
-                    <span class="s2">&quot;center&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;decimal&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;decimal&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;decimal&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;decimal&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;decimal&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;decimal&quot;</span><span class="p">,</span>
+                    <span class="s2">"center"</span><span class="p">,</span>
+                    <span class="s2">"decimal"</span><span class="p">,</span>
+                    <span class="s2">"decimal"</span><span class="p">,</span>
+                    <span class="s2">"decimal"</span><span class="p">,</span>
+                    <span class="s2">"decimal"</span><span class="p">,</span>
+                    <span class="s2">"decimal"</span><span class="p">,</span>
+                    <span class="s2">"decimal"</span><span class="p">,</span>
                 <span class="p">),</span>
             <span class="p">)</span>
             <span class="n">length</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">tmp</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()[</span><span class="mi">0</span><span class="p">])</span>
-            <span class="n">text</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="n">text</span> <span class="o">+=</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">"</span>
             <span class="n">parameters</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">current_values_to_dict</span><span class="p">(</span>
                 <span class="n">context</span><span class="o">=</span><span class="n">seamm</span><span class="o">.</span><span class="n">flowchart_variables</span><span class="o">.</span><span class="n">_data</span>
             <span class="p">)</span>
-            <span class="n">T</span> <span class="o">=</span> <span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;T&quot;</span><span class="p">]</span>
-            <span class="n">P</span> <span class="o">=</span> <span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;P&quot;</span><span class="p">]</span>
-            <span class="n">text</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;Thermodynamic Functions at </span><span class="si">{</span><span class="n">T</span><span class="si">:</span><span class="s2">.2f~P</span><span class="si">}</span><span class="s2"> and </span><span class="si">{</span><span class="n">P</span><span class="si">:</span><span class="s2">.2f~P</span><span class="si">}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">center</span><span class="p">(</span><span class="n">length</span><span class="p">)</span>
-            <span class="n">text</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="n">T</span> <span class="o">=</span> <span class="n">parameters</span><span class="p">[</span><span class="s2">"T"</span><span class="p">]</span>
+            <span class="n">P</span> <span class="o">=</span> <span class="n">parameters</span><span class="p">[</span><span class="s2">"P"</span><span class="p">]</span>
+            <span class="n">text</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">"Thermodynamic Functions at </span><span class="si">{</span><span class="n">T</span><span class="si">:</span><span class="s2">.2f~P</span><span class="si">}</span><span class="s2"> and </span><span class="si">{</span><span class="n">P</span><span class="si">:</span><span class="s2">.2f~P</span><span class="si">}</span><span class="s2">"</span><span class="o">.</span><span class="n">center</span><span class="p">(</span><span class="n">length</span><span class="p">)</span>
+            <span class="n">text</span> <span class="o">+=</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">"</span>
             <span class="n">text</span> <span class="o">+=</span> <span class="n">tmp</span>
-            <span class="n">text</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
-            <span class="n">printer</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">__</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">8</span> <span class="o">*</span> <span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="n">wrap</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">dedent</span><span class="o">=</span><span class="kc">False</span><span class="p">))</span>
+            <span class="n">text</span> <span class="o">+=</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">"</span>
+            <span class="n">printer</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">__</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">8</span> <span class="o">*</span> <span class="s2">" "</span><span class="p">,</span> <span class="n">wrap</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">dedent</span><span class="o">=</span><span class="kc">False</span><span class="p">))</span>
 
             <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">analyze</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">d</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">text</span> <span class="o">=</span> <span class="p">(</span>
-                <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">There are no thermochemistry results from Psi4. Perhaps it &quot;</span>
-                <span class="sa">f</span><span class="s2">&quot;failed? Looking for </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">json_file</span><span class="p">)</span><span class="si">}</span><span class="s2">.&quot;</span>
+                <span class="s2">"</span><span class="se">\n</span><span class="s2">There are no thermochemistry results from Psi4. Perhaps it "</span>
+                <span class="sa">f</span><span class="s2">"failed? Looking for </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">json_file</span><span class="p">)</span><span class="si">}</span><span class="s2">."</span>
             <span class="p">)</span>
-            <span class="n">printer</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">__</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">indent</span> <span class="o">+</span> <span class="mi">4</span> <span class="o">*</span> <span class="s2">&quot; &quot;</span><span class="p">))</span>
+            <span class="n">printer</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">__</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">indent</span> <span class="o">+</span> <span class="mi">4</span> <span class="o">*</span> <span class="s2">" "</span><span class="p">))</span>
             <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="n">text</span><span class="p">)</span></div>
 </div>
 
@@ -889,8 +892,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
-<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
+  <script defer src="../../_static/scripts/bootstrap.js?digest=64cc4de3f052d77215f0"></script>
+<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=64cc4de3f052d77215f0"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -902,7 +905,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <div class="footer-item">
 <p class="theme-version">
   <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.20.0.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.22.0.
 </p></div>
       
     </div>
