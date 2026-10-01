@@ -1,6 +1,23 @@
 =======
 History
 =======
+2026.10.1 -- Settings that depend on each other, and three bug fixes
+    * The dialogs show only the settings that apply with the current choices, and SEAMM's
+      flowchart tools use the same rules: the functional only for DFT; the frozen core
+      only for correlated methods; a dispersion correction only from the functional's own
+      list; the damping, level-shift and second-order SCF controls only when switched on.
+    * BSSE no longer offers the 17 Energy settings it does not use (Psi4's own SCF
+      settings are used, and no plots are made), and Thermochemistry's plots apply only
+      when it uses its own settings.
+    * Bugfix: Thermochemistry right after Initialization tried to use the previous
+      step's method; it now uses its own settings.
+    * Bugfix: a functional given by its short name (e.g. a variable set to 'b3lyp')
+      raised KeyError.
+    * Bugfix: keeping the dispersion choice valid in the dialog raised a TypeError.
+    * Documented in the user guide. Needs seamm 2026.10.1.
+    * Internal: CI now installs the package's declared dependencies with uv rather than
+      a conda test environment; seamm-exec, which it uses, is now declared.
+
 2026.8.7 -- Bugfix: catch a mis-assigned per-fragment BSSE charge before running Psi4
    * The BSSE (counterpoise) sub-step now passes the cluster's atomic numbers into
      ``seamm_bsse.validate_fragments``, which checks that every fragment has an
