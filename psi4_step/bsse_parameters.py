@@ -36,6 +36,7 @@ class BSSEParameters(EnergyParameters):
             ),
         },
         "fragment atoms": {
+            "applies_when": {"fragments": "specified"},
             "default": "",
             "kind": "string",
             "default_units": "",
@@ -85,6 +86,29 @@ class BSSEParameters(EnergyParameters):
             ),
         },
     }
+
+    # The Energy settings that the counterpoise calculation does not use: the
+    # reference follows from the multiplicity, Psi4's own SCF defaults are used, and
+    # no stability analysis or plots are done.
+    unused = (
+        "spin-restricted",
+        "use damping",
+        "damping percentage",
+        "damping convergence",
+        "use level shift",
+        "level shift",
+        "level shift convergence",
+        "use soscf",
+        "soscf starting convergence",
+        "soscf convergence",
+        "soscf max iterations",
+        "soscf print iterations",
+        "convergence error",
+        "stability analysis",
+        "density",
+        "orbitals",
+        "selected orbitals",
+    )
 
     def __init__(self, defaults={}, data=None):
         logger.debug("BSSEParameters.__init__")

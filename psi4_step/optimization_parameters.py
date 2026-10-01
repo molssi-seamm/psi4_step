@@ -85,6 +85,9 @@ class OptimizationParameters(psi4_step.EnergyParameters):
         },
     }
 
+    # An optimization gives a single structure, so there are no subsequent ones.
+    unused = ("subsequent structure handling",)
+
     def __init__(self, defaults={}, data=None):
         """Initialize the instance, by default from the default
         parameters given in the class"""

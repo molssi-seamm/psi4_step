@@ -91,7 +91,8 @@ class TkBSSE(psi4_step.TkEnergy):
 
     def reset_fragments(self, widget=None):
         """'Fragment atoms' only applies when defining the fragments by
-        hand; 'Fragment charges'/'compute gradient' apply either way."""
+        hand (from the parameters' rules); 'Fragment charges'/'compute
+        gradient' apply either way."""
         frame = self["fragments frame"]
         for slave in frame.grid_slaves():
             slave.grid_forget()
@@ -106,7 +107,7 @@ class TkBSSE(psi4_step.TkEnergy):
             row += 1
 
         add("fragments")
-        if self["fragments"].get() == "specified":
+        if self.node.parameters.applies("fragment atoms", self._widget_values()):
             add("fragment atoms")
         add("fragment charges")
         add("compute gradient")

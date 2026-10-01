@@ -8,6 +8,9 @@ import seamm
 
 logger = logging.getLogger(__name__)
 
+# The methods that are DFT, which take a functional.
+DFT_METHODS = [name for name, record in methods.items() if record["method"] == "dft"]
+
 
 class EnergyParameters(seamm.Parameters):
     """The control parameters for the energy."""
@@ -25,6 +28,7 @@ class EnergyParameters(seamm.Parameters):
             ),
         },
         "method": {
+            "applies_when": {"level": "recommended"},
             "default": "Kohn-Sham (KS) density functional theory (DFT)",
             "kind": "enumeration",
             "default_units": "",
@@ -34,6 +38,7 @@ class EnergyParameters(seamm.Parameters):
             "help_text": ("The computational method to use."),
         },
         "advanced_method": {
+            "applies_when": {"level": "advanced"},
             "default": "Kohn-Sham (KS) density functional theory (DFT)",
             "kind": "enumeration",
             "default_units": "",
@@ -43,6 +48,7 @@ class EnergyParameters(seamm.Parameters):
             "help_text": ("The computational method to use."),
         },
         "functional": {
+            "applies_when": {"method": DFT_METHODS},
             "default": "B3LYP Hyb-GGA Exchange-Correlation Functional",
             "kind": "enumeration",
             "default_units": "",
@@ -54,6 +60,7 @@ class EnergyParameters(seamm.Parameters):
             "help_text": ("The exchange-correlation functional to use."),
         },
         "advanced_functional": {
+            "applies_when": {"advanced_method": DFT_METHODS},
             "default": "B3LYP Hyb-GGA Exchange-Correlation Functional",
             "kind": "enumeration",
             "default_units": "",
@@ -97,6 +104,7 @@ class EnergyParameters(seamm.Parameters):
             ),
         },
         "damping percentage": {
+            "applies_when": {"use damping": "yes"},
             "default": 20.0,
             "kind": "float",
             "default_units": "",
@@ -106,6 +114,7 @@ class EnergyParameters(seamm.Parameters):
             "help_text": "Percent of previous density to use to damp oscillations.",
         },
         "damping convergence": {
+            "applies_when": {"use damping": "yes"},
             "default": 0.0,
             "kind": "float",
             "default_units": "",
@@ -124,6 +133,7 @@ class EnergyParameters(seamm.Parameters):
             "help_text": ("Whether to use a level shift to help convergence."),
         },
         "level shift": {
+            "applies_when": {"use level shift": "yes"},
             "default": 5.0,
             "kind": "float",
             "default_units": "E_h",
@@ -133,6 +143,7 @@ class EnergyParameters(seamm.Parameters):
             "help_text": "The amount to shift the occupied orbitals down.",
         },
         "level shift convergence": {
+            "applies_when": {"use level shift": "yes"},
             "default": 0.01,
             "kind": "float",
             "default_units": "",
@@ -151,6 +162,7 @@ class EnergyParameters(seamm.Parameters):
             "help_text": ("Whether to use the second order SCF to help convergence."),
         },
         "soscf starting convergence": {
+            "applies_when": {"use soscf": "yes"},
             "default": 0.01,
             "kind": "float",
             "default_units": "",
@@ -160,6 +172,7 @@ class EnergyParameters(seamm.Parameters):
             "help_text": "Convergence level to start second order SCF.",
         },
         "soscf convergence": {
+            "applies_when": {"use soscf": "yes"},
             "default": 0.001,
             "kind": "float",
             "default_units": "",
@@ -169,6 +182,7 @@ class EnergyParameters(seamm.Parameters):
             "help_text": "Convergence level for SOSCF microiterations.",
         },
         "soscf max iterations": {
+            "applies_when": {"use soscf": "yes"},
             "default": 5,
             "kind": "integer",
             "default_units": "",
@@ -178,6 +192,7 @@ class EnergyParameters(seamm.Parameters):
             "help_text": "Maximum number of SOSCF microiterations.",
         },
         "soscf print iterations": {
+            "applies_when": {"use soscf": "yes"},
             "default": "no",
             "kind": "boolean",
             "default_units": "",
@@ -291,6 +306,7 @@ class EnergyParameters(seamm.Parameters):
             "help_text": "Whether to plot orbitals.",
         },
         "selected orbitals": {
+            "applies_when": {"orbitals": "yes"},
             "default": "-1, HOMO, LUMO, +1",
             "kind": "string",
             "default_units": "",
@@ -300,6 +316,118 @@ class EnergyParameters(seamm.Parameters):
             "help_text": "Which orbitals to plot.",
         },
     }
+
+    # Rules shared by the dialog and the flowchart builder (see seamm.Parameters).
+    # The simple conditions are the "applies_when" entries above: the method (and
+    # functional) of the chosen level of disclosure, and the sub-controls of the
+    # damping, level shift, second-order SCF and orbital plots. The rules below
+    # depend on the method's and functional's metadata.
+
+    unused = ()
+    """Parameters that this kind of step never uses."""
+
+    def _method_key(self, values):
+        """The method parameter in use for the level of disclosure."""
+        return "advanced_method" if values.get("level") == "advanced" else "method"
+
+    def _functional_key(self, values):
+        """The functional parameter in use for the level of disclosure."""
+        if values.get("level") == "advanced":
+            return "advanced_functional"
+        return "functional"
+
+    @staticmethod
+    def _method_record(name):
+        """The metadata of a method, given by its full or short name, or None."""
+        if name in methods:
+            return methods[name]
+        for record in methods.values():
+            if record["method"] == str(name).lower():
+                return record
+        return None
+
+    def _dispersions(self, values):
+        """The dispersion corrections of the chosen functional, or None if it is
+        not known (e.g. a variable)."""
+        record = dft_functionals.get(values.get(self._functional_key(values)))
+        return None if record is None else tuple(record["dispersion"])
+
+    def applies(self, key, values=None, _seen=None):
+        """As seamm.Parameters.applies, plus: the parameters that this kind of step
+        does not use never apply; the frozen-core choice applies only to
+        methods with a frozen core (the correlated ones), and the dispersion
+        correction only to functionals that have dispersion corrections."""
+        if values is None:
+            values = self.current_values()
+        if key in self.unused:
+            return False
+        if not super().applies(key, values, _seen):
+            return False
+        if key == "freeze-cores":
+            name = values.get(self._method_key(values))
+            if self._is_expr(name):
+                return True
+            record = self._method_record(name)
+            return record is None or bool(record.get("freeze core?", False))
+        if key == "dispersion":
+            functional_key = self._functional_key(values)
+            if not self.applies(functional_key, values, _seen):
+                return False
+            if self._is_expr(values.get(functional_key)):
+                return True
+            dispersions = self._dispersions(values)
+            return dispersions is not None and len(dispersions) > 1
+        return True
+
+    def not_applicable_reason(self, key, values=None):
+        """Why a parameter does not apply, for the builder's messages."""
+        if values is None:
+            values = self.current_values()
+        if key in self.unused:
+            return "this kind of step does not use it"
+        reason = super().not_applicable_reason(key, values)
+        if reason or self.applies(key, values):
+            return reason
+        if key == "freeze-cores":
+            name = values.get(self._method_key(values))
+            return f"the method '{name}' does not freeze core orbitals"
+        if key == "dispersion":
+            functional_key = self._functional_key(values)
+            if not self.applies(functional_key, values):
+                why = self.not_applicable_reason(functional_key, values)
+                return f"it needs '{functional_key}', which does not apply" + (
+                    f" ({why})" if why else ""
+                )
+            functional = values.get(functional_key)
+            if self._dispersions(values) is None:
+                return f"the functional '{functional}' is not known"
+            return f"the functional '{functional}' has no dispersion corrections"
+        return ""
+
+    def choices(self, key, values=None):
+        """The dispersion corrections are those of the functional."""
+        if values is None:
+            values = self.current_values()
+        if key == "dispersion":
+            return self._dispersions(values)
+        return super().choices(key, values)
+
+    def implied(self, values=None):
+        """A functional implies a dispersion correction it has: if the current one
+        is not available, the first real correction (as the dialog chooses)."""
+        if values is None:
+            values = self.current_values()
+        result = {}
+        if self.applies("dispersion", values):
+            dispersions = self._dispersions(values)
+            dispersion = values.get("dispersion")
+            if (
+                dispersions is not None
+                and dispersion not in dispersions
+                and not self._is_expr(dispersion)
+            ):
+                result["dispersion"] = dispersions[1]
+        return result
 
     def __init__(self, defaults={}, data=None):
         """Initialize the instance, by default from the default

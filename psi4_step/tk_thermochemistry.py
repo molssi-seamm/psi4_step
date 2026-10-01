@@ -190,12 +190,25 @@ class TkThermochemistry(psi4_step.TkEnergy):
 
         self.reset_thermochemistry()
 
-        if self.first_calculation or self["use existing parameters"].get() != "yes":
+        # The Energy settings apply only when not using the previous step's
+        # (from the parameters' rules, psi4_step.ThermochemistryParameters).
+        if self.node.parameters.applies("level", self._widget_values()):
             row = super().reset_dialog(row=row)
+        else:
+            self.reset_plotting()
 
         self.fit_dialog()
 
         return row
+
+    def _widget_values(self):
+        """The dialog's current values for the parameters' rules. Right after the
+        Initialization step there are no previous parameters to use, so the Energy
+        settings are needed (see edit())."""
+        values = super()._widget_values()
+        if self.first_calculation:
+            values["use existing parameters"] = "no"
+        return values
 
     def reset_thermochemistry(self, widget=None):
         frame = self["thermochemistry"]
