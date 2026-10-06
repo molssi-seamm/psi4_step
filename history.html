@@ -7,7 +7,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>History &#8212; SEAMM Psi4 Plug-in 2026.10.1 documentation</title>
+    <title>History &#8212; SEAMM Psi4 Plug-in 2026.10.6 documentation</title>
   
   
   
@@ -48,7 +48,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-PQXXTJ2');</script>
 <!-- End Google Tag Manager -->
 
-    <script src="_static/documentation_options.js?v=65cfade2"></script>
+    <script src="_static/documentation_options.js?v=ae463d2f"></script>
     <script src="_static/doctools.js?v=fd6eb6e6"></script>
     <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="_static/clipboard.min.js?v=a7894cd8"></script>
@@ -62,7 +62,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     <link rel="prev" title="Development Team" href="authors.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2026.10.1" />
+  <meta name="docsearch:version" content="2026.10.6" />
   
     
     <script src="_static/searchtools.js"></script>
@@ -505,6 +505,15 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <section id="history">
 <h1>History<a class="headerlink" href="#history" title="Link to this heading">#</a></h1>
 <dl class="simple">
+<dt>2026.10.6 – Timing records that a cost model can be fitted to</dt><dd><ul class="simple">
+<li><p>Each Psi4 run appends a record to <code class="docutils literal notranslate"><span class="pre">~/.seamm.d/timing/psi4.csv</span></code> through
+<code class="docutils literal notranslate"><span class="pre">seamm_exec.timing</span></code>: the machine class, processes, wall time and outcome, and
+the descriptors of the calculation: the method and basis, the structure, and from the output the basis functions, electrons, SCF iterations and Psi4’s own wall time. This replaces the step’s own CSV
+(SMILES, formula and the whole parameter dictionary as JSON), which grew
+without bound. See seamm_exec’s campaign of 2026-10-05.</p></li>
+<li><p>Requires seamm-exec 2026.10.6.</p></li>
+</ul>
+</dd>
 <dt>2026.10.1 – Settings that depend on each other, and three bug fixes</dt><dd><ul class="simple">
 <li><p>The dialogs show only the settings that apply with the current choices, and SEAMM’s
 flowchart tools use the same rules: the functional only for DFT; the frozen core

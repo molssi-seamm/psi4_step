@@ -7,7 +7,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>psi4_step package &#8212; SEAMM Psi4 Plug-in 2026.10.1 documentation</title>
+    <title>psi4_step package &#8212; SEAMM Psi4 Plug-in 2026.10.6 documentation</title>
   
   
   
@@ -48,7 +48,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-PQXXTJ2');</script>
 <!-- End Google Tag Manager -->
 
-    <script src="../_static/documentation_options.js?v=65cfade2"></script>
+    <script src="../_static/documentation_options.js?v=ae463d2f"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -63,7 +63,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     <link rel="prev" title="psi4_step" href="modules.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2026.10.1" />
+  <meta name="docsearch:version" content="2026.10.6" />
   
     
     <script src="../_static/searchtools.js"></script>
@@ -1224,6 +1224,13 @@ parameters.</p>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="psi4_step.psi4.Psi4.record_timing">
+<span class="sig-name descname"><span class="pre">record_timing</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">configuration</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ce</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">control</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wall</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">result</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/psi4_step/psi4.html#Psi4.record_timing"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#psi4_step.psi4.Psi4.record_timing" title="Link to this definition">#</a></dt>
+<dd><p>Append this run’s timing record (<code class="docutils literal notranslate"><span class="pre">~/.seamm.d/timing/psi4.csv</span></code>) with
+<a class="reference internal" href="#psi4_step.psi4.timing_descriptors" title="psi4_step.psi4.timing_descriptors"><code class="xref py py-func docutils literal notranslate"><span class="pre">timing_descriptors()</span></code></a>; never raises.</p>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="psi4_step.psi4.Psi4.run">
 <span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/psi4_step/psi4.html#Psi4.run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#psi4_step.psi4.Psi4.run" title="Link to this definition">#</a></dt>
 <dd><p>Run a Psi4 step.</p>
@@ -1269,6 +1276,16 @@ parameters.</p>
 <div><p>1253656 =&gt; ‘1.20 MiB’
 1253656678 =&gt; ‘1.17 GiB’</p>
 </div></blockquote>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="psi4_step.psi4.timing_descriptors">
+<span class="sig-prename descclassname"><span class="pre">psi4_step.psi4.</span></span><span class="sig-name descname"><span class="pre">timing_descriptors</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">control</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_text</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">configuration</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/psi4_step/psi4.html#timing_descriptors"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#psi4_step.psi4.timing_descriptors" title="Link to this definition">#</a></dt>
+<dd><p>The descriptors of a Psi4 run for its timing record (seamm_exec’s
+campaign of 2026-10-05): the structure, the number of calculations in the
+input, the method/functional and basis of the first (from the sub-steps’
+parameters), and from the output the basis functions, electrons, SCF
+iterations and Psi4’s own wall time.</p>
 </dd></dl>
 
 </section>
@@ -2482,6 +2499,7 @@ A step for Psi4 in a SEAMM flowchart</p>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#psi4_step.psi4.Psi4.extended_model"><code class="docutils literal notranslate"><span class="pre">Psi4.extended_model</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#psi4_step.psi4.Psi4.git_revision"><code class="docutils literal notranslate"><span class="pre">Psi4.git_revision</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#psi4_step.psi4.Psi4.model"><code class="docutils literal notranslate"><span class="pre">Psi4.model</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#psi4_step.psi4.Psi4.record_timing"><code class="docutils literal notranslate"><span class="pre">Psi4.record_timing()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#psi4_step.psi4.Psi4.run"><code class="docutils literal notranslate"><span class="pre">Psi4.run()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#psi4_step.psi4.Psi4.set_id"><code class="docutils literal notranslate"><span class="pre">Psi4.set_id()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#psi4_step.psi4.Psi4.version"><code class="docutils literal notranslate"><span class="pre">Psi4.version</span></code></a></li>
@@ -2489,6 +2507,7 @@ A step for Psi4 in a SEAMM flowchart</p>
 </li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#psi4_step.psi4.dehumanize"><code class="docutils literal notranslate"><span class="pre">dehumanize()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#psi4_step.psi4.humanize"><code class="docutils literal notranslate"><span class="pre">humanize()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#psi4_step.psi4.timing_descriptors"><code class="docutils literal notranslate"><span class="pre">timing_descriptors()</span></code></a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-psi4_step.psi4_metadata">psi4_step.psi4_metadata module</a><ul class="pst-show_toc_level nav section-nav flex-column">
