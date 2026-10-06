@@ -7,4 +7,4 @@ scipy
 seamm>=2026.10.1
 seamm-bsse
 tabulate
-seamm-exec
+seamm-exec>=2026.10.6

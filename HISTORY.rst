@@ -1,6 +1,13 @@
 =======
 History
 =======
+2026.10.6 -- Timing records that a cost model can be fitted to
+    * Each Psi4 run appends a record to ``~/.seamm.d/timing/psi4.csv`` through
+      ``seamm_exec.timing``: the machine class, processes, wall time and outcome, and
+      the descriptors of the calculation: the method and basis, the structure, and from the output the basis functions, electrons, SCF iterations and Psi4's own wall time. This replaces the step's own CSV
+      (SMILES, formula and the whole parameter dictionary as JSON), which grew
+      without bound. See seamm_exec's campaign of 2026-10-05.
+    * Requires seamm-exec 2026.10.6.
 2026.10.1 -- Settings that depend on each other, and three bug fixes
     * The dialogs show only the settings that apply with the current choices, and SEAMM's
       flowchart tools use the same rules: the functional only for DFT; the frozen core

@@ -3,19 +3,15 @@
 """Non-graphical part of the Psi4 step in a SEAMM flowchart"""
 
 import configparser
-import csv
-from datetime import datetime, timezone
 import importlib
-import json
 import logging
+import re
 import os
 from pathlib import Path
-import platform
 import pprint
 import shutil
 import time
 
-from cpuinfo import get_cpu_info
 
 import psi4_step
 import seamm
@@ -111,6 +107,61 @@ def dehumanize(memory, suffix="B"):
     raise ValueError(f"Don't recognize the units on '{memory}'")
 
 
+def _output_text(directory, names):
+    """The text of the first of ``names`` found in ``directory``, or None."""
+    for name in names:
+        path = Path(directory) / name
+        if path.exists():
+            try:
+                return path.read_text(errors="replace")
+            except OSError:
+                return None
+    return None
+
+
+def timing_descriptors(control, out_text=None, configuration=None):
+    """The descriptors of a Psi4 run for its timing record (seamm_exec's
+    campaign of 2026-10-05): the structure, the number of calculations in the
+    input, the method/functional and basis of the first (from the sub-steps'
+    parameters), and from the output the basis functions, electrons, SCF
+    iterations and Psi4's own wall time.
+    """
+    d = {"n_calculations": len(control or ())}
+    method = basis = ""
+    for item in control or ():
+        if isinstance(item, (list, tuple)):
+            for sub in item:
+                if isinstance(sub, (list, tuple)) and len(sub) == 2:
+                    key, value = sub
+                    if key == "basis" and not basis:
+                        basis = str(value)
+                    elif key in ("method", "functional") and not method:
+                        method = str(value).split()[0]
+                    elif (
+                        key == "level" and not method and value not in ("recommended",)
+                    ):
+                        pass
+    d["method"] = method
+    d["basis"] = basis
+    if configuration is not None:
+        d.update(seamm_exec.structure_descriptors(configuration))
+    if out_text:
+        m = re.search(r"Number of basis functions?:?\s+(\d+)", out_text)
+        d["nbf"] = int(m.group(1)) if m else None
+        m = re.search(r"Nalpha\s*=\s*(\d+)\s*\n\s*Nbeta\s*=\s*(\d+)", out_text)
+        if m:
+            d["n_electrons"] = int(m.group(1)) + int(m.group(2))
+        d["scf_runs"] = len(re.findall(r"Energy and wave function converged", out_text))
+        d["scf_iterations"] = len(re.findall(r"^\s*@\S*\s+iter\s+\d+:", out_text, re.M))
+        m = re.search(r"Psi4 wall time for execution:\s+(\d+):(\d+):([\d.]+)", out_text)
+        if m:
+            d["code_seconds"] = (
+                int(m.group(1)) * 3600 + int(m.group(2)) * 60 + float(m.group(3))
+            )
+        d["terminated_normally"] = "Psi4 exiting successfully" in out_text
+    return d
+
+
 class Psi4(seamm.Node):
     """
     The non-graphical part of a Psi4 step in a flowchart.
@@ -170,47 +221,6 @@ class Psi4(seamm.Node):
         self._basis = None
         self._model = None
         self._extended_model = None
-
-        # Set up the timing information
-        self._timing_data = []
-        self._timing_path = Path("~/.seamm.d/timing/psi4.csv").expanduser()
-        self._timing_header = [
-            "node",  # 0
-            "cpu",  # 1
-            "cpu_version",  # 2
-            "cpu_count",  # 3
-            "cpu_speed",  # 4
-            "date",  # 5
-            "H_SMILES",  # 6
-            "ISOMERIC_SMILES",  # 7
-            "formula",  # 8
-            "net_charge",  # 9
-            "spin_multiplicity",  # 10
-            "keywords",  # 11
-            "nproc",  # 12
-            "time",  # 13
-        ]
-        try:
-            self._timing_path.parent.mkdir(parents=True, exist_ok=True)
-
-            self._timing_data = 14 * [""]
-            self._timing_data[0] = platform.node()
-            tmp = get_cpu_info()
-            if "arch" in tmp:
-                self._timing_data[1] = tmp["arch"]
-            if "cpuinfo_version_string" in tmp:
-                self._timing_data[2] = tmp["cpuinfo_version_string"]
-            if "count" in tmp:
-                self._timing_data[3] = str(tmp["count"])
-            if "hz_advertized_friendly" in tmp:
-                self._timing_data[4] = tmp["hz_advertized_friendly"]
-
-            if not self._timing_path.exists():
-                with self._timing_path.open("w", newline="") as fd:
-                    writer = csv.writer(fd)
-                    writer.writerow(self._timing_header)
-        except Exception:
-            self._timing_data = None
 
     @property
     def version(self):
@@ -492,7 +502,6 @@ class Psi4(seamm.Node):
         # Check for already having run
         path = Path(self.directory) / "success.dat"
         if path.exists():
-            self._timing_data = None
             result = {}
             path = Path(self.directory) / "stdout.txt"
             if path.exists():
@@ -548,32 +557,6 @@ class Psi4(seamm.Node):
                 + f"    Psi4 will use {ce['NTASKS']} threads and {memory} memory\n"
             )
 
-            if self._timing_data is not None:
-                try:
-                    self._timing_data[6] = configuration.to_smiles(
-                        canonical=True, hydrogens=True
-                    )
-                except Exception:
-                    self._timing_data[6] = ""
-                try:
-                    self._timing_data[7] = configuration.isomeric_smiles
-                except Exception:
-                    self._timing_data[7] = ""
-                try:
-                    self._timing_data[8] = configuration.formula[0]
-                except Exception:
-                    self._timing_data[7] = ""
-                try:
-                    self._timing_data[9] = str(configuration.charge)
-                except Exception:
-                    self._timing_data[9] = ""
-                try:
-                    self._timing_data[10] = str(configuration.spin_multiplicity)
-                except Exception:
-                    self._timing_data[10] = ""
-                self._timing_data[11] = json.dumps(control)
-                self._timing_data[5] = datetime.now(timezone.utc).isoformat()
-
             t0 = time.time_ns()
 
             result = executor.run(
@@ -588,15 +571,7 @@ class Psi4(seamm.Node):
             )
 
             t = (time.time_ns() - t0) / 1.0e9
-            if self._timing_data is not None:
-                self._timing_data[13] = f"{t:.3f}"
-                self._timing_data[12] = str(ce["NTASKS"])
-                try:
-                    with self._timing_path.open("a", newline="") as fd:
-                        writer = csv.writer(fd)
-                        writer.writerow(self._timing_data)
-                except Exception:
-                    pass
+            self.record_timing(configuration, ce, control, t, result)
 
             if not result:
                 self.logger.error("There was an error running Psi4")
@@ -626,6 +601,26 @@ class Psi4(seamm.Node):
             raise RuntimeError("Psi4 did not complete successfully.")
 
         return next_node
+
+    def record_timing(self, configuration, ce, control, wall, result):
+        """Append this run's timing record (``~/.seamm.d/timing/psi4.csv``) with
+        :func:`timing_descriptors`; never raises."""
+        try:
+            text = _output_text(
+                self.directory, ("output.dat", "psi4.out", "stdout.txt")
+            )
+            descriptors = timing_descriptors(control, text, configuration)
+            seamm_exec.record_timing(
+                "psi4",
+                wall,
+                descriptors,
+                ntasks=1,
+                cpus_per_task=ce.get("NTASKS"),
+                state="finished" if result else "failed",
+                in_situ=True,
+            )
+        except Exception as e:  # pragma: no cover - must never stop the step
+            self.logger.warning(f"Could not record the timing of the Psi4 run: {e}")
 
     def analyze(self, indent="", **kwargs):
         """Do any analysis of the output from this step.
