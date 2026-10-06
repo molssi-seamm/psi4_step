@@ -133,7 +133,7 @@ TIMING_SPEC = {
 
 
 def _record_kwargs():
-    """``spec=`` for seamm-exec releases that take it (2026.10.7 on)."""
+    """``spec=`` for seamm-exec releases that take it (2026.10.6.1 on)."""
     return {"spec": TIMING_SPEC} if hasattr(seamm_exec, "TimingSpec") else {}
 
 
