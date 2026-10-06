@@ -119,6 +119,24 @@ def _output_text(directory, names):
     return None
 
 
+#: What the cost model is made of (seamm_exec.timing_model.Spec as plain data): basis
+#: functions, electrons and atoms as size variables, the method as the class, the task,
+#: SCF runs as the unit. Written beside the records when a run is recorded.
+TIMING_SPEC = {
+    "size": ["nbf", "n_electrons", "n_atoms"],
+    "klass": ["method"],
+    "task": "task",
+    "units": "scf_runs",
+    "multiplier": None,
+    "default_alpha": 0.8,
+}
+
+
+def _record_kwargs():
+    """``spec=`` for seamm-exec releases that take it (2026.10.7 on)."""
+    return {"spec": TIMING_SPEC} if hasattr(seamm_exec, "TimingSpec") else {}
+
+
 def timing_descriptors(control, out_text=None, configuration=None):
     """The descriptors of a Psi4 run for its timing record (seamm_exec's
     campaign of 2026-10-05): the structure, the number of calculations in the
@@ -618,6 +636,7 @@ class Psi4(seamm.Node):
                 cpus_per_task=ce.get("NTASKS"),
                 state="finished" if result else "failed",
                 in_situ=True,
+                **_record_kwargs(),
             )
         except Exception as e:  # pragma: no cover - must never stop the step
             self.logger.warning(f"Could not record the timing of the Psi4 run: {e}")

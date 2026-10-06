@@ -36,3 +36,9 @@ def test_descriptors():
     assert d["scf_runs"] == 1 and d["scf_iterations"] == 2
     assert abs(d["code_seconds"] - 3.12) < 1e-9
     assert d["terminated_normally"] is True
+
+
+def test_timing_spec():
+    from psi4_step import psi4
+
+    assert psi4.TIMING_SPEC["units"] == "scf_runs"
