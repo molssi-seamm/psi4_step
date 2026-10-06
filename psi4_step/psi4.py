@@ -567,8 +567,6 @@ class Psi4(seamm.Node):
                     full_config.read(ini_dir / "psi4.ini")
 
             config = dict(full_config.items(executor_type))
-            # Use the matching version of the seamm-psi4 image by default.
-            config["version"] = self.version
 
             printer.important(
                 self.indent
