@@ -37,6 +37,7 @@ setup(
     packages=find_packages(include=['psi4_step']),
     include_package_data=True,
     setup_requires=[] + pytest_runner,
+    python_requires='>=3.12',
     install_requires=requirements,
     test_suite='tests',
     platforms=['Linux',
@@ -55,8 +56,7 @@ setup(
         'License :: OSI Approved :: BSD License',
         'Natural Language :: English',
         'Programming Language :: Python :: 3 :: Only',
-        'Programming Language :: Python :: 3.8',
-        'Programming Language :: Python :: 3.9',
+        'Programming Language :: Python :: 3.12',
     ],
     entry_points={
         'console_scripts': [

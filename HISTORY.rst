@@ -1,6 +1,15 @@
 =======
 History
 =======
+2026.10.11 -- The step declares what its cost model is made of
+    * ``psi4.TIMING_SPEC`` -- basis functions, electrons and atoms as the size
+      variables, the method as the class, the task, and SCF runs as the unit -- is
+      passed with each timing record (seamm-exec 2026.10.6.1 and later write it beside
+      the records), so the cost model is fitted from the step's own description.
+    * Removed the Docker image (and its recipe and release job) and the Docker settings
+      in the default psi4.ini, which were no longer used or maintained.
+    * Requires Python 3.12 or later.
+
 2026.10.6 -- Timing records that a cost model can be fitted to
     * Each Psi4 run appends a record to ``~/.seamm.d/timing/psi4.csv`` through
       ``seamm_exec.timing``: the machine class, processes, wall time and outcome, and
