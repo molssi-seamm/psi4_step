@@ -597,11 +597,10 @@ class Psi4(seamm.Node):
 
             failed = False
             if "output.dat" in result["files"]:
-                if result["output.dat"]["data"] is not None:
-                    if (
-                        "*** Psi4 exiting successfully."
-                        not in result["output.dat"]["data"]
-                    ):
+                # The executor leaves the returned files on disk
+                text = _output_text(self.directory, ["output.dat"])
+                if text is not None:
+                    if "*** Psi4 exiting successfully." not in text:
                         self.logger.warning("Psi4 did not complete successfully.")
                         failed = True
             if not failed:

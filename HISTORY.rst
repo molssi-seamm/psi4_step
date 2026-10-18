@@ -1,6 +1,11 @@
 =======
 History
 =======
+2026.10.18 -- Internal: read the output files from disk
+    * seamm-exec 2026.10.18 no longer reads the files a calculation returns into memory,
+      since they can be gigabytes. The Psi4 step now reads the ones it needs from the
+      step's directory, which works with earlier versions of seamm-exec too.
+
 2026.10.11 -- The step declares what its cost model is made of
     * ``psi4.TIMING_SPEC`` -- basis functions, electrons and atoms as the size
       variables, the method as the class, the task, and SCF runs as the unit -- is
