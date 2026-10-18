@@ -7,7 +7,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>History &#8212; SEAMM Psi4 Plug-in 2026.10.11 documentation</title>
+    <title>History &#8212; SEAMM Psi4 Plug-in 2026.10.18 documentation</title>
   
   
   
@@ -48,7 +48,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-PQXXTJ2');</script>
 <!-- End Google Tag Manager -->
 
-    <script src="_static/documentation_options.js?v=912780bd"></script>
+    <script src="_static/documentation_options.js?v=16cc37ab"></script>
     <script src="_static/doctools.js?v=fd6eb6e6"></script>
     <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="_static/clipboard.min.js?v=a7894cd8"></script>
@@ -63,7 +63,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2026.10.11" />
+  <meta name="docsearch:version" content="2026.10.18" />
   
     
     <script src="_static/searchtools.js"></script>
@@ -506,6 +506,12 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <section id="history">
 <h1>History<a class="headerlink" href="#history" title="Link to this heading">#</a></h1>
 <dl class="simple">
+<dt>2026.10.18 – Internal: read the output files from disk</dt><dd><ul class="simple">
+<li><p>seamm-exec 2026.10.18 no longer reads the files a calculation returns into memory,
+since they can be gigabytes. The Psi4 step now reads the ones it needs from the
+step’s directory, which works with earlier versions of seamm-exec too.</p></li>
+</ul>
+</dd>
 <dt>2026.10.11 – The step declares what its cost model is made of</dt><dd><ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">psi4.TIMING_SPEC</span></code> – basis functions, electrons and atoms as the size
 variables, the method as the class, the task, and SCF runs as the unit – is
