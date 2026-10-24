@@ -4,7 +4,7 @@ numpy
 pandas
 py-cpuinfo
 scipy
-seamm>=2026.10.1
+seamm>=2026.10.24
 seamm-bsse
 tabulate
 seamm-exec>=2026.10.6
