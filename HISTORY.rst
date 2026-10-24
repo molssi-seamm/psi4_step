@@ -1,6 +1,14 @@
 =======
 History
 =======
+2026.10.24 -- The optimized structure keeps its name
+    * The structures that optimizations write are now named '{current name} optimized
+      with {model}' by default, keeping the name the structure had, such as a title
+      read from an SDF file: 'DMC_cc optimized with B3LYP/def2-SVP'. Before, every
+      structure was named 'optimized with <model>', so the titles of several molecules
+      were lost. Flowcharts already saved keep their setting, and the previous choice
+      remains in the list. Needs seamm 2026.10.24.
+
 2026.10.18 -- Internal: read the output files from disk
     * seamm-exec 2026.10.18 no longer reads the files a calculation returns into memory,
       since they can be gigabytes. The Psi4 step now reads the ones it needs from the
