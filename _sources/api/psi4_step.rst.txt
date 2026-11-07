@@ -28,6 +28,14 @@ psi4\_step.bsse\_step module
    :show-inheritance:
    :undoc-members:
 
+psi4\_step.derivatives module
+-----------------------------
+
+.. automodule:: psi4_step.derivatives
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
 psi4\_step.energy module
 ------------------------
 
