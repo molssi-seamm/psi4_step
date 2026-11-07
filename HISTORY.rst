@@ -1,6 +1,22 @@
 =======
 History
 =======
+2026.11.7 -- Bugfix: analytic CCSD(T) gradients, and no silent finite differences
+    * CCSD(T) optimizations and thermochemistry used finite differences of energies,
+      not Psi4's analytic gradients: Psi4 uses them only when told to use its
+      ``ccenergy`` module, which the step did not do. All-electron CCSD(T) now uses the
+      analytic gradients, which for a Hessian is many times faster.
+    * Psi4's analytic CCSD(T), CCSD, EOM-CCSD and LCCD gradients are all-electron only.
+      With the core frozen the step now asks Psi4 for finite differences of energies
+      explicitly and warns in the output, rather than Psi4 switching silently (or, for
+      CCSD, stopping with an error).
+    * An energy calculation computes the gradient as well only when it is analytic, so
+      a CCSD(T) energy with a frozen core no longer costs a finite-difference gradient.
+    * CCD is marked as having no analytic gradient. The user guide explains which
+      methods have analytic gradients.
+    * A Psi4 output that cclib cannot read, e.g. from a development build of Psi4, no
+      longer stops the step; the results come from Psi4's own data as before.
+
 2026.10.24 -- The optimized structure keeps its name
     * The structures that optimizations write are now named '{current name} optimized
       with {model}' by default, keeping the name the structure had, such as a title

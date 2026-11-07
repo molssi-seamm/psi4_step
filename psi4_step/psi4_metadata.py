@@ -288,7 +288,7 @@ methods = {
         "method": "lccd",
         "calculation": ["energy", "gradients"],
         "level": "normal",
-        "gradients": "analytic",
+        "gradients": "analytic",  # all-electron only (psi4_step.derivatives)
         "freeze core?": True,
     },
     "LCCD with frozen natural orbitals": {
@@ -316,14 +316,15 @@ methods = {
         "method": "ccd",
         "calculation": ["energy", "gradients"],
         "level": "expert",
-        "gradients": "analytic",
+        # analytic only with density fitting (cc_type df), which the step does not set
+        "gradients": "finite-difference",
         "freeze core?": True,
     },
     "coupled cluster singles and doubles (CCSD)": {
         "method": "ccsd",
         "calculation": ["energy", "gradients"],
         "level": "normal",
-        "gradients": "analytic",
+        "gradients": "analytic",  # all-electron only (psi4_step.derivatives)
         "freeze core?": True,
     },
     "Brueckner coupled cluster doubles (BCCD)": {
@@ -358,7 +359,7 @@ methods = {
         "method": "ccsd(t)",
         "calculation": ["energy", "gradients"],
         "level": "normal",
-        "gradients": "analytic",
+        "gradients": "analytic",  # all-electron only (psi4_step.derivatives)
         "freeze core?": True,
     },
     "CCSD with asymmetric perturbative triples (CCSD(AT))": {
@@ -687,7 +688,7 @@ methods = {
         "method": "eom-ccsd",
         "calculation": ["energy", "gradients"],
         "level": "expert",
-        "gradients": "analytic",
+        "gradients": "analytic",  # all-electron only (psi4_step.derivatives)
         "freeze core?": True,
     },
     "EOM-CC3": {
