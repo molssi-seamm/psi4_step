@@ -1,6 +1,17 @@
 =======
 History
 =======
+2026.11.7.1 -- Bugfix: Psi4 runs on node-local scratch under a queueing system
+    * Under a queueing system such as SLURM, Psi4 now runs in a temporary directory on
+      the node's local disk ($TMPDIR), with its scratch files there too, and the
+      output and results are brought back to the step's directory. Before, it ran in
+      the job's directory, often on a shared filesystem: on a busy day the many small
+      writes Psi4 makes (its output, timer and scratch files) stalled it, so that a
+      CCSD(T) gradient that takes 20 s ran for many minutes. Interactive runs are
+      unchanged.
+    * The developer guide has the design of a Psi4 backend for the Interaction EDA
+      step (second-generation ALMO-EDA on CPUs).
+
 2026.11.7 -- Bugfix: analytic CCSD(T) gradients, and no silent finite differences
     * CCSD(T) optimizations and thermochemistry used finite differences of energies,
       not Psi4's analytic gradients: Psi4 uses them only when told to use its

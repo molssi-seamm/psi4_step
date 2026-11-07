@@ -575,13 +575,22 @@ class Psi4(seamm.Node):
 
             t0 = time.time_ns()
 
+            # Under a scheduler Psi4 runs in node-local scratch (in_situ=None: a
+            # temporary directory in $TMPDIR), with its scratch files there too;
+            # the job directory is often on a shared filesystem that is slow for
+            # the many small writes Psi4 makes (psi4_step#40). Interactively it
+            # runs in place, as before.
+            env = {}
+            if "SLURM_JOB_ID" in os.environ and os.environ.get("TMPDIR"):
+                env["PSI_SCRATCH"] = os.environ["TMPDIR"]
             result = executor.run(
                 cmd=["{code}"],
                 config=config,
                 directory=self.directory,
                 files=files,
                 return_files=return_files,
-                in_situ=True,
+                in_situ=None,
+                env=env,
                 shell=True,
                 ce=ce,
             )
@@ -632,7 +641,7 @@ class Psi4(seamm.Node):
                 ntasks=1,
                 cpus_per_task=ce.get("NTASKS"),
                 state="finished" if result else "failed",
-                in_situ=True,
+                in_situ=bool(result.get("in_situ", True)) if result else True,
                 **_record_kwargs(),
             )
         except Exception as e:  # pragma: no cover - must never stop the step
