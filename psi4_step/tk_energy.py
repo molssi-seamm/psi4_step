@@ -94,6 +94,8 @@ class TkEnergy(seamm.TkNode):
             "dispersion",
             "spin-restricted",
             "freeze-cores",
+            "correlation integrals",
+            "correlation fitting basis",
             "stability analysis",
         ):
             self[key] = P[key].widget(self["calculation"])
@@ -128,6 +130,10 @@ class TkEnergy(seamm.TkNode):
             "<<ComboboxSelected>>", self.reset_calculation
         )
         self["advanced_method"].combobox.bind("<Return>", self.reset_calculation)
+
+        self["correlation integrals"].combobox.bind(
+            "<<ComboboxSelected>>", self.reset_calculation
+        )
         self["advanced_method"].combobox.bind("<FocusOut>", self.reset_calculation)
 
         # The dispersion corrections offered depend on the functional
@@ -237,7 +243,6 @@ class TkEnergy(seamm.TkNode):
         row = 0
         self["level"].grid(row=row, column=0, columnspan=2, sticky=tk.EW)
         row += 1
-        is_dft = False
         for method, functional in (
             ("method", "functional"),
             ("advanced_method", "advanced_functional"),
@@ -248,13 +253,30 @@ class TkEnergy(seamm.TkNode):
             widgets.append(self[method])
             row += 1
             if applies(functional):
-                is_dft = True
                 self[functional].grid(row=row, column=1, sticky=tk.EW)
                 widgets2.append(self[functional])
                 row += 1
             if applies("freeze-cores"):
                 self["freeze-cores"].grid(row=row, column=1, sticky=tk.EW)
                 widgets2.append(self["freeze-cores"])
+                row += 1
+            if applies("correlation integrals"):
+                # CCD offers only density fitting or Cholesky decomposition
+                w = self["correlation integrals"]
+                allowed = P.choices("correlation integrals", values)
+                if allowed is None:
+                    allowed = P["correlation integrals"].enumeration
+                w.config(values=list(allowed))
+                implied = P.implied(values)
+                if "correlation integrals" in implied:
+                    w.set(implied["correlation integrals"])
+                    values = self._widget_values()
+                w.grid(row=row, column=1, sticky=tk.EW)
+                widgets2.append(w)
+                row += 1
+            if applies("correlation fitting basis"):
+                self["correlation fitting basis"].grid(row=row, column=1, sticky=tk.EW)
+                widgets2.append(self["correlation fitting basis"])
                 row += 1
         if applies("dispersion"):
             # Offer only the functional's dispersion corrections, keeping the
@@ -270,7 +292,7 @@ class TkEnergy(seamm.TkNode):
             w.grid(row=row, column=1, sticky=tk.W)
             widgets2.append(w)
             row += 1
-        if is_dft:
+        if widgets2:
             sw.align_labels(widgets2)
             frame.columnconfigure(0, minsize=30)
         for key in ("spin-restricted", "stability analysis"):

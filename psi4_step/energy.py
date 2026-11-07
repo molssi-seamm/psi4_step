@@ -19,7 +19,12 @@ from tabulate import tabulate
 
 from molsystem import elements
 import psi4_step
-from psi4_step.derivatives import gradient_route
+from psi4_step.derivatives import (
+    gradient_route,
+    integral_options,
+    integral_type,
+    model_prefix,
+)
 import seamm
 import seamm.data
 from seamm_util import Q_, units_class
@@ -614,6 +619,17 @@ class Energy(seamm.Node):
                 text += " with no dispersion correction."
         else:
             text = f"{calculation_type} using {method}."
+            if (
+                "correlation integrals" in P
+                and self.parameters.applies("correlation integrals", dict(P))
+                and P["correlation integrals"] != "default"
+            ):
+                integrals = P["correlation integrals"]
+                text += f" The correlation integrals will use {integrals}"
+                basis = P.get("correlation fitting basis", "default")
+                if integrals == "density fitting" and basis != "default":
+                    text += f" with the {basis} fitting basis"
+                text += "."
 
         # Spin
         if P["spin-restricted"] == "yes":
@@ -700,7 +716,8 @@ class Energy(seamm.Node):
                     f"{extended_functional.upper()}/{basis_set}"
                 )
             else:
-                self.parent.model = f"{method.upper()}/{basis_set}"
+                prefix = model_prefix(method, self.integral_choice(P))
+                self.parent.model = f"{prefix}{method.upper()}/{basis_set}"
 
         # lines.append('set scf_type df')
         # lines.append('set guess sad')
@@ -714,9 +731,19 @@ class Energy(seamm.Node):
         else:
             lines.append("set freeze_core False")
 
+        # The correlation integrals: conventional, density fitted or Cholesky
+        choice = self.integral_choice(P)
+        lines.extend(
+            integral_options(
+                method, reference, choice, P.get("correlation fitting basis")
+            )
+        )
+
         # How Psi4 will get the gradient. Without an analytic gradient it would
         # quietly differentiate energies, so ask for that explicitly and say so.
-        route = gradient_route(method, reference, frozen_core)
+        route = gradient_route(
+            method, reference, frozen_core, integral_type(method, choice)
+        )
         derivatives = calculation_type in ("gradient", "optimize", "frequency")
         dertype = ""
         if route.analytic:
@@ -883,8 +910,21 @@ with open("{filename}", "w") as fd:
         method = self.get_method()[0]
         frozen_core = "freeze-cores" in P and P["freeze-cores"] == "yes"
         return gradient_route(
-            method, self.reference(method, P, configuration), frozen_core
+            method,
+            self.reference(method, P, configuration),
+            frozen_core,
+            integral_type(method, self.integral_choice(P)),
         )
+
+    def integral_choice(self, P):
+        """The setting for the correlation integrals, if it applies, else
+        "default"."""
+        if "correlation integrals" not in P:
+            return "default"
+        values = {k: v for k, v in P.items()}
+        if not self.parameters.applies("correlation integrals", values):
+            return "default"
+        return P["correlation integrals"]
 
     def get_method(self):
         """Get the method and functional to use"""

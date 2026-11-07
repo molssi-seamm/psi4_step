@@ -30,6 +30,7 @@ import textwrap
 from tabulate import tabulate
 
 import psi4_step
+from psi4_step.derivatives import integral_options, model_prefix
 import seamm
 import seamm_bsse
 from seamm_util import Q_
@@ -265,7 +266,8 @@ class BSSE(psi4_step.Energy):
             if method == "dft":
                 self.parent.model = f"{functional.upper()}/{basis_set}"
             else:
-                self.parent.model = f"{method.upper()}/{basis_set}"
+                prefix = model_prefix(method, self.integral_choice(P))
+                self.parent.model = f"{prefix}{method.upper()}/{basis_set}"
 
         want_gradient = P["compute gradient"] == "yes"
 
@@ -287,6 +289,14 @@ class BSSE(psi4_step.Energy):
             lines.append("set freeze_core True")
         else:
             lines.append("set freeze_core False")
+        lines.extend(
+            integral_options(
+                method,
+                reference,
+                self.integral_choice(P),
+                P.get("correlation fitting basis"),
+            )
+        )
         lines.append("set fail_on_maxiter False")  # Psi4 hangs! Cope in the plug-in
         lines.append(f"set maxiter {P['maximum iterations']}")
         if P["density convergence"] != "default":
