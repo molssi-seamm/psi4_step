@@ -6,7 +6,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>psi4_step.psi4 &#8212; SEAMM Psi4 Plug-in 2026.11.7 documentation</title>
+    <title>psi4_step.psi4 &#8212; SEAMM Psi4 Plug-in 2026.11.7.1 documentation</title>
   
   
   
@@ -47,7 +47,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-PQXXTJ2');</script>
 <!-- End Google Tag Manager -->
 
-    <script src="../../_static/documentation_options.js?v=7bebf36f"></script>
+    <script src="../../_static/documentation_options.js?v=e733021e"></script>
     <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -61,7 +61,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2026.11.7" />
+  <meta name="docsearch:version" content="2026.11.7.1" />
   
     
     <script src="../../_static/searchtools.js"></script>
@@ -1085,13 +1085,22 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
             <span class="n">t0</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time_ns</span><span class="p">()</span>
 
+            <span class="c1"># Under a scheduler Psi4 runs in node-local scratch (in_situ=None: a</span>
+            <span class="c1"># temporary directory in $TMPDIR), with its scratch files there too;</span>
+            <span class="c1"># the job directory is often on a shared filesystem that is slow for</span>
+            <span class="c1"># the many small writes Psi4 makes (psi4_step#40). Interactively it</span>
+            <span class="c1"># runs in place, as before.</span>
+            <span class="n">env</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="k">if</span> <span class="s2">"SLURM_JOB_ID"</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span> <span class="ow">and</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"TMPDIR"</span><span class="p">):</span>
+                <span class="n">env</span><span class="p">[</span><span class="s2">"PSI_SCRATCH"</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">"TMPDIR"</span><span class="p">]</span>
             <span class="n">result</span> <span class="o">=</span> <span class="n">executor</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
                 <span class="n">cmd</span><span class="o">=</span><span class="p">[</span><span class="s2">"</span><span class="si">{code}</span><span class="s2">"</span><span class="p">],</span>
                 <span class="n">config</span><span class="o">=</span><span class="n">config</span><span class="p">,</span>
                 <span class="n">directory</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">directory</span><span class="p">,</span>
                 <span class="n">files</span><span class="o">=</span><span class="n">files</span><span class="p">,</span>
                 <span class="n">return_files</span><span class="o">=</span><span class="n">return_files</span><span class="p">,</span>
-                <span class="n">in_situ</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">in_situ</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                <span class="n">env</span><span class="o">=</span><span class="n">env</span><span class="p">,</span>
                 <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                 <span class="n">ce</span><span class="o">=</span><span class="n">ce</span><span class="p">,</span>
             <span class="p">)</span>
@@ -1145,7 +1154,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 <span class="n">ntasks</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
                 <span class="n">cpus_per_task</span><span class="o">=</span><span class="n">ce</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"NTASKS"</span><span class="p">),</span>
                 <span class="n">state</span><span class="o">=</span><span class="s2">"finished"</span> <span class="k">if</span> <span class="n">result</span> <span class="k">else</span> <span class="s2">"failed"</span><span class="p">,</span>
-                <span class="n">in_situ</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">in_situ</span><span class="o">=</span><span class="nb">bool</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"in_situ"</span><span class="p">,</span> <span class="kc">True</span><span class="p">))</span> <span class="k">if</span> <span class="n">result</span> <span class="k">else</span> <span class="kc">True</span><span class="p">,</span>
                 <span class="o">**</span><span class="n">_record_kwargs</span><span class="p">(),</span>
             <span class="p">)</span>
         <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>  <span class="c1"># pragma: no cover - must never stop the step</span>
