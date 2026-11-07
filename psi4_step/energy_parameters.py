@@ -254,6 +254,42 @@ class EnergyParameters(seamm.Parameters):
                 "Whether to freeze the core orbitals in correlated " "methods"
             ),
         },
+        "correlation integrals": {
+            "default": "default",
+            "kind": "enumeration",
+            "default_units": "",
+            "enumeration": (
+                "default",
+                "conventional",
+                "density fitting",
+                "Cholesky decomposition",
+            ),
+            "format_string": "s",
+            "description": "Correlation integrals:",
+            "help_text": (
+                "How the integrals of the correlated method are done. 'default' is "
+                "Psi4's default for the method: density fitting for MP2, MP2.5 and "
+                "MP3, conventional for the coupled-cluster methods. Density fitting "
+                "is much faster and gives analytic gradients with frozen core (via "
+                "DFOCC), but changes the energies slightly, so the model's name "
+                "starts with 'DF-'. Cholesky decomposition has no analytic "
+                "gradients."
+            ),
+        },
+        "correlation fitting basis": {
+            "applies_when": {"correlation integrals": "density fitting"},
+            "default": "default",
+            "kind": "string",
+            "default_units": "",
+            "enumeration": ("default",),
+            "format_string": "s",
+            "description": "Fitting basis:",
+            "help_text": (
+                "The auxiliary basis for the density-fitted correlation integrals "
+                "(Psi4's df_basis_cc). 'default' uses the RI basis that matches the "
+                "orbital basis, e.g. cc-pVTZ-RI for cc-pVTZ."
+            ),
+        },
         "stability analysis": {
             "default": "no",
             "kind": "boolean",
@@ -369,6 +405,14 @@ class EnergyParameters(seamm.Parameters):
                 return True
             record = self._method_record(name)
             return record is None or bool(record.get("freeze core?", False))
+        if key == "correlation integrals":
+            from .derivatives import TYPE_KEYWORD
+
+            name = values.get(self._method_key(values))
+            if self._is_expr(name):
+                return True
+            record = self._method_record(name)
+            return record is not None and record["method"] in TYPE_KEYWORD
         if key == "dispersion":
             functional_key = self._functional_key(values)
             if not self.applies(functional_key, values, _seen):
@@ -391,6 +435,9 @@ class EnergyParameters(seamm.Parameters):
         if key == "freeze-cores":
             name = values.get(self._method_key(values))
             return f"the method '{name}' does not freeze core orbitals"
+        if key == "correlation integrals":
+            name = values.get(self._method_key(values))
+            return f"the method '{name}' has no choice of correlation integrals"
         if key == "dispersion":
             functional_key = self._functional_key(values)
             if not self.applies(functional_key, values):
@@ -405,16 +452,26 @@ class EnergyParameters(seamm.Parameters):
         return ""
 
     def choices(self, key, values=None):
-        """The dispersion corrections are those of the functional."""
+        """The dispersion corrections are those of the functional; CCD needs
+        density-fitted or Cholesky-decomposed integrals."""
         if values is None:
             values = self.current_values()
         if key == "dispersion":
             return self._dispersions(values)
+        if key == "correlation integrals" and self._is_ccd(values):
+            # Psi4 has CCD only with density fitting or Cholesky decomposition
+            return ("density fitting", "Cholesky decomposition")
         return super().choices(key, values)
+
+    def _is_ccd(self, values):
+        """Whether the method is CCD."""
+        record = self._method_record(values.get(self._method_key(values)))
+        return record is not None and record["method"] == "ccd"
 
     def implied(self, values=None):
         """A functional implies a dispersion correction it has: if the current one
-        is not available, the first real correction (as the dialog chooses)."""
+        is not available, the first real correction (as the dialog chooses). CCD
+        implies density fitting unless Cholesky decomposition is chosen."""
         if values is None:
             values = self.current_values()
         result = {}
@@ -427,6 +484,9 @@ class EnergyParameters(seamm.Parameters):
                 and not self._is_expr(dispersion)
             ):
                 result["dispersion"] = dispersions[1]
+        if self.applies("correlation integrals", values) and self._is_ccd(values):
+            if values.get("correlation integrals") in ("default", "conventional"):
+                result["correlation integrals"] = "density fitting"
         return result
 
     def __init__(self, defaults={}, data=None):

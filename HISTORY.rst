@@ -1,6 +1,21 @@
 =======
 History
 =======
+2026.11.7.2 -- Density-fitted and Cholesky correlation integrals, with analytic DF gradients
+    * New "Correlation integrals" setting for MP2, MP2.5, MP3, LCCD, CCD, CCSD, CCSD(T)
+      and the orbital-optimized methods: Psi4's default for the method, conventional,
+      density fitting (with an optional fitting basis), or Cholesky decomposition.
+    * Density-fitted CCSD(T) and CCSD have analytic gradients with a frozen core, via
+      Psi4's DFOCC module, so frozen-core coupled-cluster optimizations and Hessians no
+      longer need finite differences of energies. The step uses DFOCC for the energy
+      too, so energy and gradient come from the same code.
+    * A model whose integrals differ from the method's default is named with a
+      prefix -- DF-CCSD(T)/cc-pVTZ, CD-..., CONV-MP2 -- so its results are kept apart
+      from the others.
+    * The rules for analytic gradients now cover the integrals: conventional MP2,
+      MP2.5, MP3 and LCCD gradients are all-electron only, and Cholesky-decomposed
+      integrals have none; the step then uses energies and says so.
+
 2026.11.7.1 -- Bugfix: Psi4 runs on node-local scratch under a queueing system
     * Under a queueing system such as SLURM, Psi4 now runs in a temporary directory on
       the node's local disk ($TMPDIR), with its scratch files there too, and the
