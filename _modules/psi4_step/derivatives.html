@@ -6,7 +6,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>psi4_step.derivatives &#8212; SEAMM Psi4 Plug-in 2026.11.7.1 documentation</title>
+    <title>psi4_step.derivatives &#8212; SEAMM Psi4 Plug-in 2026.11.7.2 documentation</title>
   
   
   
@@ -47,7 +47,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-PQXXTJ2');</script>
 <!-- End Google Tag Manager -->
 
-    <script src="../../_static/documentation_options.js?v=e733021e"></script>
+    <script src="../../_static/documentation_options.js?v=d0cb8874"></script>
     <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -61,7 +61,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2026.11.7.1" />
+  <meta name="docsearch:version" content="2026.11.7.2" />
   
     
     <script src="../../_static/searchtools.js"></script>
@@ -488,28 +488,32 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <h1>Source code for psi4_step.derivatives</h1><div class="highlight"><pre>
 <span></span><span class="c1"># -*- coding: utf-8 -*-</span>
 
-<span class="sd">"""Which Psi4 calculations have analytic gradients.</span>
+<span class="sd">"""Which Psi4 calculations have analytic gradients, and how the integrals are done.</span>
 
 <span class="sd">Psi4 (1.11) picks the code for a gradient from the method, the reference, the</span>
-<span class="sd">algorithm (``scf_type``, ``mp2_type``, ``mp_type``, ``cc_type``; this step leaves</span>
-<span class="sd">them at their defaults: density fitting for SCF, MP2, MP2.5 and MP3, conventional</span>
-<span class="sd">for the coupled-cluster methods and LCCD) and ``qc_module``. When no code fits, Psi4</span>
-<span class="sd">does not stop: it quietly differentiates energies instead, which for a correlated</span>
-<span class="sd">method costs many times more -- every energy of a Hessian, roughly the square of</span>
-<span class="sd">the number of coordinates. So the step decides here, writes ``qc_module`` where</span>
-<span class="sd">Psi4 needs it, asks for energies explicitly where there is no analytic gradient,</span>
-<span class="sd">and says so in the output.</span>
+<span class="sd">algorithm of the correlation integrals (``mp2_type``, ``mp_type`` or ``cc_type``:</span>
+<span class="sd">conventional, density fitted or Cholesky decomposed) and ``qc_module``. When no code</span>
+<span class="sd">fits, Psi4 does not stop: it quietly differentiates energies instead, which for a</span>
+<span class="sd">correlated method costs many times more -- every energy of a Hessian, roughly the</span>
+<span class="sd">square of the number of coordinates. So the step decides here, writes the options</span>
+<span class="sd">Psi4 needs, asks for energies explicitly where there is no analytic gradient, and</span>
+<span class="sd">says so in the output.</span>
 
-<span class="sd">The rules follow ``psi4/driver/procrouting/proc.py`` (the ``select_*_gradient``</span>
-<span class="sd">functions):</span>
+<span class="sd">The rules follow ``psi4/driver/procrouting/proc.py`` (the ``select_*`` functions):</span>
 
 <span class="sd">* conventional CCSD(T): ``ccenergy``, RHF or UHF, only with ``qc_module ccenergy``</span>
 <span class="sd">  set, and all-electron (``ccenergy`` refuses frozen core);</span>
 <span class="sd">* conventional CCSD and EOM-CCSD: ``ccenergy``, all-electron;</span>
-<span class="sd">* conventional LCCD: ``occ``, RHF or UHF, all-electron;</span>
-<span class="sd">* conventional CCD: none;</span>
-<span class="sd">* DF-MP2, DF-MP2.5, DF-MP3: RHF or UHF, frozen core or not;</span>
-<span class="sd">* the orbital-optimized methods, HF and DFT: analytic.</span>
+<span class="sd">* conventional MP2, MP2.5, MP3 and LCCD: ``occ``, RHF or UHF, all-electron;</span>
+<span class="sd">* conventional CCD: no gradient (nor energy);</span>
+<span class="sd">* density-fitted MP2, MP2.5, MP3, LCCD, CCD, CCSD and CCSD(T): RHF or UHF, frozen</span>
+<span class="sd">  core or not (``dfmp2`` or ``dfocc``). The step sets ``qc_module occ`` for</span>
+<span class="sd">  DF-CCSD and DF-CCSD(T), so that the energy comes from the same code as the</span>
+<span class="sd">  gradient (Psi4 would otherwise take an RHF energy from ``fnocc``) and UHF</span>
+<span class="sd">  DF-CCSD(T) works at all;</span>
+<span class="sd">* Cholesky-decomposed integrals: no analytic gradient for any correlated method;</span>
+<span class="sd">* the orbital-optimized methods: analytic, conventional or density fitted;</span>
+<span class="sd">* HF and DFT: analytic.</span>
 <span class="sd">"""</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span>
@@ -529,22 +533,110 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
 
 
-<span class="n">ALWAYS</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"hf"</span><span class="p">,</span> <span class="s2">"scf"</span><span class="p">,</span> <span class="s2">"dft"</span><span class="p">,</span> <span class="s2">"efp"</span><span class="p">,</span> <span class="s2">"omp2"</span><span class="p">,</span> <span class="s2">"omp3"</span><span class="p">,</span> <span class="s2">"omp2.5"</span><span class="p">,</span> <span class="s2">"olccd"</span><span class="p">,</span> <span class="s2">"oremp2"</span><span class="p">}</span>
-<span class="n">DF_RHF_UHF</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"mp2"</span><span class="p">,</span> <span class="s2">"mp2.5"</span><span class="p">,</span> <span class="s2">"mp3"</span><span class="p">}</span>  <span class="c1"># density fitted by default</span>
+<span class="n">ALWAYS</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"hf"</span><span class="p">,</span> <span class="s2">"scf"</span><span class="p">,</span> <span class="s2">"dft"</span><span class="p">,</span> <span class="s2">"efp"</span><span class="p">}</span>
+<span class="n">ORBITAL_OPTIMIZED</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"omp2"</span><span class="p">,</span> <span class="s2">"omp3"</span><span class="p">,</span> <span class="s2">"omp2.5"</span><span class="p">,</span> <span class="s2">"olccd"</span><span class="p">,</span> <span class="s2">"oremp2"</span><span class="p">}</span>
 <span class="n">CONV_ALL_ELECTRON</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="c1"># method: references with an analytic all-electron gradient</span>
+    <span class="c1"># method: references with an analytic all-electron conventional gradient</span>
+    <span class="s2">"mp2"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"rhf"</span><span class="p">,</span> <span class="s2">"uhf"</span><span class="p">},</span>
+    <span class="s2">"mp2.5"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"rhf"</span><span class="p">,</span> <span class="s2">"uhf"</span><span class="p">},</span>
+    <span class="s2">"mp3"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"rhf"</span><span class="p">,</span> <span class="s2">"uhf"</span><span class="p">},</span>
+    <span class="s2">"lccd"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"rhf"</span><span class="p">,</span> <span class="s2">"uhf"</span><span class="p">},</span>
     <span class="s2">"ccsd"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"rhf"</span><span class="p">,</span> <span class="s2">"uhf"</span><span class="p">,</span> <span class="s2">"rohf"</span><span class="p">},</span>
     <span class="s2">"eom-ccsd"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"rhf"</span><span class="p">,</span> <span class="s2">"uhf"</span><span class="p">,</span> <span class="s2">"rohf"</span><span class="p">},</span>
-    <span class="s2">"lccd"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"rhf"</span><span class="p">,</span> <span class="s2">"uhf"</span><span class="p">},</span>
     <span class="s2">"ccsd(t)"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"rhf"</span><span class="p">,</span> <span class="s2">"uhf"</span><span class="p">},</span>
 <span class="p">}</span>
+<span class="n">DF_RHF_UHF</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"mp2"</span><span class="p">,</span> <span class="s2">"mp2.5"</span><span class="p">,</span> <span class="s2">"mp3"</span><span class="p">,</span> <span class="s2">"lccd"</span><span class="p">,</span> <span class="s2">"ccd"</span><span class="p">,</span> <span class="s2">"ccsd"</span><span class="p">,</span> <span class="s2">"ccsd(t)"</span><span class="p">}</span>
 <span class="n">NEEDS_CCENERGY</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"ccsd(t)"</span><span class="p">}</span>  <span class="c1"># Psi4 routes it to ccenergy only if asked</span>
-<span class="n">NONE</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"ccd"</span><span class="p">:</span> <span class="s2">"Psi4 has an analytic CCD gradient only with density fitting"</span><span class="p">}</span>
+<span class="n">NEEDS_OCC</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"ccsd"</span><span class="p">,</span> <span class="s2">"ccsd(t)"</span><span class="p">}</span>  <span class="c1"># DF/CD: dfocc for the energy too, and for UHF</span>
+<span class="n">NONE</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"ccd"</span><span class="p">:</span> <span class="s2">"Psi4 has CCD only with density-fitted or Cholesky integrals"</span><span class="p">}</span>
+
+<span class="c1">#: The Psi4 option that sets each method's correlation integrals, and its default.</span>
+<span class="c1">#: (Psi4 treats MP2.5 and MP3 as density fitted unless mp_type is set.)</span>
+<span class="n">TYPE_KEYWORD</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">"mp2"</span><span class="p">:</span> <span class="p">(</span><span class="s2">"mp2_type"</span><span class="p">,</span> <span class="s2">"DF"</span><span class="p">),</span>
+    <span class="s2">"mp2.5"</span><span class="p">:</span> <span class="p">(</span><span class="s2">"mp_type"</span><span class="p">,</span> <span class="s2">"DF"</span><span class="p">),</span>
+    <span class="s2">"mp3"</span><span class="p">:</span> <span class="p">(</span><span class="s2">"mp_type"</span><span class="p">,</span> <span class="s2">"DF"</span><span class="p">),</span>
+    <span class="s2">"lccd"</span><span class="p">:</span> <span class="p">(</span><span class="s2">"cc_type"</span><span class="p">,</span> <span class="s2">"CONV"</span><span class="p">),</span>
+    <span class="s2">"ccd"</span><span class="p">:</span> <span class="p">(</span><span class="s2">"cc_type"</span><span class="p">,</span> <span class="s2">"CONV"</span><span class="p">),</span>
+    <span class="s2">"ccsd"</span><span class="p">:</span> <span class="p">(</span><span class="s2">"cc_type"</span><span class="p">,</span> <span class="s2">"CONV"</span><span class="p">),</span>
+    <span class="s2">"ccsd(t)"</span><span class="p">:</span> <span class="p">(</span><span class="s2">"cc_type"</span><span class="p">,</span> <span class="s2">"CONV"</span><span class="p">),</span>
+    <span class="s2">"omp2"</span><span class="p">:</span> <span class="p">(</span><span class="s2">"mp2_type"</span><span class="p">,</span> <span class="s2">"DF"</span><span class="p">),</span>
+    <span class="s2">"omp2.5"</span><span class="p">:</span> <span class="p">(</span><span class="s2">"mp_type"</span><span class="p">,</span> <span class="s2">"CONV"</span><span class="p">),</span>
+    <span class="s2">"omp3"</span><span class="p">:</span> <span class="p">(</span><span class="s2">"mp_type"</span><span class="p">,</span> <span class="s2">"CONV"</span><span class="p">),</span>
+    <span class="s2">"olccd"</span><span class="p">:</span> <span class="p">(</span><span class="s2">"cc_type"</span><span class="p">,</span> <span class="s2">"CONV"</span><span class="p">),</span>
+<span class="p">}</span>
+<span class="c1">#: The step's choices for the correlation integrals, as Psi4's values.</span>
+<span class="n">INTEGRAL_CHOICES</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">"conventional"</span><span class="p">:</span> <span class="s2">"CONV"</span><span class="p">,</span>
+    <span class="s2">"density fitting"</span><span class="p">:</span> <span class="s2">"DF"</span><span class="p">,</span>
+    <span class="s2">"Cholesky decomposition"</span><span class="p">:</span> <span class="s2">"CD"</span><span class="p">,</span>
+<span class="p">}</span>
+<span class="c1">#: How the model name shows integrals other than the method's default.</span>
+<span class="n">MODEL_PREFIX</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"CONV"</span><span class="p">:</span> <span class="s2">"CONV-"</span><span class="p">,</span> <span class="s2">"DF"</span><span class="p">:</span> <span class="s2">"DF-"</span><span class="p">,</span> <span class="s2">"CD"</span><span class="p">:</span> <span class="s2">"CD-"</span><span class="p">}</span>
+
+
+<div class="viewcode-block" id="integral_type">
+<a class="viewcode-back" href="../../api/psi4_step.html#psi4_step.derivatives.integral_type">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">integral_type</span><span class="p">(</span><span class="n">method</span><span class="p">,</span> <span class="n">choice</span><span class="o">=</span><span class="s2">"default"</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Psi4's correlation-integral type for ``method``: "CONV", "DF" or "CD".</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    method : str</span>
+<span class="sd">        Psi4's name for the method.</span>
+<span class="sd">    choice : str</span>
+<span class="sd">        The step's setting: "default" (Psi4's default for the method),</span>
+<span class="sd">        "conventional", "density fitting" or "Cholesky decomposition".</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    str or None</span>
+<span class="sd">        None for methods without correlation integrals (HF, DFT, ...).</span>
+<span class="sd">    """</span>
+    <span class="n">method</span> <span class="o">=</span> <span class="n">method</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">method</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">TYPE_KEYWORD</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="n">choice</span> <span class="ow">in</span> <span class="n">INTEGRAL_CHOICES</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">INTEGRAL_CHOICES</span><span class="p">[</span><span class="n">choice</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">TYPE_KEYWORD</span><span class="p">[</span><span class="n">method</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span></div>
+
+
+
+<div class="viewcode-block" id="model_prefix">
+<a class="viewcode-back" href="../../api/psi4_step.html#psi4_step.derivatives.model_prefix">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">model_prefix</span><span class="p">(</span><span class="n">method</span><span class="p">,</span> <span class="n">choice</span><span class="o">=</span><span class="s2">"default"</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""The prefix for the model name ("DF-", "CD-", "CONV-") when the integrals are</span>
+<span class="sd">    not the method's default, so results of different integrals are kept apart."""</span>
+    <span class="n">method</span> <span class="o">=</span> <span class="n">method</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+    <span class="n">integrals</span> <span class="o">=</span> <span class="n">integral_type</span><span class="p">(</span><span class="n">method</span><span class="p">,</span> <span class="n">choice</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">integrals</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">integrals</span> <span class="o">==</span> <span class="n">TYPE_KEYWORD</span><span class="p">[</span><span class="n">method</span><span class="p">][</span><span class="mi">1</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="s2">""</span>
+    <span class="k">return</span> <span class="n">MODEL_PREFIX</span><span class="p">[</span><span class="n">integrals</span><span class="p">]</span></div>
+
+
+
+<div class="viewcode-block" id="integral_options">
+<a class="viewcode-back" href="../../api/psi4_step.html#psi4_step.derivatives.integral_options">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">integral_options</span><span class="p">(</span><span class="n">method</span><span class="p">,</span> <span class="n">reference</span><span class="p">,</span> <span class="n">choice</span><span class="o">=</span><span class="s2">"default"</span><span class="p">,</span> <span class="n">fitting_basis</span><span class="o">=</span><span class="s2">"default"</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""The Psi4 'set' lines for the correlation integrals of ``method``."""</span>
+    <span class="n">method</span> <span class="o">=</span> <span class="n">method</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+    <span class="n">integrals</span> <span class="o">=</span> <span class="n">integral_type</span><span class="p">(</span><span class="n">method</span><span class="p">,</span> <span class="n">choice</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">integrals</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">[]</span>
+    <span class="n">lines</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">if</span> <span class="n">choice</span> <span class="ow">in</span> <span class="n">INTEGRAL_CHOICES</span><span class="p">:</span>
+        <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">"set </span><span class="si">{</span><span class="n">TYPE_KEYWORD</span><span class="p">[</span><span class="n">method</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">integrals</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">integrals</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">"DF"</span><span class="p">,</span> <span class="s2">"CD"</span><span class="p">)</span> <span class="ow">and</span> <span class="n">method</span> <span class="ow">in</span> <span class="n">NEEDS_OCC</span><span class="p">:</span>
+        <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">"set qc_module occ"</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">integrals</span> <span class="o">==</span> <span class="s2">"DF"</span> <span class="ow">and</span> <span class="n">fitting_basis</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">"default"</span><span class="p">,</span> <span class="s2">""</span><span class="p">,</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">"set df_basis_cc </span><span class="si">{</span><span class="n">fitting_basis</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">lines</span></div>
+
 
 
 <div class="viewcode-block" id="gradient_route">
 <a class="viewcode-back" href="../../api/psi4_step.html#psi4_step.derivatives.gradient_route">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">gradient_route</span><span class="p">(</span><span class="n">method</span><span class="p">,</span> <span class="n">reference</span><span class="p">,</span> <span class="n">frozen_core</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">gradient_route</span><span class="p">(</span><span class="n">method</span><span class="p">,</span> <span class="n">reference</span><span class="p">,</span> <span class="n">frozen_core</span><span class="p">,</span> <span class="n">integrals</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">"""The route Psi4 takes to the gradient of ``method``.</span>
 
 <span class="sd">    Parameters</span>
@@ -555,6 +647,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <span class="sd">        "rhf", "uhf", "rohf", "rks" or "uks".</span>
 <span class="sd">    frozen_core : bool</span>
 <span class="sd">        Whether the core orbitals are frozen.</span>
+<span class="sd">    integrals : str, optional</span>
+<span class="sd">        "CONV", "DF" or "CD" (see :func:`integral_type`); by default Psi4's</span>
+<span class="sd">        default for the method.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -564,7 +659,19 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     <span class="n">reference</span> <span class="o">=</span> <span class="n">reference</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
     <span class="k">if</span> <span class="n">method</span> <span class="ow">in</span> <span class="n">ALWAYS</span> <span class="ow">or</span> <span class="n">reference</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">"rks"</span><span class="p">,</span> <span class="s2">"uks"</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">GradientRoute</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">method</span> <span class="ow">in</span> <span class="n">DF_RHF_UHF</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">integrals</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">integrals</span> <span class="o">=</span> <span class="n">integral_type</span><span class="p">(</span><span class="n">method</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">integrals</span> <span class="o">==</span> <span class="s2">"CD"</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">GradientRoute</span><span class="p">(</span>
+            <span class="kc">False</span><span class="p">,</span>
+            <span class="n">reason</span><span class="o">=</span><span class="p">(</span>
+                <span class="s2">"Psi4 has no analytic gradients with Cholesky-decomposed "</span>
+                <span class="s2">"integrals; use density fitting for analytic gradients"</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+    <span class="k">if</span> <span class="n">method</span> <span class="ow">in</span> <span class="n">ORBITAL_OPTIMIZED</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">GradientRoute</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">integrals</span> <span class="o">==</span> <span class="s2">"DF"</span> <span class="ow">and</span> <span class="n">method</span> <span class="ow">in</span> <span class="n">DF_RHF_UHF</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">reference</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">"rhf"</span><span class="p">,</span> <span class="s2">"uhf"</span><span class="p">):</span>
             <span class="k">return</span> <span class="n">GradientRoute</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">GradientRoute</span><span class="p">(</span>
@@ -579,11 +686,17 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 <span class="n">reason</span><span class="o">=</span><span class="sa">f</span><span class="s2">"Psi4 has no analytic </span><span class="si">{</span><span class="n">reference</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span><span class="si">}</span><span class="s2"> gradient for it"</span><span class="p">,</span>
             <span class="p">)</span>
         <span class="k">if</span> <span class="n">frozen_core</span><span class="p">:</span>
+            <span class="n">extra</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="s2">", or density-fitted integrals, which allow a frozen core"</span>
+                <span class="k">if</span> <span class="n">method</span> <span class="ow">in</span> <span class="n">DF_RHF_UHF</span>
+                <span class="k">else</span> <span class="s2">""</span>
+            <span class="p">)</span>
             <span class="k">return</span> <span class="n">GradientRoute</span><span class="p">(</span>
                 <span class="kc">False</span><span class="p">,</span>
                 <span class="n">reason</span><span class="o">=</span><span class="p">(</span>
-                    <span class="s2">"Psi4's analytic gradient for it is all-electron only; set "</span>
-                    <span class="s2">"'Freeze core orbitals' to 'no' for analytic gradients"</span>
+                    <span class="s2">"Psi4's analytic gradient for it with conventional integrals is "</span>
+                    <span class="s2">"all-electron only; set 'Freeze core orbitals' to 'no' for "</span>
+                    <span class="sa">f</span><span class="s2">"analytic gradients</span><span class="si">{</span><span class="n">extra</span><span class="si">}</span><span class="s2">"</span>
                 <span class="p">),</span>
             <span class="p">)</span>
         <span class="n">options</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"set qc_module ccenergy"</span><span class="p">]</span> <span class="k">if</span> <span class="n">method</span> <span class="ow">in</span> <span class="n">NEEDS_CCENERGY</span> <span class="k">else</span> <span class="p">[]</span>

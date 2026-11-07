@@ -7,7 +7,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>User Guide &#8212; SEAMM Psi4 Plug-in 2026.11.7.1 documentation</title>
+    <title>User Guide &#8212; SEAMM Psi4 Plug-in 2026.11.7.2 documentation</title>
   
   
   
@@ -48,7 +48,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-PQXXTJ2');</script>
 <!-- End Google Tag Manager -->
 
-    <script src="../_static/documentation_options.js?v=e733021e"></script>
+    <script src="../_static/documentation_options.js?v=d0cb8874"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -64,7 +64,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2026.11.7.1" />
+  <meta name="docsearch:version" content="2026.11.7.2" />
   
     
     <script src="../_static/searchtools.js"></script>
@@ -523,6 +523,32 @@ settings. Thermochemistry’s plots apply only when it uses its own settings rat
 the previous step’s; placed right after Initialization, where there is no previous
 calculation, it always uses its own.</p>
 </section>
+<section id="correlation-integrals">
+<h2>Correlation integrals<a class="headerlink" href="#correlation-integrals" title="Link to this heading">#</a></h2>
+<p>For MP2, MP2.5, MP3, LCCD, CCD, CCSD, CCSD(T) and the orbital-optimized methods,
+“Correlation integrals” chooses how the integrals of the correlated method are done:</p>
+<ul class="simple">
+<li><p><strong>default</strong>: Psi4’s default for the method – density fitted for MP2, MP2.5 and
+MP3, conventional for LCCD and the coupled-cluster methods.</p></li>
+<li><p><strong>conventional</strong>: exact four-index integrals.</p></li>
+<li><p><strong>density fitting</strong>: much faster and lighter on memory, and the only way to get
+analytic coupled-cluster gradients with a frozen core (Psi4’s DFOCC module). The
+energies differ slightly from conventional ones – of the order of tens of
+microhartree per atom in total energies with the matching fitting basis, largely
+cancelling in relative energies – so it is a different model: its name starts with <code class="docutils literal notranslate"><span class="pre">DF-</span></code> (e.g. <code class="docutils literal notranslate"><span class="pre">DF-CCSD(T)/cc-pVTZ</span></code>) and its results are
+stored under that name, apart from conventional ones. “Fitting basis” is the
+auxiliary basis (Psi4’s <code class="docutils literal notranslate"><span class="pre">df_basis_cc</span></code>); <code class="docutils literal notranslate"><span class="pre">default</span></code> uses the RI basis matching
+the orbital basis, e.g. cc-pVTZ-RI. The SCF is density fitted too, as it is by
+default.</p></li>
+<li><p><strong>Cholesky decomposition</strong>: like density fitting with an automatically built
+auxiliary basis, but with no analytic gradients.</p></li>
+</ul>
+<p>A model whose integrals are not the method’s default gets a prefix: <code class="docutils literal notranslate"><span class="pre">DF-</span></code>,
+<code class="docutils literal notranslate"><span class="pre">CD-</span></code>, or <code class="docutils literal notranslate"><span class="pre">CONV-</span></code> (e.g. conventional MP2 is <code class="docutils literal notranslate"><span class="pre">CONV-MP2</span></code>). CCD exists in Psi4 only
+with density fitting or Cholesky decomposition, so the dialog offers only those.</p>
+<p>For DF-CCSD and DF-CCSD(T) the step tells Psi4 to use DFOCC for the energy as well as
+the gradient, so both come from the same code, and UHF DF-CCSD(T) works.</p>
+</section>
 <section id="gradients-and-hessians">
 <h2>Gradients and Hessians<a class="headerlink" href="#gradients-and-hessians" title="Link to this heading">#</a></h2>
 <p>Optimizations and Thermochemistry need gradients. Psi4 has analytic gradients for most
@@ -531,20 +557,25 @@ correlated method costs many more calculations: a Hessian needs roughly the squa
 the number of coordinates. The step decides which applies, asks Psi4 for it
 explicitly, and says so in the output when energies are used:</p>
 <ul class="simple">
-<li><p><strong>CCSD(T), CCSD, EOM-CCSD and LCCD</strong> (conventional, the default algorithm) have
-analytic gradients only for <strong>all-electron</strong> calculations, RHF or UHF (CCSD and
-EOM-CCSD also ROHF). Set “Freeze core orbitals” to “no” for analytic gradients; with
-the core frozen, gradients and Hessians come from energies. For CCSD(T) the step
-also tells Psi4 to use its <code class="docutils literal notranslate"><span class="pre">ccenergy</span></code> module, without which Psi4 used energies
-even for all-electron calculations (before version 2026.11.7 of this step).</p></li>
-<li><p><strong>CCD</strong> has no analytic conventional gradient.</p></li>
-<li><p><strong>MP2, MP2.5 and MP3</strong> (density fitted, the default) have analytic gradients for RHF
-and UHF, with or without a frozen core; the orbital-optimized methods, HF and DFT
-have them too.</p></li>
+<li><p><strong>Conventional CCSD(T), CCSD, EOM-CCSD, LCCD, MP2, MP2.5 and MP3</strong> have analytic
+gradients only for <strong>all-electron</strong> calculations, RHF or UHF (CCSD and EOM-CCSD
+also ROHF). Set “Freeze core orbitals” to “no” for analytic gradients, or use
+density fitting; with the core frozen and conventional integrals, gradients and
+Hessians come from energies. For CCSD(T) the step also tells Psi4 to use its
+<code class="docutils literal notranslate"><span class="pre">ccenergy</span></code> module, without which Psi4 used energies even for all-electron
+calculations (before version 2026.11.7 of this step).</p></li>
+<li><p><strong>Density-fitted MP2, MP2.5, MP3, LCCD, CCD, CCSD and CCSD(T)</strong> have analytic
+gradients for RHF and UHF, with or without a frozen core. Frozen-core
+DF-CCSD(T) is the affordable route to coupled-cluster Hessians.</p></li>
+<li><p><strong>Cholesky-decomposed</strong> integrals have no analytic gradients for any correlated
+method.</p></li>
+<li><p>The orbital-optimized methods (conventional or density fitted), HF and DFT have
+analytic gradients.</p></li>
 </ul>
 <p>Psi4 has analytic Hessians only for HF (and LDA functionals), so Thermochemistry finds
 the Hessian by finite differences of gradients, using the molecule’s symmetry to reduce
-the number of displaced geometries.</p>
+the number of displaced geometries. With “use existing parameters”, Thermochemistry
+uses the previous step’s settings, including its correlation integrals.</p>
 </section>
 <section id="index">
 <h2>Index<a class="headerlink" href="#index" title="Link to this heading">#</a></h2>
@@ -602,6 +633,7 @@ the number of displaced geometries.</p>
   <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="pst-show_toc_level nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#settings-that-depend-on-each-other">Settings that depend on each other</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#correlation-integrals">Correlation integrals</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#gradients-and-hessians">Gradients and Hessians</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#index">Index</a></li>
 </ul>

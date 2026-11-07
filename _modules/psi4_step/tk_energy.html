@@ -6,7 +6,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>psi4_step.tk_energy &#8212; SEAMM Psi4 Plug-in 2026.11.7.1 documentation</title>
+    <title>psi4_step.tk_energy &#8212; SEAMM Psi4 Plug-in 2026.11.7.2 documentation</title>
   
   
   
@@ -47,7 +47,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-PQXXTJ2');</script>
 <!-- End Google Tag Manager -->
 
-    <script src="../../_static/documentation_options.js?v=e733021e"></script>
+    <script src="../../_static/documentation_options.js?v=d0cb8874"></script>
     <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -61,7 +61,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2026.11.7.1" />
+  <meta name="docsearch:version" content="2026.11.7.2" />
   
     
     <script src="../../_static/searchtools.js"></script>
@@ -589,6 +589,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             <span class="s2">"dispersion"</span><span class="p">,</span>
             <span class="s2">"spin-restricted"</span><span class="p">,</span>
             <span class="s2">"freeze-cores"</span><span class="p">,</span>
+            <span class="s2">"correlation integrals"</span><span class="p">,</span>
+            <span class="s2">"correlation fitting basis"</span><span class="p">,</span>
             <span class="s2">"stability analysis"</span><span class="p">,</span>
         <span class="p">):</span>
             <span class="bp">self</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">P</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">widget</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="s2">"calculation"</span><span class="p">])</span>
@@ -623,6 +625,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             <span class="s2">"&lt;&lt;ComboboxSelected&gt;&gt;"</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">reset_calculation</span>
         <span class="p">)</span>
         <span class="bp">self</span><span class="p">[</span><span class="s2">"advanced_method"</span><span class="p">]</span><span class="o">.</span><span class="n">combobox</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span class="s2">"&lt;Return&gt;"</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">reset_calculation</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="p">[</span><span class="s2">"correlation integrals"</span><span class="p">]</span><span class="o">.</span><span class="n">combobox</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span>
+            <span class="s2">"&lt;&lt;ComboboxSelected&gt;&gt;"</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">reset_calculation</span>
+        <span class="p">)</span>
         <span class="bp">self</span><span class="p">[</span><span class="s2">"advanced_method"</span><span class="p">]</span><span class="o">.</span><span class="n">combobox</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span class="s2">"&lt;FocusOut&gt;"</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">reset_calculation</span><span class="p">)</span>
 
         <span class="c1"># The dispersion corrections offered depend on the functional</span>
@@ -738,7 +744,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <span class="n">row</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="bp">self</span><span class="p">[</span><span class="s2">"level"</span><span class="p">]</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">row</span><span class="o">=</span><span class="n">row</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">columnspan</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">sticky</span><span class="o">=</span><span class="n">tk</span><span class="o">.</span><span class="n">EW</span><span class="p">)</span>
         <span class="n">row</span> <span class="o">+=</span> <span class="mi">1</span>
-        <span class="n">is_dft</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="k">for</span> <span class="n">method</span><span class="p">,</span> <span class="n">functional</span> <span class="ow">in</span> <span class="p">(</span>
             <span class="p">(</span><span class="s2">"method"</span><span class="p">,</span> <span class="s2">"functional"</span><span class="p">),</span>
             <span class="p">(</span><span class="s2">"advanced_method"</span><span class="p">,</span> <span class="s2">"advanced_functional"</span><span class="p">),</span>
@@ -749,13 +754,30 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             <span class="n">widgets</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="n">method</span><span class="p">])</span>
             <span class="n">row</span> <span class="o">+=</span> <span class="mi">1</span>
             <span class="k">if</span> <span class="n">applies</span><span class="p">(</span><span class="n">functional</span><span class="p">):</span>
-                <span class="n">is_dft</span> <span class="o">=</span> <span class="kc">True</span>
                 <span class="bp">self</span><span class="p">[</span><span class="n">functional</span><span class="p">]</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">row</span><span class="o">=</span><span class="n">row</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">sticky</span><span class="o">=</span><span class="n">tk</span><span class="o">.</span><span class="n">EW</span><span class="p">)</span>
                 <span class="n">widgets2</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="n">functional</span><span class="p">])</span>
                 <span class="n">row</span> <span class="o">+=</span> <span class="mi">1</span>
             <span class="k">if</span> <span class="n">applies</span><span class="p">(</span><span class="s2">"freeze-cores"</span><span class="p">):</span>
                 <span class="bp">self</span><span class="p">[</span><span class="s2">"freeze-cores"</span><span class="p">]</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">row</span><span class="o">=</span><span class="n">row</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">sticky</span><span class="o">=</span><span class="n">tk</span><span class="o">.</span><span class="n">EW</span><span class="p">)</span>
                 <span class="n">widgets2</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="s2">"freeze-cores"</span><span class="p">])</span>
+                <span class="n">row</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">if</span> <span class="n">applies</span><span class="p">(</span><span class="s2">"correlation integrals"</span><span class="p">):</span>
+                <span class="c1"># CCD offers only density fitting or Cholesky decomposition</span>
+                <span class="n">w</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="s2">"correlation integrals"</span><span class="p">]</span>
+                <span class="n">allowed</span> <span class="o">=</span> <span class="n">P</span><span class="o">.</span><span class="n">choices</span><span class="p">(</span><span class="s2">"correlation integrals"</span><span class="p">,</span> <span class="n">values</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">allowed</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">allowed</span> <span class="o">=</span> <span class="n">P</span><span class="p">[</span><span class="s2">"correlation integrals"</span><span class="p">]</span><span class="o">.</span><span class="n">enumeration</span>
+                <span class="n">w</span><span class="o">.</span><span class="n">config</span><span class="p">(</span><span class="n">values</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">allowed</span><span class="p">))</span>
+                <span class="n">implied</span> <span class="o">=</span> <span class="n">P</span><span class="o">.</span><span class="n">implied</span><span class="p">(</span><span class="n">values</span><span class="p">)</span>
+                <span class="k">if</span> <span class="s2">"correlation integrals"</span> <span class="ow">in</span> <span class="n">implied</span><span class="p">:</span>
+                    <span class="n">w</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">implied</span><span class="p">[</span><span class="s2">"correlation integrals"</span><span class="p">])</span>
+                    <span class="n">values</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_widget_values</span><span class="p">()</span>
+                <span class="n">w</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">row</span><span class="o">=</span><span class="n">row</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">sticky</span><span class="o">=</span><span class="n">tk</span><span class="o">.</span><span class="n">EW</span><span class="p">)</span>
+                <span class="n">widgets2</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">w</span><span class="p">)</span>
+                <span class="n">row</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">if</span> <span class="n">applies</span><span class="p">(</span><span class="s2">"correlation fitting basis"</span><span class="p">):</span>
+                <span class="bp">self</span><span class="p">[</span><span class="s2">"correlation fitting basis"</span><span class="p">]</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">row</span><span class="o">=</span><span class="n">row</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">sticky</span><span class="o">=</span><span class="n">tk</span><span class="o">.</span><span class="n">EW</span><span class="p">)</span>
+                <span class="n">widgets2</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="s2">"correlation fitting basis"</span><span class="p">])</span>
                 <span class="n">row</span> <span class="o">+=</span> <span class="mi">1</span>
         <span class="k">if</span> <span class="n">applies</span><span class="p">(</span><span class="s2">"dispersion"</span><span class="p">):</span>
             <span class="c1"># Offer only the functional's dispersion corrections, keeping the</span>
@@ -771,7 +793,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             <span class="n">w</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">row</span><span class="o">=</span><span class="n">row</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">sticky</span><span class="o">=</span><span class="n">tk</span><span class="o">.</span><span class="n">W</span><span class="p">)</span>
             <span class="n">widgets2</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">w</span><span class="p">)</span>
             <span class="n">row</span> <span class="o">+=</span> <span class="mi">1</span>
-        <span class="k">if</span> <span class="n">is_dft</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">widgets2</span><span class="p">:</span>
             <span class="n">sw</span><span class="o">.</span><span class="n">align_labels</span><span class="p">(</span><span class="n">widgets2</span><span class="p">)</span>
             <span class="n">frame</span><span class="o">.</span><span class="n">columnconfigure</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">minsize</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">"spin-restricted"</span><span class="p">,</span> <span class="s2">"stability analysis"</span><span class="p">):</span>

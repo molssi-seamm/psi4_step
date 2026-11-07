@@ -6,7 +6,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>psi4_step.energy_parameters &#8212; SEAMM Psi4 Plug-in 2026.11.7.1 documentation</title>
+    <title>psi4_step.energy_parameters &#8212; SEAMM Psi4 Plug-in 2026.11.7.2 documentation</title>
   
   
   
@@ -47,7 +47,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-PQXXTJ2');</script>
 <!-- End Google Tag Manager -->
 
-    <script src="../../_static/documentation_options.js?v=e733021e"></script>
+    <script src="../../_static/documentation_options.js?v=d0cb8874"></script>
     <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -61,7 +61,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2026.11.7.1" />
+  <meta name="docsearch:version" content="2026.11.7.2" />
   
     
     <script src="../../_static/searchtools.js"></script>
@@ -744,6 +744,42 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 <span class="s2">"Whether to freeze the core orbitals in correlated "</span> <span class="s2">"methods"</span>
             <span class="p">),</span>
         <span class="p">},</span>
+        <span class="s2">"correlation integrals"</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">"default"</span><span class="p">:</span> <span class="s2">"default"</span><span class="p">,</span>
+            <span class="s2">"kind"</span><span class="p">:</span> <span class="s2">"enumeration"</span><span class="p">,</span>
+            <span class="s2">"default_units"</span><span class="p">:</span> <span class="s2">""</span><span class="p">,</span>
+            <span class="s2">"enumeration"</span><span class="p">:</span> <span class="p">(</span>
+                <span class="s2">"default"</span><span class="p">,</span>
+                <span class="s2">"conventional"</span><span class="p">,</span>
+                <span class="s2">"density fitting"</span><span class="p">,</span>
+                <span class="s2">"Cholesky decomposition"</span><span class="p">,</span>
+            <span class="p">),</span>
+            <span class="s2">"format_string"</span><span class="p">:</span> <span class="s2">"s"</span><span class="p">,</span>
+            <span class="s2">"description"</span><span class="p">:</span> <span class="s2">"Correlation integrals:"</span><span class="p">,</span>
+            <span class="s2">"help_text"</span><span class="p">:</span> <span class="p">(</span>
+                <span class="s2">"How the integrals of the correlated method are done. 'default' is "</span>
+                <span class="s2">"Psi4's default for the method: density fitting for MP2, MP2.5 and "</span>
+                <span class="s2">"MP3, conventional for the coupled-cluster methods. Density fitting "</span>
+                <span class="s2">"is much faster and gives analytic gradients with frozen core (via "</span>
+                <span class="s2">"DFOCC), but changes the energies slightly, so the model's name "</span>
+                <span class="s2">"starts with 'DF-'. Cholesky decomposition has no analytic "</span>
+                <span class="s2">"gradients."</span>
+            <span class="p">),</span>
+        <span class="p">},</span>
+        <span class="s2">"correlation fitting basis"</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">"applies_when"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"correlation integrals"</span><span class="p">:</span> <span class="s2">"density fitting"</span><span class="p">},</span>
+            <span class="s2">"default"</span><span class="p">:</span> <span class="s2">"default"</span><span class="p">,</span>
+            <span class="s2">"kind"</span><span class="p">:</span> <span class="s2">"string"</span><span class="p">,</span>
+            <span class="s2">"default_units"</span><span class="p">:</span> <span class="s2">""</span><span class="p">,</span>
+            <span class="s2">"enumeration"</span><span class="p">:</span> <span class="p">(</span><span class="s2">"default"</span><span class="p">,),</span>
+            <span class="s2">"format_string"</span><span class="p">:</span> <span class="s2">"s"</span><span class="p">,</span>
+            <span class="s2">"description"</span><span class="p">:</span> <span class="s2">"Fitting basis:"</span><span class="p">,</span>
+            <span class="s2">"help_text"</span><span class="p">:</span> <span class="p">(</span>
+                <span class="s2">"The auxiliary basis for the density-fitted correlation integrals "</span>
+                <span class="s2">"(Psi4's df_basis_cc). 'default' uses the RI basis that matches the "</span>
+                <span class="s2">"orbital basis, e.g. cc-pVTZ-RI for cc-pVTZ."</span>
+            <span class="p">),</span>
+        <span class="p">},</span>
         <span class="s2">"stability analysis"</span><span class="p">:</span> <span class="p">{</span>
             <span class="s2">"default"</span><span class="p">:</span> <span class="s2">"no"</span><span class="p">,</span>
             <span class="s2">"kind"</span><span class="p">:</span> <span class="s2">"boolean"</span><span class="p">,</span>
@@ -861,6 +897,14 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 <span class="k">return</span> <span class="kc">True</span>
             <span class="n">record</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_method_record</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
             <span class="k">return</span> <span class="n">record</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="nb">bool</span><span class="p">(</span><span class="n">record</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"freeze core?"</span><span class="p">,</span> <span class="kc">False</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">"correlation integrals"</span><span class="p">:</span>
+            <span class="kn">from</span><span class="w"> </span><span class="nn">.derivatives</span><span class="w"> </span><span class="kn">import</span> <span class="n">TYPE_KEYWORD</span>
+
+            <span class="n">name</span> <span class="o">=</span> <span class="n">values</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_method_key</span><span class="p">(</span><span class="n">values</span><span class="p">))</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_expr</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
+                <span class="k">return</span> <span class="kc">True</span>
+            <span class="n">record</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_method_record</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">record</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">record</span><span class="p">[</span><span class="s2">"method"</span><span class="p">]</span> <span class="ow">in</span> <span class="n">TYPE_KEYWORD</span>
         <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">"dispersion"</span><span class="p">:</span>
             <span class="n">functional_key</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_functional_key</span><span class="p">(</span><span class="n">values</span><span class="p">)</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">applies</span><span class="p">(</span><span class="n">functional_key</span><span class="p">,</span> <span class="n">values</span><span class="p">,</span> <span class="n">_seen</span><span class="p">):</span>
@@ -886,6 +930,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">"freeze-cores"</span><span class="p">:</span>
             <span class="n">name</span> <span class="o">=</span> <span class="n">values</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_method_key</span><span class="p">(</span><span class="n">values</span><span class="p">))</span>
             <span class="k">return</span> <span class="sa">f</span><span class="s2">"the method '</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">' does not freeze core orbitals"</span>
+        <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">"correlation integrals"</span><span class="p">:</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="n">values</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_method_key</span><span class="p">(</span><span class="n">values</span><span class="p">))</span>
+            <span class="k">return</span> <span class="sa">f</span><span class="s2">"the method '</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">' has no choice of correlation integrals"</span>
         <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">"dispersion"</span><span class="p">:</span>
             <span class="n">functional_key</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_functional_key</span><span class="p">(</span><span class="n">values</span><span class="p">)</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">applies</span><span class="p">(</span><span class="n">functional_key</span><span class="p">,</span> <span class="n">values</span><span class="p">):</span>
@@ -903,19 +950,29 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <div class="viewcode-block" id="EnergyParameters.choices">
 <a class="viewcode-back" href="../../api/psi4_step.html#psi4_step.energy_parameters.EnergyParameters.choices">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">choices</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">values</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">"""The dispersion corrections are those of the functional."""</span>
+<span class="w">        </span><span class="sd">"""The dispersion corrections are those of the functional; CCD needs</span>
+<span class="sd">        density-fitted or Cholesky-decomposed integrals."""</span>
         <span class="k">if</span> <span class="n">values</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">values</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_values</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">"dispersion"</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dispersions</span><span class="p">(</span><span class="n">values</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">"correlation integrals"</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_ccd</span><span class="p">(</span><span class="n">values</span><span class="p">):</span>
+            <span class="c1"># Psi4 has CCD only with density fitting or Cholesky decomposition</span>
+            <span class="k">return</span> <span class="p">(</span><span class="s2">"density fitting"</span><span class="p">,</span> <span class="s2">"Cholesky decomposition"</span><span class="p">)</span>
         <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">choices</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">values</span><span class="p">)</span></div>
 
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_is_ccd</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">values</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Whether the method is CCD."""</span>
+        <span class="n">record</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_method_record</span><span class="p">(</span><span class="n">values</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_method_key</span><span class="p">(</span><span class="n">values</span><span class="p">)))</span>
+        <span class="k">return</span> <span class="n">record</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">record</span><span class="p">[</span><span class="s2">"method"</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"ccd"</span>
 
 <div class="viewcode-block" id="EnergyParameters.implied">
 <a class="viewcode-back" href="../../api/psi4_step.html#psi4_step.energy_parameters.EnergyParameters.implied">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">implied</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">values</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">"""A functional implies a dispersion correction it has: if the current one</span>
-<span class="sd">        is not available, the first real correction (as the dialog chooses)."""</span>
+<span class="sd">        is not available, the first real correction (as the dialog chooses). CCD</span>
+<span class="sd">        implies density fitting unless Cholesky decomposition is chosen."""</span>
         <span class="k">if</span> <span class="n">values</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">values</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_values</span><span class="p">()</span>
         <span class="n">result</span> <span class="o">=</span> <span class="p">{}</span>
@@ -928,6 +985,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_expr</span><span class="p">(</span><span class="n">dispersion</span><span class="p">)</span>
             <span class="p">):</span>
                 <span class="n">result</span><span class="p">[</span><span class="s2">"dispersion"</span><span class="p">]</span> <span class="o">=</span> <span class="n">dispersions</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">applies</span><span class="p">(</span><span class="s2">"correlation integrals"</span><span class="p">,</span> <span class="n">values</span><span class="p">)</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_ccd</span><span class="p">(</span><span class="n">values</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">values</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"correlation integrals"</span><span class="p">)</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">"default"</span><span class="p">,</span> <span class="s2">"conventional"</span><span class="p">):</span>
+                <span class="n">result</span><span class="p">[</span><span class="s2">"correlation integrals"</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"density fitting"</span>
         <span class="k">return</span> <span class="n">result</span></div>
 
 

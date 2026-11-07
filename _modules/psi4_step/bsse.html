@@ -6,7 +6,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>psi4_step.bsse &#8212; SEAMM Psi4 Plug-in 2026.11.7.1 documentation</title>
+    <title>psi4_step.bsse &#8212; SEAMM Psi4 Plug-in 2026.11.7.2 documentation</title>
   
   
   
@@ -47,7 +47,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-PQXXTJ2');</script>
 <!-- End Google Tag Manager -->
 
-    <script src="../../_static/documentation_options.js?v=e733021e"></script>
+    <script src="../../_static/documentation_options.js?v=d0cb8874"></script>
     <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -61,7 +61,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2026.11.7.1" />
+  <meta name="docsearch:version" content="2026.11.7.2" />
   
     
     <script src="../../_static/searchtools.js"></script>
@@ -518,6 +518,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <span class="kn">from</span><span class="w"> </span><span class="nn">tabulate</span><span class="w"> </span><span class="kn">import</span> <span class="n">tabulate</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">psi4_step</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">psi4_step.derivatives</span><span class="w"> </span><span class="kn">import</span> <span class="n">integral_options</span><span class="p">,</span> <span class="n">model_prefix</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">seamm</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">seamm_bsse</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">seamm_util</span><span class="w"> </span><span class="kn">import</span> <span class="n">Q_</span>
@@ -760,7 +761,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">"dft"</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">functional</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">basis_set</span><span class="si">}</span><span class="s2">"</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">method</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">basis_set</span><span class="si">}</span><span class="s2">"</span>
+                <span class="n">prefix</span> <span class="o">=</span> <span class="n">model_prefix</span><span class="p">(</span><span class="n">method</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">integral_choice</span><span class="p">(</span><span class="n">P</span><span class="p">))</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">prefix</span><span class="si">}{</span><span class="n">method</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">basis_set</span><span class="si">}</span><span class="s2">"</span>
 
         <span class="n">want_gradient</span> <span class="o">=</span> <span class="n">P</span><span class="p">[</span><span class="s2">"compute gradient"</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"yes"</span>
 
@@ -782,6 +784,14 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">"set freeze_core True"</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">"set freeze_core False"</span><span class="p">)</span>
+        <span class="n">lines</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span>
+            <span class="n">integral_options</span><span class="p">(</span>
+                <span class="n">method</span><span class="p">,</span>
+                <span class="n">reference</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">integral_choice</span><span class="p">(</span><span class="n">P</span><span class="p">),</span>
+                <span class="n">P</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"correlation fitting basis"</span><span class="p">),</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
         <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">"set fail_on_maxiter False"</span><span class="p">)</span>  <span class="c1"># Psi4 hangs! Cope in the plug-in</span>
         <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">"set maxiter </span><span class="si">{</span><span class="n">P</span><span class="p">[</span><span class="s1">'maximum iterations'</span><span class="p">]</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">P</span><span class="p">[</span><span class="s2">"density convergence"</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">"default"</span><span class="p">:</span>
