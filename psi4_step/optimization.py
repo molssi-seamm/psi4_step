@@ -69,7 +69,13 @@ class Optimization(psi4_step.Energy):
             # Use cclib to get results. Note the file is one level up.
             path = directory.parent / "output.dat"
             if path.exists():
-                data = vars(cclib.io.ccread(path))
+                try:
+                    data = vars(cclib.io.ccread(path))
+                except Exception as e:
+                    # e.g. a Psi4 version string cclib cannot parse; the results
+                    # in properties.json are still read below.
+                    logger.warning(f"cclib could not read {path}: {e}")
+                    data = {}
                 data = self.process_data(data)
             else:
                 data = {}

@@ -19,6 +19,7 @@ from tabulate import tabulate
 
 from molsystem import elements
 import psi4_step
+from psi4_step.derivatives import gradient_route
 import seamm
 import seamm.data
 from seamm_util import Q_, units_class
@@ -704,36 +705,37 @@ class Energy(seamm.Node):
         # lines.append('set scf_type df')
         # lines.append('set guess sad')
 
-        multiplicity = configuration.spin_multiplicity
-        spin_restricted = P["spin-restricted"]
-        if spin_restricted == "default":
-            if multiplicity == 1:
-                restricted = True
-            else:
-                restricted = False
-        elif spin_restricted == "yes":
-            restricted = True
-        else:
-            restricted = False
+        reference = self.reference(method, P, configuration)
+        lines.append(f"set reference {reference}")
 
-        if method == "dft":
-            if restricted:
-                lines.append("set reference rks")
-            else:
-                lines.append("set reference uks")
-        else:
-            if restricted:
-                if multiplicity == 1:
-                    lines.append("set reference rhf")
-                else:
-                    lines.append("set reference rohf")
-            else:
-                lines.append("set reference uhf")
-
-        if "freeze-cores" in P and P["freeze-cores"] == "yes":
+        frozen_core = "freeze-cores" in P and P["freeze-cores"] == "yes"
+        if frozen_core:
             lines.append("set freeze_core True")
         else:
             lines.append("set freeze_core False")
+
+        # How Psi4 will get the gradient. Without an analytic gradient it would
+        # quietly differentiate energies, so ask for that explicitly and say so.
+        route = gradient_route(method, reference, frozen_core)
+        derivatives = calculation_type in ("gradient", "optimize", "frequency")
+        dertype = ""
+        if route.analytic:
+            if derivatives or calculation_type == "energy":
+                lines.extend(route.options)
+        elif derivatives:
+            dertype = ", dertype='energy'"
+            what = {
+                "gradient": "The gradient",
+                "optimize": "The gradients for the optimization",
+                "frequency": "The Hessian",
+            }[calculation_type]
+            warning = (
+                f"Warning: {what} will be found by finite differences of energies, "
+                f"which costs many more calculations than an analytic gradient: "
+                f"{route.reason}."
+            )
+            logger.warning(warning)
+            self.description.append(__(warning, indent=self.indent + 4 * " "))
 
         if P["stability analysis"]:
             lines.append("set stability_analysis True")
@@ -771,9 +773,9 @@ class Energy(seamm.Node):
             if restart is None:
                 lines.append(
                     f"Eelec, wfn = {calculation_type}('{extended_functional}', "
-                    "return_wfn=True)"
+                    f"return_wfn=True{dertype})"
                 )
-                if calculation_type == "energy":
+                if calculation_type == "energy" and route.analytic:
                     lines.append(f"G = gradient('{extended_functional}', ref_wfn=wfn)")
             else:
                 if calculation_type == "gradient":
@@ -781,18 +783,21 @@ class Energy(seamm.Node):
                         f"Eelec, wfn = energy('{extended_functional}', return_wfn=True,"
                         f" restart_file='{restart}')"
                     )
-                    lines.append(f"G = gradient('{extended_functional}', ref_wfn=wfn)")
+                    lines.append(
+                        f"G = gradient('{extended_functional}', ref_wfn=wfn{dertype})"
+                    )
                 else:
                     lines.append(
                         f"Eelec, wfn = {calculation_type}('{extended_functional}', "
-                        f"return_wfn=True, restart_file='{restart}')"
+                        f"return_wfn=True, restart_file='{restart}'{dertype})"
                     )
         else:
             if restart is None:
                 lines.append(
-                    f"Eelec, wfn = {calculation_type}('{method}', return_wfn=True)"
+                    f"Eelec, wfn = {calculation_type}('{method}', "
+                    f"return_wfn=True{dertype})"
                 )
-                if calculation_type == "energy":
+                if calculation_type == "energy" and route.analytic:
                     lines.append(f"G = gradient('{method}', ref_wfn=wfn)")
             else:
                 if calculation_type == "gradient":
@@ -800,11 +805,11 @@ class Energy(seamm.Node):
                         f"Eelec, wfn = energy('{method}', return_wfn=True, "
                         f" restart_file='{restart}')"
                     )
-                    lines.append(f"G = gradient('{method}', ref_wfn=wfn)")
+                    lines.append(f"G = gradient('{method}', ref_wfn=wfn{dertype})")
                 else:
                     lines.append(
                         f"Eelec, wfn = {calculation_type}('{method}', return_wfn=True, "
-                        f" restart_file='{restart}')"
+                        f" restart_file='{restart}'{dertype})"
                     )
 
         if calculation_type != "gradient":
@@ -854,6 +859,32 @@ with open("{filename}", "w") as fd:
         lines.append(self.plot_input())
 
         return "\n".join(lines)
+
+    @staticmethod
+    def reference(method, P, configuration):
+        """The SCF reference: rhf, rohf or uhf; rks or uks for DFT."""
+        multiplicity = configuration.spin_multiplicity
+        spin_restricted = P["spin-restricted"]
+        if spin_restricted == "default":
+            restricted = multiplicity == 1
+        else:
+            restricted = spin_restricted == "yes"
+        if method == "dft":
+            return "rks" if restricted else "uks"
+        if restricted:
+            return "rhf" if multiplicity == 1 else "rohf"
+        return "uhf"
+
+    def gradient_route(self, configuration):
+        """How Psi4 gets this step's gradients (see psi4_step.derivatives)."""
+        P = self.parameters.current_values_to_dict(
+            context=seamm.flowchart_variables._data
+        )
+        method = self.get_method()[0]
+        frozen_core = "freeze-cores" in P and P["freeze-cores"] == "yes"
+        return gradient_route(
+            method, self.reference(method, P, configuration), frozen_core
+        )
 
     def get_method(self):
         """Get the method and functional to use"""
@@ -926,7 +957,13 @@ with open("{filename}", "w") as fd:
             # Use cclib to get results. Note the file is one level up.
             path = directory.parent / "output.dat"
             if path.exists():
-                data = vars(cclib.io.ccread(path))
+                try:
+                    data = vars(cclib.io.ccread(path))
+                except Exception as e:
+                    # e.g. a Psi4 version string cclib cannot parse; the results
+                    # in properties.json are still read below.
+                    logger.warning(f"cclib could not read {path}: {e}")
+                    data = {}
                 data = self.process_data(data)
             else:
                 data = {}

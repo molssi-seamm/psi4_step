@@ -197,12 +197,23 @@ class Thermochemistry(psi4_step.Energy):
         else:
             method, functional, extended_functional, _ = previous.get_method()
 
-            if method == "dft":
-                lines.append(
-                    f"Eelec, wfn = frequency('{extended_functional}', return_wfn=True)"
-                )
+            # The previous step's settings are in effect; how Psi4 gets the
+            # Hessian follows from them (see psi4_step.derivatives).
+            route = previous.gradient_route(configuration)
+            dertype = ""
+            if route.analytic:
+                lines.extend(route.options)
             else:
-                lines.append(f"Eelec, wfn = frequency('{method}', return_wfn=True)")
+                dertype = ", dertype='energy'"
+                warning = (
+                    "Warning: The Hessian will be found by finite differences of "
+                    "energies, which costs many more calculations than an analytic "
+                    f"gradient: {route.reason}."
+                )
+                logger.warning(warning)
+                self.description.append(__(warning, indent=self.indent + 4 * " "))
+            name = extended_functional if method == "dft" else method
+            lines.append(f"Eelec, wfn = frequency('{name}', return_wfn=True{dertype})")
 
         lines.append(f"""
 set writer_file_label thermo
