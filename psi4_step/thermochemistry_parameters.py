@@ -5,7 +5,7 @@ Control parameters for the Thermochemistry step in a Psi4 flowchart
 
 import logging
 
-from .energy_parameters import EnergyParameters
+from .energy_parameters import DERIVATIVES, EnergyParameters
 
 logger = logging.getLogger(__name__)
 
@@ -84,6 +84,7 @@ class ThermochemistryParameters(EnergyParameters):
             "description": "Use existing parameters",
             "help_text": "Whether to use existing parameters from the previous step",
         },
+        "derivatives": DERIVATIVES,
         "T": {
             "default": 298.15,
             "kind": "float",

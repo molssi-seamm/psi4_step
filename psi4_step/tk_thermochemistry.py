@@ -222,7 +222,7 @@ class TkThermochemistry(psi4_step.TkEnergy):
             self["use existing parameters"].grid(row=row, column=0, sticky=tk.EW)
             widgets.append(self["use existing parameters"])
             row += 1
-        for key in ("T", "P"):
+        for key in ("derivatives", "T", "P"):
             self[key].grid(row=row, column=0, sticky=tk.EW)
             widgets.append(self[key])
             row += 1

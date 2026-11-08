@@ -10,6 +10,7 @@ from pathlib import Path
 from tabulate import tabulate
 
 import psi4_step
+from psi4_step.energy_parameters import FINITE_DIFFERENCES
 import molsystem
 import seamm
 from seamm_util import Q_, units_class
@@ -135,9 +136,21 @@ class Thermochemistry(psi4_step.Energy):
         if not P:
             P = self.parameters.values_to_dict()
 
-        text = super().description_text(
-            P=P, calculation_type="Thermochemistry", configuration=configuration
-        )
+        previous = self._previous_settings(P)
+        if previous is None:
+            text = super().description_text(
+                P=P, calculation_type="Thermochemistry", configuration=configuration
+            )
+        else:
+            # The previous step's method and settings are used, not this step's
+            # own (unused) ones -- which would name e.g. the default B3LYP.
+            text = (
+                "Thermochemistry, using the method and settings of the previous "
+                f"step: {self._previous_method_text(previous)}."
+            )
+            if P.get("derivatives") == FINITE_DIFFERENCES:
+                text += " The Hessian is found by finite differences of energies."
+            text = self.header + "\n" + __(text, indent=4 * " ").__str__()
 
         added = (
             "\nThe thermodynamic functions will be calculated at temperature {T} and "
@@ -145,6 +158,45 @@ class Thermochemistry(psi4_step.Energy):
         )
 
         return text + "\n" + __(added, **P, indent=4 * " ").__str__()
+
+    def _previous_settings(self, P):
+        """The previous Energy-type step whose settings this step uses, or None if
+        it uses its own (as get_input decides)."""
+        if P.get("use existing parameters") not in (True, "yes"):
+            return None
+        try:
+            previous = self.previous()
+        except Exception:
+            return None
+        return previous if isinstance(previous, psi4_step.Energy) else None
+
+    @staticmethod
+    def _previous_method_text(previous):
+        """The previous step's method, as it will be run, for the description."""
+        try:
+            method, functional, extended_functional, method_string = (
+                previous.get_method()
+            )
+        except Exception:
+            return "the previous step's method"
+        if method == "dft":
+            return f"{method_string} with {extended_functional}"
+        text = method_string
+        try:
+            P = previous.parameters.current_values_to_dict(
+                context=seamm.flowchart_variables._data
+            )
+            values = previous.parameters.current_values()
+            choice = previous.integral_choice(P)
+            if choice not in ("default", None):
+                text += f", {choice} integrals"
+            if previous.parameters.applies("freeze-cores", values):
+                text += (
+                    ", frozen core" if P["freeze-cores"] == "yes" else ", all electrons"
+                )
+        except Exception:
+            pass
+        return text
 
     def get_input(self, calculation_type="frequency"):
         """Get the input for a frequency calculation for Psi4"""
@@ -200,10 +252,19 @@ class Thermochemistry(psi4_step.Energy):
             # The previous step's settings are in effect; how Psi4 gets the
             # Hessian follows from them (see psi4_step.derivatives).
             route = previous.gradient_route(configuration)
+            energies = P.get("derivatives") == FINITE_DIFFERENCES
             dertype = ""
             if route.analytic:
                 lines.extend(route.options)
-            else:
+            if energies:
+                dertype = ", dertype='energy'"
+                self.description.append(
+                    __(
+                        "The Hessian will be found by finite differences of energies.",
+                        indent=self.indent + 4 * " ",
+                    )
+                )
+            elif not route.analytic:
                 dertype = ", dertype='energy'"
                 warning = (
                     "Warning: The Hessian will be found by finite differences of "
@@ -212,6 +273,14 @@ class Thermochemistry(psi4_step.Energy):
                 )
                 logger.warning(warning)
                 self.description.append(__(warning, indent=self.indent + 4 * " "))
+            # The previous step's amplitude convergence
+            r_convergence = previous.cc_amplitude_convergence(
+                previous.parameters.current_values_to_dict(
+                    context=seamm.flowchart_variables._data
+                )
+            )
+            if r_convergence is not None:
+                lines.append(f"set r_convergence {r_convergence}")
             name = extended_functional if method == "dft" else method
             lines.append(f"Eelec, wfn = frequency('{name}', return_wfn=True{dertype})")
 

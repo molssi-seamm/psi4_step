@@ -167,3 +167,18 @@ def test_dispersion_kept_valid(root):
     tk_node["dispersion"].set("d3mbj")
     tk_node.reset_dialog()
     assert tk_node["dispersion"].get() == "d3bj"
+
+
+@pytest.mark.parametrize("substep", ("Energy", "Optimization", "Thermochemistry"))
+def test_cc_amplitude_convergence_and_derivatives(root, substep):
+    """The amplitude convergence is offered for the correlated methods only; the
+    derivatives choice on the steps that take derivatives."""
+    tk_node = make(root, substep)
+    if substep == "Thermochemistry":
+        set_and_check(tk_node, "use existing parameters", "no")
+    set_and_check(tk_node, "method", "CCSD with perturbative triples (CCSD(T))")
+    assert shown(tk_node, "CC amplitude convergence")
+    set_and_check(tk_node, "method", "Kohn-Sham (KS) density functional theory (DFT)")
+    assert not shown(tk_node, "CC amplitude convergence")
+    if substep != "Energy":
+        assert shown(tk_node, "derivatives")

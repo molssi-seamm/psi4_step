@@ -88,6 +88,23 @@ the Hessian by finite differences of gradients, using the molecule's symmetry to
 the number of displaced geometries. With "use existing parameters", Thermochemistry
 uses the previous step's settings, including its correlation integrals.
 
+**Derivatives** (Optimization and Thermochemistry) chooses between "analytic where
+available", the default described above, and "finite differences of energies", which
+uses only energies even where Psi4 has an analytic gradient. That costs many more
+calculations, but it is a check on an analytic gradient, or a way around one.
+
+**Optimizations with correlated methods** clean Psi4's scratch files before each
+gradient. Psi4 1.11's optimizer keeps the previous step's files, and a correlated
+gradient computed with them present can be wrong: for the all-electron CCSD(T)
+gradient of CH\ :sub:`4` near its minimum, ten times too large, so a tight
+optimization never converged. The previous step's orbitals are still used as the
+starting guess. Hessians are not affected: Psi4 computes each displaced gradient
+afresh.
+
+**CC amplitude convergence** (correlated methods) is how tightly Psi4 converges the
+amplitude equations, and for gradients the lambda equations: its ``r_convergence``.
+"default" leaves Psi4's own, 10\ :sup:`-7`.
+
 Index
 =====
 

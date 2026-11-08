@@ -113,6 +113,7 @@ class TkEnergy(seamm.TkNode):
             "soscf print iterations",
             "density convergence",
             "energy convergence",
+            "CC amplitude convergence",
             "convergence error",
             "maximum iterations",
         ):
@@ -302,6 +303,10 @@ class TkEnergy(seamm.TkNode):
                 row += 1
         sw.align_labels(widgets, sticky=tk.E)
 
+        # The CC amplitude convergence applies only to the correlated methods
+        if "CC amplitude convergence" in self._widget:
+            self.reset_convergence()
+
         return row
 
     def reset_convergence(self, widget=None):
@@ -322,6 +327,7 @@ class TkEnergy(seamm.TkNode):
             "maximum iterations",
             "density convergence",
             "energy convergence",
+            "CC amplitude convergence",
             "convergence error",
         ):
             if P.applies(key, values):

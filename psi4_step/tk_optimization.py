@@ -145,6 +145,10 @@ class TkOptimization(psi4_step.TkEnergy):
         widgets.append(self["optimization method"])
         row += 1
 
+        self["derivatives"].grid(row=row, column=0, columnspan=2, sticky=tk.EW)
+        widgets.append(self["derivatives"])
+        row += 1
+
         self["coordinates"].grid(row=row, column=0, columnspan=2, sticky=tk.EW)
         widgets.append(self["coordinates"])
         row += 1
