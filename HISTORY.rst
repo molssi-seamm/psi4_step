@@ -1,6 +1,18 @@
 =======
 History
 =======
+2026.11.8.1 -- Bugfix: optimizations did not store the optimized structure
+    * Since version 2025.3.9 an Optimization looked for Psi4's optimized structure in
+      the wrong directory, did not find it, and silently kept the starting coordinates
+      -- while still naming the configuration as optimized. The optimized structure
+      is now written for each Optimization and stored, aligned with the starting
+      structure, and a missing structure is an error rather than silently ignored.
+      Later steps in the same Psi4 step (e.g. Thermochemistry) were not affected:
+      Psi4 itself used the optimized geometry.
+    * The results table again gives the number of optimization steps and whether the
+      optimization converged when cclib cannot read Psi4's output (as for the
+      current conda-forge build of Psi4 1.11).
+
 2026.11.8 -- Bugfix: wrong correlated gradients in optimizations; derivatives and CC convergence options
     * Bugfix: Psi4's optimizer keeps the previous step's scratch files, and a
       correlated gradient computed with them present can be wrong -- for the
