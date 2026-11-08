@@ -4,6 +4,7 @@
 import logging
 
 import psi4_step
+from .energy_parameters import DERIVATIVES
 import seamm
 
 logger = logging.getLogger(__name__)
@@ -13,6 +14,7 @@ class OptimizationParameters(psi4_step.EnergyParameters):
     """The control parameters for the energy."""
 
     parameters = {
+        "derivatives": DERIVATIVES,
         "optimization method": {
             "default": "Rational Function Optimization",
             "kind": "enumeration",

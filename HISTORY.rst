@@ -1,6 +1,27 @@
 =======
 History
 =======
+2026.11.8 -- Bugfix: wrong correlated gradients in optimizations; derivatives and CC convergence options
+    * Bugfix: Psi4's optimizer keeps the previous step's scratch files, and a
+      correlated gradient computed with them present can be wrong -- for the
+      all-electron CCSD(T) gradient of CH4 near its minimum, ten times too large, so a
+      tight optimization wandered uphill and never converged. Optimizations with
+      correlated methods now clean the scratch files before each gradient. The
+      previous step's orbitals are still used as the starting guess, and Hessians,
+      whose displaced gradients Psi4 computes afresh, were not affected.
+    * New "Derivatives" in Optimization and Thermochemistry: "analytic where
+      available" (as before) or "finite differences of energies", which uses only
+      energies even where Psi4 has analytic gradients -- a check on them, or a way
+      around them.
+    * New "CC amplitude convergence" for the correlated methods: Psi4's
+      r_convergence, the convergence of the amplitude and lambda equations. "default"
+      leaves Psi4's own.
+    * Bugfix: with "use existing parameters", Thermochemistry described the step's own
+      unused settings (e.g. "B3LYP") rather than the previous step's method, which is
+      what runs. It now names the previous step's method, integrals and frozen core.
+    * Bugfix: a Thermochemistry step with its own parameters ignored its "Correlation
+      integrals" setting.
+
 2026.11.7.2 -- Density-fitted and Cholesky correlation integrals, with analytic DF gradients
     * New "Correlation integrals" setting for MP2, MP2.5, MP3, LCCD, CCD, CCSD, CCSD(T)
       and the orbital-optimized methods: Psi4's default for the method, conventional,

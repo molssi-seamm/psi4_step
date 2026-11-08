@@ -12,6 +12,27 @@ logger = logging.getLogger(__name__)
 DFT_METHODS = [name for name, record in methods.items() if record["method"] == "dft"]
 
 
+#: How a step that needs gradients or Hessians gets them (Optimization and
+#: Thermochemistry): analytic gradients where Psi4 has them, else finite
+#: differences of energies; or finite differences of energies regardless.
+ANALYTIC = "analytic where available"
+FINITE_DIFFERENCES = "finite differences of energies"
+DERIVATIVES = {
+    "default": ANALYTIC,
+    "kind": "enumeration",
+    "default_units": "",
+    "enumeration": (ANALYTIC, FINITE_DIFFERENCES),
+    "format_string": "s",
+    "description": "Derivatives:",
+    "help_text": (
+        "How the gradients (and so the Hessian) are found: analytically where "
+        "Psi4 can for this method, or by finite differences of energies, which "
+        "costs many more calculations but needs only energies -- a check on, or a "
+        "way around, an analytic gradient."
+    ),
+}
+
+
 class EnergyParameters(seamm.Parameters):
     """The control parameters for the energy."""
 
@@ -225,6 +246,19 @@ class EnergyParameters(seamm.Parameters):
                 "SCF, 10^-8 optimization."
             ),
         },
+        "CC amplitude convergence": {
+            "default": "default",
+            "kind": "float",
+            "default_units": "",
+            "enumeration": ("default",),
+            "format_string": "s",
+            "description": "CC amplitude convergence:",
+            "help_text": (
+                "Convergence of the residuals of the amplitude (and, for gradients, "
+                "lambda) equations of the correlated method: Psi4's r_convergence. "
+                "'default' is Psi4's own (1e-7)."
+            ),
+        },
         "convergence error": {
             "default": "yes",
             "kind": "boolean",
@@ -405,7 +439,7 @@ class EnergyParameters(seamm.Parameters):
                 return True
             record = self._method_record(name)
             return record is None or bool(record.get("freeze core?", False))
-        if key == "correlation integrals":
+        if key in ("correlation integrals", "CC amplitude convergence"):
             from .derivatives import TYPE_KEYWORD
 
             name = values.get(self._method_key(values))
@@ -438,6 +472,9 @@ class EnergyParameters(seamm.Parameters):
         if key == "correlation integrals":
             name = values.get(self._method_key(values))
             return f"the method '{name}' has no choice of correlation integrals"
+        if key == "CC amplitude convergence":
+            name = values.get(self._method_key(values))
+            return f"the method '{name}' has no amplitude equations"
         if key == "dispersion":
             functional_key = self._functional_key(values)
             if not self.applies(functional_key, values):

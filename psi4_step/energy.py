@@ -19,6 +19,7 @@ from tabulate import tabulate
 
 from molsystem import elements
 import psi4_step
+from psi4_step.energy_parameters import FINITE_DIFFERENCES
 from psi4_step.derivatives import (
     gradient_route,
     integral_options,
@@ -32,6 +33,30 @@ import seamm_util.printing as printing
 from seamm_util.printing import FormattedText as __
 
 logger = logging.getLogger(__name__)
+
+#: Methods without correlation, whose gradients do not need clean scratch files
+UNCORRELATED = ("dft", "hf", "scf", "efp")
+
+#: Psi4 1.11's optimize() does not clean the scratch files between its steps, and a
+#: correlated gradient computed with the previous geometry's files present can be
+#: wrong: AE CCSD(T)/cc-pCVTZ (ccenergy) of CH4 by 4.7e-5 Eh/bohr near the minimum,
+#: ten times the true gradient (thermo's job 5652, 2026-11-08). The SCF guess file is
+#: kept, so the previous orbitals are still read.
+CLEAN_GRADIENTS = """# Psi4's optimize() keeps the previous step's scratch files,
+# which can make a correlated gradient wrong: clean them before
+# each gradient (SEAMM, 2026-11-08).
+import sys as _sys
+_driver = _sys.modules["psi4.driver.driver"]
+if not getattr(_driver.gradient, "_seamm_clean", False):
+    _gradient = _driver.gradient
+
+    def _clean_gradient(*args, **kwargs):
+        core.clean()
+        return _gradient(*args, **kwargs)
+
+    _clean_gradient._seamm_clean = True
+    _driver.gradient = _clean_gradient
+"""
 job = printing.getPrinter()
 printer = printing.getPrinter("psi4")
 
@@ -745,24 +770,34 @@ class Energy(seamm.Node):
             method, reference, frozen_core, integral_type(method, choice)
         )
         derivatives = calculation_type in ("gradient", "optimize", "frequency")
+        energies = derivatives and P.get("derivatives") == FINITE_DIFFERENCES
         dertype = ""
         if route.analytic:
             if derivatives or calculation_type == "energy":
                 lines.extend(route.options)
-        elif derivatives:
+        if derivatives and (energies or not route.analytic):
             dertype = ", dertype='energy'"
             what = {
                 "gradient": "The gradient",
                 "optimize": "The gradients for the optimization",
                 "frequency": "The Hessian",
             }[calculation_type]
-            warning = (
-                f"Warning: {what} will be found by finite differences of energies, "
-                f"which costs many more calculations than an analytic gradient: "
-                f"{route.reason}."
-            )
-            logger.warning(warning)
-            self.description.append(__(warning, indent=self.indent + 4 * " "))
+            if energies:
+                note = f"{what} will be found by finite differences of energies."
+                self.description.append(__(note, indent=self.indent + 4 * " "))
+            else:
+                warning = (
+                    f"Warning: {what} will be found by finite differences of "
+                    "energies, which costs many more calculations than an analytic "
+                    f"gradient: {route.reason}."
+                )
+                logger.warning(warning)
+                self.description.append(__(warning, indent=self.indent + 4 * " "))
+
+        # The convergence of the amplitude (and lambda) equations
+        r_convergence = self.cc_amplitude_convergence(P)
+        if r_convergence is not None:
+            lines.append(f"set r_convergence {r_convergence}")
 
         if P["stability analysis"]:
             lines.append("set stability_analysis True")
@@ -796,6 +831,8 @@ class Energy(seamm.Node):
                 lines.append("set soscf_print True")
 
         lines.append("")
+        if calculation_type == "optimize" and method not in UNCORRELATED:
+            lines.append(CLEAN_GRADIENTS)
         if method == "dft":
             if restart is None:
                 lines.append(
@@ -916,12 +953,26 @@ with open("{filename}", "w") as fd:
             integral_type(method, self.integral_choice(P)),
         )
 
+    def cc_amplitude_convergence(self, P):
+        """Psi4's r_convergence for the correlated method, or None for Psi4's own."""
+        if "CC amplitude convergence" not in P:
+            return None
+        # The rules compare the raw values ('no', not False as in P)
+        values = self.parameters.current_values()
+        if not self.parameters.applies("CC amplitude convergence", values):
+            return None
+        value = P["CC amplitude convergence"]
+        return None if value == "default" else value
+
     def integral_choice(self, P):
         """The setting for the correlation integrals, if it applies, else
         "default"."""
         if "correlation integrals" not in P:
             return "default"
-        values = {k: v for k, v in P.items()}
+        # The rules compare the raw values ('no', not False as in P), so e.g. a
+        # Thermochemistry step with its own parameters is not taken for one using
+        # the previous step's
+        values = self.parameters.current_values()
         if not self.parameters.applies("correlation integrals", values):
             return "default"
         return P["correlation integrals"]
