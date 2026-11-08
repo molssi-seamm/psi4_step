@@ -7,7 +7,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>psi4_step package &#8212; SEAMM Psi4 Plug-in 2026.11.8 documentation</title>
+    <title>psi4_step package &#8212; SEAMM Psi4 Plug-in 2026.11.8.1 documentation</title>
   
   
   
@@ -48,7 +48,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-PQXXTJ2');</script>
 <!-- End Google Tag Manager -->
 
-    <script src="../_static/documentation_options.js?v=93f150ad"></script>
+    <script src="../_static/documentation_options.js?v=5120ad9a"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -64,7 +64,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2026.11.8" />
+  <meta name="docsearch:version" content="2026.11.8.1" />
   
     
     <script src="../_static/searchtools.js"></script>
@@ -1158,6 +1158,12 @@ default.</p></li>
 <dt class="sig sig-object py" id="psi4_step.optimization.Optimization">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">psi4_step.optimization.</span></span><span class="sig-name descname"><span class="pre">Optimization</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">flowchart</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Optimization'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extension</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logger</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;Logger</span> <span class="pre">psi4_step.optimization</span> <span class="pre">(WARNING)&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/psi4_step/optimization.html#Optimization"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#psi4_step.optimization.Optimization" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#psi4_step.energy.Energy" title="psi4_step.energy.Energy"><code class="xref py py-class docutils literal notranslate"><span class="pre">Energy</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="psi4_step.optimization.Optimization.BOHR">
+<span class="sig-name descname"><span class="pre">BOHR</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0.52917721067</span></span><a class="headerlink" href="#psi4_step.optimization.Optimization.BOHR" title="Link to this definition">#</a></dt>
+<dd><p>Psi4’s (CODATA 2014) Bohr radius in Ångström</p>
+</dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="psi4_step.optimization.Optimization.analyze">
 <span class="sig-name descname"><span class="pre">analyze</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">indent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">table</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/psi4_step/optimization.html#Optimization.analyze"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#psi4_step.optimization.Optimization.analyze" title="Link to this definition">#</a></dt>
@@ -1175,6 +1181,14 @@ data in variables for other stages to access</p>
 <dt class="sig sig-object py" id="psi4_step.optimization.Optimization.get_input">
 <span class="sig-name descname"><span class="pre">get_input</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">calculation_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'optimize'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/psi4_step/optimization.html#Optimization.get_input"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#psi4_step.optimization.Optimization.get_input" title="Link to this definition">#</a></dt>
 <dd><p>Get the input for an optimization calculation for Psi4</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="psi4_step.optimization.Optimization.optimized_coordinates">
+<span class="sig-name descname"><span class="pre">optimized_coordinates</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">directory</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/psi4_step/optimization.html#Optimization.optimized_coordinates"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#psi4_step.optimization.Optimization.optimized_coordinates" title="Link to this definition">#</a></dt>
+<dd><p>The optimized Cartesian coordinates in Å, from final_structure.json, which
+the input writes for this step. Raises if it is missing, rather than leave
+the starting structure in place under an ‘optimized’ name.</p>
 </dd></dl>
 
 </dd></dl>
@@ -2659,9 +2673,11 @@ A step for Psi4 in a SEAMM flowchart</p>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-psi4_step.optimization">psi4_step.optimization module</a><ul class="pst-show_toc_level nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#psi4_step.optimization.Optimization"><code class="docutils literal notranslate"><span class="pre">Optimization</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#psi4_step.optimization.Optimization.BOHR"><code class="docutils literal notranslate"><span class="pre">Optimization.BOHR</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#psi4_step.optimization.Optimization.analyze"><code class="docutils literal notranslate"><span class="pre">Optimization.analyze()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#psi4_step.optimization.Optimization.description_text"><code class="docutils literal notranslate"><span class="pre">Optimization.description_text()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#psi4_step.optimization.Optimization.get_input"><code class="docutils literal notranslate"><span class="pre">Optimization.get_input()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#psi4_step.optimization.Optimization.optimized_coordinates"><code class="docutils literal notranslate"><span class="pre">Optimization.optimized_coordinates()</span></code></a></li>
 </ul>
 </li>
 </ul>

@@ -6,7 +6,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>psi4_step.optimization &#8212; SEAMM Psi4 Plug-in 2026.11.8 documentation</title>
+    <title>psi4_step.optimization &#8212; SEAMM Psi4 Plug-in 2026.11.8.1 documentation</title>
   
   
   
@@ -47,7 +47,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-PQXXTJ2');</script>
 <!-- End Google Tag Manager -->
 
-    <script src="../../_static/documentation_options.js?v=93f150ad"></script>
+    <script src="../../_static/documentation_options.js?v=5120ad9a"></script>
     <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -61,7 +61,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2026.11.8" />
+  <meta name="docsearch:version" content="2026.11.8.1" />
   
     
     <script src="../../_static/searchtools.js"></script>
@@ -495,6 +495,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">cclib</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">molsystem</span><span class="w"> </span><span class="kn">import</span> <span class="n">RMSD</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">psi4_step</span>
@@ -503,21 +504,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <span class="kn">from</span><span class="w"> </span><span class="nn">seamm_util</span><span class="w"> </span><span class="kn">import</span> <span class="n">units_class</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">seamm_util.printing</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">printing</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">seamm_util.printing</span><span class="w"> </span><span class="kn">import</span> <span class="n">FormattedText</span> <span class="k">as</span> <span class="n">__</span>
-
-<span class="k">try</span><span class="p">:</span>
-    <span class="kn">from</span><span class="w"> </span><span class="nn">itertools</span><span class="w"> </span><span class="kn">import</span> <span class="n">batched</span>
-<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
-    <span class="kn">from</span><span class="w"> </span><span class="nn">itertools</span><span class="w"> </span><span class="kn">import</span> <span class="n">islice</span>
-
-    <span class="k">def</span><span class="w"> </span><span class="nf">batched</span><span class="p">(</span><span class="n">iterable</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
-        <span class="s2">"Batch data into tuples of length n. The last batch may be shorter."</span>
-        <span class="c1"># batched('ABCDEFG', 3) --&gt; ABC DEF G</span>
-        <span class="k">if</span> <span class="n">n</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"n must be at least one"</span><span class="p">)</span>
-        <span class="n">it</span> <span class="o">=</span> <span class="nb">iter</span><span class="p">(</span><span class="n">iterable</span><span class="p">)</span>
-        <span class="k">while</span> <span class="n">batch</span> <span class="o">:=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">islice</span><span class="p">(</span><span class="n">it</span><span class="p">,</span> <span class="n">n</span><span class="p">)):</span>
-            <span class="k">yield</span> <span class="n">batch</span>
-
 
 <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 <span class="n">job</span> <span class="o">=</span> <span class="n">printing</span><span class="o">.</span><span class="n">getPrinter</span><span class="p">()</span>
@@ -606,14 +592,11 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <span class="k">else</span><span class="p">:</span>
             <span class="n">final</span> <span class="o">=</span> <span class="n">initial_configuration</span><span class="o">.</span><span class="n">to_RDKMol</span><span class="p">()</span>
 
-        <span class="c1"># Get the updated coordinates</span>
-        <span class="n">structure_file</span> <span class="o">=</span> <span class="n">directory</span> <span class="o">/</span> <span class="s2">"final_structure.json"</span>
-        <span class="k">if</span> <span class="n">structure_file</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
-            <span class="k">with</span> <span class="n">structure_file</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s2">"r"</span><span class="p">)</span> <span class="k">as</span> <span class="n">fd</span><span class="p">:</span>
-                <span class="n">structure</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">fd</span><span class="p">)</span>
-            <span class="k">if</span> <span class="s2">"geom"</span> <span class="ow">in</span> <span class="n">structure</span><span class="p">:</span>
-                <span class="n">XYZs</span> <span class="o">=</span> <span class="p">[</span><span class="n">batched</span><span class="p">(</span><span class="n">structure</span><span class="p">[</span><span class="s2">"geom"</span><span class="p">],</span> <span class="mi">3</span><span class="p">)]</span>
-                <span class="n">final</span><span class="o">.</span><span class="n">GetConformer</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">SetPositions</span><span class="p">(</span><span class="n">XYZs</span><span class="p">)</span>
+        <span class="c1"># The optimized coordinates, which the input writes for this step. (Before</span>
+        <span class="c1"># 2026.11.8.1 this looked for the run's final_structure.json in this step's</span>
+        <span class="c1"># directory, never found it, and silently kept the starting coordinates.)</span>
+        <span class="k">if</span> <span class="n">configuration</span><span class="o">.</span><span class="n">n_atoms</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">final</span><span class="o">.</span><span class="n">GetConformer</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">SetPositions</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">optimized_coordinates</span><span class="p">(</span><span class="n">directory</span><span class="p">))</span>
 
         <span class="n">result</span> <span class="o">=</span> <span class="n">RMSD</span><span class="p">(</span><span class="n">final</span><span class="p">,</span> <span class="n">initial</span><span class="p">,</span> <span class="n">symmetry</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">include_h</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">align</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         <span class="n">data</span><span class="p">[</span><span class="s2">"RMSD with H"</span><span class="p">]</span> <span class="o">=</span> <span class="n">result</span><span class="p">[</span><span class="s2">"RMSD"</span><span class="p">]</span>
@@ -648,23 +631,21 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 <span class="s2">"Units"</span><span class="p">:</span> <span class="p">[],</span>
             <span class="p">}</span>
 
-        <span class="k">if</span> <span class="s2">"optdone"</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
-            <span class="n">table</span><span class="p">[</span><span class="s2">"Property"</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">"Converged"</span><span class="p">)</span>
-            <span class="n">table</span><span class="p">[</span><span class="s2">"Value"</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">"optdone"</span><span class="p">]))</span>
-            <span class="n">table</span><span class="p">[</span><span class="s2">"Units"</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">""</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">table</span><span class="p">[</span><span class="s2">"Property"</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">"Converged"</span><span class="p">)</span>
-            <span class="n">table</span><span class="p">[</span><span class="s2">"Value"</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">"unknown"</span><span class="p">)</span>
-            <span class="n">table</span><span class="p">[</span><span class="s2">"Units"</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">""</span><span class="p">)</span>
+        <span class="c1"># Psi4's optimize() raises if it does not converge, so results mean it did.</span>
+        <span class="c1"># cclib's values are used if it could read the output.</span>
+        <span class="n">table</span><span class="p">[</span><span class="s2">"Property"</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">"Converged"</span><span class="p">)</span>
+        <span class="n">table</span><span class="p">[</span><span class="s2">"Value"</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"optdone"</span><span class="p">,</span> <span class="kc">True</span><span class="p">)))</span>
+        <span class="n">table</span><span class="p">[</span><span class="s2">"Units"</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">""</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="s2">"optstatus"</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
-            <span class="n">table</span><span class="p">[</span><span class="s2">"Property"</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">"# Steps"</span><span class="p">)</span>
-            <span class="n">table</span><span class="p">[</span><span class="s2">"Value"</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">"optstatus"</span><span class="p">])))</span>
-            <span class="n">table</span><span class="p">[</span><span class="s2">"Units"</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">""</span><span class="p">)</span>
+            <span class="n">steps</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">"optstatus"</span><span class="p">]))</span>
+        <span class="k">elif</span> <span class="s2">"OPTIMIZATION ITERATIONS"</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+            <span class="n">steps</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">"OPTIMIZATION ITERATIONS"</span><span class="p">]))</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">table</span><span class="p">[</span><span class="s2">"Property"</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">"# Steps"</span><span class="p">)</span>
-            <span class="n">table</span><span class="p">[</span><span class="s2">"Value"</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">"unknown"</span><span class="p">)</span>
-            <span class="n">table</span><span class="p">[</span><span class="s2">"Units"</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">""</span><span class="p">)</span>
+            <span class="n">steps</span> <span class="o">=</span> <span class="s2">"unknown"</span>
+        <span class="n">table</span><span class="p">[</span><span class="s2">"Property"</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">"# Steps"</span><span class="p">)</span>
+        <span class="n">table</span><span class="p">[</span><span class="s2">"Value"</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">steps</span><span class="p">)</span>
+        <span class="n">table</span><span class="p">[</span><span class="s2">"Units"</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">""</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="s2">"RMSD"</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
             <span class="n">tmp</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">"RMSD"</span><span class="p">]</span>
@@ -728,6 +709,29 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <span class="n">added</span> <span class="o">+=</span> <span class="n">seamm</span><span class="o">.</span><span class="n">standard_parameters</span><span class="o">.</span><span class="n">structure_handling_description</span><span class="p">(</span><span class="n">P</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">text</span> <span class="o">+</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">"</span> <span class="o">+</span> <span class="n">__</span><span class="p">(</span><span class="n">added</span><span class="p">,</span> <span class="o">**</span><span class="n">P</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span> <span class="o">*</span> <span class="s2">" "</span><span class="p">)</span><span class="o">.</span><span class="fm">__str__</span><span class="p">()</span></div>
+
+
+    <span class="c1">#: Psi4's (CODATA 2014) Bohr radius in Ångström</span>
+    <span class="n">BOHR</span> <span class="o">=</span> <span class="mf">0.52917721067</span>
+
+<div class="viewcode-block" id="Optimization.optimized_coordinates">
+<a class="viewcode-back" href="../../api/psi4_step.html#psi4_step.optimization.Optimization.optimized_coordinates">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">optimized_coordinates</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">directory</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""The optimized Cartesian coordinates in Å, from final_structure.json, which</span>
+<span class="sd">        the input writes for this step. Raises if it is missing, rather than leave</span>
+<span class="sd">        the starting structure in place under an 'optimized' name."""</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">directory</span><span class="p">)</span> <span class="o">/</span> <span class="s2">"final_structure.json"</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">"The optimized structure from Psi4 is missing (</span><span class="si">{</span><span class="n">path</span><span class="si">}</span><span class="s2">), so the "</span>
+                <span class="s2">"structure cannot be updated."</span>
+            <span class="p">)</span>
+        <span class="k">with</span> <span class="n">path</span><span class="o">.</span><span class="n">open</span><span class="p">()</span> <span class="k">as</span> <span class="n">fd</span><span class="p">:</span>
+            <span class="n">structure</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">fd</span><span class="p">)</span>
+        <span class="n">xyz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">structure</span><span class="p">[</span><span class="s2">"geom"</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">structure</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"units"</span><span class="p">,</span> <span class="s2">"Angstrom"</span><span class="p">))</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">"bohr"</span><span class="p">):</span>
+            <span class="n">xyz</span> <span class="o">=</span> <span class="n">xyz</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">BOHR</span>
+        <span class="k">return</span> <span class="n">xyz</span></div>
 
 
 <div class="viewcode-block" id="Optimization.get_input">
@@ -810,6 +814,17 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
         <span class="c1"># Add in the input from the energy part of things</span>
         <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">get_input</span><span class="p">(</span><span class="n">calculation_type</span><span class="o">=</span><span class="n">calculation_type</span><span class="p">))</span>
+
+        <span class="c1"># The optimized structure, for this step's analysis (into its directory)</span>
+        <span class="n">filename</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"@</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_id</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">+final_structure.json"</span>
+        <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">"""</span>
+<span class="s2">_structure = get_active_molecule().to_dict()</span>
+<span class="s2">for _key, _value in _structure.items():</span>
+<span class="s2">    if isinstance(_value, np.ndarray):</span>
+<span class="s2">        _structure[_key] = _value.tolist()</span>
+<span class="s2">with open("</span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2">", "w") as fd:</span>
+<span class="s2">    json.dump(_structure, fd, sort_keys=True, indent=3)</span>
+<span class="s2">"""</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">lines</span><span class="p">)</span></div>
 </div>
