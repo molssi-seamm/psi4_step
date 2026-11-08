@@ -159,6 +159,16 @@ class Thermochemistry(psi4_step.Energy):
 
         return text + "\n" + __(added, **P, indent=4 * " ").__str__()
 
+    def get_method(self):
+        """The method that runs: the previous step's when its settings are used."""
+        P = self.parameters.current_values_to_dict(
+            context=seamm.flowchart_variables._data
+        )
+        previous = self._previous_settings(P)
+        if previous is not None:
+            return previous.get_method()
+        return super().get_method()
+
     def _previous_settings(self, P):
         """The previous Energy-type step whose settings this step uses, or None if
         it uses its own (as get_input decides)."""

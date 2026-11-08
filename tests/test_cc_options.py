@@ -226,3 +226,19 @@ def test_clean_gradients_fix_in_psi4():
         )
         expected = np.array(psi4.gradient("ccsd(t)", molecule=fresh))
         assert np.abs(gradient - expected).max() < 1e-8
+
+
+def test_thermochemistry_reports_the_previous_steps_method(variables):
+    """The results header named the step's own unused method (DFT) with 'use
+    existing parameters' (thermo, 5657)."""
+    import seamm
+
+    flowchart = seamm.Flowchart()
+    optimization = psi4_step.Optimization(flowchart=flowchart)
+    optimization.parameters["method"].value = CCSD_T
+    thermo = psi4_step.Thermochemistry(flowchart=flowchart)
+    thermo.previous = lambda: optimization
+    assert thermo.get_method()[0] == "ccsd(t)"
+    assert thermo.get_method()[3] == CCSD_T
+    thermo.parameters["use existing parameters"].value = "no"
+    assert thermo.get_method()[0] == "dft"
