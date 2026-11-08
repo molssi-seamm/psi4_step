@@ -6,7 +6,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>psi4_step.energy &#8212; SEAMM Psi4 Plug-in 2026.11.7.2 documentation</title>
+    <title>psi4_step.energy &#8212; SEAMM Psi4 Plug-in 2026.11.8 documentation</title>
   
   
   
@@ -47,7 +47,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-PQXXTJ2');</script>
 <!-- End Google Tag Manager -->
 
-    <script src="../../_static/documentation_options.js?v=d0cb8874"></script>
+    <script src="../../_static/documentation_options.js?v=93f150ad"></script>
     <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -61,7 +61,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2026.11.7.2" />
+  <meta name="docsearch:version" content="2026.11.8" />
   
     
     <script src="../../_static/searchtools.js"></script>
@@ -507,6 +507,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">molsystem</span><span class="w"> </span><span class="kn">import</span> <span class="n">elements</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">psi4_step</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">psi4_step.energy_parameters</span><span class="w"> </span><span class="kn">import</span> <span class="n">FINITE_DIFFERENCES</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">psi4_step.derivatives</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
     <span class="n">gradient_route</span><span class="p">,</span>
     <span class="n">integral_options</span><span class="p">,</span>
@@ -520,6 +521,30 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <span class="kn">from</span><span class="w"> </span><span class="nn">seamm_util.printing</span><span class="w"> </span><span class="kn">import</span> <span class="n">FormattedText</span> <span class="k">as</span> <span class="n">__</span>
 
 <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+<span class="c1">#: Methods without correlation, whose gradients do not need clean scratch files</span>
+<span class="n">UNCORRELATED</span> <span class="o">=</span> <span class="p">(</span><span class="s2">"dft"</span><span class="p">,</span> <span class="s2">"hf"</span><span class="p">,</span> <span class="s2">"scf"</span><span class="p">,</span> <span class="s2">"efp"</span><span class="p">)</span>
+
+<span class="c1">#: Psi4 1.11's optimize() does not clean the scratch files between its steps, and a</span>
+<span class="c1">#: correlated gradient computed with the previous geometry's files present can be</span>
+<span class="c1">#: wrong: AE CCSD(T)/cc-pCVTZ (ccenergy) of CH4 by 4.7e-5 Eh/bohr near the minimum,</span>
+<span class="c1">#: ten times the true gradient (thermo's job 5652, 2026-11-08). The SCF guess file is</span>
+<span class="c1">#: kept, so the previous orbitals are still read.</span>
+<span class="n">CLEAN_GRADIENTS</span> <span class="o">=</span> <span class="s2">"""# Psi4's optimize() keeps the previous step's scratch files,</span>
+<span class="s2"># which can make a correlated gradient wrong: clean them before</span>
+<span class="s2"># each gradient (SEAMM, 2026-11-08).</span>
+<span class="s2">import sys as _sys</span>
+<span class="s2">_driver = _sys.modules["psi4.driver.driver"]</span>
+<span class="s2">if not getattr(_driver.gradient, "_seamm_clean", False):</span>
+<span class="s2">    _gradient = _driver.gradient</span>
+
+<span class="s2">    def _clean_gradient(*args, **kwargs):</span>
+<span class="s2">        core.clean()</span>
+<span class="s2">        return _gradient(*args, **kwargs)</span>
+
+<span class="s2">    _clean_gradient._seamm_clean = True</span>
+<span class="s2">    _driver.gradient = _clean_gradient</span>
+<span class="s2">"""</span>
 <span class="n">job</span> <span class="o">=</span> <span class="n">printing</span><span class="o">.</span><span class="n">getPrinter</span><span class="p">()</span>
 <span class="n">printer</span> <span class="o">=</span> <span class="n">printing</span><span class="o">.</span><span class="n">getPrinter</span><span class="p">(</span><span class="s2">"psi4"</span><span class="p">)</span>
 
@@ -1246,24 +1271,34 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             <span class="n">method</span><span class="p">,</span> <span class="n">reference</span><span class="p">,</span> <span class="n">frozen_core</span><span class="p">,</span> <span class="n">integral_type</span><span class="p">(</span><span class="n">method</span><span class="p">,</span> <span class="n">choice</span><span class="p">)</span>
         <span class="p">)</span>
         <span class="n">derivatives</span> <span class="o">=</span> <span class="n">calculation_type</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">"gradient"</span><span class="p">,</span> <span class="s2">"optimize"</span><span class="p">,</span> <span class="s2">"frequency"</span><span class="p">)</span>
+        <span class="n">energies</span> <span class="o">=</span> <span class="n">derivatives</span> <span class="ow">and</span> <span class="n">P</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"derivatives"</span><span class="p">)</span> <span class="o">==</span> <span class="n">FINITE_DIFFERENCES</span>
         <span class="n">dertype</span> <span class="o">=</span> <span class="s2">""</span>
         <span class="k">if</span> <span class="n">route</span><span class="o">.</span><span class="n">analytic</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">derivatives</span> <span class="ow">or</span> <span class="n">calculation_type</span> <span class="o">==</span> <span class="s2">"energy"</span><span class="p">:</span>
                 <span class="n">lines</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">route</span><span class="o">.</span><span class="n">options</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="n">derivatives</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">derivatives</span> <span class="ow">and</span> <span class="p">(</span><span class="n">energies</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">route</span><span class="o">.</span><span class="n">analytic</span><span class="p">):</span>
             <span class="n">dertype</span> <span class="o">=</span> <span class="s2">", dertype='energy'"</span>
             <span class="n">what</span> <span class="o">=</span> <span class="p">{</span>
                 <span class="s2">"gradient"</span><span class="p">:</span> <span class="s2">"The gradient"</span><span class="p">,</span>
                 <span class="s2">"optimize"</span><span class="p">:</span> <span class="s2">"The gradients for the optimization"</span><span class="p">,</span>
                 <span class="s2">"frequency"</span><span class="p">:</span> <span class="s2">"The Hessian"</span><span class="p">,</span>
             <span class="p">}[</span><span class="n">calculation_type</span><span class="p">]</span>
-            <span class="n">warning</span> <span class="o">=</span> <span class="p">(</span>
-                <span class="sa">f</span><span class="s2">"Warning: </span><span class="si">{</span><span class="n">what</span><span class="si">}</span><span class="s2"> will be found by finite differences of energies, "</span>
-                <span class="sa">f</span><span class="s2">"which costs many more calculations than an analytic gradient: "</span>
-                <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">route</span><span class="o">.</span><span class="n">reason</span><span class="si">}</span><span class="s2">."</span>
-            <span class="p">)</span>
-            <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="n">warning</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">description</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">__</span><span class="p">(</span><span class="n">warning</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">indent</span> <span class="o">+</span> <span class="mi">4</span> <span class="o">*</span> <span class="s2">" "</span><span class="p">))</span>
+            <span class="k">if</span> <span class="n">energies</span><span class="p">:</span>
+                <span class="n">note</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">what</span><span class="si">}</span><span class="s2"> will be found by finite differences of energies."</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">description</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">__</span><span class="p">(</span><span class="n">note</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">indent</span> <span class="o">+</span> <span class="mi">4</span> <span class="o">*</span> <span class="s2">" "</span><span class="p">))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">warning</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">"Warning: </span><span class="si">{</span><span class="n">what</span><span class="si">}</span><span class="s2"> will be found by finite differences of "</span>
+                    <span class="s2">"energies, which costs many more calculations than an analytic "</span>
+                    <span class="sa">f</span><span class="s2">"gradient: </span><span class="si">{</span><span class="n">route</span><span class="o">.</span><span class="n">reason</span><span class="si">}</span><span class="s2">."</span>
+                <span class="p">)</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="n">warning</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">description</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">__</span><span class="p">(</span><span class="n">warning</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">indent</span> <span class="o">+</span> <span class="mi">4</span> <span class="o">*</span> <span class="s2">" "</span><span class="p">))</span>
+
+        <span class="c1"># The convergence of the amplitude (and lambda) equations</span>
+        <span class="n">r_convergence</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cc_amplitude_convergence</span><span class="p">(</span><span class="n">P</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">r_convergence</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">"set r_convergence </span><span class="si">{</span><span class="n">r_convergence</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">P</span><span class="p">[</span><span class="s2">"stability analysis"</span><span class="p">]:</span>
             <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">"set stability_analysis True"</span><span class="p">)</span>
@@ -1297,6 +1332,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">"set soscf_print True"</span><span class="p">)</span>
 
         <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">""</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">calculation_type</span> <span class="o">==</span> <span class="s2">"optimize"</span> <span class="ow">and</span> <span class="n">method</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">UNCORRELATED</span><span class="p">:</span>
+            <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">CLEAN_GRADIENTS</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">"dft"</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">restart</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
@@ -1424,6 +1461,20 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <span class="p">)</span></div>
 
 
+<div class="viewcode-block" id="Energy.cc_amplitude_convergence">
+<a class="viewcode-back" href="../../api/psi4_step.html#psi4_step.energy.Energy.cc_amplitude_convergence">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">cc_amplitude_convergence</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">P</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Psi4's r_convergence for the correlated method, or None for Psi4's own."""</span>
+        <span class="k">if</span> <span class="s2">"CC amplitude convergence"</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">P</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="c1"># The rules compare the raw values ('no', not False as in P)</span>
+        <span class="n">values</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">current_values</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">applies</span><span class="p">(</span><span class="s2">"CC amplitude convergence"</span><span class="p">,</span> <span class="n">values</span><span class="p">):</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="n">P</span><span class="p">[</span><span class="s2">"CC amplitude convergence"</span><span class="p">]</span>
+        <span class="k">return</span> <span class="kc">None</span> <span class="k">if</span> <span class="n">value</span> <span class="o">==</span> <span class="s2">"default"</span> <span class="k">else</span> <span class="n">value</span></div>
+
+
 <div class="viewcode-block" id="Energy.integral_choice">
 <a class="viewcode-back" href="../../api/psi4_step.html#psi4_step.energy.Energy.integral_choice">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">integral_choice</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">P</span><span class="p">):</span>
@@ -1431,7 +1482,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <span class="sd">        "default"."""</span>
         <span class="k">if</span> <span class="s2">"correlation integrals"</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">P</span><span class="p">:</span>
             <span class="k">return</span> <span class="s2">"default"</span>
-        <span class="n">values</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">P</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
+        <span class="c1"># The rules compare the raw values ('no', not False as in P), so e.g. a</span>
+        <span class="c1"># Thermochemistry step with its own parameters is not taken for one using</span>
+        <span class="c1"># the previous step's</span>
+        <span class="n">values</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">current_values</span><span class="p">()</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">applies</span><span class="p">(</span><span class="s2">"correlation integrals"</span><span class="p">,</span> <span class="n">values</span><span class="p">):</span>
             <span class="k">return</span> <span class="s2">"default"</span>
         <span class="k">return</span> <span class="n">P</span><span class="p">[</span><span class="s2">"correlation integrals"</span><span class="p">]</span></div>

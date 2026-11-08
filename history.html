@@ -7,7 +7,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>History &#8212; SEAMM Psi4 Plug-in 2026.11.7.2 documentation</title>
+    <title>History &#8212; SEAMM Psi4 Plug-in 2026.11.8 documentation</title>
   
   
   
@@ -48,7 +48,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-PQXXTJ2');</script>
 <!-- End Google Tag Manager -->
 
-    <script src="_static/documentation_options.js?v=d0cb8874"></script>
+    <script src="_static/documentation_options.js?v=93f150ad"></script>
     <script src="_static/doctools.js?v=fd6eb6e6"></script>
     <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="_static/clipboard.min.js?v=a7894cd8"></script>
@@ -63,7 +63,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2026.11.7.2" />
+  <meta name="docsearch:version" content="2026.11.8" />
   
     
     <script src="_static/searchtools.js"></script>
@@ -506,6 +506,28 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <section id="history">
 <h1>History<a class="headerlink" href="#history" title="Link to this heading">#</a></h1>
 <dl class="simple">
+<dt>2026.11.8 – Bugfix: wrong correlated gradients in optimizations; derivatives and CC convergence options</dt><dd><ul class="simple">
+<li><p>Bugfix: Psi4’s optimizer keeps the previous step’s scratch files, and a
+correlated gradient computed with them present can be wrong – for the
+all-electron CCSD(T) gradient of CH4 near its minimum, ten times too large, so a
+tight optimization wandered uphill and never converged. Optimizations with
+correlated methods now clean the scratch files before each gradient. The
+previous step’s orbitals are still used as the starting guess, and Hessians,
+whose displaced gradients Psi4 computes afresh, were not affected.</p></li>
+<li><p>New “Derivatives” in Optimization and Thermochemistry: “analytic where
+available” (as before) or “finite differences of energies”, which uses only
+energies even where Psi4 has analytic gradients – a check on them, or a way
+around them.</p></li>
+<li><p>New “CC amplitude convergence” for the correlated methods: Psi4’s
+r_convergence, the convergence of the amplitude and lambda equations. “default”
+leaves Psi4’s own.</p></li>
+<li><p>Bugfix: with “use existing parameters”, Thermochemistry described the step’s own
+unused settings (e.g. “B3LYP”) rather than the previous step’s method, which is
+what runs. It now names the previous step’s method, integrals and frozen core.</p></li>
+<li><p>Bugfix: a Thermochemistry step with its own parameters ignored its “Correlation
+integrals” setting.</p></li>
+</ul>
+</dd>
 <dt>2026.11.7.2 – Density-fitted and Cholesky correlation integrals, with analytic DF gradients</dt><dd><ul class="simple">
 <li><p>New “Correlation integrals” setting for MP2, MP2.5, MP3, LCCD, CCD, CCSD, CCSD(T)
 and the orbital-optimized methods: Psi4’s default for the method, conventional,

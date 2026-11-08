@@ -6,7 +6,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>psi4_step.tk_energy &#8212; SEAMM Psi4 Plug-in 2026.11.7.2 documentation</title>
+    <title>psi4_step.tk_energy &#8212; SEAMM Psi4 Plug-in 2026.11.8 documentation</title>
   
   
   
@@ -47,7 +47,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-PQXXTJ2');</script>
 <!-- End Google Tag Manager -->
 
-    <script src="../../_static/documentation_options.js?v=d0cb8874"></script>
+    <script src="../../_static/documentation_options.js?v=93f150ad"></script>
     <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -61,7 +61,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2026.11.7.2" />
+  <meta name="docsearch:version" content="2026.11.8" />
   
     
     <script src="../../_static/searchtools.js"></script>
@@ -608,6 +608,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             <span class="s2">"soscf print iterations"</span><span class="p">,</span>
             <span class="s2">"density convergence"</span><span class="p">,</span>
             <span class="s2">"energy convergence"</span><span class="p">,</span>
+            <span class="s2">"CC amplitude convergence"</span><span class="p">,</span>
             <span class="s2">"convergence error"</span><span class="p">,</span>
             <span class="s2">"maximum iterations"</span><span class="p">,</span>
         <span class="p">):</span>
@@ -803,6 +804,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 <span class="n">row</span> <span class="o">+=</span> <span class="mi">1</span>
         <span class="n">sw</span><span class="o">.</span><span class="n">align_labels</span><span class="p">(</span><span class="n">widgets</span><span class="p">,</span> <span class="n">sticky</span><span class="o">=</span><span class="n">tk</span><span class="o">.</span><span class="n">E</span><span class="p">)</span>
 
+        <span class="c1"># The CC amplitude convergence applies only to the correlated methods</span>
+        <span class="k">if</span> <span class="s2">"CC amplitude convergence"</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_widget</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">reset_convergence</span><span class="p">()</span>
+
         <span class="k">return</span> <span class="n">row</span></div>
 
 
@@ -826,6 +831,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             <span class="s2">"maximum iterations"</span><span class="p">,</span>
             <span class="s2">"density convergence"</span><span class="p">,</span>
             <span class="s2">"energy convergence"</span><span class="p">,</span>
+            <span class="s2">"CC amplitude convergence"</span><span class="p">,</span>
             <span class="s2">"convergence error"</span><span class="p">,</span>
         <span class="p">):</span>
             <span class="k">if</span> <span class="n">P</span><span class="o">.</span><span class="n">applies</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">values</span><span class="p">):</span>

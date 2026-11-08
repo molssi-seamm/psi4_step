@@ -6,7 +6,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>psi4_step.energy_parameters &#8212; SEAMM Psi4 Plug-in 2026.11.7.2 documentation</title>
+    <title>psi4_step.energy_parameters &#8212; SEAMM Psi4 Plug-in 2026.11.8 documentation</title>
   
   
   
@@ -47,7 +47,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-PQXXTJ2');</script>
 <!-- End Google Tag Manager -->
 
-    <script src="../../_static/documentation_options.js?v=d0cb8874"></script>
+    <script src="../../_static/documentation_options.js?v=93f150ad"></script>
     <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -61,7 +61,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2026.11.7.2" />
+  <meta name="docsearch:version" content="2026.11.8" />
   
     
     <script src="../../_static/searchtools.js"></script>
@@ -500,6 +500,27 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <span class="n">DFT_METHODS</span> <span class="o">=</span> <span class="p">[</span><span class="n">name</span> <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">record</span> <span class="ow">in</span> <span class="n">methods</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">record</span><span class="p">[</span><span class="s2">"method"</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"dft"</span><span class="p">]</span>
 
 
+<span class="c1">#: How a step that needs gradients or Hessians gets them (Optimization and</span>
+<span class="c1">#: Thermochemistry): analytic gradients where Psi4 has them, else finite</span>
+<span class="c1">#: differences of energies; or finite differences of energies regardless.</span>
+<span class="n">ANALYTIC</span> <span class="o">=</span> <span class="s2">"analytic where available"</span>
+<span class="n">FINITE_DIFFERENCES</span> <span class="o">=</span> <span class="s2">"finite differences of energies"</span>
+<span class="n">DERIVATIVES</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">"default"</span><span class="p">:</span> <span class="n">ANALYTIC</span><span class="p">,</span>
+    <span class="s2">"kind"</span><span class="p">:</span> <span class="s2">"enumeration"</span><span class="p">,</span>
+    <span class="s2">"default_units"</span><span class="p">:</span> <span class="s2">""</span><span class="p">,</span>
+    <span class="s2">"enumeration"</span><span class="p">:</span> <span class="p">(</span><span class="n">ANALYTIC</span><span class="p">,</span> <span class="n">FINITE_DIFFERENCES</span><span class="p">),</span>
+    <span class="s2">"format_string"</span><span class="p">:</span> <span class="s2">"s"</span><span class="p">,</span>
+    <span class="s2">"description"</span><span class="p">:</span> <span class="s2">"Derivatives:"</span><span class="p">,</span>
+    <span class="s2">"help_text"</span><span class="p">:</span> <span class="p">(</span>
+        <span class="s2">"How the gradients (and so the Hessian) are found: analytically where "</span>
+        <span class="s2">"Psi4 can for this method, or by finite differences of energies, which "</span>
+        <span class="s2">"costs many more calculations but needs only energies -- a check on, or a "</span>
+        <span class="s2">"way around, an analytic gradient."</span>
+    <span class="p">),</span>
+<span class="p">}</span>
+
+
 <div class="viewcode-block" id="EnergyParameters">
 <a class="viewcode-back" href="../../api/psi4_step.html#psi4_step.energy_parameters.EnergyParameters">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">EnergyParameters</span><span class="p">(</span><span class="n">seamm</span><span class="o">.</span><span class="n">Parameters</span><span class="p">):</span>
@@ -715,6 +736,19 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 <span class="s2">"SCF, 10^-8 optimization."</span>
             <span class="p">),</span>
         <span class="p">},</span>
+        <span class="s2">"CC amplitude convergence"</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">"default"</span><span class="p">:</span> <span class="s2">"default"</span><span class="p">,</span>
+            <span class="s2">"kind"</span><span class="p">:</span> <span class="s2">"float"</span><span class="p">,</span>
+            <span class="s2">"default_units"</span><span class="p">:</span> <span class="s2">""</span><span class="p">,</span>
+            <span class="s2">"enumeration"</span><span class="p">:</span> <span class="p">(</span><span class="s2">"default"</span><span class="p">,),</span>
+            <span class="s2">"format_string"</span><span class="p">:</span> <span class="s2">"s"</span><span class="p">,</span>
+            <span class="s2">"description"</span><span class="p">:</span> <span class="s2">"CC amplitude convergence:"</span><span class="p">,</span>
+            <span class="s2">"help_text"</span><span class="p">:</span> <span class="p">(</span>
+                <span class="s2">"Convergence of the residuals of the amplitude (and, for gradients, "</span>
+                <span class="s2">"lambda) equations of the correlated method: Psi4's r_convergence. "</span>
+                <span class="s2">"'default' is Psi4's own (1e-7)."</span>
+            <span class="p">),</span>
+        <span class="p">},</span>
         <span class="s2">"convergence error"</span><span class="p">:</span> <span class="p">{</span>
             <span class="s2">"default"</span><span class="p">:</span> <span class="s2">"yes"</span><span class="p">,</span>
             <span class="s2">"kind"</span><span class="p">:</span> <span class="s2">"boolean"</span><span class="p">,</span>
@@ -897,7 +931,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 <span class="k">return</span> <span class="kc">True</span>
             <span class="n">record</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_method_record</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
             <span class="k">return</span> <span class="n">record</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="nb">bool</span><span class="p">(</span><span class="n">record</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"freeze core?"</span><span class="p">,</span> <span class="kc">False</span><span class="p">))</span>
-        <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">"correlation integrals"</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">"correlation integrals"</span><span class="p">,</span> <span class="s2">"CC amplitude convergence"</span><span class="p">):</span>
             <span class="kn">from</span><span class="w"> </span><span class="nn">.derivatives</span><span class="w"> </span><span class="kn">import</span> <span class="n">TYPE_KEYWORD</span>
 
             <span class="n">name</span> <span class="o">=</span> <span class="n">values</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_method_key</span><span class="p">(</span><span class="n">values</span><span class="p">))</span>
@@ -933,6 +967,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">"correlation integrals"</span><span class="p">:</span>
             <span class="n">name</span> <span class="o">=</span> <span class="n">values</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_method_key</span><span class="p">(</span><span class="n">values</span><span class="p">))</span>
             <span class="k">return</span> <span class="sa">f</span><span class="s2">"the method '</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">' has no choice of correlation integrals"</span>
+        <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">"CC amplitude convergence"</span><span class="p">:</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="n">values</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_method_key</span><span class="p">(</span><span class="n">values</span><span class="p">))</span>
+            <span class="k">return</span> <span class="sa">f</span><span class="s2">"the method '</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">' has no amplitude equations"</span>
         <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">"dispersion"</span><span class="p">:</span>
             <span class="n">functional_key</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_functional_key</span><span class="p">(</span><span class="n">values</span><span class="p">)</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">applies</span><span class="p">(</span><span class="n">functional_key</span><span class="p">,</span> <span class="n">values</span><span class="p">):</span>

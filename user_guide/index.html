@@ -7,7 +7,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>User Guide &#8212; SEAMM Psi4 Plug-in 2026.11.7.2 documentation</title>
+    <title>User Guide &#8212; SEAMM Psi4 Plug-in 2026.11.8 documentation</title>
   
   
   
@@ -48,7 +48,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-PQXXTJ2');</script>
 <!-- End Google Tag Manager -->
 
-    <script src="../_static/documentation_options.js?v=d0cb8874"></script>
+    <script src="../_static/documentation_options.js?v=93f150ad"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -64,7 +64,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2026.11.7.2" />
+  <meta name="docsearch:version" content="2026.11.8" />
   
     
     <script src="../_static/searchtools.js"></script>
@@ -576,6 +576,20 @@ analytic gradients.</p></li>
 the Hessian by finite differences of gradients, using the molecule’s symmetry to reduce
 the number of displaced geometries. With “use existing parameters”, Thermochemistry
 uses the previous step’s settings, including its correlation integrals.</p>
+<p><strong>Derivatives</strong> (Optimization and Thermochemistry) chooses between “analytic where
+available”, the default described above, and “finite differences of energies”, which
+uses only energies even where Psi4 has an analytic gradient. That costs many more
+calculations, but it is a check on an analytic gradient, or a way around one.</p>
+<p><strong>Optimizations with correlated methods</strong> clean Psi4’s scratch files before each
+gradient. Psi4 1.11’s optimizer keeps the previous step’s files, and a correlated
+gradient computed with them present can be wrong: for the all-electron CCSD(T)
+gradient of CH<sub>4</sub> near its minimum, ten times too large, so a tight
+optimization never converged. The previous step’s orbitals are still used as the
+starting guess. Hessians are not affected: Psi4 computes each displaced gradient
+afresh.</p>
+<p><strong>CC amplitude convergence</strong> (correlated methods) is how tightly Psi4 converges the
+amplitude equations, and for gradients the lambda equations: its <code class="docutils literal notranslate"><span class="pre">r_convergence</span></code>.
+“default” leaves Psi4’s own, 10<sup>-7</sup>.</p>
 </section>
 <section id="index">
 <h2>Index<a class="headerlink" href="#index" title="Link to this heading">#</a></h2>
