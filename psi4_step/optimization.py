@@ -7,6 +7,7 @@ import logging
 from pathlib import Path
 
 import cclib
+import numpy as np
 
 from molsystem import RMSD
 import psi4_step
@@ -15,21 +16,6 @@ import seamm.data
 from seamm_util import units_class
 import seamm_util.printing as printing
 from seamm_util.printing import FormattedText as __
-
-try:
-    from itertools import batched
-except ImportError:
-    from itertools import islice
-
-    def batched(iterable, n):
-        "Batch data into tuples of length n. The last batch may be shorter."
-        # batched('ABCDEFG', 3) --> ABC DEF G
-        if n < 1:
-            raise ValueError("n must be at least one")
-        it = iter(iterable)
-        while batch := tuple(islice(it, n)):
-            yield batch
-
 
 logger = logging.getLogger(__name__)
 job = printing.getPrinter()
@@ -114,14 +100,11 @@ class Optimization(psi4_step.Energy):
         else:
             final = initial_configuration.to_RDKMol()
 
-        # Get the updated coordinates
-        structure_file = directory / "final_structure.json"
-        if structure_file.exists():
-            with structure_file.open(mode="r") as fd:
-                structure = json.load(fd)
-            if "geom" in structure:
-                XYZs = [batched(structure["geom"], 3)]
-                final.GetConformer(0).SetPositions(XYZs)
+        # The optimized coordinates, which the input writes for this step. (Before
+        # 2026.11.8.1 this looked for the run's final_structure.json in this step's
+        # directory, never found it, and silently kept the starting coordinates.)
+        if configuration.n_atoms > 1:
+            final.GetConformer(0).SetPositions(self.optimized_coordinates(directory))
 
         result = RMSD(final, initial, symmetry=True, include_h=True, align=True)
         data["RMSD with H"] = result["RMSD"]
@@ -156,23 +139,21 @@ class Optimization(psi4_step.Energy):
                 "Units": [],
             }
 
-        if "optdone" in data:
-            table["Property"].append("Converged")
-            table["Value"].append(str(data["optdone"]))
-            table["Units"].append("")
-        else:
-            table["Property"].append("Converged")
-            table["Value"].append("unknown")
-            table["Units"].append("")
+        # Psi4's optimize() raises if it does not converge, so results mean it did.
+        # cclib's values are used if it could read the output.
+        table["Property"].append("Converged")
+        table["Value"].append(str(data.get("optdone", True)))
+        table["Units"].append("")
 
         if "optstatus" in data:
-            table["Property"].append("# Steps")
-            table["Value"].append(str(len(data["optstatus"])))
-            table["Units"].append("")
+            steps = str(len(data["optstatus"]))
+        elif "OPTIMIZATION ITERATIONS" in data:
+            steps = str(int(data["OPTIMIZATION ITERATIONS"]))
         else:
-            table["Property"].append("# Steps")
-            table["Value"].append("unknown")
-            table["Units"].append("")
+            steps = "unknown"
+        table["Property"].append("# Steps")
+        table["Value"].append(steps)
+        table["Units"].append("")
 
         if "RMSD" in data:
             tmp = data["RMSD"]
@@ -233,6 +214,26 @@ class Optimization(psi4_step.Energy):
         added += seamm.standard_parameters.structure_handling_description(P, **kwargs)
 
         return text + "\n" + __(added, **P, indent=4 * " ").__str__()
+
+    #: Psi4's (CODATA 2014) Bohr radius in Ångström
+    BOHR = 0.52917721067
+
+    def optimized_coordinates(self, directory):
+        """The optimized Cartesian coordinates in Å, from final_structure.json, which
+        the input writes for this step. Raises if it is missing, rather than leave
+        the starting structure in place under an 'optimized' name."""
+        path = Path(directory) / "final_structure.json"
+        if not path.exists():
+            raise RuntimeError(
+                f"The optimized structure from Psi4 is missing ({path}), so the "
+                "structure cannot be updated."
+            )
+        with path.open() as fd:
+            structure = json.load(fd)
+        xyz = np.asarray(structure["geom"], dtype=float).reshape(-1, 3)
+        if str(structure.get("units", "Angstrom")).lower().startswith("bohr"):
+            xyz = xyz * self.BOHR
+        return xyz
 
     def get_input(self, calculation_type="optimize"):
         """Get the input for an optimization calculation for Psi4"""
@@ -312,5 +313,16 @@ class Optimization(psi4_step.Energy):
 
         # Add in the input from the energy part of things
         lines.append(super().get_input(calculation_type=calculation_type))
+
+        # The optimized structure, for this step's analysis (into its directory)
+        filename = f"@{self._id[-1]}+final_structure.json"
+        lines.append(f"""
+_structure = get_active_molecule().to_dict()
+for _key, _value in _structure.items():
+    if isinstance(_value, np.ndarray):
+        _structure[_key] = _value.tolist()
+with open("{filename}", "w") as fd:
+    json.dump(_structure, fd, sort_keys=True, indent=3)
+""")
 
         return "\n".join(lines)
