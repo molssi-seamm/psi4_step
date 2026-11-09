@@ -7,7 +7,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>History &#8212; SEAMM Psi4 Plug-in 2026.11.8.1 documentation</title>
+    <title>History &#8212; SEAMM Psi4 Plug-in 2026.11.9 documentation</title>
   
   
   
@@ -48,7 +48,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-PQXXTJ2');</script>
 <!-- End Google Tag Manager -->
 
-    <script src="_static/documentation_options.js?v=5120ad9a"></script>
+    <script src="_static/documentation_options.js?v=3789d4b4"></script>
     <script src="_static/doctools.js?v=fd6eb6e6"></script>
     <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="_static/clipboard.min.js?v=a7894cd8"></script>
@@ -63,7 +63,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2026.11.8.1" />
+  <meta name="docsearch:version" content="2026.11.9" />
   
     
     <script src="_static/searchtools.js"></script>
@@ -506,6 +506,15 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <section id="history">
 <h1>History<a class="headerlink" href="#history" title="Link to this heading">#</a></h1>
 <dl class="simple">
+<dt>2026.11.9 – Bugfix: the Thermochemistry results name the method that ran</dt><dd><ul class="simple">
+<li><p>With ‘use existing parameters’ the header of the Thermochemistry results named
+the step’s own, unused method (e.g. Kohn-Sham DFT) instead of the method of the
+calculation it analyzed, and correlated methods showed ‘R-None’. It now names
+the method that ran.</p></li>
+<li><p>The developer guide’s ALMO-EDA campaign records the validation and cost of the
+Psi4 backend of the Interaction EDA step.</p></li>
+</ul>
+</dd>
 <dt>2026.11.8.1 – Bugfix: optimizations did not store the optimized structure</dt><dd><ul class="simple">
 <li><p>Since version 2025.3.9 an Optimization looked for Psi4’s optimized structure in
 the wrong directory, did not find it, and silently kept the starting coordinates

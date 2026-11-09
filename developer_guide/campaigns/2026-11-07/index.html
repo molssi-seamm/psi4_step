@@ -7,7 +7,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>2026-11-07 ALMO-EDA in Psi4 (design) &#8212; SEAMM Psi4 Plug-in 2026.11.8.1 documentation</title>
+    <title>2026-11-07 ALMO-EDA in Psi4 (design) &#8212; SEAMM Psi4 Plug-in 2026.11.9 documentation</title>
   
   
   
@@ -48,7 +48,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-PQXXTJ2');</script>
 <!-- End Google Tag Manager -->
 
-    <script src="../../../_static/documentation_options.js?v=5120ad9a"></script>
+    <script src="../../../_static/documentation_options.js?v=3789d4b4"></script>
     <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -65,7 +65,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2026.11.8.1" />
+  <meta name="docsearch:version" content="2026.11.9" />
   
     
     <script src="../../../_static/searchtools.js"></script>
@@ -772,8 +772,169 @@ milestone 7.</p></li>
 (<code class="docutils literal notranslate"><span class="pre">VBase</span></code>, <code class="docutils literal notranslate"><span class="pre">cphf_solve</span></code>); pin the Psi4 version the backend supports.</p></li>
 </ul>
 </section>
+<section id="results-2026-11-08-09">
+<h2>Results (2026-11-08/09)<a class="headerlink" href="#results-2026-11-08-09" title="Link to this heading">#</a></h2>
+<p>The driver (<code class="docutils literal notranslate"><span class="pre">interaction_eda_step/data/psi4_eda.py</span></code>, released in
+interaction-eda-step 2026.11.8.1) was run against the GPU4PySCF references of
+TinkerCliffs job 793976 (ωB97X-V/def2-TZVPD, coupled FERF without VV10 in the response,
+exact integrals) on TinkerCliffs AMD nodes, 16 threads unless noted. ωB97M-V is not
+possible: Psi4 has no coupled meta-GGA kernel, and the backend refuses it.</p>
+<p><strong>Parity with exact integrals</strong> (job 8546834): HF on the water dimer and Li⁺–EC
+agree to better than 1e-4 kJ/mol; ωB97X-V on the water dimer, Li⁺–EC and PF₆⁻–EC to
+0.0036 kJ/mol at worst. The method is right.</p>
+<p><strong>Two driver fixes</strong> (jobs 8548610, 8548842):</p>
+<ul class="simple">
+<li><p>Keeping the integrals in core (PK) was 4.5 times <em>slower</em> than computing them
+directly for the EDA’s many Fock builds (HF Li⁺–EC: 1179 s against 260 s, the same
+terms): the driver now uses DIRECT, or MEM_DF with an auxiliary basis.</p></li>
+<li><p>The density-fitted path stopped at once (“point group has not been set”):
+<code class="docutils literal notranslate"><span class="pre">JK.build</span></code> makes the fitting basis itself only for SCF_TYPE DF, so the driver now
+builds it explicitly.</p></li>
+</ul>
+<p><strong>Density fitting</strong> (def2-universal-JKFIT) on the whole of shell A (job 8552392; the
+EC–EC pair 1+2 alone in job 8551357, with 8 threads in 8551537):</p>
+<div class="pst-scrollable-table-container"><table class="table" id="id1">
+<caption><span class="caption-text">Time and memory, 16 threads (GPU4PySCF on a V100 for comparison)</span><a class="headerlink" href="#id1" title="Link to this table">#</a></caption>
+<colgroup>
+<col style="width: 30.0%" />
+<col style="width: 10.0%" />
+<col style="width: 30.0%" />
+<col style="width: 30.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Calculation</p></th>
+<th class="head"><p>nao</p></th>
+<th class="head"><p>Psi4 + DF</p></th>
+<th class="head"><p>GPU4PySCF</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Li⁺–EC pairs 0+2, 0+3</p></td>
+<td><p>284</p></td>
+<td><p>424, 428 s</p></td>
+<td><p>87, 85 s</p></td>
+</tr>
+<tr class="row-odd"><td><p>Li⁺–EC pairs 0+1, 0+4</p></td>
+<td><p>302</p></td>
+<td><p>456, 478 s</p></td>
+<td><p>93, 94 s</p></td>
+</tr>
+<tr class="row-even"><td><p>EC–EC pair 2+3</p></td>
+<td><p>534</p></td>
+<td><p>903 s</p></td>
+<td><p>166 s</p></td>
+</tr>
+<tr class="row-odd"><td><p>EC–EC pairs 1+2, 1+3, 2+4, 3+4</p></td>
+<td><p>552</p></td>
+<td><p>1120, 1048, 1134, 1011 s</p></td>
+<td><p>200, 191, 203, 180 s</p></td>
+</tr>
+<tr class="row-even"><td><p>EC–EC pair 1+4</p></td>
+<td><p>570</p></td>
+<td><p>1191 s</p></td>
+<td><p>211 s</p></td>
+</tr>
+<tr class="row-odd"><td><p>The cluster</p></td>
+<td><p>1121</p></td>
+<td><p>7712 s, peak 141 GB</p></td>
+<td><p>1538 s</p></td>
+</tr>
+<tr class="row-even"><td><p>All of shell A</p></td>
+<td></td>
+<td><p>4 h 26 min, 70.8 core-h</p></td>
+<td><p>3046 s</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>On the EC–EC pair, 8 threads took 2235 s (4.97 core-h) against 956 s (4.27 core-h) for
+16, so 16 threads is the more efficient. The time grows as nao<sup>2.8</sup> from the
+EC–EC pairs to the cluster.</p>
+<div class="pst-scrollable-table-container"><table class="table" id="id2">
+<caption><span class="caption-text">Density-fitting error against exact integrals (kJ/mol)</span><a class="headerlink" href="#id2" title="Link to this table">#</a></caption>
+<colgroup>
+<col style="width: 21.6%" />
+<col style="width: 9.8%" />
+<col style="width: 9.8%" />
+<col style="width: 9.8%" />
+<col style="width: 9.8%" />
+<col style="width: 9.8%" />
+<col style="width: 9.8%" />
+<col style="width: 9.8%" />
+<col style="width: 9.8%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Set</p></th>
+<th class="head"><p>total</p></th>
+<th class="head"><p>frozen</p></th>
+<th class="head"><p>cls. elec.</p></th>
+<th class="head"><p>orth. elec.</p></th>
+<th class="head"><p>disp.</p></th>
+<th class="head"><p>orth. Pauli</p></th>
+<th class="head"><p>pol.</p></th>
+<th class="head"><p>CT</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Pairs, worst</p></td>
+<td><p>0.011</p></td>
+<td><p>0.012</p></td>
+<td><p>0.009</p></td>
+<td><p>0.007</p></td>
+<td><p>0.044</p></td>
+<td><p>0.049</p></td>
+<td><p>0.007</p></td>
+<td><p>0.007</p></td>
+</tr>
+<tr class="row-odd"><td><p>Cluster</p></td>
+<td><p>+0.004</p></td>
+<td><p>−0.000</p></td>
+<td><p>+0.008</p></td>
+<td><p>+0.001</p></td>
+<td><p>−0.081</p></td>
+<td><p>+0.081</p></td>
+<td><p>−0.000</p></td>
+<td><p>+0.005</p></td>
+</tr>
+<tr class="row-even"><td><p>≥3-body</p></td>
+<td><p>−0.042</p></td>
+<td><p>−0.043</p></td>
+<td><p>−0.004</p></td>
+<td><p>−0.008</p></td>
+<td><p>+0.086</p></td>
+<td><p>−0.121</p></td>
+<td><p>+0.009</p></td>
+<td><p>−0.009</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>The error is in the split between dispersion and Pauli, and grows with size: the
+modified (SAPT-like) Pauli, frozen − classical electrostatics − dispersion, is off by
++0.073 kJ/mol for the cluster and −0.124 in its ≥3-body part. The total, the classical
+electrostatics, polarization and charge transfer stay within 0.01 kJ/mol.</p>
+<p><strong>Cost</strong> of shell A: 70.8 core-h, billed 203.6 SU on a node with 240 GB (46 SU/h, two
+thirds of it for the memory), against 52.5 SU for GPU4PySCF on a V100: 3.9 times as
+billed, 1.35 times in CPU time alone. For a typical exchange cluster (about 1500 nao,
+21 pairs) the same scaling gives about 177 core-h, roughly 4.5 times the GPU as billed
+(1.6 times in CPU time), and 250–340 GB of memory, at or beyond a 256 GB node.</p>
+<p><strong>Conclusion</strong> (science, 2026-11-09). The terms the fits read – polarization, charge
+transfer and its ≥3-body part, and the pairs’ classical electrostatics and modified
+Pauli – are within the 0.05 kJ/mol gate up to the size of shell A (polarization and
+charge transfer within 0.01, pair Pauli within 0.049). The cluster-level
+dispersion/Pauli error (0.08 for the cluster, 0.12 in the ≥3-body modified Pauli) is
+far below the fits’ tolerances but beyond the gate. So Psi4 with density fitting is a
+valid fallback for the fitted terms up to shell-A size; its real limits are the
+memory (about 1500 nao needs 250–340 GB) and the cost, 3.9–4.5 times the GPU as
+billed. Production labels stay ωB97M-V on GPUs, and Psi4 is the cross-check and
+fallback.</p>
+</section>
 <section id="decisions-for-paul">
 <h2>Decisions for Paul<a class="headerlink" href="#decisions-for-paul" title="Link to this heading">#</a></h2>
+<p>Decided (2026-11-07 to 11-09): the CPU backend targets ωB97X-V (coupled) and HF, and
+refuses meta-GGAs rather than run them uncoupled; production labels stay ωB97M-V on
+GPUs, with Psi4 as the cross-check and fallback (see the results above); milestone 8 is
+not started. The questions as first put:</p>
 <ul class="simple">
 <li><p>Which functional the CPU backend targets first: ωB97X-V (coupled, Python only) or
 ωB97M-V (uncoupled, Python only, about 1 % of polarization moved to charge
@@ -857,6 +1018,7 @@ decomposition in DFT: electrostatics, Pauli, dispersion.</p></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#validation-against-gpu4pyscf">Validation against GPU4PySCF</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#milestones">Milestones</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#risks">Risks</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#results-2026-11-08-09">Results (2026-11-08/09)</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#decisions-for-paul">Decisions for Paul</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#references">References</a></li>
 </ul>
