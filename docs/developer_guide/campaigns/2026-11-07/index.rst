@@ -212,8 +212,141 @@ Risks
 * **Psi4 internals:** the driver uses exported but lightly documented objects
   (``VBase``, ``cphf_solve``); pin the Psi4 version the backend supports.
 
+Results (2026-11-08/09)
+-----------------------
+The driver (``interaction_eda_step/data/psi4_eda.py``, released in
+interaction-eda-step 2026.11.8.1) was run against the GPU4PySCF references of
+TinkerCliffs job 793976 (ωB97X-V/def2-TZVPD, coupled FERF without VV10 in the response,
+exact integrals) on TinkerCliffs AMD nodes, 16 threads unless noted. ωB97M-V is not
+possible: Psi4 has no coupled meta-GGA kernel, and the backend refuses it.
+
+**Parity with exact integrals** (job 8546834): HF on the water dimer and Li⁺–EC
+agree to better than 1e-4 kJ/mol; ωB97X-V on the water dimer, Li⁺–EC and PF₆⁻–EC to
+0.0036 kJ/mol at worst. The method is right.
+
+**Two driver fixes** (jobs 8548610, 8548842):
+
+* Keeping the integrals in core (PK) was 4.5 times *slower* than computing them
+  directly for the EDA's many Fock builds (HF Li⁺–EC: 1179 s against 260 s, the same
+  terms): the driver now uses DIRECT, or MEM_DF with an auxiliary basis.
+* The density-fitted path stopped at once ("point group has not been set"):
+  ``JK.build`` makes the fitting basis itself only for SCF_TYPE DF, so the driver now
+  builds it explicitly.
+
+**Density fitting** (def2-universal-JKFIT) on the whole of shell A (job 8552392; the
+EC–EC pair 1+2 alone in job 8551357, with 8 threads in 8551537):
+
+.. list-table:: Time and memory, 16 threads (GPU4PySCF on a V100 for comparison)
+   :header-rows: 1
+   :widths: 30 10 30 30
+
+   * - Calculation
+     - nao
+     - Psi4 + DF
+     - GPU4PySCF
+   * - Li⁺–EC pairs 0+2, 0+3
+     - 284
+     - 424, 428 s
+     - 87, 85 s
+   * - Li⁺–EC pairs 0+1, 0+4
+     - 302
+     - 456, 478 s
+     - 93, 94 s
+   * - EC–EC pair 2+3
+     - 534
+     - 903 s
+     - 166 s
+   * - EC–EC pairs 1+2, 1+3, 2+4, 3+4
+     - 552
+     - 1120, 1048, 1134, 1011 s
+     - 200, 191, 203, 180 s
+   * - EC–EC pair 1+4
+     - 570
+     - 1191 s
+     - 211 s
+   * - The cluster
+     - 1121
+     - 7712 s, peak 141 GB
+     - 1538 s
+   * - All of shell A
+     -
+     - 4 h 26 min, 70.8 core-h
+     - 3046 s
+
+On the EC–EC pair, 8 threads took 2235 s (4.97 core-h) against 956 s (4.27 core-h) for
+16, so 16 threads is the more efficient. The time grows as nao\ :sup:`2.8` from the
+EC–EC pairs to the cluster.
+
+.. list-table:: Density-fitting error against exact integrals (kJ/mol)
+   :header-rows: 1
+   :widths: 22 10 10 10 10 10 10 10 10
+
+   * - Set
+     - total
+     - frozen
+     - cls. elec.
+     - orth. elec.
+     - disp.
+     - orth. Pauli
+     - pol.
+     - CT
+   * - Pairs, worst
+     - 0.011
+     - 0.012
+     - 0.009
+     - 0.007
+     - 0.044
+     - 0.049
+     - 0.007
+     - 0.007
+   * - Cluster
+     - +0.004
+     - −0.000
+     - +0.008
+     - +0.001
+     - −0.081
+     - +0.081
+     - −0.000
+     - +0.005
+   * - ≥3-body
+     - −0.042
+     - −0.043
+     - −0.004
+     - −0.008
+     - +0.086
+     - −0.121
+     - +0.009
+     - −0.009
+
+The error is in the split between dispersion and Pauli, and grows with size: the
+modified (SAPT-like) Pauli, frozen − classical electrostatics − dispersion, is off by
++0.073 kJ/mol for the cluster and −0.124 in its ≥3-body part. The total, the classical
+electrostatics, polarization and charge transfer stay within 0.01 kJ/mol.
+
+**Cost** of shell A: 70.8 core-h, billed 203.6 SU on a node with 240 GB (46 SU/h, two
+thirds of it for the memory), against 52.5 SU for GPU4PySCF on a V100: 3.9 times as
+billed, 1.35 times in CPU time alone. For a typical exchange cluster (about 1500 nao,
+21 pairs) the same scaling gives about 177 core-h, roughly 4.5 times the GPU as billed
+(1.6 times in CPU time), and 250--340 GB of memory, at or beyond a 256 GB node.
+
+**Conclusion** (science, 2026-11-09). The terms the fits read -- polarization, charge
+transfer and its ≥3-body part, and the pairs' classical electrostatics and modified
+Pauli -- are within the 0.05 kJ/mol gate up to the size of shell A (polarization and
+charge transfer within 0.01, pair Pauli within 0.049). The cluster-level
+dispersion/Pauli error (0.08 for the cluster, 0.12 in the ≥3-body modified Pauli) is
+far below the fits' tolerances but beyond the gate. So Psi4 with density fitting is a
+valid fallback for the fitted terms up to shell-A size; its real limits are the
+memory (about 1500 nao needs 250--340 GB) and the cost, 3.9--4.5 times the GPU as
+billed. Production labels stay ωB97M-V on GPUs, and Psi4 is the cross-check and
+fallback.
+
 Decisions for Paul
 ------------------
+Decided (2026-11-07 to 11-09): the CPU backend targets ωB97X-V (coupled) and HF, and
+refuses meta-GGAs rather than run them uncoupled; production labels stay ωB97M-V on
+GPUs, with Psi4 as the cross-check and fallback (see the results above); milestone 8 is
+not started. The questions as first put:
+
 * Which functional the CPU backend targets first: ωB97X-V (coupled, Python only) or
   ωB97M-V (uncoupled, Python only, about 1 % of polarization moved to charge
   transfer).
