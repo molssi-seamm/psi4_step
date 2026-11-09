@@ -1,6 +1,14 @@
 =======
 History
 =======
+2026.11.9 -- Bugfix: the Thermochemistry results name the method that ran
+    * With 'use existing parameters' the header of the Thermochemistry results named
+      the step's own, unused method (e.g. Kohn-Sham DFT) instead of the method of the
+      calculation it analyzed, and correlated methods showed 'R-None'. It now names
+      the method that ran.
+    * The developer guide's ALMO-EDA campaign records the validation and cost of the
+      Psi4 backend of the Interaction EDA step.
+
 2026.11.8.1 -- Bugfix: optimizations did not store the optimized structure
     * Since version 2025.3.9 an Optimization looked for Psi4's optimized structure in
       the wrong directory, did not find it, and silently kept the starting coordinates

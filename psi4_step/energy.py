@@ -1191,7 +1191,8 @@ with open("{filename}", "w") as fd:
             spin_text = "U-"
 
         text_lines.append(
-            f"Results for {spin_text}{self.parent.extended_model}".center(length)
+            f"Results for {spin_text}"
+            f"{self.parent.extended_model or self.parent.model}".center(length)
         )
         text_lines.append(method_string.center(length))
         text_lines.append(tmp)
