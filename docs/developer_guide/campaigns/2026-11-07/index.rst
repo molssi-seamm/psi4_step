@@ -340,6 +340,45 @@ memory (about 1500 nao needs 250--340 GB) and the cost, 3.9--4.5 times the GPU a
 billed. Production labels stay ωB97M-V on GPUs, and Psi4 is the cross-check and
 fallback.
 
+Memory, and parity with GPU density fitting (2026-11-09)
+--------------------------------------------------------
+On 11-09 Paul switched the EDA labels to ωB97X-V and made Psi4 the main CPU route for
+the relabel, so the two limits above were taken up the same day.
+
+**Memory** (interaction-eda-step 2026.11.9). The driver held two sets of density-fitted
+integrals at once: the EDA engine's and those of the final SCF of the whole system. The
+SCF now runs first, and Psi4 frees its integrals before the engine builds its own. On
+the EC–EC pair (job 8558499) the peak fell from 7.55 to 6.31 GB and the time from 433
+to 364 s, with the terms unchanged to 8e-7 kJ/mol. When the integrals would not fit,
+the driver falls back to DISK_DF, and the step gives Psi4 80 % of the job's memory.
+Projected from this: shell A at about 70 GB, which on a 128 GB allocation is about 2.7
+times the GPU as billed; a 1500-nao cluster at 125--170 GB, which fits a 256 GB node.
+A run capped at 16 GB timed out, so the projection is not yet measured.
+
+**GPU against Psi4, both density-fitted** (def2-universal-JKFIT, ωB97X-V/def2-TZVPD,
+coupled FERF without VV10 in the response; TinkerCliffs 8558670, Falcon A30 810556):
+
+* Pairs (water dimer, Li⁺–EC, Li⁺–PF₆⁻, PF₆⁻–EC, two Na⁺/water pairs) agree to 0.021
+  kJ/mol or better in every term, so GPU and CPU labels of pairs can be mixed.
+* The Na⁺(H₂O)₆ cluster differed by 0.38 kJ/mol in total, 0.43 in the frozen term
+  and 0.33 in dispersion. Most of it is GPU4PySCF's integration grids, (99,590) for
+  exchange-correlation and (50,194) for VV10 with pruning, which are not converged for
+  a compact cluster; the two grids contribute about equally (Falcon 810833, 810905).
+  With (150,974) and (99,590) the energy of the whole cluster agrees with Psi4 to 0.012
+  kJ/mol, at about 7 times the GPU time. Psi4 at the same nominal grids, unpruned, is
+  already close to converged. interaction-eda-step PR #5 makes the fine grids the GPU
+  default.
+* What remains on every grid, 0.13 kJ/mol in total (frozen 0.15, electrostatics 0.12,
+  classical electrostatics 0.07), is the two codes' density-fitting implementations
+  adding up over seven fragments, the same size as Psi4's own density-fitting error on
+  shell A. It changes no decision.
+
+**Decided** (science, 2026-11-09): pairs may mix GPU and CPU labels; each cluster set
+stays on one code, Psi4 for the relabel, and any later GPU cluster labels use the fine
+grids. The earlier ωB97M-V GPU cluster labels used GPU4PySCF's unconverged default
+grids (about 0.3 kJ/mol in dispersion and the frozen term for compact clusters); the
+relabel replaces them, so their grid error is not measured separately.
+
 Decisions for Paul
 ------------------
 Decided (2026-11-07 to 11-09): the CPU backend targets ωB97X-V (coupled) and HF, and
