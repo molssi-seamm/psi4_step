@@ -7,7 +7,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>User Guide &#8212; SEAMM Psi4 Plug-in 2026.11.9.1 documentation</title>
+    <title>User Guide &#8212; SEAMM Psi4 Plug-in 2026.11.18 documentation</title>
   
   
   
@@ -31,7 +31,7 @@
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=6a604523" />
     <link rel="stylesheet" type="text/css" href="../_static/css/custom.css?v=c224919a" />
   
   <!-- So that users can add custom icons -->
@@ -48,12 +48,12 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-PQXXTJ2');</script>
 <!-- End Google Tag Manager -->
 
-    <script src="../_static/documentation_options.js?v=20f5e7c3"></script>
+    <script src="../_static/documentation_options.js?v=040a0bb1"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../_static/copybutton.js?v=f281be69"></script>
-    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script data-sd-tabs-storage-prefix="sphinx-design-tab-id-" src="../_static/design-tabs.js?v=fcb327ea"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'user_guide/index';</script>
     <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
 
@@ -64,7 +64,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2026.11.9.1" />
+  <meta name="docsearch:version" content="2026.11.18" />
   
     
     <script src="../_static/searchtools.js"></script>
@@ -591,6 +591,48 @@ afresh.</p>
 amplitude equations, and for gradients the lambda equations: its <code class="docutils literal notranslate"><span class="pre">r_convergence</span></code>.
 “default” leaves Psi4’s own, 10<sup>-7</sup>.</p>
 </section>
+<section id="frozen-core">
+<h2>Frozen core<a class="headerlink" href="#frozen-core" title="Link to this heading">#</a></h2>
+<p>For the correlated methods, “Freeze core orbitals” chooses which core orbitals are left
+out of the correlation:</p>
+<ul class="simple">
+<li><p><strong>yes</strong>: the previous noble-gas core of each atom – [He] on B-Ne, [Ne] on Al-Ar,
+[Ar] on Ga-Kr (Psi4’s <code class="docutils literal notranslate"><span class="pre">freeze_core</span> <span class="pre">true</span></code>).</p></li>
+<li><p><strong>no</strong>: all electrons are correlated.</p></li>
+<li><p><strong>inner core ([Ne] on Ga-Kr, [He] on Al-Ar)</strong>: the noble-gas core before that, so
+the outermost core shell is correlated with the valence – 3s3p3d on Ga-Kr, 2s2p on
+Al-Ar – and nothing is frozen on H-Ne (<code class="docutils literal notranslate"><span class="pre">freeze_core</span> <span class="pre">-2</span></code>). This goes with
+core-valence basis sets such as cc-pwCVTZ.</p></li>
+<li><p><strong>innermost core ([He] on Ga-Kr)</strong>: one shell further: [He] on Ga-Kr, nothing on
+lighter atoms (<code class="docutils literal notranslate"><span class="pre">freeze_core</span> <span class="pre">-3</span></code>).</p></li>
+<li><p><strong>number of orbitals</strong>: freezes the given number of lowest doubly occupied orbitals
+of the whole system (<code class="docutils literal notranslate"><span class="pre">num_frozen_docc</span></code>).</p></li>
+</ul>
+<p>The number of frozen orbitals is printed in the results and stored as “number of
+frozen core orbitals”, so it can be checked: for GeH<sub>4</sub> with the inner core it
+is 5 ([Ne] on Ge), and for GeH<sub>3</sub>Cl 6 (5 on Ge, 1 on Cl).</p>
+</section>
+<section id="basis-files">
+<h2>Basis files<a class="headerlink" href="#basis-files" title="Link to this heading">#</a></h2>
+<p>The Initialization sub-step takes the basis set either from Psi4’s library, by name, or
+from a <strong>basis file</strong>: Psi4 input blocks copied into the input – a <code class="docutils literal notranslate"><span class="pre">basis</span> <span class="pre">{...}</span></code>
+block for the orbital basis and, optionally, <code class="docutils literal notranslate"><span class="pre">df_basis_cc</span> <span class="pre">{...}</span></code> and
+<code class="docutils literal notranslate"><span class="pre">df_basis_scf</span> <span class="pre">{...}</span></code> blocks giving the density-fitting sets. A basis file is either
+one shipped with the step, by name, or the path of a file on the machine running the
+flowchart. The name of the file, without its extension, is the basis set’s name in the
+model, e.g. <code class="docutils literal notranslate"><span class="pre">DF-CCSD(T)/cc-pwCVTZ-ORCA</span></code>. A fitting basis set in the Energy step’s
+“Fitting basis” takes precedence over the file’s.</p>
+<p>The step ships one basis file:</p>
+<ul class="simple">
+<li><p><strong>cc-pwCVTZ-ORCA</strong>: cc-pwCVTZ exactly as ORCA 6.1.1 has it (cc-pVTZ on H and He), for
+H, He, B-Ne, Al-Ar and Ge-Br, so that Psi4 calculations use the same basis as ORCA
+ones. Neither Psi4’s library nor the Basis Set Exchange has an all-electron cc-pwCVTZ
+for Ge-Br. It gives cc-pwCVTZ-RIFIT (cc-pVTZ-RIFIT on H and He) for the correlation
+and def2-universal-JKFIT for the SCF, so DF-CCSD(T) fits the core-valence
+correlation of the outer core too. Its provenance is in <code class="docutils literal notranslate"><span class="pre">data/basis/README.md</span></code> in
+the package.</p></li>
+</ul>
+</section>
 <section id="index">
 <h2>Index<a class="headerlink" href="#index" title="Link to this heading">#</a></h2>
 <ul class="simple">
@@ -649,6 +691,8 @@ amplitude equations, and for gradients the lambda equations: its <code class="do
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#settings-that-depend-on-each-other">Settings that depend on each other</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#correlation-integrals">Correlation integrals</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#gradients-and-hessians">Gradients and Hessians</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#frozen-core">Frozen core</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#basis-files">Basis files</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#index">Index</a></li>
 </ul>
   </nav></div>

@@ -6,7 +6,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>psi4_step.energy_parameters &#8212; SEAMM Psi4 Plug-in 2026.11.9.1 documentation</title>
+    <title>psi4_step.energy_parameters &#8212; SEAMM Psi4 Plug-in 2026.11.18 documentation</title>
   
   
   
@@ -30,7 +30,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
     <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=6a604523" />
     <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css?v=c224919a" />
   
   <!-- So that users can add custom icons -->
@@ -47,12 +47,12 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-PQXXTJ2');</script>
 <!-- End Google Tag Manager -->
 
-    <script src="../../_static/documentation_options.js?v=20f5e7c3"></script>
+    <script src="../../_static/documentation_options.js?v=040a0bb1"></script>
     <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../../_static/copybutton.js?v=f281be69"></script>
-    <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+    <script data-sd-tabs-storage-prefix="sphinx-design-tab-id-" src="../../_static/design-tabs.js?v=fcb327ea"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '_modules/psi4_step/energy_parameters';</script>
     <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
 
@@ -61,7 +61,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2026.11.9.1" />
+  <meta name="docsearch:version" content="2026.11.18" />
   
     
     <script src="../../_static/searchtools.js"></script>
@@ -771,11 +771,39 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             <span class="s2">"default"</span><span class="p">:</span> <span class="s2">"yes"</span><span class="p">,</span>
             <span class="s2">"kind"</span><span class="p">:</span> <span class="s2">"enumeration"</span><span class="p">,</span>
             <span class="s2">"default_units"</span><span class="p">:</span> <span class="s2">""</span><span class="p">,</span>
-            <span class="s2">"enumeration"</span><span class="p">:</span> <span class="p">(</span><span class="s2">"yes"</span><span class="p">,</span> <span class="s2">"no"</span><span class="p">),</span>
+            <span class="s2">"enumeration"</span><span class="p">:</span> <span class="p">(</span>
+                <span class="s2">"yes"</span><span class="p">,</span>
+                <span class="s2">"no"</span><span class="p">,</span>
+                <span class="s2">"inner core ([Ne] on Ga-Kr, [He] on Al-Ar)"</span><span class="p">,</span>
+                <span class="s2">"innermost core ([He] on Ga-Kr)"</span><span class="p">,</span>
+                <span class="s2">"number of orbitals"</span><span class="p">,</span>
+            <span class="p">),</span>
             <span class="s2">"format_string"</span><span class="p">:</span> <span class="s2">"s"</span><span class="p">,</span>
             <span class="s2">"description"</span><span class="p">:</span> <span class="s2">"Freeze core orbitals:"</span><span class="p">,</span>
             <span class="s2">"help_text"</span><span class="p">:</span> <span class="p">(</span>
-                <span class="s2">"Whether to freeze the core orbitals in correlated "</span> <span class="s2">"methods"</span>
+                <span class="s2">"Which core orbitals to freeze in correlated methods. 'yes' freezes "</span>
+                <span class="s2">"the previous noble-gas core of each atom: [He] on B-Ne, [Ne] on "</span>
+                <span class="s2">"Al-Ar, [Ar] on Ga-Kr (Psi4's freeze_core true). 'inner core' "</span>
+                <span class="s2">"freezes the noble-gas core before that, so the outermost core "</span>
+                <span class="s2">"shell is correlated: [Ne] on Ga-Kr (3s3p3d correlated), [He] on "</span>
+                <span class="s2">"Al-Ar, nothing on H-Ne (freeze_core -2). 'innermost core' goes "</span>
+                <span class="s2">"one shell further: [He] on Ga-Kr, nothing on lighter atoms "</span>
+                <span class="s2">"(freeze_core -3). 'number of orbitals' freezes the given number "</span>
+                <span class="s2">"of lowest orbitals (num_frozen_docc). The number frozen is printed "</span>
+                <span class="s2">"and stored."</span>
+            <span class="p">),</span>
+        <span class="p">},</span>
+        <span class="s2">"frozen orbitals"</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">"applies_when"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"freeze-cores"</span><span class="p">:</span> <span class="s2">"number of orbitals"</span><span class="p">},</span>
+            <span class="s2">"default"</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+            <span class="s2">"kind"</span><span class="p">:</span> <span class="s2">"integer"</span><span class="p">,</span>
+            <span class="s2">"default_units"</span><span class="p">:</span> <span class="s2">""</span><span class="p">,</span>
+            <span class="s2">"enumeration"</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">(),</span>
+            <span class="s2">"format_string"</span><span class="p">:</span> <span class="s2">"d"</span><span class="p">,</span>
+            <span class="s2">"description"</span><span class="p">:</span> <span class="s2">"Number of frozen orbitals:"</span><span class="p">,</span>
+            <span class="s2">"help_text"</span><span class="p">:</span> <span class="p">(</span>
+                <span class="s2">"The number of lowest doubly occupied orbitals to freeze in the "</span>
+                <span class="s2">"whole system (Psi4's num_frozen_docc)."</span>
             <span class="p">),</span>
         <span class="p">},</span>
         <span class="s2">"correlation integrals"</span><span class="p">:</span> <span class="p">{</span>

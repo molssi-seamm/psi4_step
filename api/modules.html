@@ -7,7 +7,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>psi4_step &#8212; SEAMM Psi4 Plug-in 2026.11.9.1 documentation</title>
+    <title>psi4_step &#8212; SEAMM Psi4 Plug-in 2026.11.18 documentation</title>
   
   
   
@@ -31,7 +31,7 @@
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=6a604523" />
     <link rel="stylesheet" type="text/css" href="../_static/css/custom.css?v=c224919a" />
   
   <!-- So that users can add custom icons -->
@@ -48,12 +48,12 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-PQXXTJ2');</script>
 <!-- End Google Tag Manager -->
 
-    <script src="../_static/documentation_options.js?v=20f5e7c3"></script>
+    <script src="../_static/documentation_options.js?v=040a0bb1"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../_static/copybutton.js?v=f281be69"></script>
-    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script data-sd-tabs-storage-prefix="sphinx-design-tab-id-" src="../_static/design-tabs.js?v=fcb327ea"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'api/modules';</script>
     <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
 
@@ -64,7 +64,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2026.11.9.1" />
+  <meta name="docsearch:version" content="2026.11.18" />
   
     
     <script src="../_static/searchtools.js"></script>
@@ -547,6 +547,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="psi4_step.html#module-psi4_step.derivatives">psi4_step.derivatives module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="psi4_step.html#psi4_step.derivatives.FREEZE_CORE"><code class="docutils literal notranslate"><span class="pre">FREEZE_CORE</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="psi4_step.html#psi4_step.derivatives.GradientRoute"><code class="docutils literal notranslate"><span class="pre">GradientRoute</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="psi4_step.html#psi4_step.derivatives.GradientRoute.analytic"><code class="docutils literal notranslate"><span class="pre">GradientRoute.analytic</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="psi4_step.html#psi4_step.derivatives.GradientRoute.options"><code class="docutils literal notranslate"><span class="pre">GradientRoute.options</span></code></a></li>
@@ -556,6 +557,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li class="toctree-l3"><a class="reference internal" href="psi4_step.html#psi4_step.derivatives.INTEGRAL_CHOICES"><code class="docutils literal notranslate"><span class="pre">INTEGRAL_CHOICES</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="psi4_step.html#psi4_step.derivatives.MODEL_PREFIX"><code class="docutils literal notranslate"><span class="pre">MODEL_PREFIX</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="psi4_step.html#psi4_step.derivatives.TYPE_KEYWORD"><code class="docutils literal notranslate"><span class="pre">TYPE_KEYWORD</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="psi4_step.html#psi4_step.derivatives.freeze_core_options"><code class="docutils literal notranslate"><span class="pre">freeze_core_options()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="psi4_step.html#psi4_step.derivatives.gradient_route"><code class="docutils literal notranslate"><span class="pre">gradient_route()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="psi4_step.html#psi4_step.derivatives.integral_options"><code class="docutils literal notranslate"><span class="pre">integral_options()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="psi4_step.html#psi4_step.derivatives.integral_type"><code class="docutils literal notranslate"><span class="pre">integral_type()</span></code></a></li>
@@ -569,6 +571,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li class="toctree-l4"><a class="reference internal" href="psi4_step.html#psi4_step.energy.Energy.calculate_enthalpy_of_formation"><code class="docutils literal notranslate"><span class="pre">Energy.calculate_enthalpy_of_formation()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="psi4_step.html#psi4_step.energy.Energy.cc_amplitude_convergence"><code class="docutils literal notranslate"><span class="pre">Energy.cc_amplitude_convergence()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="psi4_step.html#psi4_step.energy.Energy.description_text"><code class="docutils literal notranslate"><span class="pre">Energy.description_text()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="psi4_step.html#psi4_step.energy.Energy.freeze_core_options"><code class="docutils literal notranslate"><span class="pre">Energy.freeze_core_options()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="psi4_step.html#psi4_step.energy.Energy.get_input"><code class="docutils literal notranslate"><span class="pre">Energy.get_input()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="psi4_step.html#psi4_step.energy.Energy.get_method"><code class="docutils literal notranslate"><span class="pre">Energy.get_method()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="psi4_step.html#psi4_step.energy.Energy.git_revision"><code class="docutils literal notranslate"><span class="pre">Energy.git_revision</span></code></a></li>
@@ -611,6 +614,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="psi4_step.html#module-psi4_step.initialization">psi4_step.initialization module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="psi4_step.html#psi4_step.initialization.BASIS_DIRECTORY"><code class="docutils literal notranslate"><span class="pre">BASIS_DIRECTORY</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="psi4_step.html#psi4_step.initialization.Initialization"><code class="docutils literal notranslate"><span class="pre">Initialization</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="psi4_step.html#psi4_step.initialization.Initialization.analyze"><code class="docutils literal notranslate"><span class="pre">Initialization.analyze()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="psi4_step.html#psi4_step.initialization.Initialization.description_text"><code class="docutils literal notranslate"><span class="pre">Initialization.description_text()</span></code></a></li>
@@ -620,6 +624,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <li class="toctree-l4"><a class="reference internal" href="psi4_step.html#psi4_step.initialization.Initialization.version"><code class="docutils literal notranslate"><span class="pre">Initialization.version</span></code></a></li>
 </ul>
 </li>
+<li class="toctree-l3"><a class="reference internal" href="psi4_step.html#psi4_step.initialization.basis_file_name"><code class="docutils literal notranslate"><span class="pre">basis_file_name()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="psi4_step.html#psi4_step.initialization.basis_file_path"><code class="docutils literal notranslate"><span class="pre">basis_file_path()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="psi4_step.html#psi4_step.initialization.shipped_basis_files"><code class="docutils literal notranslate"><span class="pre">shipped_basis_files()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="psi4_step.html#module-psi4_step.initialization_parameters">psi4_step.initialization_parameters module</a><ul>

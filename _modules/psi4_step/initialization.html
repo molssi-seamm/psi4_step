@@ -6,7 +6,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>psi4_step.initialization &#8212; SEAMM Psi4 Plug-in 2026.11.9.1 documentation</title>
+    <title>psi4_step.initialization &#8212; SEAMM Psi4 Plug-in 2026.11.18 documentation</title>
   
   
   
@@ -30,7 +30,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
     <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=6a604523" />
     <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css?v=c224919a" />
   
   <!-- So that users can add custom icons -->
@@ -47,12 +47,12 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-PQXXTJ2');</script>
 <!-- End Google Tag Manager -->
 
-    <script src="../../_static/documentation_options.js?v=20f5e7c3"></script>
+    <script src="../../_static/documentation_options.js?v=040a0bb1"></script>
     <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../../_static/copybutton.js?v=f281be69"></script>
-    <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+    <script data-sd-tabs-storage-prefix="sphinx-design-tab-id-" src="../../_static/design-tabs.js?v=fcb327ea"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '_modules/psi4_step/initialization';</script>
     <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
 
@@ -61,7 +61,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2026.11.9.1" />
+  <meta name="docsearch:version" content="2026.11.18" />
   
     
     <script src="../../_static/searchtools.js"></script>
@@ -506,6 +506,51 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <span class="n">printer</span> <span class="o">=</span> <span class="n">printing</span><span class="o">.</span><span class="n">getPrinter</span><span class="p">(</span><span class="s2">"psi4"</span><span class="p">)</span>
 
 
+<span class="c1">#: The basis files shipped with the step</span>
+<span class="n">BASIS_DIRECTORY</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="s2">"data"</span> <span class="o">/</span> <span class="s2">"basis"</span>
+<span class="n">BASIS_SUFFIX</span> <span class="o">=</span> <span class="s2">".basis"</span>
+
+
+<div class="viewcode-block" id="shipped_basis_files">
+<a class="viewcode-back" href="../../api/psi4_step.html#psi4_step.initialization.shipped_basis_files">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">shipped_basis_files</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">"""The names of the basis files shipped with the step."""</span>
+    <span class="k">return</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">stem</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">BASIS_DIRECTORY</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="sa">f</span><span class="s2">"*</span><span class="si">{</span><span class="n">BASIS_SUFFIX</span><span class="si">}</span><span class="s2">"</span><span class="p">))</span></div>
+
+
+
+<div class="viewcode-block" id="basis_file_path">
+<a class="viewcode-back" href="../../api/psi4_step.html#psi4_step.initialization.basis_file_path">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">basis_file_path</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""The path of a basis file: one shipped with the step, by name (any case),</span>
+<span class="sd">    or a path.</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    FileNotFoundError</span>
+<span class="sd">    """</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">name</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+    <span class="n">path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">name</span><span class="p">)</span><span class="o">.</span><span class="n">expanduser</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">path</span><span class="o">.</span><span class="n">is_file</span><span class="p">():</span>
+        <span class="k">return</span> <span class="n">path</span>
+    <span class="k">for</span> <span class="n">stem</span> <span class="ow">in</span> <span class="n">shipped_basis_files</span><span class="p">():</span>
+        <span class="k">if</span> <span class="n">stem</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="p">(</span><span class="n">name</span><span class="o">.</span><span class="n">lower</span><span class="p">(),</span> <span class="n">name</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">removesuffix</span><span class="p">(</span><span class="n">BASIS_SUFFIX</span><span class="p">)):</span>
+            <span class="k">return</span> <span class="n">BASIS_DIRECTORY</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">stem</span><span class="si">}{</span><span class="n">BASIS_SUFFIX</span><span class="si">}</span><span class="s2">"</span>
+    <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span>
+        <span class="sa">f</span><span class="s2">"There is no basis file '</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">'. Give the path of a file, or one of the "</span>
+        <span class="s2">"basis files shipped with the step: "</span> <span class="o">+</span> <span class="s2">", "</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">shipped_basis_files</span><span class="p">())</span>
+    <span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="basis_file_name">
+<a class="viewcode-back" href="../../api/psi4_step.html#psi4_step.initialization.basis_file_name">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">basis_file_name</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""The basis set's name for the model: the file's name without its extension."""</span>
+    <span class="k">return</span> <span class="n">basis_file_path</span><span class="p">(</span><span class="n">name</span><span class="p">)</span><span class="o">.</span><span class="n">stem</span></div>
+
+
+
 <div class="viewcode-block" id="Initialization">
 <a class="viewcode-back" href="../../api/psi4_step.html#psi4_step.initialization.Initialization">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">Initialization</span><span class="p">(</span><span class="n">seamm</span><span class="o">.</span><span class="n">Node</span><span class="p">):</span>
@@ -545,10 +590,16 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <span class="k">if</span> <span class="ow">not</span> <span class="n">P</span><span class="p">:</span>
             <span class="n">P</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">values_to_dict</span><span class="p">()</span>
 
-        <span class="n">text</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="sa">f</span><span class="s2">"Using the basis set '</span><span class="si">{</span><span class="n">P</span><span class="p">[</span><span class="s1">'basis'</span><span class="p">]</span><span class="si">}</span><span class="s2">' and a symmetry "</span>
-            <span class="sa">f</span><span class="s2">"tolerance of </span><span class="si">{</span><span class="n">P</span><span class="p">[</span><span class="s1">'symmetry_tolerance'</span><span class="p">]</span><span class="si">}</span><span class="s2">."</span>
-        <span class="p">)</span>
+        <span class="k">if</span> <span class="n">P</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"basis source"</span><span class="p">,</span> <span class="s2">"library"</span><span class="p">)</span> <span class="o">==</span> <span class="s2">"basis file"</span><span class="p">:</span>
+            <span class="n">text</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="sa">f</span><span class="s2">"Using the basis sets in the basis file '</span><span class="si">{</span><span class="n">P</span><span class="p">[</span><span class="s1">'basis file'</span><span class="p">]</span><span class="si">}</span><span class="s2">' and a "</span>
+                <span class="sa">f</span><span class="s2">"symmetry tolerance of </span><span class="si">{</span><span class="n">P</span><span class="p">[</span><span class="s1">'symmetry_tolerance'</span><span class="p">]</span><span class="si">}</span><span class="s2">."</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">text</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="sa">f</span><span class="s2">"Using the basis set '</span><span class="si">{</span><span class="n">P</span><span class="p">[</span><span class="s1">'basis'</span><span class="p">]</span><span class="si">}</span><span class="s2">' and a symmetry "</span>
+                <span class="sa">f</span><span class="s2">"tolerance of </span><span class="si">{</span><span class="n">P</span><span class="p">[</span><span class="s1">'symmetry_tolerance'</span><span class="p">]</span><span class="si">}</span><span class="s2">."</span>
+            <span class="p">)</span>
 
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">header</span> <span class="o">+</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">"</span> <span class="o">+</span> <span class="n">__</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span> <span class="o">*</span> <span class="s2">" "</span><span class="p">)</span><span class="o">.</span><span class="fm">__str__</span><span class="p">()</span></div>
 
@@ -580,8 +631,14 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">"# </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">header</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
         <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">"#"</span> <span class="o">*</span> <span class="mi">80</span><span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">basis</span> <span class="o">=</span> <span class="n">P</span><span class="p">[</span><span class="s2">"basis"</span><span class="p">]</span>
-        <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">"set basis </span><span class="si">{</span><span class="n">P</span><span class="p">[</span><span class="s1">'basis'</span><span class="p">]</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">P</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"basis source"</span><span class="p">,</span> <span class="s2">"library"</span><span class="p">)</span> <span class="o">==</span> <span class="s2">"basis file"</span><span class="p">:</span>
+            <span class="n">path</span> <span class="o">=</span> <span class="n">basis_file_path</span><span class="p">(</span><span class="n">P</span><span class="p">[</span><span class="s2">"basis file"</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">basis</span> <span class="o">=</span> <span class="n">path</span><span class="o">.</span><span class="n">stem</span>
+            <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">"# The basis file </span><span class="si">{</span><span class="n">path</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+            <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">path</span><span class="o">.</span><span class="n">read_text</span><span class="p">()</span><span class="o">.</span><span class="n">rstrip</span><span class="p">())</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">basis</span> <span class="o">=</span> <span class="n">P</span><span class="p">[</span><span class="s2">"basis"</span><span class="p">]</span>
+            <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">"set basis </span><span class="si">{</span><span class="n">P</span><span class="p">[</span><span class="s1">'basis'</span><span class="p">]</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
         <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">""</span><span class="p">)</span>
         <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">"initial.symmetrize(</span><span class="si">{</span><span class="n">P</span><span class="p">[</span><span class="s1">'symmetry_tolerance'</span><span class="p">]</span><span class="si">}</span><span class="s2">)"</span><span class="p">)</span>
         <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">"point_group = initial.point_group().symbol()"</span><span class="p">)</span>
