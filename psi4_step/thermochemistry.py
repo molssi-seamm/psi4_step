@@ -201,9 +201,15 @@ class Thermochemistry(psi4_step.Energy):
             if choice not in ("default", None):
                 text += f", {choice} integrals"
             if previous.parameters.applies("freeze-cores", values):
-                text += (
-                    ", frozen core" if P["freeze-cores"] == "yes" else ", all electrons"
-                )
+                frozen = P["freeze-cores"]
+                if frozen == "yes":
+                    text += ", frozen core"
+                elif frozen == "no":
+                    text += ", all electrons"
+                elif frozen == "number of orbitals":
+                    text += f", {P['frozen orbitals']} frozen orbitals"
+                else:
+                    text += f", frozen {frozen}"
         except Exception:
             pass
         return text

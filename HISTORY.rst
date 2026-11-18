@@ -1,6 +1,22 @@
 =======
 History
 =======
+2026.11.18 -- Frozen-core choices and basis files, with ORCA's cc-pwCVTZ
+    * "Freeze core orbitals" has more choices: 'inner core', which freezes [Ne] on Ga-Kr
+      and [He] on Al-Ar and nothing on H-Ne, so the outermost core shell is correlated
+      (Psi4's freeze_core -2); 'innermost core', [He] on Ga-Kr (-3); and 'number of
+      orbitals', a given number of lowest orbitals (num_frozen_docc). 'yes' and 'no'
+      are unchanged. The number of frozen orbitals is printed and stored as a result.
+    * Initialization can take the basis sets from a basis file of Psi4 basis blocks,
+      which can also give the density-fitting sets, instead of Psi4's library. The
+      file's name is the basis set's name in the model.
+    * The step ships cc-pwCVTZ-ORCA: cc-pwCVTZ exactly as ORCA 6.1.1 has it, including
+      an all-electron set for Ge-Br that neither Psi4 nor the Basis Set Exchange has,
+      with cc-pwCVTZ-RIFIT and def2-universal-JKFIT fitting sets. With the inner core
+      frozen and density fitting, CCSD(T) has analytic gradients, so geometries at
+      ORCA's CCSD(T)/cc-pwCVTZ level can be optimized in Psi4.
+    * The user guide describes the frozen-core choices and basis files.
+
 2026.11.9 -- Bugfix: the Thermochemistry results name the method that ran
     * With 'use existing parameters' the header of the Thermochemistry results named
       the step's own, unused method (e.g. Kohn-Sham DFT) instead of the method of the

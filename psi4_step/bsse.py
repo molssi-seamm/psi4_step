@@ -30,7 +30,11 @@ import textwrap
 from tabulate import tabulate
 
 import psi4_step
-from psi4_step.derivatives import integral_options, model_prefix
+from psi4_step.derivatives import (
+    freeze_core_options,
+    integral_options,
+    model_prefix,
+)
 import seamm
 import seamm_bsse
 from seamm_util import Q_
@@ -285,10 +289,7 @@ class BSSE(psi4_step.Energy):
         lines.append(self._molecule_block(fragments, configuration))
         lines.append("")
         lines.append(f"set reference {reference}")
-        if P.get("freeze-cores", "yes") == "yes":
-            lines.append("set freeze_core True")
-        else:
-            lines.append("set freeze_core False")
+        lines.extend(freeze_core_options(P)[0])
         lines.extend(
             integral_options(
                 method,

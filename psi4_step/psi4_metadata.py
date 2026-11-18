@@ -2383,6 +2383,13 @@ metadata["results"] = {
         "units": "E_h",
         "format": ".6f",
     },
+    "number of frozen core orbitals": {
+        "calculation": ["energy", "optimization", "thermochemistry", "vibrations"],
+        "description": "number of frozen core orbitals",
+        "dimensionality": "scalar",
+        "methods": ["ccsd", "ccsd(t)", "lccd", "mp2", "mp3", "mp4"],
+        "type": "integer",
+    },
     "SCF ITERATIONS": {
         "calculation": ["energy", "optimization", "thermochemistry", "vibrations"],
         "description": "number of iterations in the SCF",

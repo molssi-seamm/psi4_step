@@ -118,6 +118,49 @@ def model_prefix(method, choice="default"):
     return MODEL_PREFIX[integrals]
 
 
+#: The step's frozen-core choices, as Psi4's freeze_core values. Psi4 counts
+#: noble-gas shells back from the atom's own: -2 freezes [Ne] on Ga-Kr and [He] on
+#: Al-Ar (BasisSet::n_frozen_core; -1 is the previous shell, like true).
+FREEZE_CORE = {
+    "yes": "True",
+    "no": "False",
+    "inner core ([Ne] on Ga-Kr, [He] on Al-Ar)": "-2",
+    "innermost core ([He] on Ga-Kr)": "-3",
+}
+FROZEN_COUNT = "number of orbitals"
+
+
+def freeze_core_options(P):
+    """The Psi4 'set' lines for the frozen core, and whether any core is frozen.
+
+    Parameters
+    ----------
+    P : dict
+        The step's parameter values; "freeze-cores" and, for an explicit count,
+        "frozen orbitals". A missing "freeze-cores" means "yes", Psi4's usual
+        choice.
+
+    Returns
+    -------
+    (list of str, bool)
+    """
+    choice = P.get("freeze-cores", "yes")
+    if isinstance(choice, bool):
+        choice = "yes" if choice else "no"
+    if choice == FROZEN_COUNT:
+        n = int(P.get("frozen orbitals", 0))
+        if n < 0:
+            raise ValueError(f"The number of frozen orbitals cannot be negative: {n}")
+        return [f"set num_frozen_docc {n}"], n > 0
+    if choice not in FREEZE_CORE:
+        raise ValueError(
+            f"Unknown frozen-core choice '{choice}'; choose one of "
+            + ", ".join(f"'{c}'" for c in (*FREEZE_CORE, FROZEN_COUNT))
+        )
+    value = FREEZE_CORE[choice]
+    return [f"set freeze_core {value}"], value != "False"
+
+
 def integral_options(method, reference, choice="default", fitting_basis="default"):
     """The Psi4 'set' lines for the correlation integrals of ``method``."""
     method = method.lower()
