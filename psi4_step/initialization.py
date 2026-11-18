@@ -18,6 +18,42 @@ job = printing.getPrinter()
 printer = printing.getPrinter("psi4")
 
 
+#: The basis files shipped with the step
+BASIS_DIRECTORY = Path(__file__).parent / "data" / "basis"
+BASIS_SUFFIX = ".basis"
+
+
+def shipped_basis_files():
+    """The names of the basis files shipped with the step."""
+    return sorted(p.stem for p in BASIS_DIRECTORY.glob(f"*{BASIS_SUFFIX}"))
+
+
+def basis_file_path(name):
+    """The path of a basis file: one shipped with the step, by name (any case),
+    or a path.
+
+    Raises
+    ------
+    FileNotFoundError
+    """
+    name = str(name).strip()
+    path = Path(name).expanduser()
+    if path.is_file():
+        return path
+    for stem in shipped_basis_files():
+        if stem.lower() in (name.lower(), name.lower().removesuffix(BASIS_SUFFIX)):
+            return BASIS_DIRECTORY / f"{stem}{BASIS_SUFFIX}"
+    raise FileNotFoundError(
+        f"There is no basis file '{name}'. Give the path of a file, or one of the "
+        "basis files shipped with the step: " + ", ".join(shipped_basis_files())
+    )
+
+
+def basis_file_name(name):
+    """The basis set's name for the model: the file's name without its extension."""
+    return basis_file_path(name).stem
+
+
 class Initialization(seamm.Node):
     def __init__(self, flowchart=None, title="Initialization", extension=None):
         """Initialize the node"""
@@ -53,10 +89,16 @@ class Initialization(seamm.Node):
         if not P:
             P = self.parameters.values_to_dict()
 
-        text = (
-            f"Using the basis set '{P['basis']}' and a symmetry "
-            f"tolerance of {P['symmetry_tolerance']}."
-        )
+        if P.get("basis source", "library") == "basis file":
+            text = (
+                f"Using the basis sets in the basis file '{P['basis file']}' and a "
+                f"symmetry tolerance of {P['symmetry_tolerance']}."
+            )
+        else:
+            text = (
+                f"Using the basis set '{P['basis']}' and a symmetry "
+                f"tolerance of {P['symmetry_tolerance']}."
+            )
 
         return self.header + "\n" + __(text, indent=4 * " ").__str__()
 
@@ -85,8 +127,14 @@ class Initialization(seamm.Node):
         result.append(f"# {self.header}")
         result.append("#" * 80)
 
-        self.parent.basis = P["basis"]
-        result.append(f"set basis {P['basis']}")
+        if P.get("basis source", "library") == "basis file":
+            path = basis_file_path(P["basis file"])
+            self.parent.basis = path.stem
+            result.append(f"# The basis file {path}")
+            result.append(path.read_text().rstrip())
+        else:
+            self.parent.basis = P["basis"]
+            result.append(f"set basis {P['basis']}")
         result.append("")
         result.append(f"initial.symmetrize({P['symmetry_tolerance']})")
         result.append("point_group = initial.point_group().symbol()")

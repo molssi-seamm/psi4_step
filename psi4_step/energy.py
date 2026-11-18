@@ -21,6 +21,7 @@ from molsystem import elements
 import psi4_step
 from psi4_step.energy_parameters import FINITE_DIFFERENCES
 from psi4_step.derivatives import (
+    freeze_core_options,
     gradient_route,
     integral_options,
     integral_type,
@@ -655,6 +656,21 @@ class Energy(seamm.Node):
                 if integrals == "density fitting" and basis != "default":
                     text += f" with the {basis} fitting basis"
                 text += "."
+            if "freeze-cores" in P and self.parameters.applies("freeze-cores", dict(P)):
+                frozen = P["freeze-cores"]
+                if frozen == "yes":
+                    text += " The core orbitals will be frozen."
+                elif frozen == "no":
+                    text += " All electrons will be correlated."
+                elif frozen == "number of orbitals":
+                    text += (
+                        f" The lowest {P.get('frozen orbitals')} orbitals will be "
+                        "frozen."
+                    )
+                elif not self.is_expr(frozen):
+                    text += f" The {frozen} will be frozen."
+                else:
+                    text += f" The frozen core will be given by {frozen}."
 
         # Spin
         if P["spin-restricted"] == "yes":
@@ -750,11 +766,8 @@ class Energy(seamm.Node):
         reference = self.reference(method, P, configuration)
         lines.append(f"set reference {reference}")
 
-        frozen_core = "freeze-cores" in P and P["freeze-cores"] == "yes"
-        if frozen_core:
-            lines.append("set freeze_core True")
-        else:
-            lines.append("set freeze_core False")
+        freeze_lines, frozen_core = self.freeze_core_options(P)
+        lines.extend(freeze_lines)
 
         # The correlation integrals: conventional, density fitted or Cholesky
         choice = self.integral_choice(P)
@@ -906,6 +919,10 @@ for item in arrays:
 variables["Eelec"] = Eelec
 variables["energy"] = Eelec
 try:
+    variables["number of frozen core orbitals"] = wfn.nfrzc()
+except Exception:
+    pass
+try:
     variables["gradients"] = np.array(G).tolist()
 except Exception as e:
     print("Problem with gradients!")
@@ -945,13 +962,25 @@ with open("{filename}", "w") as fd:
             context=seamm.flowchart_variables._data
         )
         method = self.get_method()[0]
-        frozen_core = "freeze-cores" in P and P["freeze-cores"] == "yes"
+        frozen_core = self.freeze_core_options(P)[1]
         return gradient_route(
             method,
             self.reference(method, P, configuration),
             frozen_core,
             integral_type(method, self.integral_choice(P)),
         )
+
+    def freeze_core_options(self, P):
+        """The Psi4 lines for the frozen core, and whether a core is frozen.
+
+        A step whose method has no frozen core (HF, DFT) freezes nothing.
+        """
+        if "freeze-cores" not in P or "freeze-cores" not in self.parameters:
+            return ["set freeze_core False"], False
+        values = self.parameters.current_values()
+        if not self.parameters.applies("freeze-cores", values):
+            return ["set freeze_core False"], False
+        return freeze_core_options(P)
 
     def cc_amplitude_convergence(self, P):
         """Psi4's r_convergence for the correlated method, or None for Psi4's own."""
@@ -1076,6 +1105,16 @@ with open("{filename}", "w") as fd:
                 tmp = json.load(fd)
             data.update(**tmp)
 
+        # The frozen core means something only for correlated methods
+        key = "number of frozen core orbitals"
+        if key in data and (
+            "freeze-cores" not in self.parameters
+            or not self.parameters.applies(
+                "freeze-cores", self.parameters.current_values()
+            )
+        ):
+            del data[key]
+
         # Put any requested results into variables or tables
         self.store_results(
             data=data,
@@ -1123,6 +1162,7 @@ with open("{filename}", "w") as fd:
             "DfE0",
             "E atomization",
             "energy",
+            "number of frozen core orbitals",
         ]
         metadata = psi4_step.metadata["results"]
         for key in keys:

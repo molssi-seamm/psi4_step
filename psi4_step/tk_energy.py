@@ -94,6 +94,7 @@ class TkEnergy(seamm.TkNode):
             "dispersion",
             "spin-restricted",
             "freeze-cores",
+            "frozen orbitals",
             "correlation integrals",
             "correlation fitting basis",
             "stability analysis",
@@ -133,6 +134,9 @@ class TkEnergy(seamm.TkNode):
         self["advanced_method"].combobox.bind("<Return>", self.reset_calculation)
 
         self["correlation integrals"].combobox.bind(
+            "<<ComboboxSelected>>", self.reset_calculation
+        )
+        self["freeze-cores"].combobox.bind(
             "<<ComboboxSelected>>", self.reset_calculation
         )
         self["advanced_method"].combobox.bind("<FocusOut>", self.reset_calculation)
@@ -261,6 +265,10 @@ class TkEnergy(seamm.TkNode):
                 self["freeze-cores"].grid(row=row, column=1, sticky=tk.EW)
                 widgets2.append(self["freeze-cores"])
                 row += 1
+                if applies("frozen orbitals"):
+                    self["frozen orbitals"].grid(row=row, column=1, sticky=tk.EW)
+                    widgets2.append(self["frozen orbitals"])
+                    row += 1
             if applies("correlation integrals"):
                 # CCD offers only density fitting or Cholesky decomposition
                 w = self["correlation integrals"]

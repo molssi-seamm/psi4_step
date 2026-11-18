@@ -68,6 +68,8 @@ class TkInitialization(seamm.TkNode):
             if key not in ("results", "extra keywords", "create tables"):
                 self[key] = P[key].widget(frame)
 
+        self["basis source"].combobox.bind("<<ComboboxSelected>>", self.reset_dialog)
+
         self.logger.debug("Finished creating the dialog")
 
     def reset_dialog(self, widget=None):
@@ -77,8 +79,15 @@ class TkInitialization(seamm.TkNode):
 
         widgets = []
         row = 0
-        self["basis"].grid(row=row, column=0, sticky=tk.EW)
-        widgets.append(self["basis"])
+        self["basis source"].grid(row=row, column=0, sticky=tk.EW)
+        widgets.append(self["basis source"])
+        row += 1
+        if self["basis source"].get() == "basis file":
+            key = "basis file"
+        else:
+            key = "basis"
+        self[key].grid(row=row, column=0, sticky=tk.EW)
+        widgets.append(self[key])
         row += 1
         self["symmetry_tolerance"].grid(row=row, column=0, sticky=tk.EW)
         widgets.append(self["symmetry_tolerance"])

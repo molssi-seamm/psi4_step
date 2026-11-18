@@ -105,6 +105,50 @@ afresh.
 amplitude equations, and for gradients the lambda equations: its ``r_convergence``.
 "default" leaves Psi4's own, 10\ :sup:`-7`.
 
+Frozen core
+===========
+
+For the correlated methods, "Freeze core orbitals" chooses which core orbitals are left
+out of the correlation:
+
+* **yes**: the previous noble-gas core of each atom -- [He] on B-Ne, [Ne] on Al-Ar,
+  [Ar] on Ga-Kr (Psi4's ``freeze_core true``).
+* **no**: all electrons are correlated.
+* **inner core ([Ne] on Ga-Kr, [He] on Al-Ar)**: the noble-gas core before that, so
+  the outermost core shell is correlated with the valence -- 3s3p3d on Ga-Kr, 2s2p on
+  Al-Ar -- and nothing is frozen on H-Ne (``freeze_core -2``). This goes with
+  core-valence basis sets such as cc-pwCVTZ.
+* **innermost core ([He] on Ga-Kr)**: one shell further: [He] on Ga-Kr, nothing on
+  lighter atoms (``freeze_core -3``).
+* **number of orbitals**: freezes the given number of lowest doubly occupied orbitals
+  of the whole system (``num_frozen_docc``).
+
+The number of frozen orbitals is printed in the results and stored as "number of
+frozen core orbitals", so it can be checked: for GeH\ :sub:`4` with the inner core it
+is 5 ([Ne] on Ge), and for GeH\ :sub:`3`\ Cl 6 (5 on Ge, 1 on Cl).
+
+Basis files
+===========
+
+The Initialization sub-step takes the basis set either from Psi4's library, by name, or
+from a **basis file**: Psi4 input blocks copied into the input -- a ``basis {...}``
+block for the orbital basis and, optionally, ``df_basis_cc {...}`` and
+``df_basis_scf {...}`` blocks giving the density-fitting sets. A basis file is either
+one shipped with the step, by name, or the path of a file on the machine running the
+flowchart. The name of the file, without its extension, is the basis set's name in the
+model, e.g. ``DF-CCSD(T)/cc-pwCVTZ-ORCA``. A fitting basis set in the Energy step's
+"Fitting basis" takes precedence over the file's.
+
+The step ships one basis file:
+
+* **cc-pwCVTZ-ORCA**: cc-pwCVTZ exactly as ORCA 6.1.1 has it (cc-pVTZ on H and He), for
+  H, He, B-Ne, Al-Ar and Ge-Br, so that Psi4 calculations use the same basis as ORCA
+  ones. Neither Psi4's library nor the Basis Set Exchange has an all-electron cc-pwCVTZ
+  for Ge-Br. It gives cc-pwCVTZ-RIFIT (cc-pVTZ-RIFIT on H and He) for the correlation
+  and def2-universal-JKFIT for the SCF, so DF-CCSD(T) fits the core-valence
+  correlation of the outer core too. Its provenance is in ``data/basis/README.md`` in
+  the package.
+
 Index
 =====
 

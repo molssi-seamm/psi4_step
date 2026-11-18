@@ -281,11 +281,39 @@ class EnergyParameters(seamm.Parameters):
             "default": "yes",
             "kind": "enumeration",
             "default_units": "",
-            "enumeration": ("yes", "no"),
+            "enumeration": (
+                "yes",
+                "no",
+                "inner core ([Ne] on Ga-Kr, [He] on Al-Ar)",
+                "innermost core ([He] on Ga-Kr)",
+                "number of orbitals",
+            ),
             "format_string": "s",
             "description": "Freeze core orbitals:",
             "help_text": (
-                "Whether to freeze the core orbitals in correlated " "methods"
+                "Which core orbitals to freeze in correlated methods. 'yes' freezes "
+                "the previous noble-gas core of each atom: [He] on B-Ne, [Ne] on "
+                "Al-Ar, [Ar] on Ga-Kr (Psi4's freeze_core true). 'inner core' "
+                "freezes the noble-gas core before that, so the outermost core "
+                "shell is correlated: [Ne] on Ga-Kr (3s3p3d correlated), [He] on "
+                "Al-Ar, nothing on H-Ne (freeze_core -2). 'innermost core' goes "
+                "one shell further: [He] on Ga-Kr, nothing on lighter atoms "
+                "(freeze_core -3). 'number of orbitals' freezes the given number "
+                "of lowest orbitals (num_frozen_docc). The number frozen is printed "
+                "and stored."
+            ),
+        },
+        "frozen orbitals": {
+            "applies_when": {"freeze-cores": "number of orbitals"},
+            "default": 0,
+            "kind": "integer",
+            "default_units": "",
+            "enumeration": tuple(),
+            "format_string": "d",
+            "description": "Number of frozen orbitals:",
+            "help_text": (
+                "The number of lowest doubly occupied orbitals to freeze in the "
+                "whole system (Psi4's num_frozen_docc)."
             ),
         },
         "correlation integrals": {
